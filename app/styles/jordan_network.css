@@ -1,0 +1,61 @@
+	/* #vis { text-align: center; width: 700px;}
+	#vis svg { width: 100%; height: 500px; } */
+
+	.node {
+	  fill: #ccc;
+	  fill-opacity: 1;
+	  stroke: #333;
+	  stroke-width: 1.5px;
+	  cursor: pointer;
+	}
+
+	.node text {
+		stroke: #333;
+		stroke-width: 1px;
+		cursor: pointer;
+	}
+
+	.node:hover, .node.hover {
+		stroke: #333;
+		fill: blue;
+		stroke-width: 2px;
+	}
+
+	.node.fixed circle {
+	  stroke: red !important;
+	  stroke-width: 3px !important;
+	}
+
+	.link {
+	  fill: none;
+	  stroke: #666;
+	  stroke-width: 1.5px;
+	  opacity: 0.6;
+	}
+
+	svg.fixed .link {
+		stroke: #666;
+		opacity: 0.3;
+	}
+
+	svg.hover .link {
+		stroke: #666 !important;
+		opacity: 0.1 !important;
+	}
+
+	svg.hover .link.hover, .link:hover {
+		stroke: blue !important;
+		opacity: 1 !important;
+	}
+
+	svg.fixed .link.fixed {
+		stroke: red;
+		opacity: 1;
+	}
+
+	.target-arrow {
+		stroke-width: 1px;
+		stroke: #666;
+		fill: none;
+		opacity: 1;
+	}

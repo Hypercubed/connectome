@@ -4,33 +4,45 @@
     <li><a ng-href="#">About</a></li>
     <li><a ng-href="#">Contact</a></li>
   </ul>
-  <h3 class="text-muted">ligand receptor spa</h3>
+  <h3 class="text-muted">Ligand Receptor Network</h3>
 </div>
 
-<div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
-  <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#">Splendid!<span class="glyphicon glyphicon-ok"></span></a></p>
+<div id="ui" class="row" ng-controller="UICtrl">
+  <div class="col-md-3 pull-left">
+
+    <h4>Ligand - Receptor Pairs</h4>
+    <div class="pull-right">{{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a></div>
+    <select id="pairs" class="col-md-12" size="30" multiple ng-model="selected.pairs" ng-options="p.Ligand + '-' + p.Receptor for p in data.pairs">
+    </select>
+  </div>
+  <div id="vis" class="col-md-6 pull-left">
+    <h4>Ligand - Receptor network</h4>
+    <br />Nodes: {{graph.nodes.length}}
+    <br />Edges: <span ng-class="{'text-danger': graph.edges.length >= 100}">{{graph.edges.length}}</span>
+    <noscript>Missing javascript</noscript>
+    <svg></svg>
+    
+  </div>
+  <div class="col-md-3 pull-right">
+    <h4>Cells</h4>
+    <div class="pull-right">{{selected.cells.length}} / <a href ng-click="selected.cells = data.cells">{{data.cells.length}}</a></div>
+    <select id="cells" class="col-md-12" size="30" multiple ng-model="selected.cells" ng-options="p.name for p in data.cells"></select>
+  </div>
 </div>
 
 <div class="row marketing">
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
-
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
-
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
+  <h4>Explanation</h4>
+  <ul>
+    <li>Select Ligand - Receptor pair (or pairs) on the left.
+    <li>Select cell samples on the right.
+    <li>The top 100 edges (L-R pairs) for the selected cells will appear in the middle.
+    <li>Hover over nodes and edges to get more information.
+    <li>Click and drag nodes to move.
+    <li>Click a node to fix in place.  Click again to release.
+    <li>Green - Ligand only, Blue - Receptor only, Magenta - Ligand and receptor are expressed
+  </ul>
 </div>
 
 <div class="footer">
-  <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
+  <p>Made and maintained by J. Harshbarger.</p>
 </div>

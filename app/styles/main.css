@@ -32,10 +32,16 @@ body {
 }
 
 /* Customize container */
+
 @media (min-width: 768px) {
   .container {
     max-width: 730px;
   }
+}
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1170px;
+  }  
 }
 .container-narrow > hr {
   margin: 30px 0;
@@ -77,3 +83,6 @@ body {
     border-bottom: 0;
   }
 }
+
+
+
