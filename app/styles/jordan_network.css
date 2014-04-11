@@ -59,3 +59,18 @@
 		fill: none;
 		opacity: 1;
 	}
+
+	.hud {
+		position: absolute;
+		top: 5px;
+		left: 5px;
+	}
+
+	#vis svg { 
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		width: 100%;
+	}

@@ -45,7 +45,8 @@ riken = function() {
 					'background': 'rgba(0, 0, 0, 0.5)',
 					'padding': '5px 10px 5px 10px',
 					'-moz-border-radius': '5px 5px',
-					'border-radius': '5px 5px'
+					'border-radius': '5px 5px',
+					'opacity': 1
 				}
 		}
 
@@ -1666,7 +1667,7 @@ riken = function() {
 		//console.log(tooltip.style());
 			
 		tooltip.show = function() {
-			//console.log(getHtml(this.__data__));
+			console.log(getHtml(this.__data__));
 			tooltip.html(getHtml(this.__data__));
 			return tooltip.style("visibility", "visible");
 		}

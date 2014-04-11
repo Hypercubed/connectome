@@ -6,3 +6,5 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [ ] filters
 - [ ] Use select2
 - [ ] Add pull out menu
+- [ ] range directive?
+- [ ] Fix loading of range.min

@@ -10,7 +10,7 @@ angular.module('lrSpaApp')
   });
 
 angular.module('lrSpaApp')
-  .controller('UICtrl', function ($scope, $log, $http, $d3, cfpLoadingBar, PAIRSFILE, EXPRESSIONFILE) {
+  .controller('UICtrl', function ($scope, $log, $http, $d3, $q, cfpLoadingBar, PAIRSFILE, EXPRESSIONFILE) {
     var STORE = 'lr.';
 
     var selected = $scope.selected = {};
@@ -26,13 +26,50 @@ angular.module('lrSpaApp')
     $scope.graph.nodes = {};
     $scope.graph.edges = {};
 
+    $scope.exprRange = [0,1];
+    $scope.exprValue = 0;
+    $scope.exprMax = 0;
+
+    var _range = function() {
+      return { min: 0, max: 100, val: 10 };
+    }
+
+    $scope.ligandRange = new _range();
+    $scope.receptorRange = new _range();
+
     var chart = networkGraph();
 
-    $http.get(PAIRSFILE, {cache: true})  
+    var valueFormat = d3.format('.2f');
+
+    chart.nodeTooltip.getHtml(function(d) {
+      var s = (selected.pairs.length > 1) ? "Sum of" : "";
+      var html = [
+       d.name,
+       "<br />", s, "Ligand expression: "+valueFormat(d.values[0]),
+       "<br />", s, "Receptor expression: "+valueFormat(d.values[1])
+      ]
+      return html.join(' ');
+    });
+
+    chart.linkTooltip.getHtml(function(d) { 
+      var s = (selected.pairs.length > 1) ? "Sum of" : "";
+      var html = [
+        s,"Ligand expression:",valueFormat(d.values[0]),
+        "<br />", s,"Receptor expression:",valueFormat(d.values[1]),
+        "<br />", s,"Product:",valueFormat(d.value)
+      ];
+      return html.join(' ');
+    });
+
+    var A = $http.get(PAIRSFILE, {cache: true})  
       .success(function(data, status, headers, config) {
         data = d3.tsv.parse(data);
 
         $log.debug('Pairs loaded:',data.length);
+
+        data.forEach(function(d,i) {
+          d.id = i;
+        });
 
         $scope.data.pairs = data;
 
@@ -42,7 +79,7 @@ angular.module('lrSpaApp')
           $log.warn('Error',data, status, headers, config);
       });
 
-    $http.get(EXPRESSIONFILE, {cache: true})  
+    var B = $http.get(EXPRESSIONFILE, {cache: true})  
       .success(function(data, status, headers, config) {
         data = d3.tsv.parseRows(data);
 
@@ -51,7 +88,7 @@ angular.module('lrSpaApp')
         $scope.data.expr = data;
 
         $scope.data.cells = data[0].slice(1).map(function(d,i) {
-          return { name: d, index: i };
+          return { name: d, id: i };
         });
 
         $log.debug('Samples loaded:',$scope.data.cells.length);
@@ -62,25 +99,57 @@ angular.module('lrSpaApp')
           $log.warn('Error',data, status, headers, config);
       });
 
-    function makeNetwork() {
+    $q.all([A, B]).then(function() { 
+      $log.debug('Done loading');
+      loadSelection();
 
-      //var ph = selected.pairs.map(function(d,i) { return i; } ).join(',');
+      makeNetwork(true,false);
 
+      $scope.$watch('selected.pairs', makeNetwork);
+      $scope.$watch('selected.cells', makeNetwork);
+      $scope.$watch('ligandRange.val', makeNetwork);
+      $scope.$watch('receptorRange.val', makeNetwork);
+    });
+
+    function saveSelection() {
+      var _id = function(d) { return d.id; }
+
+      var _pairs = selected.pairs.map(_id);
+      var _cells = selected.cells.map(_id);
+      //console.log('store',_pairs,_cells);
+      localStorage.setItem(STORE+'pairs', JSON.stringify(_pairs));
+      localStorage.setItem(STORE+'cells', JSON.stringify(_cells));
+    }
+
+    function loadSelection() {
+      var _pairs = JSON.parse(localStorage.getItem(STORE+'pairs')) || [];
+      var _cells = JSON.parse(localStorage.getItem(STORE+'cells')) || [];
+
+    
+      var _idin = function(arr) {
+        return function(d) {
+          return arr.indexOf(d.id) > -1;
+        }
+      }
+
+      console.log('load',_pairs,_cells);
+
+      selected.pairs = data.pairs.filter(_idin(_pairs));
+      selected.cells = data.cells.filter(_idin(_cells));
       
-      //ph = "5,6,7";
-      //console.log(JSON.stringify(ph));
+    }
 
-      //localStorage.setItem(STORE+'pairs', JSON.stringify(ph));
+    function makeNetwork(newVal, oldVal) {
+      if (newVal == oldVal) return;
 
-      //localStorage.setItem( STORE+'pairs', JSON.stringify(ph) );
-      //localStorage.setItem( STORE+'cells', selected.cells.map(function(d,i) { return d.$$hashKey; } ) );
+      saveSelection();
 
       cfpLoadingBar.start();
 
-      $log.debug('Constructing network: ');
+      $log.debug('Constructing network');
       if ($scope.selected.cells.length < 1 && $scope.selected.pairs.length < 1) return;
 
-      graph.nodes = $scope.selected.cells;
+      graph.nodes = selected.cells;
 
       graph.nodes.forEach(function(n) {
         n.lout = [];
@@ -90,10 +159,11 @@ angular.module('lrSpaApp')
 
       cfpLoadingBar.inc();
 
-      $log.debug('Nodes: ',$scope.graph.nodes.length);
-      $log.debug('Pairs: ',$scope.selected.pairs.length);
+      $log.debug('Nodes: ',graph.nodes.length);
+      $log.debug('Pairs: ',selected.pairs.length);
 
       graph.edges = [];
+      $scope.exprRange[1] = 1;
       $scope.selected.pairs.forEach(addLinks);
 
       cfpLoadingBar.inc();
@@ -129,25 +199,30 @@ angular.module('lrSpaApp')
 
       });
 
+      graph.nodes = graph.nodes.filter(function(d) {   // Filtered nodes
+        return (d.lout.length + d.lin.length) > 0; 
+      });
+
       cfpLoadingBar.inc();
 
       draw();
 
-      cfpLoadingBar.complete()
+      //$scope.exprRange = d3.extent(graph.edges, function(d) { return d.value; });
+
+      cfpLoadingBar.complete();
 
     }
 
     function addLinks(_pair) {
       var expr = $scope.data.expr;
-      var cells = $scope.selected.cells;
 
       var minValue = 0;
 
       var ligandRow = null;
       var receptorRow = null;
 
-      for (var i = 1; i < data.expr.length; i++) {
-        var row = data.expr[i];
+      for (var i = 1; i < expr.length; i++) {
+        var row = expr[i];
         var gene = row[0];
 
         if (gene == _pair.Ligand)     ligandRow = row.slice(1);
@@ -158,12 +233,19 @@ angular.module('lrSpaApp')
 
       if (ligandRow && receptorRow) {
 
-        $scope.selected.cells.forEach(function(src) {  // all selected cell-cell pairs
-        $scope.selected.cells.forEach(function(tgt) {
+        graph.nodes.forEach(function(src) {  // all selected cell-cell pairs
+        graph.nodes.forEach(function(tgt) {
 
-          var value = (+ligandRow[src.index])*(+receptorRow[tgt.index]);
+          var lexpr = +ligandRow[src.id];
+          var rexpr = +receptorRow[tgt.id];
 
-          if (value > minValue) {  // src and tgt are talking!!!
+          $scope.ligandRange.max = Math.max(lexpr, $scope.ligandRange.max);
+          $scope.receptorRange.max = Math.max(rexpr, $scope.receptorRange.max);
+
+          var value = lexpr*rexpr;
+          //$scope.exprRange[1] = Math.max(value, $scope.exprRange[1]);
+
+          if (value > 0 && lexpr >= $scope.ligandRange.val && rexpr >= $scope.receptorRange.val) {  // src and tgt are talking!!!
             var lrs = _pair.Ligand + ' -> ' + _pair.Receptor;
             var cells = src.name + ' -> ' + tgt.name;
             //console.log(cells);
@@ -186,8 +268,8 @@ angular.module('lrSpaApp')
             }
 
             edge.value += value;
-            edge.values[0] += +ligandRow[src.index];
-            edge.values[1] += +receptorRow[tgt.index];
+            edge.values[0] += +lexpr;
+            edge.values[1] += +rexpr;
  
           }
 
@@ -242,8 +324,5 @@ angular.module('lrSpaApp')
         .datum(graph)
         .call(chart);
     }
-
-    $scope.$watch('selected.pairs', makeNetwork);
-    $scope.$watch('selected.cells', makeNetwork);
 
   });
