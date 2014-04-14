@@ -1,0 +1,26 @@
+.slider {
+    display:     block;
+    position:    relative;
+    height:      20px;
+    width:       100%;
+  }
+
+  .slider span.bubble {
+    position: absolute;
+    font-size:   0.7em;
+    line-height: 1.4em;
+    font-family: sans-serif;
+    text-align:  center;
+    text-shadow: none;
+    top:         2em;
+    cursor:      pointer;
+  }
+
+  .slider span.bubble.value {
+    margin-left: -0.5em;
+  }
+
+  .slider span.bubble.ceiling {
+    left: auto;
+    right: 0;
+  }

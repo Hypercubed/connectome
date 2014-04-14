@@ -29,7 +29,7 @@
     <h3>
       <a href="" data-toggle="collapse" data-target="#filters" class="">Filters <b class="caret"></b></a>
     </h3>
-    <div id="filters" class="fade out collapse">
+    <div id="filters" class="fade in collapse">
       <p />Ligand - Receptor Pairs
       <div class="pull-right">{{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a> <a href ng-click="selected.pairs = []">(clear)</a></div>  
       <select id="pairs" class="col-md-12" size="30" multiple chosen ng-model="selected.pairs" ng-options="p.Ligand + '-' + p.Receptor for p in data.pairs track by p.id" data-placeholder="Select Ligand-Receptor pairs"></select>
@@ -39,22 +39,12 @@
       <select id="cells" class="col-md-12" size="30" multiple  chosen ng-model="selected.cells" ng-options="c.name for c in data.cells track by c.id" data-placeholder="Select cell samples" style="width: 100%"></select>
 
       <p />
-      <div class="row">
-        <div class="col-md-3">{{ligandRange.min | number:2}}</div>
-        <div class="col-md-6 text-center">Ligand min TPM</div>
-        <div class="col-md-3 text-right">{{ligandRange.max | number:2}}</div>
-        <input type="range" name="points" min="0" max="{{ligandRange.max}}" step="1" ng-model="ligandRange.val">
-        {{ligandRange.val | number:2}}
-      </div>
+      Ligand min TPM
+      <div slider ng-model="ligandRange.val" max="ligandRange.max"></div>
 
-      <p />
-      <div class="row">
-        <div class="col-md-3">{{receptorRange.min | number:2}}</div>
-        <div class="col-md-6 text-center">Receptor min TPM</div>
-        <div class="col-md-3 text-right">{{receptorRange.max | number:2}}</div>
-        <input type="range" name="points" min="0" max="{{receptorRange.max}}" step="1" ng-model="receptorRange.val">
-        {{receptorRange.val | number:2}}
-      </div>      
+      <p /><br />Receptor min TPM
+      <div slider ng-model="receptorRange.val" max="receptorRange.max"></div>
+
     </div>
 
     <h3>

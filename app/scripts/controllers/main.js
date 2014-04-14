@@ -166,7 +166,15 @@ angular.module('lrSpaApp')
 
       graph.edges = [];
       $scope.exprRange[1] = 1;
+
+      $scope.ligandRange.max = 100;
+      $scope.receptorRange.max = 100;
+
+
       $scope.selected.pairs.forEach(addLinks);
+
+      $scope.ligandRange.val = Math.min($scope.ligandRange.val,$scope.ligandRange.max);
+      $scope.receptorRange.val = Math.min($scope.receptorRange.val,$scope.receptorRange.max);
 
       $scope.edgeCount = graph.edges.length;
 

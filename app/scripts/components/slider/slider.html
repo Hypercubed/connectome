@@ -1,0 +1,4 @@
+<input type="range" step="1" ng-model="value" min="0" max="{{max}}">
+<span class="bubble value" ng-style="{left: percent+'%'}" ng-bind="value"></span>
+<span class="bubble limit floor" ng-show="left" >{{0 | number:2}}</span>
+<span class="bubble limit ceiling" ng-show="right">{{max | number:2}}</span>
