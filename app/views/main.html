@@ -30,20 +30,30 @@
       <a href="" data-toggle="collapse" data-target="#filters" class="">Filters <b class="caret"></b></a>
     </h3>
     <div id="filters" class="fade in collapse">
-      <p />Ligand - Receptor Pairs
-      <div class="pull-right">{{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a> <a href ng-click="selected.pairs = []">(clear)</a></div>  
-      <select id="pairs" class="col-md-12" size="30" multiple chosen ng-model="selected.pairs" ng-options="p.Ligand + '-' + p.Receptor for p in data.pairs track by p.id" data-placeholder="Select Ligand-Receptor pairs"></select>
+      <p />
+      <div class="">
+        <a data-toggle="collapse" data-target="#pairsBox" >Ligand - Receptor Pairs <b class="caret"></b></a>
+        <div class="pull-right small">{{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a> <a href ng-click="selected.pairs = []">(clear)</a></div>  
+      </div>
+      <div id="pairsBox" class="fade out collapse">
+        <select id="pairs" class="col-md-12" size="30" multiple chosen ng-model="selected.pairs" ng-options="p.Ligand + '-' + p.Receptor for p in data.pairs track by p.id" data-placeholder="Select Ligand-Receptor pairs"></select>
+      </div>
 
-      <p />Samples
-      <div class="pull-right">{{selected.cells.length}} / <a href ng-click="selected.cells = data.cells">{{data.cells.length}}</a> <a href ng-click="selected.cells = []">(clear)</a></div>
-      <select id="cells" class="col-md-12" size="30" multiple  chosen ng-model="selected.cells" ng-options="c.name for c in data.cells track by c.id" data-placeholder="Select cell samples" style="width: 100%"></select>
+      <p />
+      <div class="">
+        <a data-toggle="collapse" data-target="#cellsBox" >Samples <b class="caret"></b></a>
+        <div class="pull-right small">{{selected.cells.length}} / <a href ng-click="selected.cells = data.cells">{{data.cells.length}}</a> <a href ng-click="selected.cells = []">(clear)</a></div>
+      </div>
+      <div id="cellsBox" class="fade out collapse" >
+        <select id="cells" class="col-md-12" size="30" multiple  chosen ng-model="selected.cells" ng-options="c.name for c in data.cells track by c.id" data-placeholder="Select cell samples" style="width: 100%"></select>
+      </div>
 
       <p />
       Ligand min TPM
-      <div slider ng-model="ligandRange.val" max="ligandRange.max"></div>
+      <div slider ng-model="ligandRange.val" max="ligandRange.max" min="1"></div>
 
       <p /><br />Receptor min TPM
-      <div slider ng-model="receptorRange.val" max="receptorRange.max"></div>
+      <div slider ng-model="receptorRange.val" max="receptorRange.max" min="1"></div>
 
     </div>
 
