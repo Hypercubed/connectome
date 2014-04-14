@@ -64,6 +64,8 @@ var networkGraph = function() {
     .gravity(2)
     .on("tick", tick);
 
+
+
   var line = d3.svg.line()
             .x(function(d) { return d.x; })
            .y(function(d) { return d.y; })
@@ -246,8 +248,8 @@ var networkGraph = function() {
     container
       .attr("width", width)
         .attr("height", height)
-        .call(zoom)
-        .on("dblclick.zoom", null)
+        .call(zoom.on("zoom", rescale))
+        //.on("dblclick.zoom", null)
           .append("svg:defs");
 
     // Ranges
@@ -267,19 +269,23 @@ var networkGraph = function() {
         .nodes(graph.nodes)
         .links(graph.edges);
 
+    //force.drag.on("dragstart", function() { d3.event.sourceEvent.stopPropagation(); });
+
       var g = container.selectAll('.networkGraph').data([1]);
 
       var gEnter = g.enter()
         .append('g')
-        .attr('class', 'networkGraph')
-        .each(function() {  // Only run once on enter
-        zoom
-          .on("zoom", function() {
-              g
-                .attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
-            });         
-        });
+        .attr('class', 'networkGraph');
 
+    // rescale g
+    function rescale() {
+      trans=d3.event.translate;
+      scale=d3.event.scale;
+     
+      g.attr("transform",
+          "translate(" + trans + ")"
+          + " scale(" + scale + ")");
+    }
 
     // MARKERS
     container.selectAll("defs").remove();
@@ -348,6 +354,14 @@ var networkGraph = function() {
     var nodesEnter = nodes.enter().append("g")
         .classed("node", true)
         .call(force.drag)
+        .on("mousedown", 
+          function(d) { 
+            container.call(zoom.on("zoom", null));
+        })
+        .on("mouseup", 
+          function(d) { 
+            container.call(zoom.on("zoom", rescale));
+        })
         .call(nodeTooltip.bind)
         .on('click', function(d) { d.fixed = (d.fixed) ? false : true; nodeClassed.call(this, 'fixed', d.fixed); })
         .on('mouseover.highlight', function() { nodeClassed.call(this, 'hover', true); })

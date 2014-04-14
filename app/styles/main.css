@@ -1,27 +1,29 @@
 /* Space out content a bit */
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding: 0px;
+  margin: 0;
 }
 
-/* Everything but the jumbotron gets side spacing for mobile first views */
-.header,
 .marketing,
-.footer {
-  padding-left: 15px;
-  padding-right: 15px;
+.footer,
+.container-fluid {
+  padding: 0px;
+  margin: 0;
 }
 
 /* Custom page header */
 .header {
-  border-bottom: 1px solid #e5e5e5;
+  background-color: #eee;
+  padding: 0 10px;
+  color: black;
 }
+
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
   margin-top: 0;
   margin-bottom: 0;
   line-height: 40px;
-  padding-bottom: 19px;
+  padding-bottom: 0;
 }
 
 /* Custom page footer */
@@ -65,24 +67,6 @@ body {
   margin-top: 28px;
 }
 
-/* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
-  /* Remove the padding we set earlier */
-  .header,
-  .marketing,
-  .footer {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  /* Space out the masthead */
-  .header {
-    margin-bottom: 30px;
-  }
-  /* Remove the bottom border on the jumbotron for visual effect */
-  .jumbotron {
-    border-bottom: 0;
-  }
+.rotate {
+  display: inline-block;
 }
-
-
-

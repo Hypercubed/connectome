@@ -9,3 +9,4 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [ ] range directive?
 - [ ] Fix loading of range.min
 - [ ] Limit number of selected cels
+- [ ] use vector lib?  (https://github.com/llafuente/js-2dmath)

@@ -1,13 +1,17 @@
-<div class="header">
-  <ul class="nav nav-pills pull-right">
-    <li class="active"><a ng-href="#">Home</a></li>
-    <li><a ng-href="#">About</a></li>
-    <li><a ng-href="#">Contact</a></li>
-  </ul>
-  <h3 class="text-muted">Ligand Receptor Network</h3>
+<div class="header row">
+  <div class="col-md-4">
+    <h4>Ligand Receptor Connectome</h4>
+    A visual guide to FANTOM5 Ligand-Receptor interactions
+    <br /><a ng-href="#">About</a>
+  </div>
+  <div class="col-md-8">
+    <div class="rotate"> [green] Ligand</div>
+    <div class="rotate"> [blue] Receptor</div>
+    <div class="rotate"> [magenta] Both</div>
+  </div>
 </div>
 
-<div id="ui" class="row" ng-controller="UICtrl">
+<div id="ui" class="content col-md-12 text-center" ng-controller="UICtrl">
   <div class="col-md-3 pull-left">
     <h4>Ligand - Receptor Pairs</h4>
     <div class="pull-right">{{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a></div>
@@ -47,19 +51,21 @@
   </div>
 </div>
 
-<div class="row marketing">
-  <h4>Explanation</h4>
-  <ul>
-    <li>Select Ligand - Receptor pair (or pairs) on the left.
-    <li>Select cell samples on the right.
-    <li>The top 100 edges (L-R pairs) for the selected cells will appear in the middle.
-    <li>Hover over nodes and edges to get more information.
-    <li>Click and drag nodes to move.
-    <li>Click a node to fix in place.  Click again to release.
-    <li>Green - Ligand only, Blue - Receptor only, Magenta - Ligand and receptor are expressed
-  </ul>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <h4>Explanation</h4>
+    <ul>
+      <li>Select Ligand - Receptor pair (or pairs) on the left.
+      <li>Select cell samples on the right.
+      <li>The top 100 edges (L-R pairs) for the selected cells will appear in the middle.
+      <li>Hover over nodes and edges to get more information.
+      <li>Click and drag nodes to move.
+      <li>Click a node to fix in place.  Click again to release.
+      <li>Green - Ligand only, Blue - Receptor only, Magenta - Ligand and receptor are expressed
+    </ul>
+  </div>  
 </div>
 
-<div class="footer">
+<div class="row footer text-center">
   <p>Made and maintained by J. Harshbarger.</p>
 </div>
