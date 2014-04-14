@@ -8,3 +8,4 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [ ] Add pull out menu
 - [ ] range directive?
 - [ ] Fix loading of range.min
+- [ ] Limit number of selected cels
