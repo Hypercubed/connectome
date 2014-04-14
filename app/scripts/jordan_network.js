@@ -59,12 +59,10 @@ var networkGraph = function() {
   var zoom = d3.behavior.zoom();
   var force = d3.layout.force()
     .charge(-250)
-    .linkDistance(400)
+    .linkDistance(800)
     .linkStrength(0.8)
     .gravity(2)
     .on("tick", tick);
-
-
 
   var line = d3.svg.line()
             .x(function(d) { return d.x; })
@@ -172,7 +170,7 @@ var networkGraph = function() {
   }
   //var opacity = d3.scale.log().range([1, 1]);
   var slog = d3.scale.log().range([2,9]).clamp(true);     // Maps value to normalized edge width
-  var rsize = d3.scale.linear().range([20, 20]).clamp(true);  // Maps value to size
+  var rsize = d3.scale.linear().range([30, 30]).clamp(true);  // Maps value to size
   //var nindex = d3.scale.linear().range([10, 1]);
 
   // Accessors
@@ -241,6 +239,11 @@ var networkGraph = function() {
   chart.draw = function draw(graph) {
 
     var container = d3.select(this);
+
+    width = parseInt(container.style('width'));
+    height = parseInt(container.style('height'));
+
+    //console.log(parseInt(container.style('width')),parseInt(container.style('height')));
 
     chart.update = function() { container.transition().call(chart); };
       chart.container = container;  //this;
@@ -370,7 +373,7 @@ var networkGraph = function() {
 
     nodesEnter
       .append('circle')
-        .attr("r",20);
+        .attr("r",rsize(1));
 
     nodesEnter
       .append('text')

@@ -1,71 +1,81 @@
-<div class="header row">
-  <div class="col-md-4">
+
+<div id="vis">
+  <noscript>Missing javascript</noscript>
+  <svg></svg>
+</div>
+
+<div id="header" class="header row">
+  <div id="legend" class="col-md-10">
+    <div class="rotate"> <div class="node ligand"></div> Ligand</div>
+    <div class="rotate"> <div class="node receptor"></div> Receptor</div>
+    <div class="rotate"> <div class="node both"></div> Both</div>
+  </div>
+</div>
+
+<div id="ui" class="content col-md-2" ng-controller="UICtrl">
+  <div class="col-md-12">
+
     <h4>Ligand Receptor Connectome</h4>
     A visual guide to FANTOM5 Ligand-Receptor interactions
-    <br /><a ng-href="#">About</a>
-  </div>
-  <div class="col-md-8">
-    <div class="rotate"> [green] Ligand</div>
-    <div class="rotate"> [blue] Receptor</div>
-    <div class="rotate"> [magenta] Both</div>
-  </div>
-</div>
+    
+    <p />
+    <div class="ng-cloak">
+      Pairs: {{selected.pairs.length}} / {{data.pairs.length}}
+      <br />Nodes: {{graph.nodes.length}} / {{data.cells.length}}
+      <br />Edges: {{graph.edges.length}} / {{edgeCount}} 
+      <br /><span class="bg-danger" ng-show="graph.edges.length >= 100">Maximum of 100 edges shown</span></span>    
+    </div>
 
-<div id="ui" class="content col-md-12 text-center" ng-controller="UICtrl">
-  <div class="col-md-3 pull-left">
-    <h4>Ligand - Receptor Pairs</h4>
-    <div class="pull-right">{{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a></div>
-    <select id="pairs" class="col-md-12" size="30" multiple ng-model="selected.pairs" ng-options="p.Ligand + '-' + p.Receptor for p in data.pairs track by p.id">
-    </select>
-  </div>
-  <div id="" class="col-md-6 pull-left">
-    <h4>Ligand - Receptor network</h4>
-    <div class="col-md-6">
-      <div class="col-md-3">{{ligandRange.min | number:2}}</div>
-      <div class="col-md-6 text-center">Ligand min TPM</div>
-      <div class="col-md-3 text-right">{{ligandRange.max | number:2}}</div>
-      <input type="range" name="points" min="0" max="{{ligandRange.max}}" step="1" ng-model="ligandRange.val">
-      {{ligandRange.val | number:2}}
-    </div>
-    <div class="col-md-6">
-      <div class="col-md-3">{{receptorRange.min | number:2}}</div>
-      <div class="col-md-6 text-center">Receptor min TPM</div>
-      <div class="col-md-3 text-right">{{receptorRange.max | number:2}}</div>
-      <input type="range" name="points" min="0" max="{{receptorRange.max}}" step="1" ng-model="receptorRange.val">
-      {{receptorRange.val | number:2}}
-    </div>
-    <div id="vis" class="row col-md-12">
-      <div class="hud pull-left">
-        Nodes: {{graph.nodes.length}}
-        <br /><span ng-class="{'bg-danger': graph.edges.length >= 100}">Edges: {{graph.edges.length}} <span ng-show="graph.edges.length >= 100">Maximum of 100 edges shown</span></span>    
+    <h3>
+      <a href="" data-toggle="collapse" data-target="#filters" class="">Filters <b class="caret"></b></a>
+    </h3>
+    <div id="filters" class="fade out collapse">
+      <p />Ligand - Receptor Pairs
+      <div class="pull-right">{{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a> <a href ng-click="selected.pairs = []">(clear)</a></div>  
+      <select id="pairs" class="col-md-12" size="30" multiple chosen ng-model="selected.pairs" ng-options="p.Ligand + '-' + p.Receptor for p in data.pairs track by p.id" data-placeholder="Select Ligand-Receptor pairs"></select>
+
+      <p />Samples
+      <div class="pull-right">{{selected.cells.length}} / <a href ng-click="selected.cells = data.cells">{{data.cells.length}}</a> <a href ng-click="selected.cells = []">(clear)</a></div>
+      <select id="cells" class="col-md-12" size="30" multiple  chosen ng-model="selected.cells" ng-options="c.name for c in data.cells track by c.id" data-placeholder="Select cell samples" style="width: 100%"></select>
+
+      <p />
+      <div class="row">
+        <div class="col-md-3">{{ligandRange.min | number:2}}</div>
+        <div class="col-md-6 text-center">Ligand min TPM</div>
+        <div class="col-md-3 text-right">{{ligandRange.max | number:2}}</div>
+        <input type="range" name="points" min="0" max="{{ligandRange.max}}" step="1" ng-model="ligandRange.val">
+        {{ligandRange.val | number:2}}
       </div>
 
-      <noscript>Missing javascript</noscript>
-      <svg></svg>
+      <p />
+      <div class="row">
+        <div class="col-md-3">{{receptorRange.min | number:2}}</div>
+        <div class="col-md-6 text-center">Receptor min TPM</div>
+        <div class="col-md-3 text-right">{{receptorRange.max | number:2}}</div>
+        <input type="range" name="points" min="0" max="{{receptorRange.max}}" step="1" ng-model="receptorRange.val">
+        {{receptorRange.val | number:2}}
+      </div>      
     </div>
-  </div>
-  <div class="col-md-3 pull-right">
-    <h4>Cells</h4>
-    <div class="pull-right">{{selected.cells.length}} / <a href ng-click="selected.cells = data.cells">{{data.cells.length}}</a></div>
-    <select id="cells" class="col-md-12" size="30" multiple ng-model="selected.cells" ng-options="c.name for c in data.cells track by c.id"></select>
+
+    <h3>
+      <a href="" data-toggle="collapse" data-target="#help" class="">Explanation <b class="caret"></b></a>
+    </h3>
+    <div id="help" class="fade out collapse">
+      <ul>
+        <li>Select Ligand - Receptor pair in the filter section on the left.
+        <li>Select cell samples.
+        <li>The top 100 edges (L-R pairs) for the selected cells will appear in the middle.
+        <li>Hover over nodes and edges to get more information.
+        <li>Click and drag nodes to move.
+        <li>Click a node to fix in place.  Click again to release.
+      </ul> 
+    </div>
+   
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <h4>Explanation</h4>
-    <ul>
-      <li>Select Ligand - Receptor pair (or pairs) on the left.
-      <li>Select cell samples on the right.
-      <li>The top 100 edges (L-R pairs) for the selected cells will appear in the middle.
-      <li>Hover over nodes and edges to get more information.
-      <li>Click and drag nodes to move.
-      <li>Click a node to fix in place.  Click again to release.
-      <li>Green - Ligand only, Blue - Receptor only, Magenta - Ligand and receptor are expressed
-    </ul>
-  </div>  
-</div>
-
-<div class="row footer text-center">
+<div id="footer" class="footer text-center">
   <p>Made and maintained by J. Harshbarger.</p>
 </div>
+
+

@@ -30,6 +30,8 @@ angular.module('lrSpaApp')
     $scope.exprValue = 0;
     $scope.exprMax = 0;
 
+    $scope.edgeCount = 0;
+
     var _range = function() {
       return { min: 0, max: 100, val: 10 };
     }
@@ -165,6 +167,8 @@ angular.module('lrSpaApp')
       graph.edges = [];
       $scope.exprRange[1] = 1;
       $scope.selected.pairs.forEach(addLinks);
+
+      $scope.edgeCount = graph.edges.length;
 
       cfpLoadingBar.inc();
 
