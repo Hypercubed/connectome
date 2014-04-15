@@ -11,3 +11,5 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [ ] use vector lib?  (https://github.com/llafuente/js-2dmath)
 - [x] Debounce slider
 - [ ] Add log scale to sliders
+- [ ] Move components
+- [ ] Download button
