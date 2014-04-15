@@ -2,6 +2,7 @@
 body {
   padding: 0px;
   margin: 0;
+  overflow: hidden;
 }
 
 .marketing,
@@ -30,7 +31,7 @@ body {
   height: 40px;
   position: absolute;
   top: 0;
-  left: 16.6666%;
+  left: 400px;
   right: 0;
   background-color: #eee;
   color: #777;
@@ -44,6 +45,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
+  width: 400px;
   opacity: 0.9;
 }
 
@@ -111,7 +113,11 @@ height: auto;
 
 .chosen-container-multi .chosen-choices {
   max-height: 300px;
-  overflow-y: scroll;  
+  overflow-y: scroll;
+}
+
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+  background: url(/bower_components/chosen/chosen-sprite.png) -42px 1px no-repeat;
 }
 
 

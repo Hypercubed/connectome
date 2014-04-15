@@ -3,9 +3,7 @@
 
   // Todo: min, customize labels, scale function
 
-  var scripts = document.getElementsByTagName("script")
-  var currentScriptPath = scripts[scripts.length-1].src;
-  var baseUrl = currentScriptPath.substring(0, currentScriptPath.lastIndexOf('/') + 1);
+  var baseUrl = 'scripts/components/slider/';
 
   angular.module('lrSpaApp')
     .directive('slider', function($timeout) {

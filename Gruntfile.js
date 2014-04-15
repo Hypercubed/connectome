@@ -32,19 +32,23 @@ module.exports = function (grunt) {
         tasks: ['bowerInstall']
       },
       js: {
-        files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
+        files: ['<%= yeoman.app %>/scripts/**/*.js'],
         tasks: ['newer:jshint:all'],
         options: {
           livereload: true
         }
       },
+      styles: {
+        files: ['<%= yeoman.app %>/scripts/components/**/*.css'],
+        tasks: ['newer:copy:styles','autoprefixer']
+      },
+      //styles: {
+      //  files: ['<%= yeoman.app %>/styles/**/*.css'],
+      //  tasks: ['newer:copy:styles', 'newer:copy:dist','autoprefixer']
+      //},
       jsTest: {
         files: ['test/spec/{,*/}*.js'],
         tasks: ['newer:jshint:test', 'karma']
-      },
-      styles: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
-        tasks: ['newer:copy:styles', 'autoprefixer']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -55,7 +59,8 @@ module.exports = function (grunt) {
         },
         files: [
           '<%= yeoman.app %>/{,*/}*.html',
-          '.tmp/styles/{,*/}*.css',
+          '<%= yeoman.app %>/scripts/**/*.html',
+          '.tmp/scripts/components/**/*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
@@ -103,7 +108,7 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%= yeoman.app %>/scripts/{,*/}*.js'
+        '<%= yeoman.app %>/scripts/**/*.js'
       ],
       test: {
         options: {
@@ -136,9 +141,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '.tmp/styles/',
-          src: '{,*/}*.css',
-          dest: '.tmp/styles/'
+          cwd: '.tmp/scripts/components/',
+          src: '**/*.css',
+          dest: '.tmp/scripts/components/'
         }]
       }
     },
@@ -274,6 +279,9 @@ module.exports = function (grunt) {
             '*.html',
             'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
+            'scripts/components/{,*/}*.{html,css}',
+            'bower_components/{,*/}*.{html,css,png}',
+            'data/*.txt',
             'fonts/*'
           ]
         }, {
@@ -285,8 +293,8 @@ module.exports = function (grunt) {
       },
       styles: {
         expand: true,
-        cwd: '<%= yeoman.app %>/styles',
-        dest: '.tmp/styles/',
+        cwd: '<%= yeoman.app %>/scripts/components',
+        dest: '.tmp/scripts/components/',
         src: '{,*/}*.css'
       }
     },

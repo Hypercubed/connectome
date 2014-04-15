@@ -12,7 +12,7 @@
     font-family: sans-serif;
     text-align:  center;
     text-shadow: none;
-    top:         2em;
+    top:         1.8em;
     cursor:      pointer;
   }
 
@@ -24,3 +24,5 @@
     left: auto;
     right: 0;
   }
+
+
