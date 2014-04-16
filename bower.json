@@ -18,5 +18,10 @@
   },
   "resolutions": {
     "angular": "1.2.16"
+  },
+  "overrides": {
+    "chosen": {
+      "main": [ "chosen.jquery.js", "chosen.css" ]
+    }
   }
 }

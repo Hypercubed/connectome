@@ -12,7 +12,7 @@ body {
 }
 
 #header {
-  height: 45px;
+  height: 40px;
   position: absolute;
   padding: 5px 20px;
   top: 0;
@@ -21,6 +21,18 @@ body {
   background-color: #eee;
   color: #777;
   border-top: 1px solid #e5e5e5;
+}
+
+#header .navbar-toggle {
+  display: inline-block;
+  float: left;
+  padding: 5px;
+  margin: 0;
+  background-color: buttonface;
+}
+
+.icon-bar {
+  background-color: red;
 }
 
 /* Custom page footer */
