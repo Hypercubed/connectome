@@ -46,8 +46,8 @@
 
       $scope.edgeCount = 0;
 
-      $scope.ligandRange = { min: 0, max: 100, val: 10 };
-      $scope.receptorRange = { min: 0, max: 100, val: 10 };
+      $scope.ligandRange = { min: 0, max: 1000000, val: 10 };
+      $scope.receptorRange = { min: 0, max: 10000000, val: 10 };
       $scope.maxEdges = 100;
 
       var chart = networkGraph();
@@ -191,8 +191,10 @@
         $scope.ligandRange.max = 100;
         $scope.receptorRange.max = 100;
 
-
         $scope.selected.pairs.forEach(addLinks);
+
+        $scope.ligandRange.max = Math.ceil($scope.ligandRange.max);
+        $scope.receptorRange.max = Math.ceil($scope.receptorRange.max);
 
         $scope.ligandRange.val = Math.min($scope.ligandRange.val,$scope.ligandRange.max);
         $scope.receptorRange.val = Math.min($scope.receptorRange.val,$scope.receptorRange.max);

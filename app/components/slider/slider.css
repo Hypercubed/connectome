@@ -5,22 +5,40 @@
 
   .slider span.bubble {
     position: absolute;
-    font-size:   0.7em;
+    font-size:   1.0em;
     line-height: 1.4em;
     font-family: sans-serif;
     text-align:  center;
     text-shadow: none;
-    top:         1.8em;
-    cursor:      pointer;
-  }
-
-  .slider span.bubble.value {
-    margin-left: -0.5em;
+    top:         0.5em;
+    color: #999;
+    margin: 0 5px;
   }
 
   .slider span.bubble.ceiling {
     left: auto;
-    right: 0;
+    right: 15px;
+  }
+
+  .slider input[type=number] {
+    position: relative;
+    overflow: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: auto !important;
+    height: 1%;
+    border: 1px solid #aaa;
+    background-color: #fff;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(1%, #eeeeee), color-stop(15%, #ffffff));
+    background-image: -webkit-linear-gradient(#eeeeee 1%, #ffffff 15%);
+    background-image: -moz-linear-gradient(#eeeeee 1%, #ffffff 15%);
+    background-image: -o-linear-gradient(#eeeeee 1%, #ffffff 15%);
+    background-image: linear-gradient(#eeeeee 1%, #ffffff 15%);
+    cursor: text;
   }
 
 

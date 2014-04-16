@@ -17,41 +17,37 @@
         link: function(scope, element, attrs) {
           element.addClass('slider');
 
+          scope.rangeValue = scope.value;
+          update();
 
-          scope.internalValue = scope.value;
-          scope.percent = (scope.value-scope.min)/(scope.max-scope.min)*100;
+          //scope.a = 10;
           
           scope.$watch('value', changeInputValue);
-          scope.$watch('max', change);
-          scope.$watch('min', change);
-          scope.$watch('percent', changeInternalValue);
-
+          scope.$watch('rangeValue', changeRangeValue);
+          scope.$watch('max', update);
+          scope.$watch('min', update);
+          
           function changeInputValue(newVal, oldVal) {
-            if (newVal == oldVal) return;
-
-            //scope.value = +scope.value || 0;
-            scope.internalValue = newVal;
-            scope.percent = (newVal-scope.min)/(scope.max-scope.min)*100;
-            change();
+            scope.rangeValue = newVal;
+            update();
           }
 
           var stop;
-          function changeInternalValue(newVal, oldVal) {
+          function changeRangeValue(newVal, oldVal) {
             if (newVal == oldVal) return;
 
-            //scope.percent = +scope.percent || 0;
-            scope.internalValue = scope.percent/100*(scope.max-scope.min)+scope.min;
-            change();
+            scope.rangeValue = +newVal;
+            update();
 
             $timeout.cancel(stop);
             stop = $timeout(function() {
-              scope.value = scope.internalValue;
+              scope.value = +scope.rangeValue;
             }, 10);
             
           }
 
-          function change() {
-            
+          function update() {
+            scope.percent = (scope.rangeValue-scope.min)/(scope.max-scope.min)*100;
             scope.max = +scope.max || 100;
             scope.min = +scope.min || 0;
 

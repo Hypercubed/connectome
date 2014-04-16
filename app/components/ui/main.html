@@ -32,20 +32,20 @@
         <div class="pull-right small">{{selected.cells.length}} / <a href ng-click="selected.cells = data.cells">{{data.cells.length}}</a> <a href ng-click="selected.cells = []">(clear)</a></div>
       </div>
       <div id="cellsBox" class="fade out collapse" >
-        <select id="cells" class="col-md-12" size="30" multiple  chosen  display-selected-options="false" search-contains="true" ng-model="selected.cells" ng-options="c.name for c in data.cells track by c.id" data-placeholder="Select cell samples" style="width: 100%"></select>
+        <select id="cells" class="col-md-12 form-control" size="30" multiple  chosen  display-selected-options="false" search-contains="true" ng-model="selected.cells" ng-options="c.name for c in data.cells track by c.id" data-placeholder="Select cell samples" style="width: 100%"></select>
       </div>
 
       <p />
       <div>
         <a href data-toggle="collapse" data-target="#ligandRange" >Ligand min TPM  <b class="caret"></b></a>
-        <div class="pull-right small"> > {{ligandRange.val | number:2}} tpm</div>
+        <div class="pull-right small"> > {{ligandRange.val | number:0}} tpm</div>
       </div>
       <div slider id="ligandRange" class="fade out collapse" ng-model="ligandRange.val" max="ligandRange.max" min="1"></div>
 
       <p />
       <div>
         <a href data-toggle="collapse" data-target="#receptorRange" >Receptor min TPM  <b class="caret"></b></a>
-        <div class="pull-right small"> > {{receptorRange.val | number:2}} tpm</div>
+        <div class="pull-right small"> > {{receptorRange.val | number:0}} tpm</div>
       </div>
       <div slider id="receptorRange" class="fade out collapse" ng-model="receptorRange.val" max="receptorRange.max" min="1"></div>
 
@@ -54,7 +54,7 @@
         <a href data-toggle="collapse" data-target="#edges" >Maximum number of edges  <b class="caret"></b></a>
         <div class="pull-right small"> {{maxEdges | number:0}}</div>
       </div>
-      <div slider id="edges" class="fade out collapse" ng-model="maxEdges" max="1000" min="0"></div>
+      <div slider id="edges" class="fade out collapse" ng-model="maxEdges" max="1000" min="1"></div>
 
     </div>
 
