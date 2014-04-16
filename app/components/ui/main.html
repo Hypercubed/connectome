@@ -13,13 +13,13 @@
       <br /><span class="bg-danger" ng-show="edgeCount > maxEdges">Maximum of {{maxEdges |number:0}} edges shown</span></span>    
     </div>
 
-    <h4 class="title">
-      <a href="" data-toggle="collapse" data-target="#filters" class="">Filters <b class="caret"></b></a>
+    <h4 class="title" data-toggle="collapse" data-target="#filters">
+      <a href="" class="">Filters</a>
     </h4>
     <div id="filters" class="fade in collapse">
       <p />
-      <div class="">
-        <a href data-toggle="collapse" data-target="#pairsBox" >Ligand - Receptor Pairs <b class="caret"></b></a>
+      <div class="" data-toggle="collapse" data-target="#pairsBox" >
+        <a href>Ligand - Receptor Pairs <b class="caret"></b></a>
         <div class="pull-right small">{{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a> <a href ng-click="selected.pairs = []">(clear)</a></div>  
       </div>
       <div id="pairsBox" class="fade in collapse">
@@ -27,8 +27,8 @@
       </div>
 
       <p />
-      <div class="">
-        <a href data-toggle="collapse" data-target="#cellsBox" >Samples <b class="caret"></b></a>
+      <div class="collapsed" data-toggle="collapse" data-target="#cellsBox" >
+        <a href>Samples <b class="caret"></b></a>
         <div class="pull-right small">{{selected.cells.length}} / <a href ng-click="selected.cells = data.cells">{{data.cells.length}}</a> <a href ng-click="selected.cells = []">(clear)</a></div>
       </div>
       <div id="cellsBox" class="fade out collapse" >
@@ -36,30 +36,27 @@
       </div>
 
       <p />
-      <div>
-        <a href data-toggle="collapse" data-target="#ligandRange" >Ligand min TPM  <b class="caret"></b></a>
+      <div class="collapsed" data-toggle="collapse" data-target="#ligandRange" >
+        <a href>Ligand min TPM  <b class="caret"></b></a>
         <div class="pull-right small"> > {{ligandRange.val | number:0}} tpm</div>
       </div>
       <div slider id="ligandRange" class="fade out collapse" ng-model="ligandRange.val" max="ligandRange.max" min="1"></div>
 
       <p />
-      <div>
-        <a href data-toggle="collapse" data-target="#receptorRange" >Receptor min TPM  <b class="caret"></b></a>
+      <div class="collapsed" data-toggle="collapse" data-target="#receptorRange" >
+        <a href>Receptor min TPM  <b class="caret"></b></a>
         <div class="pull-right small"> > {{receptorRange.val | number:0}} tpm</div>
       </div>
       <div slider id="receptorRange" class="fade out collapse" ng-model="receptorRange.val" max="receptorRange.max" min="1"></div>
-
-
-
     </div>
 
-    <h4 class="title">
-      <a href="" data-toggle="collapse" data-target="#options" class="">Options <b class="caret"></b></a>
+    <h4 class="title collapsed" data-toggle="collapse" data-target="#options">
+      <a href="" class="">Options</a>
     </h4>
     <div id="options" class="fade out collapse">
       <p />
-      <div>
-        <a href data-toggle="collapse" data-target="#edges" >Maximum number of edges  <b class="caret"></b></a>
+      <div class="collapsed" data-toggle="collapse" data-target="#edges">
+        <a href>Maximum number of edges  <b class="caret"></b></a>
         <div class="pull-right small"> {{maxEdges | number:0}}</div>
       </div>
       <div slider id="edges" class="fade out collapse" ng-model="maxEdges" max="1000" min="1"></div>
@@ -71,8 +68,8 @@
       </div>
     </div>
 
-    <h4 class="title">
-      <a href="" data-toggle="collapse" data-target="#help" class="">Explanation <b class="caret"></b></a>
+    <h4 class="title" data-toggle="collapse" data-target="#help">
+      <a href="" class="accordion-toggle" class="" >Explanation</a>
     </h4>
     <div id="help" class="fade in collapse">
       <ul>
