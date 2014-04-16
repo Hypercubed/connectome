@@ -169,7 +169,7 @@
 
     //var opacity = d3.scale.log().range([1, 1]);
     var slog = d3.scale.log().range([2,9]).clamp(true);     // Maps value to normalized edge width
-    var rsize = d3.scale.linear().range([30, 30]).clamp(true);  // Maps value to size
+    var rsize = d3.scale.linear().range([10, 10]).clamp(true);  // Maps value to size
     //var nindex = d3.scale.linear().range([10, 1]);
 
     // Accessors
@@ -393,8 +393,9 @@
 
       nodesEnter
         .append('text')
-          .attr('text-anchor', 'middle')
+          .attr('text-anchor', 'start')
           .attr('dy', 3)
+          .attr('dx', rsize(1)+3)
           .text(_F('name'));
 
       nodes

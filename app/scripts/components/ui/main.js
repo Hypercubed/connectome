@@ -7,6 +7,14 @@
   var app = angular.module('lrSpaApp');
 
   app
+    .config(function(snapRemoteProvider) {
+      snapRemoteProvider.globalOptions = {
+        disable: 'right',
+        maxPosition: 350
+      }
+    });
+
+  app
     .constant('EXPRESSIONFILE', 'data/LR.expr.txt')
     .constant('PAIRSFILE', 'data/LR.pairs.txt');
 

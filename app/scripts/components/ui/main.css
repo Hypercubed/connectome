@@ -2,7 +2,6 @@
 body {
   padding: 0px;
   margin: 0;
-  overflow: hidden;
 }
 
 .marketing,
@@ -12,26 +11,12 @@ body {
   margin: 0;
 }
 
-/* Custom page header */
-.header {
-  background-color: #eee;
-  padding: 0 10px;
-  color: black;
-}
-
-/* Make the masthead heading the same height as the navigation */
-.header h3 {
-  margin-top: 0;
-  margin-bottom: 0;
-  line-height: 40px;
-  padding-bottom: 0;
-}
-
 #header {
-  height: 40px;
+  height: 45px;
   position: absolute;
+  padding: 5px 20px;
   top: 0;
-  left: 400px;
+  left: 0;
   right: 0;
   background-color: #eee;
   color: #777;
@@ -45,12 +30,16 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 400px;
+  width: 350px;
   opacity: 0.9;
 }
 
 #ui:hover {
   opacity: 1;
+}
+
+#content {
+  overflow: hidden;
 }
 
 #footer {
@@ -120,4 +109,6 @@ height: auto;
   background: url(/bower_components/chosen/chosen-sprite.png) -42px 1px no-repeat;
 }
 
-
+.snap-content {
+  background-color: white;
+}

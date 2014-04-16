@@ -4,7 +4,7 @@
   'use strict';
   
   angular
-    .module('lrSpaApp', ['chieffancypants.loadingBar','localytics.directives']);
+    .module('lrSpaApp', ['chieffancypants.loadingBar','localytics.directives','snap']);
 
 })();
 

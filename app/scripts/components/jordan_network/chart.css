@@ -80,13 +80,23 @@ svg.fixed .link.fixed {
   opacity: 1;
 }
 
+#legend {
+  margin: 0 30px;
+  display: inline-block;
+}
+
+#legend .rotate {
+  height:30px;
+  line-height: 30px;
+}
+
 #legend .node {
   display: inline-block;
   border: 1px solid red;
-  width: 20px;
-  height: 20px;
-  margin-top: 5px;
-  border-radius: 10px;
+  width: 10px;
+  height: 10px;
+  margin-top: 0;
+  border-radius: 5px;
 }
 
 #legend .node.receptor {

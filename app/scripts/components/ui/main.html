@@ -1,18 +1,5 @@
 
-<div id="vis">
-  <noscript>Missing javascript</noscript>
-  <svg></svg>
-</div>
-
-<div id="header" class="header row">
-  <div id="legend" class="col-md-10">
-    <div class="rotate"> <div class="node ligand"></div> Ligand</div>
-    <div class="rotate"> <div class="node receptor"></div> Receptor</div>
-    <div class="rotate"> <div class="node both"></div> Both</div>
-  </div>
-</div>
-
-<div id="ui" class="content col-md-4" ng-controller="UICtrl">
+<div snap-drawer id="ui" class="content" ng-controller="UICtrl">
   <div class="col-md-12">
 
     <h4>Ligand Receptor Connectome</h4>
@@ -36,7 +23,7 @@
         <div class="pull-right small">{{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a> <a href ng-click="selected.pairs = []">(clear)</a></div>  
       </div>
       <div id="pairsBox" class="fade out collapse">
-        <select id="pairs" class="col-md-12" size="30" multiple chosen ng-model="selected.pairs" ng-options="p.Ligand + '-' + p.Receptor for p in data.pairs track by p.id" data-placeholder="Select Ligand-Receptor pairs"></select>
+        <select id="pairs" class="col-md-12" size="30" multiple chosen  display-selected-options="false" search-contains="true" ng-model="selected.pairs" ng-options="p.Ligand + '-' + p.Receptor for p in data.pairs track by p.id" data-placeholder="Select Ligand-Receptor pairs"></select>
       </div>
 
       <p />
@@ -45,7 +32,7 @@
         <div class="pull-right small">{{selected.cells.length}} / <a href ng-click="selected.cells = data.cells">{{data.cells.length}}</a> <a href ng-click="selected.cells = []">(clear)</a></div>
       </div>
       <div id="cellsBox" class="fade out collapse" >
-        <select id="cells" class="col-md-12" size="30" multiple  chosen ng-model="selected.cells" ng-options="c.name for c in data.cells track by c.id" data-placeholder="Select cell samples" style="width: 100%"></select>
+        <select id="cells" class="col-md-12" size="30" multiple  chosen  display-selected-options="false" search-contains="true" ng-model="selected.cells" ng-options="c.name for c in data.cells track by c.id" data-placeholder="Select cell samples" style="width: 100%"></select>
       </div>
 
       <p />
@@ -53,14 +40,14 @@
         <a href data-toggle="collapse" data-target="#ligandRange" >Ligand min TPM  <b class="caret"></b></a>
         <div class="pull-right small"> > {{ligandRange.val | number:2}} tpm</div>
       </div>
-      <div slider id="ligandRange" class="fade out collapsed" ng-model="ligandRange.val" max="ligandRange.max" min="1"></div>
+      <div slider id="ligandRange" class="fade out collapse" ng-model="ligandRange.val" max="ligandRange.max" min="1"></div>
 
       <p />
       <div>
         <a href data-toggle="collapse" data-target="#receptorRange" >Receptor min TPM  <b class="caret"></b></a>
         <div class="pull-right small"> > {{receptorRange.val | number:2}} tpm</div>
       </div>
-      <div slider id="receptorRange" class="fade out collapsed" ng-model="receptorRange.val" max="receptorRange.max" min="1"></div>
+      <div slider id="receptorRange" class="fade out collapse" ng-model="receptorRange.val" max="receptorRange.max" min="1"></div>
 
     </div>
 
@@ -80,9 +67,28 @@
    
   </div>
 </div>
+<div id="content" snap-content id="content">
 
-<div id="footer" class="footer text-center">
-  <p>Made and maintained by J. Harshbarger.</p>
+  <div id="vis">
+    <noscript>Missing javascript</noscript>
+    <svg></svg>
+  </div>
+
+  <div id="header" class="header row">
+    <button snap-toggle snap-dragger class="btn"><i class="glyphicon glyphicon-align-justify"></i></button>
+    <div id="legend">
+      <div class="rotate"> <div class="node ligand"></div> Ligand</div>
+      <div class="rotate"> <div class="node receptor"></div> Receptor</div>
+      <div class="rotate"> <div class="node both"></div> Both</div>
+    </div>
+  </div>
+
+  <div id="footer" class="footer text-center">
+    <p>Made and maintained by J. Harshbarger.</p>
+  </div>
+
 </div>
+
+
 
 
