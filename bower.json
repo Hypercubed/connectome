@@ -10,7 +10,8 @@
     "d3": "~3.4.5",
     "angular-loading-bar": "~0.3.0",
     "angular-chosen-localytics": "~1.0.6",
-    "angular-snap": "~1.4.1"
+    "angular-snap": "~1.4.1",
+    "d3-tip": "~0.6.4"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",
@@ -21,7 +22,10 @@
   },
   "overrides": {
     "chosen": {
-      "main": [ "chosen.jquery.js", "chosen.css" ]
+      "main": [
+        "chosen.jquery.js",
+        "chosen.css"
+      ]
     }
   }
 }

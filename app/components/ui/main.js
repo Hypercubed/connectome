@@ -45,6 +45,7 @@
       $scope.exprMax = 0;
 
       $scope.edgeCount = 0;
+      $scope.showLabels = true;
 
       $scope.ligandRange = { min: 0, max: 1000000, val: 10 };
       $scope.receptorRange = { min: 0, max: 10000000, val: 10 };
@@ -123,6 +124,11 @@
         $scope.$watch('ligandRange.val', makeNetwork);
         $scope.$watch('receptorRange.val', makeNetwork);
         $scope.$watch('maxEdges', makeNetwork);
+        $scope.$watch('showLabels', function() {
+          console.log('showLabels',$scope.showLabels);
+          d3.select('#vis svg')
+            .classed('labels',$scope.showLabels);
+        });
       });
 
       function saveSelection() {
@@ -355,6 +361,7 @@
 
       function draw() {
         d3.select('#vis svg')
+          .classed('labels',$scope.showLabels)
           .datum(graph)
           .call(chart);
       }

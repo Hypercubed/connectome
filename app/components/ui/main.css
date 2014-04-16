@@ -46,6 +46,10 @@ body {
   opacity: 0.9;
 }
 
+#ui .title {
+  background-color: buttonface;
+}
+
 #ui:hover {
   opacity: 1;
 }

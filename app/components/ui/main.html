@@ -13,16 +13,16 @@
       <br /><span class="bg-danger" ng-show="edgeCount > maxEdges">Maximum of {{maxEdges |number:0}} edges shown</span></span>    
     </div>
 
-    <h3>
+    <h4 class="title">
       <a href="" data-toggle="collapse" data-target="#filters" class="">Filters <b class="caret"></b></a>
-    </h3>
+    </h4>
     <div id="filters" class="fade in collapse">
       <p />
       <div class="">
         <a href data-toggle="collapse" data-target="#pairsBox" >Ligand - Receptor Pairs <b class="caret"></b></a>
         <div class="pull-right small">{{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a> <a href ng-click="selected.pairs = []">(clear)</a></div>  
       </div>
-      <div id="pairsBox" class="fade out collapse">
+      <div id="pairsBox" class="fade in collapse">
         <select id="pairs" class="col-md-12" size="30" multiple chosen  display-selected-options="false" search-contains="true" ng-model="selected.pairs" ng-options="p.Ligand + '-' + p.Receptor for p in data.pairs track by p.id" data-placeholder="Select Ligand-Receptor pairs"></select>
       </div>
 
@@ -49,6 +49,14 @@
       </div>
       <div slider id="receptorRange" class="fade out collapse" ng-model="receptorRange.val" max="receptorRange.max" min="1"></div>
 
+
+
+    </div>
+
+    <h4 class="title">
+      <a href="" data-toggle="collapse" data-target="#options" class="">Options <b class="caret"></b></a>
+    </h4>
+    <div id="options" class="fade out collapse">
       <p />
       <div>
         <a href data-toggle="collapse" data-target="#edges" >Maximum number of edges  <b class="caret"></b></a>
@@ -56,25 +64,30 @@
       </div>
       <div slider id="edges" class="fade out collapse" ng-model="maxEdges" max="1000" min="1"></div>
 
+      <p />
+      <div>
+        Show node labels
+        <div class="pull-right small"><input type="checkbox" ng-model="showLabels"></div>
+      </div>
     </div>
 
-    <h3>
+    <h4 class="title">
       <a href="" data-toggle="collapse" data-target="#help" class="">Explanation <b class="caret"></b></a>
-    </h3>
-    <div id="help" class="fade out collapse">
+    </h4>
+    <div id="help" class="fade in collapse">
       <ul>
-        <li>Select Ligand - Receptor pair in the filter section on the left.
+        <li>Select Ligand - Receptor pair in the filter.
         <li>Select cell samples.
-        <li>The top 100 edges (L-R pairs) for the selected cells will appear in the middle.
+        <li>The top 100 edges for the selected cells will appear.
         <li>Hover over nodes and edges to get more information.
         <li>Click and drag nodes to move.
         <li>Double click a node to fix in place.  Double click again to release.
-      </ul> 
+      </ul>
     </div>
    
   </div>
 </div>
-<div id="content" snap-content id="content">
+<div id="content" snap-content id="content" style="-webkit-transform: translate3d(350px, 0px, 0px);">
 
   <div id="vis">
     <noscript>Missing javascript</noscript>
