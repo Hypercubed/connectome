@@ -118,6 +118,7 @@ svg.fixed .link.fixed {
   background: rgba(0, 0, 0, 0.8);
   color: #fff;
   border-radius: 2px;
+  z-index: 100;
   pointer-events:none !imporatant;
 }
 

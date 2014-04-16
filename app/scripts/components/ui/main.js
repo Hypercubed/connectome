@@ -48,6 +48,7 @@
 
       $scope.ligandRange = { min: 0, max: 100, val: 10 };
       $scope.receptorRange = { min: 0, max: 100, val: 10 };
+      $scope.maxEdges = 100;
 
       var chart = networkGraph();
 
@@ -121,6 +122,7 @@
         $scope.$watch('selected.cells', makeNetwork);
         $scope.$watch('ligandRange.val', makeNetwork);
         $scope.$watch('receptorRange.val', makeNetwork);
+        $scope.$watch('maxEdges', makeNetwork);
       });
 
       function saveSelection() {
@@ -199,14 +201,13 @@
 
         cfpLoadingBar.inc();
 
-        var EDGELIMIT = 100;
-        if (graph.edges.length > EDGELIMIT) {
+        if (graph.edges.length > $scope.maxEdges) {
 
           $log.warn('Too many edges', graph.edges.length);
 
           graph.edges = graph.edges
             .sort(function(a,b) { return b.value - a.value; })
-            .slice(0,EDGELIMIT);
+            .slice(0,$scope.maxEdges);
 
         }
 

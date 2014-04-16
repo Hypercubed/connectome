@@ -10,7 +10,7 @@
       Pairs: {{selected.pairs.length}} / {{data.pairs.length}}
       <br />Nodes: {{graph.nodes.length}} / {{data.cells.length}}
       <br />Edges: {{graph.edges.length}} / {{edgeCount}} 
-      <br /><span class="bg-danger" ng-show="graph.edges.length >= 100">Maximum of 100 edges shown</span></span>    
+      <br /><span class="bg-danger" ng-show="edgeCount > maxEdges">Maximum of {{maxEdges |number:0}} edges shown</span></span>    
     </div>
 
     <h3>
@@ -48,6 +48,13 @@
         <div class="pull-right small"> > {{receptorRange.val | number:2}} tpm</div>
       </div>
       <div slider id="receptorRange" class="fade out collapse" ng-model="receptorRange.val" max="receptorRange.max" min="1"></div>
+
+      <p />
+      <div>
+        <a href data-toggle="collapse" data-target="#edges" >Maximum number of edges  <b class="caret"></b></a>
+        <div class="pull-right small"> {{maxEdges | number:0}}</div>
+      </div>
+      <div slider id="edges" class="fade out collapse" ng-model="maxEdges" max="1000" min="0"></div>
 
     </div>
 
