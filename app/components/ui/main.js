@@ -10,7 +10,9 @@
     .config(function(snapRemoteProvider) {
       snapRemoteProvider.globalOptions = {
         disable: 'right',
-        maxPosition: 350
+        maxPosition: 350,
+        tapToClose: false,
+        touchToDrag: false
       };
     });
 

@@ -33,7 +33,7 @@
 
         <p />
         <div ng-click="panelState.ligand = !panelState.ligand">
-          <a href>Ligand min TPM  <b class="caret" ng-class="{'collapsed': !panelState.cells}"></b></a>
+          <a href>Ligand min TPM  <b class="caret" ng-class="{'collapsed': !panelState.ligand}"></b></a>
           <div class="pull-right small"> > {{ligandRange.val | number:0}} tpm</div>
         </div>
         <div slider collapse="!panelState.ligand" ng-model="ligandRange.val" max="ligandRange.max" min="1"></div>
