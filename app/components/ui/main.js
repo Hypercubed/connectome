@@ -24,7 +24,7 @@
   });
 
   app
-    .controller('UICtrl', function ($scope, $log, $http, $q, cfpLoadingBar, PAIRSFILE, EXPRESSIONFILE) {
+    .controller('UICtrl', function ($scope, $log, $http, $q, cfpLoadingBar, localStorageService, PAIRSFILE, EXPRESSIONFILE) {
       var STORE = 'lr.';
 
       var selected = $scope.selected = {};
@@ -87,8 +87,6 @@
 
           $scope.data.pairs = data;
 
-          //console.log('localStorage pairs', localStorage.getItem(STORE+'pairs'));
-
         }).error(function(data, status, headers, config) {
           $log.warn('Error',data, status, headers, config);
         });
@@ -115,6 +113,7 @@
 
       $q.all([A, B]).then(function() {
         $log.debug('Done loading');
+
         loadSelection();
 
         makeNetwork(true,false);
@@ -137,10 +136,11 @@
         var _pairs = selected.pairs.map(_id);
         var _cells = selected.cells.map(_id);
 
-        localStorage.setItem(STORE+'pairs', JSON.stringify(_pairs));
-        localStorage.setItem(STORE+'cells', JSON.stringify(_cells));
-        localStorage.setItem(STORE+'ligandRange', JSON.stringify($scope.ligandRange));
-        localStorage.setItem(STORE+'receptorRange', JSON.stringify($scope.receptorRange));
+        localStorageService.set('pairs', _pairs);
+        localStorageService.set('cells', _cells);
+        localStorageService.set('ligandRange', $scope.ligandRange);
+        localStorageService.set('receptorRange', $scope.receptorRange);
+
       }
 
       function loadSelection() {
@@ -151,10 +151,10 @@
           };
         }
 
-        console.log(localStorage.getItem(STORE+'pairs'));
+        //console.log(localStorage.getItem(STORE+'pairs'));
 
-        var _pairs = JSON.parse(localStorage.getItem(STORE+'pairs')) || [317];
-        var _cells = JSON.parse(localStorage.getItem(STORE+'cells')) || [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26];
+        var _pairs = localStorageService.get('pairs') || [317];
+        var _cells = localStorageService.get('cells') || [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26];
 
         $log.debug('load from local stoarge',_pairs,_cells);
 
@@ -163,8 +163,9 @@
 
         selected.pairs = data.pairs.filter(_idin(_pairs));
         selected.cells = data.cells.filter(_idin(_cells));
-        $scope.ligandRange = JSON.parse(localStorage.getItem(STORE+'ligandRange')) || {"min":0,"max":100,"val":10};
-        $scope.receptorRange = JSON.parse(localStorage.getItem(STORE+'receptorRange')) || {"min":0,"max":699.419821048934,"val":10};
+
+        $scope.ligandRange = localStorageService.get('ligandRange') || {"min":0,"max":100,"val":10};
+        $scope.receptorRange = localStorageService.get('receptorRange') || {"min":0,"max":699.419821048934,"val":10};
         
       }
 

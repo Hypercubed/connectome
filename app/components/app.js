@@ -3,8 +3,13 @@
 (function() {
   'use strict';
   
-  angular
-    .module('lrSpaApp', ['chieffancypants.loadingBar','localytics.directives','snap']);
+  var app = angular
+    .module('lrSpaApp', ['chieffancypants.loadingBar','localytics.directives','snap','LocalStorageModule']);
+
+  app
+	.config(['localStorageServiceProvider', function(localStorageServiceProvider){
+	  localStorageServiceProvider.setPrefix('lr');
+	}]);
 
 })();
 
