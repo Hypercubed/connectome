@@ -12,8 +12,8 @@
     "angular-chosen-localytics": "~1.0.6",
     "angular-snap": "~1.4.1",
     "d3-tip": "~0.6.4",
-    "angular-local-storage": "~0.0.1",
-    "angular-bootstrap": "~0.10.0"
+    "angular-bootstrap": "~0.10.0",
+    "angular-local-storage": "https://github.com/Hypercubed/angular-local-storage.git#feature/bind"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",

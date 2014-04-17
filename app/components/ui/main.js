@@ -26,13 +26,7 @@
   app
     .controller('UICtrl', function ($scope, $log, $http, $q, cfpLoadingBar, localStorageService, PAIRSFILE, EXPRESSIONFILE) {
 
-      localStorageService.bind = function(scope, key, def) {
-        scope[key] = localStorageService.get(key) || def;
-
-        scope.$watchCollection(key, function(newVal) {
-          localStorageService.set(key, newVal);
-        });
-      }
+      console.log(localStorageService);
 
       $scope.panelState = {
         filters: true,
