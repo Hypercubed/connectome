@@ -11,7 +11,7 @@
       snapRemoteProvider.globalOptions = {
         disable: 'right',
         maxPosition: 350
-      }
+      };
     });
 
   app
@@ -25,7 +25,6 @@
 
   app
     .controller('UICtrl', function ($scope, $log, $http, $q, cfpLoadingBar, localStorageService, PAIRSFILE, EXPRESSIONFILE) {
-      var STORE = 'lr.';
 
       var selected = $scope.selected = {};
       $scope.selected.pairs = []; //localStorage.getItem(STORE+'pairs') || [];
@@ -158,14 +157,14 @@
 
         $log.debug('load from local stoarge',_pairs,_cells);
 
-        if (_pairs.length < 1) { _pairs = [317] }
-        if (_cells.length < 1) { _cells = [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26] }
+        if (_pairs.length < 1) { _pairs = [317]; }
+        if (_cells.length < 1) { _cells = [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]; }
 
         selected.pairs = data.pairs.filter(_idin(_pairs));
         selected.cells = data.cells.filter(_idin(_cells));
 
-        $scope.ligandRange = localStorageService.get('ligandRange') || {"min":0,"max":100,"val":10};
-        $scope.receptorRange = localStorageService.get('receptorRange') || {"min":0,"max":699.419821048934,"val":10};
+        $scope.ligandRange = localStorageService.get('ligandRange') || {min:0,max:100,val:10};
+        $scope.receptorRange = localStorageService.get('receptorRange') || {min:0,max:699.419821048934,val:10};
         
       }
 

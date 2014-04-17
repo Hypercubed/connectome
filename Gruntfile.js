@@ -155,8 +155,8 @@ module.exports = function (grunt) {
         ignorePath: '<%= yeoman.app %>/',
         //exclude: [ /chosen\.jquery\.js/ ]
         overrides: {
-          "chosen": {
-            "main": "bower_components/chosen/chosen.jquery.js"
+          chosen: {
+            main: 'bower_components/chosen/chosen.jquery.js'
           }
         }
       }

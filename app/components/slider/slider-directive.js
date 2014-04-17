@@ -14,27 +14,17 @@
           min: '='
         },
         templateUrl: baseUrl+'slider.html',
-        link: function(scope, element, attrs) {
+        link: function(scope, element) {
           element.addClass('slider');
 
-          scope.rangeValue = scope.value;
-          update();
-
-          //scope.a = 10;
-          
-          scope.$watch('value', changeInputValue);
-          scope.$watch('rangeValue', changeRangeValue);
-          scope.$watch('max', update);
-          scope.$watch('min', update);
-          
-          function changeInputValue(newVal, oldVal) {
+          function changeInputValue(newVal) {
             scope.rangeValue = newVal;
             update();
           }
 
           var stop;
           function changeRangeValue(newVal, oldVal) {
-            if (newVal == oldVal) return;
+            if (newVal === oldVal) {return;}
 
             scope.rangeValue = +newVal;
             update();
@@ -52,10 +42,18 @@
             scope.min = +scope.min || 0;
 
             scope.left = scope.percent > 10;
-            scope.right = scope.percent < 90;    
+            scope.right = scope.percent < 90;
             scope.bubbleStyle = {left: scope.percent+'%'};
 
           }
+
+          scope.rangeValue = scope.value;
+          update();
+          
+          scope.$watch('value', changeInputValue);
+          scope.$watch('rangeValue', changeRangeValue);
+          scope.$watch('max', update);
+          scope.$watch('min', update);
 
         }
       };

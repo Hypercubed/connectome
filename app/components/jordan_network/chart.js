@@ -1,5 +1,4 @@
 /* global d3 */
-/* global riken */
 
 (function(d3) {
   'use strict';
@@ -187,7 +186,7 @@
     var linkTooltip = chart.linkTooltip = d3.tip().attr('class', 'd3-tip link').html(_F('name'));
 
     linkTooltip.offset(function() {
-      return [this.getBBox().height / 2, 0]
+      return [this.getBBox().height / 2, 0];
     });
 
     //var nodeTooltip = chart.nodeTooltip = riken.tooltips().getHtml(_F('name'));
