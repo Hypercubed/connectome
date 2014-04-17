@@ -1,86 +1,76 @@
 
-<div snap-drawer id="ui" class="content" ng-controller="UICtrl">
-  <div class="col-md-12">
+<div snap-drawer id="ui" ng-controller="UICtrl">
+  <div class="">
 
-    <h4>Ligand Receptor Connectome</h4>
-    A visual guide to FANTOM5 Ligand-Receptor interactions
-    
-    <p />
-    <div class="ng-cloak">
+    <h4 class="title">Ligand Receptor Connectome</h4>
+    <p>A visual guide to FANTOM5 Ligand-Receptor interactions</p>
+
+    <p class="ng-cloak">
       Pairs: {{selected.pairs.length}} / {{data.pairs.length}}
       <br />Nodes: {{graph.nodes.length}} / {{data.cells.length}}
-      <br />Edges: {{graph.edges.length}} / {{edgeCount}} 
-      <br /><span class="bg-danger" ng-show="edgeCount > maxEdges">Maximum of {{maxEdges |number:0}} edges shown</span></span>    
-    </div>
+      <br />Edges: {{graph.edges.length}} / {{edgeCount}} <span class="bg-danger" ng-show="edgeCount > options.maxEdges">Maximum shown</span></span>    
+    </p>
 
-    <h4 class="title" data-toggle="collapse" data-target="#filters">
-      <a href="" class="">Filters</a>
-    </h4>
-    <div id="filters" class="fade in collapse">
-      <p />
-      <div class="" data-toggle="collapse" data-target="#pairsBox" >
-        <a href>Ligand - Receptor Pairs <b class="caret"></b></a>
-        <div class="pull-right small">{{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a> <a href ng-click="selected.pairs = []">(clear)</a></div>  
-      </div>
-      <div id="pairsBox" class="fade in collapse">
-        <select id="pairs" class="col-md-12" size="30" multiple chosen  display-selected-options="false" search-contains="true" ng-model="selected.pairs" ng-options="p.Ligand + '-' + p.Receptor for p in data.pairs track by p.id" data-placeholder="Select Ligand-Receptor pairs"></select>
-      </div>
+    <accordion close-others="false">
+      <accordion-group heading="Filters" is-open="panelState.filters" ng-class="{'collapsed': !panelState.filters}">
 
-      <p />
-      <div class="collapsed" data-toggle="collapse" data-target="#cellsBox" >
-        <a href>Samples <b class="caret"></b></a>
-        <div class="pull-right small">{{selected.cells.length}} / <a href ng-click="selected.cells = data.cells">{{data.cells.length}}</a> <a href ng-click="selected.cells = []">(clear)</a></div>
-      </div>
-      <div id="cellsBox" class="fade out collapse" >
-        <select id="cells" class="col-md-12 form-control" size="30" multiple  chosen  display-selected-options="false" search-contains="true" ng-model="selected.cells" ng-options="c.name for c in data.cells track by c.id" data-placeholder="Select cell samples" style="width: 100%"></select>
-      </div>
+        <div class="">
+          <a href data-toggle="collapse" data-target="#pairsBox" >Ligand - Receptor Pairs <b class="caret"></b></a>
+          <div class="pull-right small">{{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a> <a href ng-click="selected.pairs = []">(clear)</a></div>  
+        </div>
+        <div id="pairsBox" class="fade in collapse">
+          <select id="pairs" class="col-md-12" size="30" multiple chosen  display-selected-options="false" search-contains="true" ng-model="selected.pairs" ng-options="p.Ligand + '-' + p.Receptor for p in data.pairs track by p.id" data-placeholder="Select Ligand-Receptor pairs"></select>
+        </div>
 
-      <p />
-      <div class="collapsed" data-toggle="collapse" data-target="#ligandRange" >
-        <a href>Ligand min TPM  <b class="caret"></b></a>
-        <div class="pull-right small"> > {{ligandRange.val | number:0}} tpm</div>
-      </div>
-      <div slider id="ligandRange" class="fade out collapse" ng-model="ligandRange.val" max="ligandRange.max" min="1"></div>
+        <p />
+        <div class="collapsed">
+          <a href data-toggle="collapse" data-target="#cellsBox" >Samples <b class="caret"></b></a>
+          <div class="pull-right small">{{selected.cells.length}} / <a href ng-click="selected.cells = data.cells">{{data.cells.length}}</a> <a href ng-click="selected.cells = []">(clear)</a></div>
+        </div>
+        <div id="cellsBox" class="fade out collapse" >
+          <select id="cells" class="col-md-12 form-control" size="30" multiple  chosen  display-selected-options="false" search-contains="true" ng-model="selected.cells" ng-options="c.name for c in data.cells track by c.id" data-placeholder="Select cell samples" style="width: 100%"></select>
+        </div>
 
-      <p />
-      <div class="collapsed" data-toggle="collapse" data-target="#receptorRange" >
-        <a href>Receptor min TPM  <b class="caret"></b></a>
-        <div class="pull-right small"> > {{receptorRange.val | number:0}} tpm</div>
-      </div>
-      <div slider id="receptorRange" class="fade out collapse" ng-model="receptorRange.val" max="receptorRange.max" min="1"></div>
-    </div>
+        <p />
+        <div class="collapsed" data-toggle="collapse" data-target="#ligandRange" >
+          <a href>Ligand min TPM  <b class="caret"></b></a>
+          <div class="pull-right small"> > {{ligandRange.val | number:0}} tpm</div>
+        </div>
+        <div slider id="ligandRange" class="fade out collapse" ng-model="ligandRange.val" max="ligandRange.max" min="1"></div>
 
-    <h4 class="title collapsed" data-toggle="collapse" data-target="#options">
-      <a href="" class="">Options</a>
-    </h4>
-    <div id="options" class="fade out collapse">
-      <p />
-      <div class="collapsed" data-toggle="collapse" data-target="#edges">
-        <a href>Maximum number of edges  <b class="caret"></b></a>
-        <div class="pull-right small"> {{maxEdges | number:0}}</div>
-      </div>
-      <div slider id="edges" class="fade out collapse" ng-model="maxEdges" max="1000" min="1"></div>
+        <p />
+        <div class="collapsed" data-toggle="collapse" data-target="#receptorRange" >
+          <a href>Receptor min TPM  <b class="caret"></b></a>
+          <div class="pull-right small"> > {{receptorRange.val | number:0}} tpm</div>
+        </div>
+        <div slider id="receptorRange" class="fade out collapse" ng-model="receptorRange.val" max="receptorRange.max" min="1"></div>
 
-      <p />
-      <div>
-        Show node labels
-        <div class="pull-right small"><input type="checkbox" ng-model="showLabels"></div>
-      </div>
-    </div>
 
-    <h4 class="title" data-toggle="collapse" data-target="#help">
-      <a href="" class="accordion-toggle" class="" >Explanation</a>
-    </h4>
-    <div id="help" class="fade in collapse">
-      <ul>
-        <li>Select Ligand - Receptor pair in the filter.
-        <li>Select cell samples.
-        <li>The top 100 edges for the selected cells will appear.
-        <li>Hover over nodes and edges to get more information.
-        <li>Click and drag nodes to move.
-        <li>Double click a node to fix in place.  Double click again to release.
-      </ul>
-    </div>
+      </accordion-group>
+      <accordion-group heading="Options" is-open="panelState.options" ng-class="{'collapsed': !panelState.options}">
+        <div class="collapsed" data-toggle="collapse" data-target="#edges">
+          <a href>Maximum number of edges  <b class="caret"></b></a>
+          <div class="pull-right small"> {{options.maxEdges | number:0}}</div>
+        </div>
+        <div slider id="edges" class="fade out collapse" ng-model="options.maxEdges" max="1000" min="1"></div>
+
+        <p />
+        <div>
+          Show node labels
+          <div class="pull-right small"><input type="checkbox" ng-model="options.showLabels"></div>
+        </div>
+      </accordion-group>
+      <accordion-group heading="Explanation" is-open="panelState.help" ng-class="{'collapsed': !panelState.help}">
+        <ul>
+          <li>Select Ligand - Receptor pair in the filter.
+          <li>Select cell samples.
+          <li>The top 100 edges for the selected cells will appear.
+          <li>Hover over nodes and edges to get more information.
+          <li>Click and drag nodes to move.
+          <li>Double click a node to fix in place.  Double click again to release.
+        </ul>
+      </accordion-group>
+    </accordion>
    
   </div>
 </div>

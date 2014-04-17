@@ -26,6 +26,20 @@
   app
     .controller('UICtrl', function ($scope, $log, $http, $q, cfpLoadingBar, localStorageService, PAIRSFILE, EXPRESSIONFILE) {
 
+      localStorageService.bind = function(scope, key, def) {
+        scope[key] = localStorageService.get(key) || def;
+
+        scope.$watchCollection(key, function(newVal) {
+          localStorageService.set(key, newVal);
+        });
+      }
+
+      $scope.panelState = {
+        filters: true,
+        options: false,
+        help: true
+      }
+
       var selected = $scope.selected = {};
       $scope.selected.pairs = []; //localStorage.getItem(STORE+'pairs') || [];
       $scope.selected.cells = []; //localStorage.getItem(STORE+'cells') || [];
@@ -43,12 +57,13 @@
       $scope.exprValue = 0;
       $scope.exprMax = 0;
 
+      localStorageService.bind($scope, 'panelState', {filters: true,options: false,help: true})
+      localStorageService.bind($scope, 'options', {showLabels: true,maxEdges: 100});
+
       $scope.edgeCount = 0;
-      $scope.showLabels = true;
 
       $scope.ligandRange = { min: 0, max: 1000000, val: 10 };
       $scope.receptorRange = { min: 0, max: 10000000, val: 10 };
-      $scope.maxEdges = 100;
 
       var chart = networkGraph();
 
@@ -117,16 +132,17 @@
 
         makeNetwork(true,false);
 
-        $scope.$watch('selected.pairs', makeNetwork);
-        $scope.$watch('selected.cells', makeNetwork);
+        $scope.$watchCollection('selected', makeNetwork);
+
         $scope.$watch('ligandRange.val', makeNetwork);
         $scope.$watch('receptorRange.val', makeNetwork);
-        $scope.$watch('maxEdges', makeNetwork);
-        $scope.$watch('showLabels', function() {
-          console.log('showLabels',$scope.showLabels);
+        $scope.$watch('options.maxEdges', makeNetwork);
+
+        $scope.$watch('options.showLabels', function() {
           d3.select('#vis svg')
-            .classed('labels',$scope.showLabels);
+            .classed('labels',$scope.options.showLabels);
         });
+
       });
 
       function saveSelection() {
@@ -139,7 +155,6 @@
         localStorageService.set('cells', _cells);
         localStorageService.set('ligandRange', $scope.ligandRange);
         localStorageService.set('receptorRange', $scope.receptorRange);
-
       }
 
       function loadSelection() {
@@ -163,8 +178,8 @@
         selected.pairs = data.pairs.filter(_idin(_pairs));
         selected.cells = data.cells.filter(_idin(_cells));
 
-        $scope.ligandRange = localStorageService.get('ligandRange') || {min:0,max:100,val:10};
-        $scope.receptorRange = localStorageService.get('receptorRange') || {min:0,max:699.419821048934,val:10};
+        $scope.ligandRange = localStorageService.get('ligandRange') || $scope.ligandRange;
+        $scope.receptorRange = localStorageService.get('receptorRange') || $scope.receptorRange;
         
       }
 
@@ -209,13 +224,13 @@
 
         cfpLoadingBar.inc();
 
-        if (graph.edges.length > $scope.maxEdges) {
+        if (graph.edges.length > $scope.options.maxEdges) {
 
           $log.warn('Too many edges', graph.edges.length);
 
           graph.edges = graph.edges
             .sort(function(a,b) { return b.value - a.value; })
-            .slice(0,$scope.maxEdges);
+            .slice(0,$scope.options.maxEdges);
 
         }
 
@@ -361,7 +376,7 @@
 
       function draw() {
         d3.select('#vis svg')
-          .classed('labels',$scope.showLabels)
+          .classed('labels',$scope.options.showLabels)
           .datum(graph)
           .call(chart);
       }

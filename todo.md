@@ -14,3 +14,4 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [x] Move components
 - [ ] Download button
 - [ ] Panels directive?
+- [ ] Move network stuff to a service
