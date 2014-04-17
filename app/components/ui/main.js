@@ -28,13 +28,11 @@
   app
     .controller('UICtrl', function ($scope, $log, $http, $q, cfpLoadingBar, localStorageService, PAIRSFILE, EXPRESSIONFILE) {
 
-      console.log(localStorageService);
-
       $scope.panelState = {
         filters: true,
         options: false,
         help: true
-      }
+      };
 
       var selected = $scope.selected = {};
       $scope.selected.pairs = []; //localStorage.getItem(STORE+'pairs') || [];
@@ -53,7 +51,7 @@
       $scope.exprValue = 0;
       $scope.exprMax = 0;
 
-      localStorageService.bind($scope, 'panelState', {filters: true,options: false,help: true})
+      localStorageService.bind($scope, 'panelState', {filters: true,options: false,help: true});
       localStorageService.bind($scope, 'options', {showLabels: true,maxEdges: 100});
 
       $scope.edgeCount = 0;
@@ -187,8 +185,6 @@
           };
         }
 
-        //console.log(localStorage.getItem(STORE+'pairs'));
-
         var _pairs = localStorageService.get('pairs') || [317];
         var _cells = localStorageService.get('cells') || [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26];
 
@@ -273,14 +269,7 @@
             return (_target === d.target);
           }).length;
 
-          //d.source.values[0] += +d.values[0] || 0;  // Ligand
-          //d.target.values[1] += +d.values[1] || 0;  // Receptor
-
         });
-
-        //graph.nodes.forEach(function(d) {
-        //  console.log(d);
-        //});
 
         graph.nodes = graph.nodes.filter(function(d) {   // Filtered nodes
           return (d.lout.length + d.lin.length) > 0;
@@ -296,7 +285,7 @@
 
       }
 
-      function addLinks(_pair,i) {
+      function addLinks(_pair) {
 
         var _expr = $scope.data.expr;
 
@@ -306,7 +295,6 @@
         if (lindex > -1 && rindex > -1) {
 
           graph.nodes.forEach(function(src) {  // all selected cell-cell pairs
-            //console.log(src.ligands, src.receptors);
 
             var lexpr = +_expr[lindex][src.id+1];
             if (lexpr === 0) {return;}
@@ -334,7 +322,6 @@
               if (value > 0 && lexpr >= $scope.ligandRange.val && rexpr >= $scope.receptorRange.val) {  // src and tgt are talking!!!
                 //var lrs = _pair.Ligand + ' -> ' + _pair.Receptor;
                 var cells = src.name + ' -> ' + tgt.name;
-                //console.log(cells);
 
                 var edge = graph.edges.filter(function(d) { return d.name === cells; });
 
@@ -363,44 +350,6 @@
             });
           });
 
-          /* for (var i = 0; i < ligandRow.length; i++) {
-          for (var j = 0; j < receptorRow.length; j++) {
-
-            var src = graphData.nodes[i];
-            var tgt = graphData.nodes[j];
-
-            var value = (+ligandRow[i])*(+receptorRow[j]);
-            var lrs = _pair.Ligand + ' -> ' + _pair.Receptor;
-            var cells = src.name + ' -> ' + tgt.name;
-
-            if (value > minValue && graphData.nodes[i].selected && graphData.nodes[j].selected) {
-
-              var link = graphData.links.filter(function(d) { return d.name == cells; });
-              
-              if (link.length > 0) {  // Existing
-                link = link[0];
-                console.log('duplicate found');
-              } else {        // New
-                link = { 
-                  source: src,
-                  target: tgt,
-                  value:0, 
-                  name: cells, 
-                  values: [0, 0 ]  
-                };
-                graphData.links.push(link);
-              }
-
-              link.value += value;
-              link.values[0] += +ligandRow[i];
-              link.values[1] += +receptorRow[j];
-              
-            }
-
-          }
-          } */
-
-          //DEBUG && console.log('sortCount',sortCount)
         }
 
       }

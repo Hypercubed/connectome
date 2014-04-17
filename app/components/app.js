@@ -7,9 +7,14 @@
     .module('lrSpaApp', ['chieffancypants.loadingBar','localytics.directives','snap','LocalStorageModule','ui.bootstrap']);
 
   app
-	.config(['localStorageServiceProvider', function(localStorageServiceProvider){
-	  localStorageServiceProvider.setPrefix('lr');
-	}]);
+  .config(function(localStorageServiceProvider){
+    localStorageServiceProvider.setPrefix('lr');
+  });
+
+  app
+    .config(function($logProvider) {
+      $logProvider.debugEnabled(false);
+    });
 
 })();
 
