@@ -36,14 +36,14 @@
           <a href>Ligand min TPM  <b class="caret" ng-class="{'collapsed': !panelState.ligand}"></b></a>
           <div class="pull-right small"> > {{ligandRange.val | number:0}} tpm</div>
         </div>
-        <div slider collapse="!panelState.ligand" ng-model="ligandRange.val" max="ligandRange.max" min="1"></div>
+        <div slider collapse="!panelState.ligand" ng-model="ligandRange.val" max="ligandRange.max" min="0"></div>
 
         <p />
         <div ng-click="panelState.receptor = !panelState.receptor">
           <a href>Receptor min TPM  <b class="caret" ng-class="{'collapsed': !panelState.receptor}"></b></a>
           <div class="pull-right small"> > {{receptorRange.val | number:0}} tpm</div>
         </div>
-        <div slider collapse="!panelState.receptor" ng-model="receptorRange.val" max="receptorRange.max" min="1"></div>
+        <div slider collapse="!panelState.receptor" ng-model="receptorRange.val" max="receptorRange.max" min="0"></div>
 
 
       </accordion-group>

@@ -49,7 +49,7 @@
       $scope.graph.nodes = {};
       $scope.graph.edges = {};
 
-      $scope.exprRange = [0,1];
+      //$scope.exprRange = [0,1];
       $scope.exprValue = 0;
       $scope.exprMax = 0;
 
@@ -65,14 +65,19 @@
 
       var valueFormat = d3.format('.2f');
 
+      var join = function(d) {return d.join(' '); };
+
       chart.nodeTooltip.html(function(d) {
         var s = (selected.pairs.length > 1) ? 'Sum of' : '';
-        var html = [
-          d.name,
-          '<br />', s, 'Ligand expression: '+valueFormat(d.values[0]),
-          '<br />', s, 'Receptor expression: '+valueFormat(d.values[1])
-        ];
-        return html.join(' ');
+        var html = [['<b>',d.name,'</b>']];
+
+        if (d.values[0] > 0) {html.push([s, 'Ligand expression:',valueFormat(d.values[0])]);}
+        if (d.values[1] > 0) {html.push([s, 'Receptor expression:',valueFormat(d.values[1])]);}
+
+        if (d.ligands.length > 0)   {html.push(['Ligands:',d.ligands]);}
+        if (d.receptors.length > 0) {html.push(['Receptors:',d.receptors]);}
+
+        return html.map(join).join('<br>');
       });
 
       chart.linkTooltip.html(function(d) {
@@ -123,6 +128,27 @@
 
       $q.all([A, B]).then(function() {
         $log.debug('Done loading');
+
+        var _expr = $scope.data.expr;
+
+        $scope.data.pairs.forEach(function(_pair) {  // Get ligand and receptor indecies in expression table
+
+          _pair.index = [-1,-1];
+
+          for (var i = 1; i < _expr.length; i++) {  // start from 1, skipping header
+            var gene = _expr[i][0];
+
+            if (gene === _pair.Ligand)   {_pair.index[0] = i;}
+            if (gene === _pair.Receptor) {_pair.index[1] = i;}
+
+            if (_pair.index[0] > -1 && _pair.index[1] >-1) {break;}
+          }
+
+          if (_pair.index[0] < 0 || _pair.index[1] < 0) {
+            $log.warn('Ligand or receptor missing from expression table');
+          }
+
+        });
 
         loadSelection();
 
@@ -184,14 +210,16 @@
 
         saveSelection();
 
-        cfpLoadingBar.start();
-
         $log.debug('Constructing network');
-        if ($scope.selected.cells.length < 1 && $scope.selected.pairs.length < 1) {return;}
+        if ($scope.selected.cells.length < 1 && $scope.selected.pairs.length < 1) { return;}
+
+        cfpLoadingBar.start();
 
         graph.nodes = selected.cells;
 
         graph.nodes.forEach(function(n) {
+          n.ligands = [];
+          n.receptors = [];
           n.lout = [];
           n.lin = [];
           n.values = [0,0];
@@ -203,7 +231,7 @@
         $log.debug('Pairs: ',selected.pairs.length);
 
         graph.edges = [];
-        $scope.exprRange[1] = 1;
+        //$scope.exprRange[1] = 1;
 
         $scope.ligandRange.max = 100;
         $scope.receptorRange.max = 100;
@@ -245,10 +273,14 @@
             return (_target === d.target);
           }).length;
 
-          d.source.values[0] += +d.values[0] || 0;  // Ligand
-          d.target.values[1] += +d.values[1] || 0;  // Receptor
+          //d.source.values[0] += +d.values[0] || 0;  // Ligand
+          //d.target.values[1] += +d.values[1] || 0;  // Receptor
 
         });
+
+        //graph.nodes.forEach(function(d) {
+        //  console.log(d);
+        //});
 
         graph.nodes = graph.nodes.filter(function(d) {   // Filtered nodes
           return (d.lout.length + d.lin.length) > 0;
@@ -264,31 +296,34 @@
 
       }
 
-      function addLinks(_pair) {
-        var expr = $scope.data.expr;
+      function addLinks(_pair,i) {
 
-        //var minValue = 0;
+        var _expr = $scope.data.expr;
 
-        var ligandRow = null;
-        var receptorRow = null;
-
-        for (var i = 1; i < expr.length; i++) {
-          var row = expr[i];
-          var gene = row[0];
-
-          if (gene === _pair.Ligand)   {ligandRow = row.slice(1);}
-          if (gene === _pair.Receptor) {receptorRow = row.slice(1);}
-
-          if (ligandRow && receptorRow) {break;}
-        }
-
-        if (ligandRow && receptorRow) {
+        var lindex = _pair.index[0];
+        var rindex = _pair.index[1];
+       
+        if (lindex > -1 && rindex > -1) {
 
           graph.nodes.forEach(function(src) {  // all selected cell-cell pairs
-            graph.nodes.forEach(function(tgt) {
+            //console.log(src.ligands, src.receptors);
 
-              var lexpr = +ligandRow[src.id];
-              var rexpr = +receptorRow[tgt.id];
+            var lexpr = +_expr[lindex][src.id+1];
+            if (lexpr === 0) {return;}
+
+            if (src.ligands.indexOf(_pair.Ligand) < 0) {
+              src.ligands.push(_pair.Ligand);
+              src.values[0] += +lexpr;
+            }
+
+            graph.nodes.forEach(function(tgt) {
+              var rexpr = +_expr[rindex][tgt.id+1];
+              if (rexpr === 0) {return;}
+
+              if (tgt.receptors.indexOf(_pair.Receptor) < 0) {
+                tgt.receptors.push(_pair.Receptor);
+                tgt.values[1] += +rexpr;
+              }
 
               $scope.ligandRange.max = Math.max(lexpr, $scope.ligandRange.max);
               $scope.receptorRange.max = Math.max(rexpr, $scope.receptorRange.max);
