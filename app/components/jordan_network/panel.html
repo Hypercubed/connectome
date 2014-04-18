@@ -1,0 +1,64 @@
+
+<h4 class="title">Ligand Receptor Connectome</h4>
+<p>A visual guide to FANTOM5 Ligand-Receptor interactions</p>
+
+<p class="ng-cloak">
+  Pairs: {{selected.pairs.length}} / {{data.pairs.length}}
+  <br />Nodes: {{graph.nodes.length}} / {{data.cells.length}}
+  <br />Edges: {{graph.edges.length}} / {{edgeCount}} <span class="bg-danger" ng-show="edgeCount > options.maxEdges">Maximum shown</span></span>
+</p>
+
+<accordion close-others="false">
+  <accordion-group heading="Filters" is-open="panelState.filters" ng-class="{'collapsed': !panelState.filters}">
+
+    <div panel heading="Ligand - Receptor Pairs" is-open="panelState.pairs">
+      <div panel-label>
+        {{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a> <a href ng-click="selected.pairs = []">(clear)</a>
+      </div>
+      <select id="pairs" class="col-md-12" size="30" multiple chosen  display-selected-options="false" search-contains="true" ng-model="selected.pairs" ng-options="p.Ligand + '-' + p.Receptor for p in data.pairs track by p.id" data-placeholder="Select Ligand-Receptor pairs"></select>
+    </div>
+
+    <p />
+    <div panel heading="Samples" is-open="panelState.cells">
+      <div panel-label>
+        {{selected.cells.length}} / <a href ng-click="selected.cells = data.cells">{{data.cells.length}}</a> <a href ng-click="selected.cells = []">(clear)</a>
+      </div>
+      <select id="cells" class="col-md-12 form-control" size="30" multiple  chosen  display-selected-options="false" search-contains="true" ng-model="selected.cells" ng-options="c.name for c in data.cells track by c.id" data-placeholder="Select cell samples" style="width: 100%"></select>
+    </div>
+
+    <p />
+    <div panel heading="Ligand TPM" is-open="panelState.ligand" label="&gt; {{ligandRange.val}} tpm">
+      <div slider ng-model="ligandRange.val" max="ligandRange.max" min="0"></div>
+    </div>
+
+    <p />
+    <div panel heading="Receptor TPM" is-open="panelState.receptor" label="&gt; {{receptorRange.val}} tpm">
+      <div slider ng-model="receptorRange.val" max="receptorRange.max" min="0"></div>
+    </div>
+
+  </accordion-group>
+  <accordion-group heading="Options" is-open="panelState.options" ng-class="{'collapsed': !panelState.options}">
+    <div panel heading="Maximum number of edges" label="{{options.maxEdges | number:0}}" is-open="panelState.edges" >
+      <div slider ng-model="options.maxEdges" max="1000" min="1"></div>
+    </div>
+
+    <p />
+    <div>
+      Show node labels
+      <div class="pull-right small"><input type="checkbox" ng-model="options.showLabels"></div>
+    </div>
+  </accordion-group>
+  <accordion-group heading="Explanation" is-open="panelState.help" ng-class="{'collapsed': !panelState.help}">
+    <ul>
+      <li>Select Ligand - Receptor pair in the filter.
+      <li>Select cell samples.
+      <li>The top 100 edges for the selected cells will appear.
+      <li>Hover over nodes and edges to get more information.
+      <li>Click and drag nodes to move.
+      <li>Double click a node to fix in place.  Double click again to release.
+    </ul>
+
+  </accordion-group>
+</accordion>
+
+

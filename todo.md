@@ -16,3 +16,8 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [ ] Panels directive?
 - [ ] Move network stuff to a service
 - [ ] dat.gui ish
+- [ ] hive plot
+- [ ] deploy using grunt
+- [ ] debounce number input
+- [ ] debouce more
+- [ ] add limits to avoid lockup

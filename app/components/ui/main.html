@@ -1,78 +1,6 @@
 
-<div snap-drawer id="ui" ng-controller="UICtrl">
-  <div class="">
+<div snap-drawer id="ui" ui-view="panel">
 
-    <h4 class="title">Ligand Receptor Connectome</h4>
-    <p>A visual guide to FANTOM5 Ligand-Receptor interactions</p>
-
-    <p class="ng-cloak">
-      Pairs: {{selected.pairs.length}} / {{data.pairs.length}}
-      <br />Nodes: {{graph.nodes.length}} / {{data.cells.length}}
-      <br />Edges: {{graph.edges.length}} / {{edgeCount}} <span class="bg-danger" ng-show="edgeCount > options.maxEdges">Maximum shown</span></span>    
-    </p>
-
-    <accordion close-others="false">
-      <accordion-group heading="Filters" is-open="panelState.filters" ng-class="{'collapsed': !panelState.filters}">
-
-        <div>
-          <a href ng-click="panelState.pairs = !panelState.pairs">Ligand - Receptor Pairs <b class="caret" ng-class="{'collapsed': !panelState.pairs}"></b></a>
-          <div class="pull-right small">{{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a> <a href ng-click="selected.pairs = []">(clear)</a></div>  
-        </div>
-        <div collapse="!panelState.pairs">
-          <select id="pairs" class="col-md-12" size="30" multiple chosen  display-selected-options="false" search-contains="true" ng-model="selected.pairs" ng-options="p.Ligand + '-' + p.Receptor for p in data.pairs track by p.id" data-placeholder="Select Ligand-Receptor pairs"></select>
-        </div>
-
-        <p />
-        <div>
-          <a href ng-click="panelState.cells = !panelState.cells" >Samples <b class="caret" ng-class="{'collapsed': !panelState.cells}"></b></a>
-          <div class="pull-right small">{{selected.cells.length}} / <a href ng-click="selected.cells = data.cells">{{data.cells.length}}</a> <a href ng-click="selected.cells = []">(clear)</a></div>
-        </div>
-        <div collapse="!panelState.cells">
-          <select id="cells" class="col-md-12 form-control" size="30" multiple  chosen  display-selected-options="false" search-contains="true" ng-model="selected.cells" ng-options="c.name for c in data.cells track by c.id" data-placeholder="Select cell samples" style="width: 100%"></select>
-        </div>
-
-        <p />
-        <div ng-click="panelState.ligand = !panelState.ligand">
-          <a href>Ligand min TPM  <b class="caret" ng-class="{'collapsed': !panelState.ligand}"></b></a>
-          <div class="pull-right small"> > {{ligandRange.val | number:0}} tpm</div>
-        </div>
-        <div slider collapse="!panelState.ligand" ng-model="ligandRange.val" max="ligandRange.max" min="0"></div>
-
-        <p />
-        <div ng-click="panelState.receptor = !panelState.receptor">
-          <a href>Receptor min TPM  <b class="caret" ng-class="{'collapsed': !panelState.receptor}"></b></a>
-          <div class="pull-right small"> > {{receptorRange.val | number:0}} tpm</div>
-        </div>
-        <div slider collapse="!panelState.receptor" ng-model="receptorRange.val" max="receptorRange.max" min="0"></div>
-
-
-      </accordion-group>
-      <accordion-group heading="Options" is-open="panelState.options" ng-class="{'collapsed': !panelState.options}">
-        <div ng-click="panelState.edges = !panelState.edges">
-          <a href>Maximum number of edges  <b class="caret" ng-class="{'collapsed': !panelState.edges}"></b></a>
-          <div class="pull-right small"> {{options.maxEdges | number:0}}</div>
-        </div>
-        <div slider collapse="!panelState.edges" id="edges" ng-model="options.maxEdges" max="1000" min="1"></div>
-
-        <p />
-        <div>
-          Show node labels
-          <div class="pull-right small"><input type="checkbox" ng-model="options.showLabels"></div>
-        </div>
-      </accordion-group>
-      <accordion-group heading="Explanation" is-open="panelState.help" ng-class="{'collapsed': !panelState.help}">
-        <ul>
-          <li>Select Ligand - Receptor pair in the filter.
-          <li>Select cell samples.
-          <li>The top 100 edges for the selected cells will appear.
-          <li>Hover over nodes and edges to get more information.
-          <li>Click and drag nodes to move.
-          <li>Double click a node to fix in place.  Double click again to release.
-        </ul>
-      </accordion-group>
-    </accordion>
-   
-  </div>
 </div>
 <div id="content" snap-content id="content" style="-webkit-transform: translate3d(350px, 0px, 0px);">
 
@@ -88,10 +16,7 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <div id="legend">
-      <div class="rotate"> <div class="node ligand"></div> Ligand</div>
-      <div class="rotate"> <div class="node receptor"></div> Receptor</div>
-      <div class="rotate"> <div class="node both"></div> Both</div>
+    <div ui-view="header">
     </div>
   </div>
 

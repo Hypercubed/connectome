@@ -1,4 +1,3 @@
-/* global d3 */
 
 (function(d3) {
   'use strict';
@@ -417,6 +416,4 @@
 
   window.networkGraph = networkGraph;
 
-})(d3);
-
-
+})(window.d3);

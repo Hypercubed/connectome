@@ -30,7 +30,7 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container-fluid" ng-include="'components/ui/main.html'" ng-controller="MainCtrl"></div>
+    <div ui-view></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <!-- script>
@@ -62,6 +62,7 @@
     <script src="bower_components/d3-tip/index.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-local-storage/angular-local-storage.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -70,6 +71,7 @@
     <script src="components/jordan_network/chart.js"></script>
     <script src="components/ui/main.js"></script>
     <script src="components/slider/slider-directive.js"></script>
+    <script src="components/jordan_network/panel-controller.js"></script>
     <!-- endbuild -->
 </body>
 </html>
