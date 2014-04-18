@@ -85,17 +85,9 @@
     });
 
   app
-    .service('panelStateManager', function() {  // TODO: everything
-      var service = {};
+    .service('directedGraph', function($log, cfpLoadingBar) {  // TODO: everything
 
-      return service;
-
-    });
-
-  app
-    .service('chartManager', function($log, cfpLoadingBar) {  // TODO: everything
-
-      var graphData = {
+      var data = {
         nodes: {},
         edges: {},
         edgeCount: 0,
@@ -144,9 +136,9 @@
 
         cfpLoadingBar.start();
 
-        graphData.nodes = cells;
+        data.nodes = cells;
 
-        graphData.nodes.forEach(function(n) {
+        data.nodes.forEach(function(n) {
           n.ligands = [];
           n.receptors = [];
           n.lout = [];
@@ -156,13 +148,13 @@
 
         cfpLoadingBar.inc();
 
-        $log.debug('Nodes: ',graphData.nodes.length);
+        $log.debug('Nodes: ',data.nodes.length);
         $log.debug('Pairs: ',pairs.length);
 
-        graphData.edges = [];
+        data.edges = [];
 
-        graphData.ligandExtent[1] = 0;
-        graphData.receptorExtent[1] = 0;
+        data.ligandExtent[1] = 0;
+        data.receptorExtent[1] = 0;
 
         pairs.forEach(
           function addLinks(_pair) {
@@ -172,7 +164,7 @@
            
             if (lindex > -1 && rindex > -1) {
 
-              graphData.nodes.forEach(function(src) {  // all selected cell-cell pairs
+              data.nodes.forEach(function(src) {  // all selected cell-cell pairs
 
                 var lexpr = +expr[lindex][src.id+1];
                 if (lexpr === 0) {return;}
@@ -181,11 +173,11 @@
                 if (src.ligands.indexOf(_pair.Ligand) < 0) {
                   src.ligands.push(_pair.Ligand);
                   src.values[0] += +lexpr;
-                  graphData.ligandExtent[0] = Math.min(lexpr, graphData.ligandExtent[0]);
-                  graphData.ligandExtent[1] = Math.max(lexpr, graphData.ligandExtent[1]);     
+                  data.ligandExtent[0] = Math.min(lexpr, data.ligandExtent[0]);
+                  data.ligandExtent[1] = Math.max(lexpr, data.ligandExtent[1]);     
                 }
 
-                graphData.nodes.forEach(function(tgt) {
+                data.nodes.forEach(function(tgt) {
                   var rexpr = +expr[rindex][tgt.id+1];
                   if (rexpr === 0) {return;}
 
@@ -193,8 +185,8 @@
                   if (tgt.receptors.indexOf(_pair.Receptor) < 0) {
                     tgt.receptors.push(_pair.Receptor);
                     tgt.values[1] += +rexpr;
-                    graphData.receptorExtent[0] = Math.min(rexpr, graphData.receptorExtent[0]);
-                    graphData.receptorExtent[1] = Math.max(rexpr, graphData.receptorExtent[1]);    
+                    data.receptorExtent[0] = Math.min(rexpr, data.receptorExtent[0]);
+                    data.receptorExtent[1] = Math.max(rexpr, data.receptorExtent[1]);    
                   }
 
                   var value = lexpr*rexpr;
@@ -202,7 +194,7 @@
                   if (value > 0 && lexpr >= options.ligandFilter && rexpr >= options.receptorFilter) {  // src and tgt are talking!!!
                     var name = src.name + ' -> ' + tgt.name;
 
-                    var edge = graphData.edges.filter(function(d) { return d.name === name; });
+                    var edge = data.edges.filter(function(d) { return d.name === name; });
 
                     if (edge.length === 0) {
                       edge = {
@@ -212,7 +204,7 @@
                         name: name,
                         values: [0, 0]
                       };
-                      graphData.edges.push(edge);
+                      data.edges.push(edge);
                     } else if (edge.length === 1 && pairs.length > 1) {
                       edge = edge[0];
                     } else {
@@ -232,38 +224,38 @@
           }
         );
 
-        graphData.edgeCount = graphData.edges.length;
+        data.edgeCount = data.edges.length;
 
         cfpLoadingBar.inc();
 
-        if (graphData.edges.length > options.maxEdges) {
+        if (data.edges.length > options.maxEdges) {
 
-          $log.warn('Too many edges', graphData.edges.length);
+          $log.warn('Too many edges', data.edges.length);
 
-          graphData.edges = graphData.edges
+          data.edges = data.edges
             .sort(function(a,b) { return b.value - a.value; })
             .slice(0,options.maxEdges);
 
         }
 
-        $log.debug('Edges: ',graphData.edges.length);
+        $log.debug('Edges: ',data.edges.length);
 
         cfpLoadingBar.inc();
 
-        graphData.edges.forEach(function(d, i) {  // Set in/out links
+        data.edges.forEach(function(d, i) {  // Set in/out links
           d.index = i;
 
           d.source.lout.push(i);
           d.target.lin.push(i);
 
           d.count = d.source.lout.filter(function(_i) {
-            var _target = graphData.edges[_i].target;
+            var _target = data.edges[_i].target;
             return (_target === d.target);
           }).length;
 
         });
 
-        graphData.nodes = graphData.nodes.filter(function(d) {   // Filtered nodes
+        data.nodes = data.nodes.filter(function(d) {   // Filtered nodes
           return (d.lout.length + d.lin.length) > 0;
         });
 
@@ -271,7 +263,7 @@
 
         d3.select('#vis svg')
           .classed('labels',options.showLabels)
-          .datum(graphData)
+          .datum(data)
           .call(chart);
 
         cfpLoadingBar.complete();
@@ -279,7 +271,7 @@
       }
 
       return {
-        graph: graphData,
+        data: data,
         chart: chart,
         makeNetwork: _makeNetwork
       };
@@ -287,7 +279,7 @@
     });
 
   app
-    .controller('PanelCtrl', function ($scope, $log, localStorageService, ligandReceptorData, chartManager) {
+    .controller('PanelCtrl', function ($scope, $log, localStorageService, ligandReceptorData, directedGraph) {
 
       localStorageService.bind = function(scope, key, def) {
         var value = localStorageService.get(key);
@@ -313,12 +305,29 @@
         help: true
       });
 
+      /* Make network */
+
       localStorageService.bind($scope, 'options', {
         showLabels: true,
         maxEdges: 100,
         ligandFilter: 10,
         receptorFilter: 100,
       });
+
+      $scope.graphData = directedGraph.data;
+
+      function updateNetwork(newVal, oldVal) {
+        if (newVal === oldVal) {return;}
+        saveSelection();
+
+        directedGraph.makeNetwork($scope.selected.pairs, $scope.selected.cells, $scope.data.expr, $scope.options);
+      }
+
+      /* Load Data */
+      $scope.selected = {
+        pairs: [],
+        cells: []
+      };
 
       function saveSelection() {
         var _id = function(d) { return d.id; };
@@ -328,8 +337,8 @@
 
         localStorageService.set('pairs', _pairs);
         localStorageService.set('cells', _cells);
-        //localStorageService.set('ligandRange', chartManager.graph.ligandRange);
-        //localStorageService.set('receptorRange', chartManager.graph.receptorRange);
+        //localStorageService.set('ligandRange', directedGraph.graph.ligandRange);
+        //localStorageService.set('receptorRange', directedGraph.graph.receptorRange);
       }
 
       function loadSelection() {
@@ -352,22 +361,11 @@
         $scope.selected.cells = $scope.data.cells.filter(_idin(_cells));
 
         //TODO: not this
-        //chartManager.graph.ligandRange = localStorageService.get('ligandRange') || chartManager.graph.ligandRange;
-        //chartManager.graph.receptorRange = localStorageService.get('receptorRange') || chartManager.graph.receptorRange;
+        //directedGraph.graph.ligandRange = localStorageService.get('ligandRange') || directedGraph.graph.ligandRange;
+        //directedGraph.graph.receptorRange = localStorageService.get('receptorRange') || directedGraph.graph.receptorRange;
         
       }
 
-      /* Make network */
-      $scope.graph = chartManager.graph;
-
-      function updateNetwork(newVal, oldVal) {
-        if (newVal === oldVal) {return;}
-        saveSelection();
-
-        chartManager.makeNetwork($scope.selected.pairs, $scope.selected.cells, $scope.data.expr, $scope.options);
-      }
-
-      /* Load Data */
       ligandReceptorData.load().then(function() {
         $scope.data = ligandReceptorData.data;
 
@@ -376,23 +374,17 @@
         updateNetwork(true,false);
 
         $scope.$watchCollection('selected', updateNetwork);
+
         $scope.$watch('options.ligandFilter', updateNetwork);
         $scope.$watch('options.receptorFilter', updateNetwork);
-        $scope.$watch('options.maxEdges', updateNetwork);
-
+        
+        $scope.$watch('options.maxEdges', updateNetwork); // TODO: filter in place
         $scope.$watch('options.showLabels', function(newVal) {
           d3.select('#vis svg')
             .classed('labels',newVal);
         });
 
       });
-
-      $scope.selected = {
-        pairs: [],
-        cells: []
-      };
-
-
 
     });
 

@@ -4,8 +4,8 @@
 
 <p class="ng-cloak">
   Pairs: {{selected.pairs.length}} / {{data.pairs.length}}
-  <br />Nodes: {{graph.nodes.length}} / {{data.cells.length}}
-  <br />Edges: {{graph.edges.length}} / {{graph.edgeCount}} <span class="bg-danger" ng-show="graph.edgeCount > options.maxEdges">Maximum shown</span></span>
+  <br />Nodes: {{graphData.nodes.length}} / {{data.cells.length}}
+  <br />Edges: {{graphData.edges.length}} / {{graphData.edgeCount}} <span class="bg-danger" ng-show="graphData.edgeCount > options.maxEdges">Maximum shown</span></span>
 </p>
 
 <accordion close-others="false">
@@ -28,12 +28,12 @@
 
     <p />
     <div panel heading="Ligand TPM" is-open="panelState.ligand" label="&gt; {{options.ligandFilter}} tpm">
-      <div slider ng-model="options.ligandFilter" max="graph.ligandExtent[1]" min="0"></div>
+      <div slider ng-model="options.ligandFilter" max="graphData.ligandExtent[1]" min="0"></div>
     </div>
 
     <p />
     <div panel heading="Receptor TPM" is-open="panelState.receptor" label="&gt; {{options.receptorFilter}} tpm">
-      <div slider ng-model="options.receptorFilter" max="graph.receptorExtent[1]" min="0"></div>
+      <div slider ng-model="options.receptorFilter" max="graphData.receptorExtent[1]" min="0"></div>
     </div>
 
   </accordion-group>
