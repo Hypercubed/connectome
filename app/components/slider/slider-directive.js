@@ -5,114 +5,54 @@
 
   var baseUrl = 'components/slider/';
 
-  var app = angular.module('lrSpaApp');
+  var app = angular.module('sliders',[]);
 
   app
-    .directive('panel', function() {
-      return {
-        scope: {
-          heading: '@',
-          label: '@',
-          isOpen: '=?'
-        },
-        restrict: 'EA',
-        transclude: true,   // Grab the contents to be used as the heading
-        templateUrl: baseUrl+'panel.html',
-        controller: function() {
-          this.setLabel = function(element) {
-            this.label = element;
-          };
-        },
-        link: function(scope) {
-          scope.toggleOpen = function() {
-            scope.isOpen = !scope.isOpen;
-          };
-        }
-      };
-    });
-
-  app
-    .directive('panelLabel', function() {
-    return {
-      restrict: 'EA',
-      transclude: true,   // Grab the contents to be used as the heading
-      template: '',       // In effect remove this element!
-      replace: true,
-      require: '^panel',
-      link: function(scope, element, attr, ctrl, transclude) {
-        ctrl.setLabel(transclude(scope, function() {}));
-      }
-    };
-  });
-
-  app
-    .directive('panelTransclude', function() {
-    return {
-      require: '^panel',
-      link: function(scope, element, attr, controller) {
-        scope.$watch(function() { return controller[attr.panelTransclude]; }, function(heading) {
-          if ( heading ) {
-            element.html('');
-            element.append(heading);
-          }
-        });
-      }
-    };
-  });
-
-  app
-    .directive('slider', function($timeout) {
+    .directive('slider', function($timeout, $debounce) {
       return {
         scope: {
           value: '=ngModel',
           max: '=',
           min: '=',
+          step: '=?'
         },
         templateUrl: baseUrl+'slider.html',
         link: function(scope, element, attrs) {
           element.addClass('slider');
 
-          if (angular.isUndefined(attrs.expanded)) {
-            scope.expanded = true;
-          }
+          scope.max = +scope.max || 10000;
+          scope.min = +scope.min || 0;
+          scope.step = +scope.step || 1; 
+          scope.value = +scope.value || 0;         
 
-          function changeInputValue(newVal) {
-            scope.rangeValue = newVal;
-            update();
-          }
+          var applyValue = $debounce(function() {
+            var val = scope.rangeValue*(scope.max-scope.min);
+            scope.value = Math.round(val)/100+scope.min;
+          }, 100);
 
-          var stop;
           function changeRangeValue(newVal, oldVal) {
-            if (newVal === oldVal) {return;}
+            if (newVal == oldVal) {return;}
 
             scope.rangeValue = +newVal;
-            update();
+            updateDom();
 
-            $timeout.cancel(stop);
-            stop = $timeout(function() {
-              scope.value = +scope.rangeValue;
-            }, 10);
-            
+            applyValue();
           }
 
-          function update() {
-            scope.percent = (scope.rangeValue-scope.min)/(scope.max-scope.min)*100;
-            scope.max = +scope.max || 100;
-            scope.min = +scope.min || 0;
-
-            scope.left = scope.percent > 10;
-            scope.right = scope.percent < 90;
-            scope.bubbleStyle = {left: scope.percent+'%'};
-
+          function updateRange() {
+            scope.rangeValue = (scope.value-scope.min)/(scope.max-scope.min)*100;
+            updateDom();
           }
 
-          scope.rangeValue = scope.value;
-          update();
+          function updateDom() {
+            scope.left = scope.rangeValue > 10;
+            scope.right = scope.rangeValue < 90;
+          }
+
+          updateRange();
           
-          scope.$watch('value', changeInputValue);
           scope.$watch('rangeValue', changeRangeValue);
-          scope.$watch('max', update);
-          scope.$watch('min', update);
+          scope.$watchCollection('[value,max,min,step]', updateRange);
 
         }
       };

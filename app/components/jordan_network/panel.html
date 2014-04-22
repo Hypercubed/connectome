@@ -13,7 +13,7 @@
 
     <div panel heading="Ligand - Receptor Pairs" is-open="panelState.pairs">
       <div panel-label>
-        {{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs">{{data.pairs.length}}</a> <a href ng-click="selected.pairs = []">(clear)</a>
+        {{selected.pairs.length}} / <a href ng-click="selected.pairs = data.pairs; $event.stopPropagation();">{{data.pairs.length}}</a> <a href ng-click="selected.pairs = []; $event.stopPropagation();">(clear)</a>
       </div>
       <select id="pairs" class="col-md-12" size="30" multiple chosen  display-selected-options="false" search-contains="true" ng-model="selected.pairs" ng-options="p.Ligand + '-' + p.Receptor for p in data.pairs track by p.id" data-placeholder="Select Ligand-Receptor pairs"></select>
     </div>
@@ -21,19 +21,29 @@
     <p />
     <div panel heading="Samples" is-open="panelState.cells">
       <div panel-label>
-        {{selected.cells.length}} / <a href ng-click="selected.cells = data.cells">{{data.cells.length}}</a> <a href ng-click="selected.cells = []">(clear)</a>
+        {{selected.cells.length}} / <a href ng-click="selected.cells = data.cells; $event.stopPropagation();">{{data.cells.length}}</a> <a href ng-click="selected.cells = []; $event.stopPropagation();">(clear)</a>
       </div>
       <select id="cells" class="col-md-12 form-control" size="30" multiple  chosen  display-selected-options="false" search-contains="true" ng-model="selected.cells" ng-options="c.name for c in data.cells track by c.id" data-placeholder="Select cell samples" style="width: 100%"></select>
     </div>
 
     <p />
-    <div panel heading="Ligand TPM" is-open="panelState.ligand" label="&gt; {{options.ligandFilter}} tpm">
+    <div panel heading="Ligand TPM" is-open="panelState.ligand" label="&gt; {{options.ligandFilter | number:0}} tpm">
       <div slider ng-model="options.ligandFilter" max="graphData.ligandExtent[1]" min="0"></div>
     </div>
 
     <p />
-    <div panel heading="Receptor TPM" is-open="panelState.receptor" label="&gt; {{options.receptorFilter}} tpm">
+    <div panel heading="Receptor TPM" is-open="panelState.receptor" label="&gt; {{options.receptorFilter | number:0}} tpm">
       <div slider ng-model="options.receptorFilter" max="graphData.receptorExtent[1]" min="0"></div>
+    </div>
+
+    <p />
+    <div panel heading="Receptor rank" is-open="panelState.ligandRank" label="p = {{options.receptorRankFilter | number:2}}">
+      <div slider ng-model="options.receptorRankFilter" max="1" min="0" step="0.01"></div>
+    </div>
+
+    <p />
+    <div panel heading="Ligand rank" is-open="panelState.receptorRank" label="p = {{options.ligandRankFilter | number:2}}">
+      <div slider ng-model="options.ligandRankFilter" max="1" min="0" step="0.01"></div>
     </div>
 
   </accordion-group>

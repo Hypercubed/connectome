@@ -21,12 +21,12 @@
     $stateProvider
       .state('home', {
         abastract: true,
-        url: '',
+        url: '/',
         templateUrl: 'components/ui/main.html',
         controller: 'MainCtrl'
       })
       .state('home.directed-graph', {
-        url: '/directed-graph',
+        url: '^/directed-graph',
         views: {
           'panel': { templateUrl: 'components/jordan_network/panel.html', controller: 'PanelCtrl' },
           'header': { templateUrl: 'components/jordan_network/header.html' }

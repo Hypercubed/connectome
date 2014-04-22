@@ -100,14 +100,20 @@
       var valueFormat = d3.format('.2f');
       var join = function(d) {return d.join(' '); };
 
+      var formatList = function(arr, max) {
+        var l = arr.slice(0,max).join(',');
+        if (arr.length > max) l += " ( +"+(arr.length-max)+" more)";
+        return l;
+      }
+
       chart.nodeTooltip.html(function(d) {
         var html = [['<b>',d.name,'</b>']];
 
         if (d.values[0] > 0) {html.push([(d.ligands.length > 1) ? 'Sum of' : '', 'Ligand expression:',valueFormat(d.values[0])]);}
         if (d.values[1] > 0) {html.push([(d.receptors.length > 1) ? 'Sum of' : '', 'Receptor expression:',valueFormat(d.values[1])]);}
 
-        if (d.ligands.length > 0)   {html.push(['Ligands:',d.ligands]);}
-        if (d.receptors.length > 0) {html.push(['Receptors:',d.receptors]);}
+        if (d.ligands.length > 0)   {html.push(['Ligands:',formatList(d.ligands,4)]);}
+        if (d.receptors.length > 0) {html.push(['Receptors:',formatList(d.receptors,4)]);}
 
         return html.map(join).join('<br>');
       });
@@ -132,19 +138,58 @@
       function _makeNetwork(pairs, cells, expr, options) {
 
         $log.debug('Constructing network');
-        if (cells.length < 1 && pairs.length < 1) { return;}
+        if (cells.length < 1 || pairs.length < 1) { return;}
 
         cfpLoadingBar.start();
 
         data.nodes = cells;
 
-        data.nodes.forEach(function(n) {
-          n.ligands = [];
-          n.receptors = [];
-          n.lout = [];
-          n.lin = [];
-          n.values = [0,0];
+        data.nodes.forEach(function(_node) {
+          _node.ligands = [];
+          _node.receptors = [];
+          _node.lout = [];
+          _node.lin = [];
+          _node.values = [0,0];
+
+          pairs.forEach(function(_pair) {
+            //console.log(_node,_pair);
+
+            var exprValues = _pair.index.map(function(_index) {
+              return +expr[_index][_node.id+1];
+            });
+
+            if (exprValues[0] > 0 && _node.ligands.indexOf(_pair.Ligand) < 0) {
+              _node.ligands.push(_pair.Ligand);
+              _node.values[0] += +exprValues[0]; 
+            }
+
+            if (exprValues[1] > 0 && _node.receptors.indexOf(_pair.Receptor) < 0) {
+              _node.receptors.push(_pair.Receptor);
+              _node.values[1] += +exprValues[1];
+            }
+
+          });
         });
+
+        var value0 = function(d) { return d.values[0]; };
+        var value1 = function(d) { return d.values[1]; };
+
+        var ranked0 = data.nodes.map(value0).filter(function(d) { return d > 0; }).sort(d3.ascending);
+        var ranked1 = data.nodes.map(value1).filter(function(d) { return d > 0; }).sort(d3.ascending);
+
+        data.ligandExtent = d3.extent(ranked0);
+        data.receptorExtent = d3.extent(ranked1);
+
+        var filter0 = d3.quantile(ranked0, options.receptorRankFilter);
+        var filter1 = d3.quantile(ranked1, options.ligandRankFilter);
+
+        data.nodes = data.nodes.filter(function(d) {
+          return d.values[0] > 0 && 
+                 d.values[1] > 0 &&
+                 ( d.values[0] > filter0 || d.values[1] > filter1 );
+        });
+
+        //
 
         cfpLoadingBar.inc();
 
@@ -153,76 +198,58 @@
 
         data.edges = [];
 
-        data.ligandExtent[1] = 0;
-        data.receptorExtent[1] = 0;
+        //data.ligandExtent[1] = 0;
+        //data.receptorExtent[1] = 0;
 
-        pairs.forEach(
-          function addLinks(_pair) {
+        pairs.forEach(function addLinks(_pair) {
 
-            var lindex = _pair.index[0];
-            var rindex = _pair.index[1];
+          var lindex = _pair.index[0];
+          var rindex = _pair.index[1];
            
-            if (lindex > -1 && rindex > -1) {
+          if (lindex > -1 && rindex > -1) {
 
-              data.nodes.forEach(function(src) {  // all selected cell-cell pairs
+            data.nodes.forEach(function(src) {  // all selected cell-cell pairs
 
-                var lexpr = +expr[lindex][src.id+1];
-                if (lexpr === 0) {return;}
+              var lexpr = +expr[lindex][src.id+1];
+              if (lexpr === 0) {return;}
 
+              data.nodes.forEach(function(tgt) {
+                var rexpr = +expr[rindex][tgt.id+1];
+                if (rexpr === 0) {return;}
 
-                if (src.ligands.indexOf(_pair.Ligand) < 0) {
-                  src.ligands.push(_pair.Ligand);
-                  src.values[0] += +lexpr;
-                  data.ligandExtent[0] = Math.min(lexpr, data.ligandExtent[0]);
-                  data.ligandExtent[1] = Math.max(lexpr, data.ligandExtent[1]);     
+                var value = lexpr*rexpr;
+
+                if (value > 0 && lexpr >= options.ligandFilter && rexpr >= options.receptorFilter) {  // src and tgt are talking!!!
+                  var name = src.name + ' -> ' + tgt.name;
+
+                  var edge = data.edges.filter(function(d) { return d.name === name; });
+
+                  if (edge.length === 0) {
+                    edge = {
+                      source: src,
+                      target: tgt,
+                      value:0,
+                      name: name,
+                      values: [0, 0]
+                    };
+                    data.edges.push(edge);
+                  } else if (edge.length === 1 && pairs.length > 1) {
+                    edge = edge[0];
+                  } else {
+                    $log.warn('Duplicate edges found', edge.length);
+                  }
+
+                  edge.value += value;
+       
                 }
 
-                data.nodes.forEach(function(tgt) {
-                  var rexpr = +expr[rindex][tgt.id+1];
-                  if (rexpr === 0) {return;}
 
-
-                  if (tgt.receptors.indexOf(_pair.Receptor) < 0) {
-                    tgt.receptors.push(_pair.Receptor);
-                    tgt.values[1] += +rexpr;
-                    data.receptorExtent[0] = Math.min(rexpr, data.receptorExtent[0]);
-                    data.receptorExtent[1] = Math.max(rexpr, data.receptorExtent[1]);    
-                  }
-
-                  var value = lexpr*rexpr;
-
-                  if (value > 0 && lexpr >= options.ligandFilter && rexpr >= options.receptorFilter) {  // src and tgt are talking!!!
-                    var name = src.name + ' -> ' + tgt.name;
-
-                    var edge = data.edges.filter(function(d) { return d.name === name; });
-
-                    if (edge.length === 0) {
-                      edge = {
-                        source: src,
-                        target: tgt,
-                        value:0,
-                        name: name,
-                        values: [0, 0]
-                      };
-                      data.edges.push(edge);
-                    } else if (edge.length === 1 && pairs.length > 1) {
-                      edge = edge[0];
-                    } else {
-                      $log.warn('Duplicate edges found', edge.length);
-                    }
-
-                    edge.value += value;
-         
-                  }
-
-
-                });
               });
-
-            }
+            });
 
           }
-        );
+
+        });
 
         data.edgeCount = data.edges.length;
 
@@ -311,7 +338,9 @@
         showLabels: true,
         maxEdges: 100,
         ligandFilter: 10,
-        receptorFilter: 100,
+        receptorFilter: 10,
+        ligandRankFilter: 0.8,       
+        receptorRankFilter: 0.8
       });
 
       $scope.graphData = directedGraph.data;
@@ -377,7 +406,9 @@
 
         $scope.$watch('options.ligandFilter', updateNetwork);
         $scope.$watch('options.receptorFilter', updateNetwork);
-        
+        $scope.$watch('options.ligandRankFilter', updateNetwork);
+        $scope.$watch('options.receptorRankFilter', updateNetwork);
+
         $scope.$watch('options.maxEdges', updateNetwork); // TODO: filter in place
         $scope.$watch('options.showLabels', function(newVal) {
           d3.select('#vis svg')

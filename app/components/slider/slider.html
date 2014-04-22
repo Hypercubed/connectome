@@ -1,9 +1,9 @@
 <div class="row">
   <div class="col-sm-4">
-    <input type="number" min="{{min}}" max="{{max}}" ng-model="value" class="col-md-12">
+    <input type="number" min="{{min}}" max="{{max}}" ng-model="value" step="{{step}}" class="col-md-12">
   </div>
   <div class="col-sm-8">
-    <input type="range" class="" step="1" ng-model="rangeValue" min="{{min}}" max="{{max}}">
+    <input type="range" class="" ng-model="rangeValue" min="0" max="100" step="{{step*100/(max - min)}}">
     <span class="bubble limit floor" ng-show="left" >{{min | number:0}}</span>
     <span class="bubble limit ceiling" ng-show="right">{{max | number:0}}</span>      
   </div>
