@@ -8,7 +8,7 @@
   var app = angular.module('sliders',[]);
 
   app
-    .directive('slider', function($timeout, $debounce) {
+    .directive('slider', function($timeout, debounce) {
       return {
         scope: {
           value: '=ngModel',
@@ -25,7 +25,7 @@
           scope.step = +scope.step || 1; 
           scope.value = +scope.value || 0;         
 
-          var applyValue = $debounce(function() {
+          var applyValue = debounce(function() {
             var val = scope.rangeValue*(scope.max-scope.min);
             scope.value = Math.round(val)/100+scope.min;
           }, 100);

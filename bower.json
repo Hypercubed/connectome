@@ -14,7 +14,8 @@
     "d3-tip": "~0.6.4",
     "angular-bootstrap": "~0.10.0",
     "angular-local-storage": "https://github.com/Hypercubed/angular-local-storage.git#feature/bind",
-    "angular-ui-router": "~0.2.10"
+    "angular-ui-router": "~0.2.10",
+    "ng-debounce": "~0.1.1"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",
