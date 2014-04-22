@@ -48,7 +48,9 @@
     return v(c*a.x - s*a.y, s*a.x + c*a.y);
   }
 
-  var networkGraph = function() {
+  var treeGraph = function() {
+
+    console.log('Tree graph');
 
     // elements
     var nodes, links;
@@ -57,126 +59,36 @@
     var width = 500,
         height = 500;
 
-    //var start = true;
-
     // Private objects
     var zoom = d3.behavior.zoom();
 
-    var line = d3.svg.line()
-      .x(function(d) { return d.x; })
-      .y(function(d) { return d.y; })
-      .interpolate('cardinal')
-      .tension(0.3)
-      //.interpolate('basis-open')
-      ;
-
-    /* function arc(d) {
-      var dx = d.target.x - d.source.x,
-          dy = d.target.y - d.source.y,
-          dr = 300;  //linknum is defined above
-      return 'M' + d.source.x + ',' + d.source.y + 'A' + dr + ',' + dr + ' 0 0,1 ' + d.target.x + ',' + d.target.y;
-    } */
-
-    function tick() {
-
-      var VC = vScale(1/2, v(force.size()));  // Center of view
-
-      //console.log(chart.container);
-
-      links
-        //.transition().duration(50)
-        .attr('d', function(d) {  // Clean this up
-        
-          //var RS = 1*rsize(sumValues(d.source));    // Source offset radius
-          var RT = 1*rsize(sumValues(d.target));  // Target offset radius
-
-          var points = [];
-
-          if (d.source !== d.target) {
-
-            var vST = vSub(d.target, d.source);   // Vector between nodes
-            var rvST = vRot(vST, Math.PI/180*10); // Rotate 30degrees
-            var vSM = vScale(1/2, rvST);          // Source -> Arc midpoint
-            var aM = vAdd(d.source, vSM);         // Arc midpoint
-
-            points.push( d.source );
-            points.push( aM );
-            points.push( d.target );
-            
-          } else {  // Self 
-
-            var o = vNorm(vSub(d.source, VC));
-
-            //var x = o.x;
-
-            //var S = 2.5*rsize(sumValues(d.source)); //+5*d.count;
-            //var S2 = 5*rsize(sumValues(d.source)); //+5*d.count;
-
-            //var VSO = vScale(S, o); // Perpendicular offset vector
-
-            var dT = vScale(RT, vNorm(vRot(o, Math.PI/4)));     // Target offset
-            var dS = vScale(RT, vNorm(vRot(o, -Math.PI/4)));    // Source offset
-
-            var dT2 = vScale(2*RT, vNorm(vRot(o, Math.PI/8)));     // Target offset
-            var dS2 = vScale(2*RT, vNorm(vRot(o, -Math.PI/8)));    // Source offset
-
-            //points.push( d.source );
-            //points.push( d.source );
-            points.push( vAdd(d.source, dS) );
-            points.push( vAdd(d.source, dS2) );
-            //points.push( vAdd(d.source, vScale(d.count/4+1,dS)) );
-            //points.push( vAdd(d.source, VSO) );
-            //points.push( vAdd(d.target, vScale(d.count/4+1,dT)) );
-            points.push( vAdd(d.target, dT2) );
-            points.push( vAdd(d.target, dT) );
-            //points.push( d.target );
-            
-          }
-
-          return line(points);
-          //return arc(d);
-
-        });
-
-      nodes
-        .attr('transform', function(d) {
-          return 'translate(' + d.x + ',' + d.y + ')';
-        })
-        //.transition().duration(50)
-        //.attr('x', function(d) { return d.x; })
-        //.attr('y', function(d) { return d.y; })
-        ;
-    }
+    //var line = d3.svg.line()  // Change to diagnal
+    //  .x(function(d) { return d.x; })
+    //  .y(function(d) { return d.y; })
+    //  ;
 
 
-    var force = d3.layout.force()
-      .charge(-8000)
-      .linkDistance(800)
-      .linkStrength(0.1)
-      .gravity(1)
-      .on('tick', tick);
+
 
     // Scales
-    //var color = d3.scale.log().range(['blue', 'green']);
-    function ncolor(d) {
-      var type = d.type;
-      if (!type) {
-        if (d.values[1] > 10) {type='recpetor'}   //  Receptor only, Very light blue
-        if (d.values[0] > 10)  {type='ligand'} //  Ligand only, lime green
-        if (d.values[0] > 10 && d.values[1] > 10) {type='both'}   //  Both, Dark moderate magenta  
-      }
-      if (type=='both') {return '#cc66cc';}   //  Both, Dark moderate magenta
-      if (type=='receptor')  {return '#99ccff';}   //  Receptor only, Very light blue
-      if (type=='ligand') {return '#00cc66';} //  Ligand only, lime green
+    function ncolor(d) {  // Clean this
+      if (d.type.match('receptor'))  {return '#99ccff';}   //  Receptor only, Very light blue
+      if (d.type.match('ligand')) {return '#00cc66';} //  Ligand only, lime green
     }
 
-    //var opacity = d3.scale.log().range([1, 1]);
     var slog = d3.scale.log().range([2,9]).clamp(true);     // Maps value to normalized edge width
     var rsize = d3.scale.linear().range([10, 10]).clamp(true);  // Maps value to size
-    //var nindex = d3.scale.linear().range([10, 1]);
+
+    var x = d3.scale.ordinal().domain([0,1,2]).rangeBands([0, width], 1);
+
+    var y = [];
+    y[0] = d3.scale.ordinal().rangePoints([0, height],1);
+    y[2] = d3.scale.ordinal().rangePoints([0, height],1);
+    y[1] = d3.scale.ordinal().rangePoints([1, height],2);
+
+    var line = d3.svg.diagonal().projection(function(d) { return [d.y, d.x]; });;
 
     // Accessors
-    //function degree(d) { return d.lin.length + d.lout.length; }  // Calculates the degree based on links
     function sumValues(d) { return d3.sum(d.values); }
     function linkName(d) { return d.source.name + ':' + d.name + ':' + d.target.name; }
 
@@ -185,43 +97,12 @@
     }
 
     // Tooltips
-    
     var nodeTooltip = chart.nodeTooltip = d3.tip().attr('class', 'd3-tip node').html(_F('name'));
     var linkTooltip = chart.linkTooltip = d3.tip().attr('class', 'd3-tip link').html(_F('name'));
 
-    linkTooltip.offset(function() {
-      return [this.getBBox().height / 2, 0];
+    nodeTooltip.offset(function() {
+      return [-10, 0];
     });
-
-    //var nodeTooltip = chart.nodeTooltip = riken.tooltips().getHtml(_F('name'));
-    //var linkTooltip = chart.linkTooltip = riken.tooltips().getHtml(_F('name'));
-
-    /* chart.classNodesByname = function(names, name) {  // Todo: Use filters
-      //console.log(names, name, value);
-
-      value = (names.length > 0);
-      name = name || 'selected';
-
-      //var _nodes = nodes.filter(function(d) { 
-      //  console.log(d); 
-      //  return names.indexOf(d.name) > -1; 
-      //});
-
-      //console.log(_nodes);
-
-      nodes[0].forEach(function(d) {
-        var node = d3.select(d);
-        var found = names.indexOf(node.datum().name) > -1;
-
-        nodeClassed.call(d, name, found);
-
-      });
-
-      //console.log(name,value);
-
-      chart.container.classed(name,value);
-
-    } */
 
     var nodeClassed = function nodeClassed(name, value) {
 
@@ -237,7 +118,8 @@
 
       links[0].forEach(function(d) {
         var link = d3.select(d);
-        var found = node.datum().lout.indexOf(link.datum().index) > -1;
+        var found = node.datum().lout.indexOf(link.datum().index) > -1 ||
+                    node.datum().lin.indexOf(link.datum().index) > -1;
 
         if (found) {
           link.classed(name, value);
@@ -254,16 +136,19 @@
       width = parseInt(container.style('width'));
       height = parseInt(container.style('height'));
 
-      //console.log(parseInt(container.style('width')),parseInt(container.style('height')));
+      x.rangeBands([0, width], 1);
+      y[0].rangePoints([0, height],1);
+      y[2].rangePoints([0, height],1);
+      y[1].rangePoints([0, height],2);
+
+      //console.log(width,height);
 
       chart.update = function() { container.transition().call(chart); };
-      chart.container = container;  //this;
+      chart.container = container; 
 
       container
         .attr('width', width)
           .attr('height', height)
-          //.call(zoom.on('zoom', rescale))
-          //.on('dblclick.zoom', null)
             .append('svg:defs');
 
       container
@@ -273,27 +158,41 @@
       // Ranges
       var _s = d3.extent(graph.edges, _F('value'));
       slog.domain(_s);
-      //color.domain(_s);
-      //opacity.domain(_s);
 
       var _e = d3.extent(graph.nodes, sumValues);
       rsize.domain(_e);
 
-      //_n = d3.extent(graph.edges, _F('count'))
-      //nindex.domain(_n);    
+      var groupCounts = [0,0,0];
 
-      force
-        .size([width, height])
-          .nodes(graph.nodes)
-          .links(graph.edges);
+      graph.nodes.forEach(function(node,i) {  // Todo: use scales
 
-      //force.drag.on("dragstart", function() { d3.event.sourceEvent.stopPropagation(); });
+        var group = 0;
+        //if (node.type == 'node.ligand') { group = 0; };
+        if (node.type == 'gene') { group = 1; };
+        if (node.type == 'node.receptor') { group = 2; };
 
-      var g = container.selectAll('.networkGraph').data([1]);
+        node.group = group;
+        node._i = groupCounts[group]++;
+      });
+
+      groupCounts.forEach(function(d,i) {
+        y[i].domain(d3.range(d));
+      });
+
+      console.log(y);
+    
+      graph.nodes.forEach(function(node,i) {  // Todo: use scales
+        node.y = x(node.group);
+        node.x = y[node.group](node._i);
+
+        //console.log(node.x,node.y);
+      });
+
+      var g = container.selectAll('.treeGraph').data([1]);
 
       g.enter()
         .append('g')
-        .attr('class', 'networkGraph');
+        .attr('class', 'treeGraph');
 
       // rescale g
       function rescale() {
@@ -307,7 +206,7 @@
       container.call(zoom.on('zoom', rescale));
 
       // MARKERS
-      container.selectAll('defs').remove();
+      /* container.selectAll('defs').remove();
 
       container.append('defs')
         .selectAll('marker')
@@ -328,7 +227,7 @@
             .attr('id', function(d) { return 'arrow-'+d.index; })
             .append('svg:path')
               .attr('d', 'M0,-5L10,0L0,5')
-              ;
+              ; */
 
       // LINKS
       var gLinks = g.selectAll('g.links').data([1]);
@@ -349,10 +248,9 @@
 
       links
         .attr('id', function(d) { return 'link-'+d.index; })
-        //.style('stroke', function(d) { return color(d.value); })
-        //.style('opacity', function(d) { return opacity(d.value); })
+        .attr('d', line)
         .style('stroke-width', function(d) { return slog(d.value); })
-        .attr('marker-mid', function(d) { return 'url(#arrow-'+d.index+')'; })
+        //.attr('marker-mid', function(d) { return 'url(#arrow-'+d.index+')'; })
         ;
 
       links.exit().remove();
@@ -374,7 +272,7 @@
       // Create
       var nodesEnter = nodes.enter().append('g')
           .classed('node', true)
-          .call(force.drag)
+          /* .call(force.drag)
           .on('mousedown',
             function() {
               container.call(zoom.on('zoom', null));
@@ -382,7 +280,7 @@
           .on('mouseup',
             function() {
               container.call(zoom.on('zoom', rescale));
-            })
+            }) */
           .on('dblclick', function(d) { d3.event.stopPropagation(); d.fixed = (d.fixed) ? false : true; nodeClassed.call(this, 'fixed', d.fixed); })
           .on('mouseover.highlight', function() { nodeClassed.call(this, 'hover', true); })
           .on('mouseout.highlight', function() { nodeClassed.call(this, 'hover', false); })
@@ -404,6 +302,9 @@
       nodes
         .attr('id', function(d) { return 'node-'+d.index; })
         .classed('fixed', _F('fixed'))
+        .attr('transform', function(d,i) {
+          return 'translate(' + x(d.group) + ',' + y[d.group](d._i) + ')';
+        })
         ;
 
       nodes
@@ -412,13 +313,13 @@
 
       nodes.exit().remove();
 
-      force.start();
+      //force.start();
 
     };
 
     return chart;
   };
 
-  window.networkGraph = networkGraph;
+  window.treeGraph = treeGraph;
 
 })(window.d3);

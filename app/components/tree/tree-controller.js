@@ -7,85 +7,7 @@
   var app = angular.module('lrSpaApp');
 
   app
-    .constant('EXPRESSIONFILE', 'data/LR.expr.txt')
-    .constant('PAIRSFILE', 'data/LR.pairs.txt');
-
-  app
-    .service('ligandReceptorData', function($q, $log,$http,EXPRESSIONFILE,PAIRSFILE) {
-      var service = {};
-
-      service.data = {};
-      service.data.expr = [];
-      service.data.pairs = [];
-      service.data.cells = [];
-
-      service.load = function() {
-        var getPairs = $http.get(PAIRSFILE, {cache: true})
-          .success(function(data) {
-            data = d3.tsv.parse(data);
-
-            $log.debug('Pairs loaded:',data.length);
-
-            data.forEach(function(d,i) {
-              d.id = i;
-            });
-
-            service.data.pairs = data;
-
-          }).error(function(data, status, headers, config) {
-            $log.warn('Error',data, status, headers, config);
-          });
-
-        var getExpression = $http.get(EXPRESSIONFILE, {cache: true})
-          .success(function(data) {
-            data = d3.tsv.parseRows(data);
-
-            $log.debug('Genes loaded:',data.length);
-
-            service.data.expr = data;
-
-            service.data.cells = data[0].slice(1).map(function(d,i) {
-              return { name: d, id: i };
-            });
-
-            $log.debug('Samples loaded:',service.data.cells.length);
-
-          }).error(function(data, status, headers, config) {
-            $log.warn('Error',data, status, headers, config);
-          });
-
-        return $q.all([getPairs, getExpression]).then(function() {
-          $log.debug('Done loading');
-
-          var _expr = service.data.expr;
-
-          service.data.pairs.forEach(function(_pair) {  // Get ligand and receptor indecies in expression table
-
-            _pair.index = [-1,-1];
-
-            for (var i = 1; i < _expr.length; i++) {  // start from 1, skipping header
-              var gene = _expr[i][0];
-
-              if (gene === _pair.Ligand)   {_pair.index[0] = i;}
-              if (gene === _pair.Receptor) {_pair.index[1] = i;}
-
-              if (_pair.index[0] > -1 && _pair.index[1] >-1) {break;}
-            }
-
-            if (_pair.index[0] < 0 || _pair.index[1] < 0) {
-              $log.warn('Ligand or receptor missing from expression table');
-            }
-
-          });
-        });
-      };
-
-      return service;
-
-    });
-
-  app
-    .service('directedGraph', function($log, cfpLoadingBar) {  // TODO: should be a directive
+    .service('treeGraph', function($log, cfpLoadingBar) {  // TODO: should be a directive
 
       var data = {
         nodes: {},
@@ -95,7 +17,9 @@
         receptorExtent: [0,100000]
       };
 
-      var chart = networkGraph();
+      var chart = treeGraph();
+
+      //console.log(chart);
 
       var valueFormat = d3.format('.2f');
       var join = function(d) {return d.join(' '); };
@@ -109,11 +33,8 @@
       chart.nodeTooltip.html(function(d) {
         var html = [['<b>',d.name,'</b>']];
 
-        if (d.values[0] > 0) {html.push([(d.ligands.length > 1) ? 'Sum of' : '', 'Ligand expression:',valueFormat(d.values[0])]);}
-        if (d.values[1] > 0) {html.push([(d.receptors.length > 1) ? 'Sum of' : '', 'Receptor expression:',valueFormat(d.values[1])]);}
-
-        if (d.ligands.length > 0)   {html.push(['Ligands:',formatList(d.ligands,4)]);}
-        if (d.receptors.length > 0) {html.push(['Receptors:',formatList(d.receptors,4)]);}
+        if (d.value > 0) {html.push([(d.genes.length > 1) ? 'Sum of' : '',d.type, 'expression:',valueFormat(d.value)]);}
+        if (d.genes.length > 0)   {html.push(['Genes:',formatList(d.genes,4)]);}
 
         return html.map(join).join('<br>');
       });
@@ -135,11 +56,70 @@
         return html.map(join).join('<br>');
       });
 
+      var Node = function(id, name, type) {
+        return {
+          id: id,
+          name: name,
+          type: type,
+          value: 0,
+          lout: [],
+          lin: [],
+          genes: [],
+          ligands: [],  // remove these
+          receptors: [],
+          values: [100,100]
+        };
+      }
+
+      var Edge = function(src,tgt,name) {
+        var name = name || src.name+'->'+tgt.name;
+        return {
+          source: src,
+          target: tgt,
+          value: 10,
+          name: name,
+          values: [10, 10]  // remove these
+        };
+      }
+
       function _makeNodes(pairs, cells, expr) {
 
-        var nodes = cells;
+        var _nodes = [];
+
+        ['Ligand','Receptor'].forEach(function(d,i) {
+          var type = d.toLowerCase();
+
+          cells.forEach(function(cell) {
+            var _node = new Node(cell.id,cell.name+'.'+type,'node.'+type);
+            
+            pairs.forEach(function(_pair) {
+              var index = _pair.index[i];
+              var exprValue = +expr[index][_node.id+1];
+
+              if (exprValue > 0 && _node.genes.indexOf(_pair[d]) < 0) {
+                _node.genes.push(_pair[d]);
+                _node.value += +exprValue;
+              }
+            });
+
+            _nodes.push(_node);
+          });
+
+          //pairs.forEach(function(_pair) {
+          //  var _node = new Node(_pair.id,_pair[d]+'.'+type,type);
+          //  _nodes.push(_node);
+          //});
+
+        });
+
+        if (_nodes.length !== 2*cells.length) {
+          $log.error('Inconsistancy found in number of generated nodes.')
+        }
+
+        /* var nodes = cells.slice(0);
 
         nodes.forEach(function(_node) {
+
           _node.ligands = [];
           _node.receptors = [];
           _node.lout = [];
@@ -163,37 +143,85 @@
             }
 
           });
+
         });
 
-        return nodes;
+        return nodes; */
+
+        return _nodes;
 
       }
 
-      function _filterNodes(nodes, options) {
-        var value0 = function(d) { return d.values[0]; };
-        var value1 = function(d) { return d.values[1]; };
+      function _sortAndFilterNodes(nodes, options) {
 
-        var ranked0 = nodes.map(value0).filter(function(d) { return d > 0; }).sort(d3.ascending);
-        var ranked1 = nodes.map(value1).filter(function(d) { return d > 0; }).sort(d3.ascending);
+        var value = function(d) { return d.value; };
+        var valueComp = function(a,b) { return value(b) - value(a) ; };
 
-        data.ligandExtent = d3.extent(ranked0);
-        data.receptorExtent = d3.extent(ranked1);
+        nodes = nodes.sort(valueComp);
 
-        var filter0 = d3.quantile(ranked0, options.receptorRankFilter);
-        var filter1 = d3.quantile(ranked1, options.ligandRankFilter);
+        var ligands = nodes.map(function(d) {
+          return d.type.match('ligand') ? d.value : 0;
+        }).filter(function(d) {return d>0;}).sort(d3.ascending);
+
+        var receptors = nodes.map(function(d) {
+          return d.type.match('receptor') ? d.value : 0;
+        }).filter(function(d) {return d>0;}).sort(d3.ascending);
+
+        data.ligandExtent = d3.extent(ligands);
+        data.receptorExtent = d3.extent(receptors);
+
+        var filter0 = d3.quantile(ligands, options.ligandRankFilter);
+        var filter1 = d3.quantile(receptors, options.receptorRankFilter);
+
+        console.log('filter',filter0,filter1);
 
         return nodes.filter(function(d) {
-          return d.values[0] > 0 && 
-                 d.values[1] > 0 &&
-                 ( d.values[0] > filter0 || d.values[1] > filter1 );
+          if (d.value == 0) return false;
+
+          var limit = (d.type.match('ligand')) ? filter0 : filter1;
+          return d.value > 0  && d.value > limit;
         });
+
       }
 
       function _makeEdges(nodes, pairs, expr, options) {
 
         var edges = [];
 
-        pairs.forEach(function addLinks(_pair) {
+        pairs.forEach(function addLinks(_pair, i) {
+          $log.debug('Constructing network for',_pair);
+
+          var lindex = _pair.index[0];
+          var rindex = _pair.index[1];
+
+          var name = _pair.Ligand + ' -> ' + _pair.Receptor;
+
+          var _pairNode = new Node(i,name,'gene');  // Todo: move this?
+
+          nodes.push(_pairNode);
+
+          data.nodes.forEach(function(_node) {
+            if (!_node.type.match('node')) return;
+
+            var index = (_node.type == 'node.ligand') ? lindex : rindex;
+            var min = (_node.type == 'node.ligand') ? options.ligandFilter : options.receptorFilter;
+
+            var _expr = +expr[index][_node.id+1];
+            if (!_expr || !(_expr > 0) || _expr < min) {return;}
+
+            if (_node.type == 'node.ligand') {
+              var _edge = new Edge(_node,_pairNode);
+            } else {
+              var _edge = new Edge(_pairNode,_node);
+            }
+            _edge.value = _expr;
+            
+            edges.push(_edge);
+          });
+
+        });
+
+        /* pairs.forEach(function addLinks(_pair) {
           $log.debug('Constructing network for',_pair);
 
           var lindex = _pair.index[0];
@@ -203,10 +231,14 @@
 
             data.nodes.forEach(function(src) {  // all selected cell-cell pairs
 
+              if (src.type !== 'ligand') return;
+
               var lexpr = +expr[lindex][src.id+1];
               if (lexpr === 0) {return;}
 
               data.nodes.forEach(function(tgt) {
+                if (tgt.type !== 'receptor') return;
+
                 var rexpr = +expr[rindex][tgt.id+1];
                 if (rexpr === 0) {return;}
 
@@ -244,7 +276,7 @@
 
           }
 
-        });
+        }); */
 
         return edges;
 
@@ -268,7 +300,7 @@
 
         $log.debug('Total nodes: ',data.nodes.length);
 
-        data.nodes = _filterNodes(data.nodes, options);
+        data.nodes = _sortAndFilterNodes(data.nodes, options);
 
         cfpLoadingBar.inc();
 
@@ -312,6 +344,7 @@
         });
 
         data.nodes = data.nodes.filter(function(d) {   // Filtered nodes
+          return true;
           return (d.lout.length + d.lin.length) > 0;
         });
 
@@ -329,7 +362,7 @@
     });
 
   app
-    .controller('PanelCtrl', function ($scope, $log, localStorageService, ligandReceptorData, directedGraph) {
+    .controller('TreeGraphCtrl', function ($scope, $log, localStorageService, ligandReceptorData, treeGraph) {
 
       localStorageService.bind = function(scope, key, def) {
         var value = localStorageService.get(key);
@@ -356,7 +389,6 @@
       });
 
       /* Make network */
-
       localStorageService.bind($scope, 'options', {
         showLabels: true,
         maxEdges: 100,
@@ -366,13 +398,12 @@
         receptorRankFilter: 0.8
       });
 
-      $scope.graphData = directedGraph.data;
+      $scope.graphData = treeGraph.data;
 
       function updateNetwork(newVal, oldVal) {
         if (newVal === oldVal) {return;}
-        saveSelection();
-        directedGraph.makeNetwork($scope.selected.pairs, $scope.selected.cells, $scope.data.expr, $scope.options);
-        directedGraph.draw($scope.options);
+        treeGraph.makeNetwork($scope.selected.pairs, $scope.selected.cells, $scope.data.expr, $scope.options);
+        treeGraph.draw($scope.options);
       }
 
       /* Load Data */
@@ -389,8 +420,8 @@
 
         localStorageService.set('pairs', _pairs);
         localStorageService.set('cells', _cells);
-        //localStorageService.set('ligandRange', directedGraph.graph.ligandRange);
-        //localStorageService.set('receptorRange', directedGraph.graph.receptorRange);
+        //localStorageService.set('ligandRange', treeGraph.graph.ligandRange);
+        //localStorageService.set('receptorRange', treeGraph.graph.receptorRange);
       }
 
       function loadSelection() {
@@ -413,8 +444,8 @@
         $scope.selected.cells = $scope.data.cells.filter(_idin(_cells));
 
         //TODO: not this
-        //directedGraph.graph.ligandRange = localStorageService.get('ligandRange') || directedGraph.graph.ligandRange;
-        //directedGraph.graph.receptorRange = localStorageService.get('receptorRange') || directedGraph.graph.receptorRange;
+        //treeGraph.graph.ligandRange = localStorageService.get('ligandRange') || treeGraph.graph.ligandRange;
+        //treeGraph.graph.receptorRange = localStorageService.get('receptorRange') || treeGraph.graph.receptorRange;
         
       }
 
@@ -427,6 +458,9 @@
 
         $scope.$watchCollection('selected', updateNetwork);
 
+        $scope.$watchCollection('options', saveSelection);
+        $scope.$watchCollection('selected', saveSelection);
+
         $scope.$watch('options.ligandFilter', updateNetwork);
         $scope.$watch('options.receptorFilter', updateNetwork);
         $scope.$watch('options.ligandRankFilter', updateNetwork);
@@ -434,8 +468,7 @@
 
         $scope.$watch('options.maxEdges', updateNetwork); // TODO: filter in place
         $scope.$watch('options.showLabels', function(newVal) {
-          saveSelection();
-          directedGraph.draw($scope.options);
+          treeGraph.draw($scope.options);
         });
 
       });
