@@ -11,7 +11,7 @@
     .constant('PAIRSFILE', 'data/LR.pairs.txt');
 
   app
-    .service('ligandReceptorData', function($q, $log,$http,EXPRESSIONFILE,PAIRSFILE) {  // TODO: everything
+    .service('ligandReceptorData', function($q, $log,$http,EXPRESSIONFILE,PAIRSFILE) {
       var service = {};
 
       service.data = {};
@@ -85,7 +85,7 @@
     });
 
   app
-    .service('directedGraph', function($log, cfpLoadingBar) {  // TODO: everything
+    .service('directedGraph', function($log, cfpLoadingBar) {  // TODO: should be a directive
 
       var data = {
         nodes: {},
@@ -135,16 +135,11 @@
         return html.map(join).join('<br>');
       });
 
-      function _makeNetwork(pairs, cells, expr, options) {
+      function _makeNodes(pairs, cells, expr) {
 
-        $log.debug('Constructing network');
-        if (cells.length < 1 || pairs.length < 1) { return;}
+        var nodes = cells;
 
-        cfpLoadingBar.start();
-
-        data.nodes = cells;
-
-        data.nodes.forEach(function(_node) {
+        nodes.forEach(function(_node) {
           _node.ligands = [];
           _node.receptors = [];
           _node.lout = [];
@@ -152,7 +147,6 @@
           _node.values = [0,0];
 
           pairs.forEach(function(_pair) {
-            //console.log(_node,_pair);
 
             var exprValues = _pair.index.map(function(_index) {
               return +expr[_index][_node.id+1];
@@ -171,11 +165,16 @@
           });
         });
 
+        return nodes;
+
+      }
+
+      function _filterNodes(nodes, options) {
         var value0 = function(d) { return d.values[0]; };
         var value1 = function(d) { return d.values[1]; };
 
-        var ranked0 = data.nodes.map(value0).filter(function(d) { return d > 0; }).sort(d3.ascending);
-        var ranked1 = data.nodes.map(value1).filter(function(d) { return d > 0; }).sort(d3.ascending);
+        var ranked0 = nodes.map(value0).filter(function(d) { return d > 0; }).sort(d3.ascending);
+        var ranked1 = nodes.map(value1).filter(function(d) { return d > 0; }).sort(d3.ascending);
 
         data.ligandExtent = d3.extent(ranked0);
         data.receptorExtent = d3.extent(ranked1);
@@ -183,23 +182,16 @@
         var filter0 = d3.quantile(ranked0, options.receptorRankFilter);
         var filter1 = d3.quantile(ranked1, options.ligandRankFilter);
 
-        data.nodes = data.nodes.filter(function(d) {
+        return nodes.filter(function(d) {
           return d.values[0] > 0 && 
                  d.values[1] > 0 &&
                  ( d.values[0] > filter0 || d.values[1] > filter1 );
         });
+      }
 
-        //
+      function _makeEdges(nodes, pairs, expr, options) {
 
-        cfpLoadingBar.inc();
-
-        $log.debug('Nodes: ',data.nodes.length);
-        $log.debug('Pairs: ',pairs.length);
-
-        data.edges = [];
-
-        //data.ligandExtent[1] = 0;
-        //data.receptorExtent[1] = 0;
+        var edges = [];
 
         pairs.forEach(function addLinks(_pair) {
 
@@ -222,7 +214,7 @@
                 if (value > 0 && lexpr >= options.ligandFilter && rexpr >= options.receptorFilter) {  // src and tgt are talking!!!
                   var name = src.name + ' -> ' + tgt.name;
 
-                  var edge = data.edges.filter(function(d) { return d.name === name; });
+                  var edge = edges.filter(function(d) { return d.name === name; });
 
                   if (edge.length === 0) {
                     edge = {
@@ -232,7 +224,7 @@
                       name: name,
                       values: [0, 0]
                     };
-                    data.edges.push(edge);
+                    edges.push(edge);
                   } else if (edge.length === 1 && pairs.length > 1) {
                     edge = edge[0];
                   } else {
@@ -250,6 +242,34 @@
           }
 
         });
+
+        return edges;
+
+      }
+
+      function _draw(options) {
+        d3.select('#vis svg')
+          .classed('labels',options.showLabels)
+          .datum(data)
+          .call(chart);
+      }
+
+      function _makeNetwork(pairs, cells, expr, options) {
+
+        $log.debug('Constructing network');
+        if (cells.length < 1 || pairs.length < 1) { return;}
+
+        cfpLoadingBar.start();
+
+        data.nodes = _makeNodes(pairs, cells, expr);
+        data.nodes = _filterNodes(data.nodes, options);
+
+        cfpLoadingBar.inc();
+
+        $log.debug('Nodes: ',data.nodes.length);
+        $log.debug('Pairs: ',pairs.length);
+
+        data.edges = _makeEdges(data.nodes, pairs, expr, options);
 
         data.edgeCount = data.edges.length;
 
@@ -286,13 +306,6 @@
           return (d.lout.length + d.lin.length) > 0;
         });
 
-        cfpLoadingBar.inc();
-
-        d3.select('#vis svg')
-          .classed('labels',options.showLabels)
-          .datum(data)
-          .call(chart);
-
         cfpLoadingBar.complete();
 
       }
@@ -300,7 +313,8 @@
       return {
         data: data,
         chart: chart,
-        makeNetwork: _makeNetwork
+        makeNetwork: _makeNetwork,
+        draw: _draw
       };
 
     });
@@ -347,9 +361,8 @@
 
       function updateNetwork(newVal, oldVal) {
         if (newVal === oldVal) {return;}
-        saveSelection();
-
         directedGraph.makeNetwork($scope.selected.pairs, $scope.selected.cells, $scope.data.expr, $scope.options);
+        directedGraph.draw($scope.options);
       }
 
       /* Load Data */
@@ -404,6 +417,8 @@
 
         $scope.$watchCollection('selected', updateNetwork);
 
+        $scope.$watchCollection('options', saveSelection);
+
         $scope.$watch('options.ligandFilter', updateNetwork);
         $scope.$watch('options.receptorFilter', updateNetwork);
         $scope.$watch('options.ligandRankFilter', updateNetwork);
@@ -411,8 +426,7 @@
 
         $scope.$watch('options.maxEdges', updateNetwork); // TODO: filter in place
         $scope.$watch('options.showLabels', function(newVal) {
-          d3.select('#vis svg')
-            .classed('labels',newVal);
+          directedGraph.draw($scope.options);
         });
 
       });
