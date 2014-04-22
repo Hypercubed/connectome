@@ -15,6 +15,11 @@
   font-family: Helvetica, Arial, sans-serif;
 }
 
+.axis {
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
 .node {
   fill: #ccc;
   fill-opacity: 1;
@@ -35,8 +40,6 @@
 svg.labels .node text {
   display: inherit;
 } 
-
-
 
 .node:hover, .node.hover {
   stroke: #333;

@@ -9,7 +9,7 @@
   //var _AF = function(n) { return function(d) { return [d[n]]; }; };
 
   // Simple vector manipulation
-  function v(x,y) {
+  /* function v(x,y) {
     if (arguments.length < 2) {
       return  { x: x[0], y: x[1]};
     }
@@ -46,6 +46,10 @@
     var c = Math.cos(A);
 
     return v(c*a.x - s*a.y, s*a.x + c*a.y);
+  } */
+
+  function degrees(radians) {
+    return radians / Math.PI * 180 - 90;
   }
 
   var treeGraph = function() {
@@ -67,11 +71,9 @@
     //  .y(function(d) { return d.y; })
     //  ;
 
-
-
-
     // Scales
     function ncolor(d) {  // Clean this
+      if (d.type.match('gene'))  {return '#cc66cc';}   //  Receptor only, Very light blue
       if (d.type.match('receptor'))  {return '#99ccff';}   //  Receptor only, Very light blue
       if (d.type.match('ligand')) {return '#00cc66';} //  Ligand only, lime green
     }
@@ -79,14 +81,15 @@
     var slog = d3.scale.log().range([2,9]).clamp(true);     // Maps value to normalized edge width
     var rsize = d3.scale.linear().range([10, 10]).clamp(true);  // Maps value to size
 
-    var x = d3.scale.ordinal().domain([0,1,2]).rangeBands([0, width], 1);
+    var groups = [0,1,2];
 
-    var y = [];
-    y[0] = d3.scale.ordinal().rangePoints([0, height],1);
-    y[2] = d3.scale.ordinal().rangePoints([0, height],1);
-    y[1] = d3.scale.ordinal().rangePoints([1, height],2);
+    var x = d3.scale.ordinal().domain(groups);
+    var y = groups.map(function() { return d3.scale.linear().range([0, 1]); });
 
-    var line = d3.svg.diagonal().projection(function(d) { return [d.y, d.x]; });;
+    var angle = d3.scale.ordinal().domain([1,2,0,3]).rangePoints([0, 2 * Math.PI]);
+    var radius = d3.scale.linear();
+
+    var line = d3.svg.diagonal().projection(function(d) { return [d.y, d.x]; });
 
     // Accessors
     function sumValues(d) { return d3.sum(d.values); }
@@ -101,7 +104,7 @@
     var linkTooltip = chart.linkTooltip = d3.tip().attr('class', 'd3-tip link').html(_F('name'));
 
     nodeTooltip.offset(function() {
-      return [-10, 0];
+      return [-20, 0];
     });
 
     var nodeClassed = function nodeClassed(name, value) {
@@ -136,10 +139,8 @@
       width = parseInt(container.style('width'));
       height = parseInt(container.style('height'));
 
-      x.rangeBands([0, width], 1);
-      y[0].rangePoints([0, height],1);
-      y[2].rangePoints([0, height],1);
-      y[1].rangePoints([0, height],2);
+      var size = Math.min(height, width);
+      radius.range([size/10, size/1.5]);
 
       //console.log(width,height);
 
@@ -165,28 +166,42 @@
       var groupCounts = [0,0,0];
 
       graph.nodes.forEach(function(node,i) {  // Todo: use scales
-
-        var group = 0;
-        //if (node.type == 'node.ligand') { group = 0; };
+        var group;
+        if (node.type == 'node.ligand') { group = 0; };
         if (node.type == 'gene') { group = 1; };
         if (node.type == 'node.receptor') { group = 2; };
 
         node.group = group;
-        node._i = groupCounts[group]++;
+        node.i = groupCounts[group]++;
+
       });
 
       groupCounts.forEach(function(d,i) {
-        y[i].domain(d3.range(d));
+        y[i].domain([0,d-1]);
       });
-
-      console.log(y);
     
-      graph.nodes.forEach(function(node,i) {  // Todo: use scales
-        node.y = x(node.group);
-        node.x = y[node.group](node._i);
+      /* graph.nodes.forEach(function(node,i) {  // Todo: use scales
+        //node.y = x(node.group);
+        //node.x = y[node.group](node._i);
+
+        node.__i = node._i/(groupCounts[node.group]-1);
+
+        console.log(node._i, y[node.group](node._i), node.__i);
+
+        node.x = node.__i;
+        node.y = node.group;
+
+        //console.log(node.group,  node._i, radius(node._i/(groupCounts[node.group]-1)));
 
         //console.log(node.x,node.y);
-      });
+      }); */
+
+      var _angle = function(d) { return angle(d.group); };
+      var _radius = function(d) { return radius(y[d.group](d.i)); };
+
+      var hiveLink = d3.hive.link()
+        .angle(_angle)
+        .radius(_radius)
 
       var g = container.selectAll('.treeGraph').data([1]);
 
@@ -205,29 +220,13 @@
 
       container.call(zoom.on('zoom', rescale));
 
-      // MARKERS
-      /* container.selectAll('defs').remove();
-
-      container.append('defs')
-        .selectAll('marker')
-          .data(graph.edges)
-        .enter()
-        .append('svg:marker')
-            .attr('class', 'Triangle')
-            .attr('viewBox', '0 -5 10 10')
-            .attr('refY', 0)
-            .attr('refX', 1)
-            .attr('markerWidth', function(d) { return 2.5*slog(d.value); })
-            .attr('markerHeight', function(d) { return 2.5*slog(d.value); })
-            .attr('stroke-width', 1)
-            .attr('markerUnits','userSpaceOnUse')
-            //.style('stroke', function(d) { return color(d.value); })
-            //.style('fill', function(d) { return color(d.value); })
-            .attr('orient', 'auto')
-            .attr('id', function(d) { return 'arrow-'+d.index; })
-            .append('svg:path')
-              .attr('d', 'M0,-5L10,0L0,5')
-              ; */
+      g.selectAll(".axis")
+          .data(d3.range(3))
+        .enter().append("line")
+          .attr("class", "axis")
+          .attr("transform", function(d) { return "rotate(" + degrees(angle(d)) + ")"; })
+          .attr("x1", radius.range()[0])
+          .attr("x2", radius.range()[1]);
 
       // LINKS
       var gLinks = g.selectAll('g.links').data([1]);
@@ -246,10 +245,12 @@
         .on('mouseout', linkTooltip.hide)
         ;
 
+
+
       links
         .attr('id', function(d) { return 'link-'+d.index; })
-        .attr('d', line)
         .style('stroke-width', function(d) { return slog(d.value); })
+        .attr('d', hiveLink)
         //.attr('marker-mid', function(d) { return 'url(#arrow-'+d.index+')'; })
         ;
 
@@ -303,7 +304,7 @@
         .attr('id', function(d) { return 'node-'+d.index; })
         .classed('fixed', _F('fixed'))
         .attr('transform', function(d,i) {
-          return 'translate(' + x(d.group) + ',' + y[d.group](d._i) + ')';
+          return 'rotate( '+degrees(_angle(d))+' ) translate(' + _radius(d) + ') ';
         })
         ;
 
