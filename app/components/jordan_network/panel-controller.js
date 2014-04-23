@@ -257,6 +257,10 @@
           .call(chart);
       }
 
+      function _clear() {
+        d3.select('#vis svg g').remove();
+      }
+
       function _makeNetwork(pairs, cells, expr, options) {
 
         $log.debug('Constructing network');
@@ -323,7 +327,8 @@
         data: data,
         chart: chart,
         makeNetwork: _makeNetwork,
-        draw: _draw
+        draw: _draw,
+        clear: _clear
       };
 
     });
@@ -366,6 +371,7 @@
         receptorRankFilter: 0.8
       });
 
+      directedGraph.clear();
       $scope.graphData = directedGraph.data;
 
       function updateNetwork(newVal, oldVal) {

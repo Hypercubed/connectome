@@ -79,12 +79,12 @@
     }
 
     var slog = d3.scale.log().range([2,9]).clamp(true);     // Maps value to normalized edge width
-    var rsize = d3.scale.linear().range([10, 10]).clamp(true);  // Maps value to size
+    var rsize = d3.scale.linear().range([5, 10]).clamp(true);  // Maps value to size
 
     var groups = [0,1,2];
 
     var x = d3.scale.ordinal().domain(groups);
-    var y = groups.map(function() { return d3.scale.linear().range([0, 1]); });
+    var y = groups.map(function() { return d3.scale.ordinal().rangePoints([0, 1]); });
 
     var angle = d3.scale.ordinal().domain([1,2,0,3]).rangePoints([0, 2 * Math.PI]);
     var radius = d3.scale.linear();
@@ -92,7 +92,7 @@
     var line = d3.svg.diagonal().projection(function(d) { return [d.y, d.x]; });
 
     // Accessors
-    function sumValues(d) { return d3.sum(d.values); }
+    function value(d) { return d.value; }
     function linkName(d) { return d.source.name + ':' + d.name + ':' + d.target.name; }
 
     function chart(selection) {
@@ -104,7 +104,7 @@
     var linkTooltip = chart.linkTooltip = d3.tip().attr('class', 'd3-tip link').html(_F('name'));
 
     nodeTooltip.offset(function() {
-      return [-20, 0];
+      return [-this.getBBox().height / 2, -rsize(value(this.__data__))];
     });
 
     var nodeClassed = function nodeClassed(name, value) {
@@ -139,8 +139,8 @@
       width = parseInt(container.style('width'));
       height = parseInt(container.style('height'));
 
-      var size = Math.min(height, width);
-      radius.range([size/10, size/1.5]);
+      var size = Math.min(height, width)/(1+Math.cos(Math.PI/3))/1.5;
+      radius.range([size/10, size]);
 
       //console.log(width,height);
 
@@ -150,7 +150,7 @@
       container
         .attr('width', width)
           .attr('height', height)
-            .append('svg:defs');
+          ;
 
       container
         .call(linkTooltip)
@@ -160,7 +160,7 @@
       var _s = d3.extent(graph.edges, _F('value'));
       slog.domain(_s);
 
-      var _e = d3.extent(graph.nodes, sumValues);
+      var _e = d3.extent(graph.nodes, _F('value'));
       rsize.domain(_e);
 
       var groupCounts = [0,0,0];
@@ -177,7 +177,7 @@
       });
 
       groupCounts.forEach(function(d,i) {
-        y[i].domain([0,d-1]);
+        y[i].domain(d3.range(d)).rangePoints([0,1]);
       });
     
       /* graph.nodes.forEach(function(node,i) {  // Todo: use scales
@@ -219,6 +219,9 @@
       }
 
       container.call(zoom.on('zoom', rescale));
+
+      zoom.translate([width/2,height/2+(height/2-size)]);
+      zoom.event(container);
 
       g.selectAll(".axis")
           .data(d3.range(3))
@@ -268,6 +271,10 @@
 
       //console.log(graph.nodes);
 
+      var name = function(d) {  // TODO: fix this
+        return d.name.split('.')[0];
+      }
+
       nodes = nodesLayer.selectAll('.node').data(_nodes, _F('name'));
 
       // Create
@@ -298,19 +305,30 @@
           .attr('text-anchor', 'start')
           .attr('dy', 3)
           .attr('dx', rsize(1)+3)
-          .text(_F('name'));
+          .text(name);
+
+      var _labelAngle = function(d) {
+        if (d.group == 1) return Math.PI;
+        if (d.group == 0) return 0;
+        return _angle(d);
+      }
 
       nodes
         .attr('id', function(d) { return 'node-'+d.index; })
         .classed('fixed', _F('fixed'))
         .attr('transform', function(d,i) {
-          return 'rotate( '+degrees(_angle(d))+' ) translate(' + _radius(d) + ') ';
+          return 'rotate( '+degrees(_angle(d))+' ) translate(' + _radius(d) + ') rotate( '+degrees(_labelAngle(d))+' )';
         })
         ;
 
       nodes
         .select('circle')
+          .attr('r',function(d) { return rsize(d.value); })
           .style('fill',ncolor);
+
+      nodes
+        .select('text')
+          .attr('dx',function(d) { return rsize(d.value)+3; });
 
       nodes.exit().remove();
 

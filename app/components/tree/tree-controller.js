@@ -30,10 +30,18 @@
         return l;
       }
 
-      chart.nodeTooltip.html(function(d) {
-        var html = [['<b>',d.name,'</b>']];
+      function toTitleCase(str)
+      {
+        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+      }
 
-        if (d.value > 0) {html.push([(d.genes.length > 1) ? 'Sum of' : '',d.type, 'expression:',valueFormat(d.value)]);}
+      chart.nodeTooltip.html(function(d) {  // Todo: clean this up
+        var s = d.name.split('.');
+        var name = s[0];
+        var type = (d.genes.length == 1) ? toTitleCase(s[1]) : s[1];
+        var html = [['<b>',name,'</b>']];
+
+        if (d.value > 0) {html.push([(d.genes.length > 1) ? 'Sum of' : '',type, 'expression:',valueFormat(d.value),'tpm']);}
         if (d.genes.length > 0)   {html.push(['Genes:',formatList(d.genes,4)]);}
 
         return html.map(join).join('<br>');
@@ -289,6 +297,10 @@
           .call(chart);
       }
 
+      function _clear() {
+        d3.select('#vis svg g').remove();
+      }
+
       function _makeNetwork(pairs, cells, expr, options) {
 
         $log.debug('Constructing network');
@@ -356,7 +368,8 @@
         data: data,
         chart: chart,
         makeNetwork: _makeNetwork,
-        draw: _draw
+        draw: _draw,
+        clear: _clear
       };
 
     });
@@ -398,6 +411,7 @@
         receptorRankFilter: 0.8
       });
 
+      treeGraph.clear();
       $scope.graphData = treeGraph.data;
 
       function updateNetwork(newVal, oldVal) {
