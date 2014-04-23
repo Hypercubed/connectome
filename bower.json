@@ -15,14 +15,12 @@
     "angular-bootstrap": "~0.10.0",
     "angular-local-storage": "https://github.com/Hypercubed/angular-local-storage.git#feature/bind",
     "angular-ui-router": "~0.2.10",
-    "ng-debounce": "~0.1.1"
+    "ng-debounce": "~0.1.1",
+    "d3-plugins": "*"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",
     "angular-scenario": "1.2.15"
-  },
-  "resolutions": {
-    "angular": "1.2.16"
   },
   "overrides": {
     "chosen": {
