@@ -109,6 +109,10 @@ svg.fixed .link.fixed {
   border-radius: 8px;
 }
 
+#legend .node.square {
+  border-radius: 0;
+}
+
 #legend .node.receptor {
   background-color: #99ccff;
 }

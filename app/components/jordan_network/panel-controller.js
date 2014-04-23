@@ -100,9 +100,9 @@
       var valueFormat = d3.format('.2f');
       var join = function(d) {return d.join(' '); };
 
-      var formatList = function(arr, max) {
+      function formatList(arr, max) {
         var l = arr.slice(0,max).join(',');
-        if (arr.length > max) l += " ( +"+(arr.length-max)+" more)";
+        if (arr.length > max) {l += ' ( +'+(arr.length-max)+' more)';}
         return l;
       }
 
@@ -154,7 +154,7 @@
 
             if (exprValues[0] > 0 && _node.ligands.indexOf(_pair.Ligand) < 0) {
               _node.ligands.push(_pair.Ligand);
-              _node.values[0] += +exprValues[0]; 
+              _node.values[0] += +exprValues[0];
             }
 
             if (exprValues[1] > 0 && _node.receptors.indexOf(_pair.Receptor) < 0) {
@@ -183,7 +183,7 @@
         var filter1 = d3.quantile(ranked1, options.ligandRankFilter);
 
         return nodes.filter(function(d) {
-          return d.values[0] > 0 && 
+          return d.values[0] > 0 &&
                  d.values[1] > 0 &&
                  ( d.values[0] > filter0 || d.values[1] > filter1 );
         });
@@ -367,7 +367,7 @@
         maxEdges: 100,
         ligandFilter: 10,
         receptorFilter: 10,
-        ligandRankFilter: 0.8,       
+        ligandRankFilter: 0.8,
         receptorRankFilter: 0.8
       });
 
@@ -439,7 +439,7 @@
         $scope.$watch('options.receptorRankFilter', updateNetwork);
 
         $scope.$watch('options.maxEdges', updateNetwork); // TODO: filter in place
-        $scope.$watch('options.showLabels', function(newVal) {
+        $scope.$watch('options.showLabels', function() {
           saveSelection();
           directedGraph.draw($scope.options);
         });

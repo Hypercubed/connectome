@@ -108,7 +108,8 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%= yeoman.app %>/components/**/*.js'
+        '<%= yeoman.app %>/components/**/*.js',
+        '!<%= yeoman.app %>/components/tree/d3.hive.v0.js'
       ],
       test: {
         options: {

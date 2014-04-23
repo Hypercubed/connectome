@@ -161,15 +161,14 @@
     function ncolor(d) {
       var type = d.type;
       if (!type) {
-        if (d.values[0] > 10) {type='ligand'} //  Ligand only, lime green
-        if (d.values[1] > 10) {type='receptor'}   //  Receptor only, Very light blue
-        if (d.values[0] > 10 && d.values[1] > 10) {type='both'}   //  Both, Dark moderate magenta
+        if (d.values[0] > 10) {type='ligand';} //  Ligand only, lime green
+        if (d.values[1] > 10) {type='receptor';}   //  Receptor only, Very light blue
+        if (d.values[0] > 10 && d.values[1] > 10) {type='both';}   //  Both, Dark moderate magenta
       }
-      //console.log(d.id, d.values, type);
       
-      if (type=='both') {return '#cc66cc';}   //  Both, Dark moderate magenta
-      if (type=='receptor')  {return '#99ccff';}   //  Receptor only, Very light blue
-      if (type=='ligand') {return '#00cc66';} //  Ligand only, lime green
+      if (type==='both') {return '#cc66cc';}   //  Both, Dark moderate magenta
+      if (type==='receptor')  {return '#99ccff';}   //  Receptor only, Very light blue
+      if (type==='ligand') {return '#00cc66';} //  Ligand only, lime green
     }
 
     //var opacity = d3.scale.log().range([1, 1]);

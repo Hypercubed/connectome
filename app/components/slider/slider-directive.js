@@ -17,13 +17,13 @@
           step: '=?'
         },
         templateUrl: baseUrl+'slider.html',
-        link: function(scope, element, attrs) {
+        link: function(scope, element) {
           element.addClass('slider');
 
           scope.max = +scope.max || 10000;
           scope.min = +scope.min || 0;
-          scope.step = +scope.step || 1; 
-          scope.value = +scope.value || 0;         
+          scope.step = +scope.step || 1;
+          scope.value = +scope.value || 0;    
 
           var applyValue = debounce(function() {
             var val = scope.rangeValue*(scope.max-scope.min);

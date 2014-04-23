@@ -79,17 +79,17 @@
     }
 
     var slog = d3.scale.log().range([2,9]).clamp(true);     // Maps value to normalized edge width
-    var rsize = d3.scale.linear().range([5, 10]).clamp(true);  // Maps value to size
+    var rsize = d3.scale.linear().range([3, 12]).clamp(true);  // Maps value to size
 
     var groups = [0,1,2];
 
-    var x = d3.scale.ordinal().domain(groups);
+    //var x = d3.scale.ordinal().domain(groups);
     var y = groups.map(function() { return d3.scale.ordinal().rangePoints([0, 1]); });
 
-    var angle = d3.scale.ordinal().domain([1,2,0,3]).rangePoints([0, 2 * Math.PI]);
+    var angle = d3.scale.ordinal().domain(groups).range([4 * Math.PI/3, 0, 2 * Math.PI/3]);
     var radius = d3.scale.linear();
 
-    var line = d3.svg.diagonal().projection(function(d) { return [d.y, d.x]; });
+    //var line = d3.svg.diagonal().projection(function(d) { return [d.y, d.x]; });
 
     // Accessors
     function value(d) { return d.value; }
@@ -115,14 +115,17 @@
       chart.container.classed(name,value);
 
       var node = d3.select(this);
+      var data = this.__data__;
 
       node.classed(name, value);
-      this.__data__[name] = value;
+      data[name] = value;
 
       links[0].forEach(function(d) {
         var link = d3.select(d);
-        var found = node.datum().lout.indexOf(link.datum().index) > -1 ||
-                    node.datum().lin.indexOf(link.datum().index) > -1;
+        var index = d.__data__.index;
+
+        var found = data.lout.indexOf(index) > -1 ||
+                    data.lin.indexOf(index) > -1;
 
         if (found) {
           link.classed(name, value);
@@ -145,7 +148,7 @@
       //console.log(width,height);
 
       chart.update = function() { container.transition().call(chart); };
-      chart.container = container; 
+      chart.container = container;
 
       container
         .attr('width', width)
@@ -165,11 +168,11 @@
 
       var groupCounts = [0,0,0];
 
-      graph.nodes.forEach(function(node,i) {  // Todo: use scales
+      graph.nodes.forEach(function(node) {  // Todo: use scales
         var group;
-        if (node.type == 'node.ligand') { group = 0; };
-        if (node.type == 'gene') { group = 1; };
-        if (node.type == 'node.receptor') { group = 2; };
+        if (node.type === 'node.ligand') { group = 0; }
+        if (node.type === 'gene') { group = 1; }
+        if (node.type === 'node.receptor') { group = 2; }
 
         node.group = group;
         node.i = groupCounts[group]++;
@@ -201,7 +204,7 @@
 
       var hiveLink = d3.hive.link()
         .angle(_angle)
-        .radius(_radius)
+        .radius(_radius);
 
       var g = container.selectAll('.treeGraph').data([1]);
 
@@ -223,13 +226,13 @@
       zoom.translate([width/2,height/2+(height/2-size)]);
       zoom.event(container);
 
-      g.selectAll(".axis")
+      g.selectAll('.axis')
           .data(d3.range(3))
-        .enter().append("line")
-          .attr("class", "axis")
-          .attr("transform", function(d) { return "rotate(" + degrees(angle(d)) + ")"; })
-          .attr("x1", radius.range()[0])
-          .attr("x2", radius.range()[1]);
+        .enter().append('line')
+          .attr('class', 'axis')
+          .attr('transform', function(d) { return 'rotate(' + degrees(angle(d)) + ')'; })
+          .attr('x1', radius.range()[0])
+          .attr('x2', radius.range()[1]);
 
       // LINKS
       var gLinks = g.selectAll('g.links').data([1]);
@@ -271,7 +274,7 @@
 
       //console.log(graph.nodes);
 
-      var name = function(d) {  // TODO: fix this
+      function name(d) {  // TODO: not this
         return d.name.split('.')[0];
       }
 
@@ -297,8 +300,7 @@
           ;
 
       nodesEnter
-        .append('circle')
-          .attr('r',rsize(1));
+        .append('rect');
 
       nodesEnter
         .append('text')
@@ -307,16 +309,16 @@
           .attr('dx', rsize(1)+3)
           .text(name);
 
-      var _labelAngle = function(d) {
-        if (d.group == 1) return Math.PI;
-        if (d.group == 0) return 0;
-        return _angle(d);
+      function _labelAngle(d) {
+        var a = -_angle(d)-Math.PI;
+        if (d.group === 1) {return a;}
+        return a+Math.PI/2;
       }
 
       nodes
         .attr('id', function(d) { return 'node-'+d.index; })
         .classed('fixed', _F('fixed'))
-        .attr('transform', function(d,i) {
+        .attr('transform', function(d) {
           return 'rotate( '+degrees(_angle(d))+' ) translate(' + _radius(d) + ') rotate( '+degrees(_labelAngle(d))+' )';
         })
         ;
@@ -326,9 +328,23 @@
           .attr('r',function(d) { return rsize(d.value); })
           .style('fill',ncolor);
 
+      function rx(d) {
+        return (d.group === 1) ? 0 : rsize(d.value);
+      }
+
+      nodes
+        .select('rect')
+          .attr('x',function(d) { return -rsize(d.value); })
+          .attr('y',function(d) { return -rsize(d.value); })
+          .attr('width',function(d) { return 2*rsize(d.value); })
+          .attr('height',function(d) { return 2*rsize(d.value); })
+          .attr('rx',rx)
+          .attr('ry',rx)
+          .style('fill',ncolor);
+
       nodes
         .select('text')
-          .attr('dx',function(d) { return rsize(d.value)+3; });
+          .attr('dx',function(d) { return rsize(d.value)+5; });
 
       nodes.exit().remove();
 
