@@ -5,7 +5,7 @@
 
   app.config(function($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise('/directed-graph');
+    $urlRouterProvider.otherwise('/force');
 
     $stateProvider
       .state('home', {
@@ -14,18 +14,18 @@
         templateUrl: 'components/ui/main.html',
         controller: 'MainCtrl'
       })
-      .state('home.directed-graph', {
-        url: '^/directed-graph',
+      .state('home.force-graph', {
+        url: '^/force',
         views: {
-          'panel': { templateUrl: 'components/jordan_network/panel.html', controller: 'PanelCtrl' },
-          'header': { templateUrl: 'components/jordan_network/header.html' }
+          'panel': { templateUrl: 'components/force/panel.html', controller: 'ForceGraphCtrl' },
+          'header': { templateUrl: 'components/force/force-legend.html' }
         }
       })
-      .state('home.tree-graph', {
+      .state('home.hive-graph', {
         url: '^/hive',
         views: {
-          'panel': { templateUrl: 'components/jordan_network/panel.html', controller: 'TreeGraphCtrl' },
-          'header': { templateUrl: 'components/tree/legend.html' }
+          'panel': { templateUrl: 'components/force/panel.html', controller: 'HiveGraphCtrl' },
+          'header': { templateUrl: 'components/hive/hive-legend.html' }
         }
       });
 

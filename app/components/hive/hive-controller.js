@@ -1,5 +1,5 @@
 /* global d3 */
-/* global treeGraph */
+/* global hiveGraph */
 
 (function() {
   'use strict';
@@ -7,7 +7,7 @@
   var app = angular.module('lrSpaApp');
 
   app
-    .service('treeGraph', function($log, cfpLoadingBar) {  // TODO: should be a directive
+    .service('hiveGraph', function($log, cfpLoadingBar) {  // TODO: should be a directive
 
       var data = {
         nodes: {},
@@ -17,7 +17,7 @@
         receptorExtent: [0,100000]
       };
 
-      var chart = treeGraph();
+      var chart = hiveGraph();
 
       //console.log(chart);
 
@@ -374,7 +374,7 @@
     });
 
   app
-    .controller('TreeGraphCtrl', function ($scope, $log, localStorageService, ligandReceptorData, treeGraph) {
+    .controller('HiveGraphCtrl', function ($scope, $log, localStorageService, ligandReceptorData, hiveGraph) {
 
       localStorageService.bind = function(scope, key, def) {
         var value = localStorageService.get(key);
@@ -410,13 +410,13 @@
         receptorRankFilter: 0.8
       });
 
-      treeGraph.clear();
-      $scope.graphData = treeGraph.data;
+      hiveGraph.clear();
+      $scope.graphData = hiveGraph.data;
 
       function updateNetwork(newVal, oldVal) {
         if (newVal === oldVal) {return;}
-        treeGraph.makeNetwork($scope.selected.pairs, $scope.selected.cells, $scope.data.expr, $scope.options);
-        treeGraph.draw($scope.options);
+        hiveGraph.makeNetwork($scope.selected.pairs, $scope.selected.cells, $scope.data.expr, $scope.options);
+        hiveGraph.draw($scope.options);
       }
 
       /* Load Data */
@@ -433,8 +433,8 @@
 
         localStorageService.set('pairs', _pairs);
         localStorageService.set('cells', _cells);
-        //localStorageService.set('ligandRange', treeGraph.graph.ligandRange);
-        //localStorageService.set('receptorRange', treeGraph.graph.receptorRange);
+        //localStorageService.set('ligandRange', hiveGraph.graph.ligandRange);
+        //localStorageService.set('receptorRange', hiveGraph.graph.receptorRange);
       }
 
       function loadSelection() {
@@ -457,8 +457,8 @@
         $scope.selected.cells = $scope.data.cells.filter(_idin(_cells));
 
         //TODO: not this
-        //treeGraph.graph.ligandRange = localStorageService.get('ligandRange') || treeGraph.graph.ligandRange;
-        //treeGraph.graph.receptorRange = localStorageService.get('receptorRange') || treeGraph.graph.receptorRange;
+        //hiveGraph.graph.ligandRange = localStorageService.get('ligandRange') || hiveGraph.graph.ligandRange;
+        //hiveGraph.graph.receptorRange = localStorageService.get('receptorRange') || hiveGraph.graph.receptorRange;
         
       }
 
@@ -481,7 +481,7 @@
 
         $scope.$watch('options.maxEdges', updateNetwork); // TODO: filter in place
         $scope.$watch('options.showLabels', function() {
-          treeGraph.draw($scope.options);
+          hiveGraph.draw($scope.options);
         });
 
       });

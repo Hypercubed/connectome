@@ -1,5 +1,5 @@
 /* global d3 */
-/* global networkGraph */
+/* global forceGraph */
 
 (function() {
   'use strict';
@@ -85,7 +85,7 @@
     });
 
   app
-    .service('directedGraph', function($log, cfpLoadingBar) {  // TODO: should be a directive
+    .service('forceGraph', function($log, cfpLoadingBar) {  // TODO: should be a directive
 
       var data = {
         nodes: {},
@@ -95,7 +95,7 @@
         receptorExtent: [0,100000]
       };
 
-      var chart = networkGraph();
+      var chart = forceGraph();
 
       var valueFormat = d3.format('.2f');
       var join = function(d) {return d.join(' '); };
@@ -334,7 +334,7 @@
     });
 
   app
-    .controller('PanelCtrl', function ($scope, $log, localStorageService, ligandReceptorData, directedGraph) {
+    .controller('ForceGraphCtrl', function ($scope, $log, localStorageService, ligandReceptorData, forceGraph) {
 
       localStorageService.bind = function(scope, key, def) {
         var value = localStorageService.get(key);
@@ -371,14 +371,14 @@
         receptorRankFilter: 0.8
       });
 
-      directedGraph.clear();
-      $scope.graphData = directedGraph.data;
+      forceGraph.clear();
+      $scope.graphData = forceGraph.data;
 
       function updateNetwork(newVal, oldVal) {
         if (newVal === oldVal) {return;}
         saveSelection();
-        directedGraph.makeNetwork($scope.selected.pairs, $scope.selected.cells, $scope.data.expr, $scope.options);
-        directedGraph.draw($scope.options);
+        forceGraph.makeNetwork($scope.selected.pairs, $scope.selected.cells, $scope.data.expr, $scope.options);
+        forceGraph.draw($scope.options);
       }
 
       /* Load Data */
@@ -395,8 +395,8 @@
 
         localStorageService.set('pairs', _pairs);
         localStorageService.set('cells', _cells);
-        //localStorageService.set('ligandRange', directedGraph.graph.ligandRange);
-        //localStorageService.set('receptorRange', directedGraph.graph.receptorRange);
+        //localStorageService.set('ligandRange', forceGraph.graph.ligandRange);
+        //localStorageService.set('receptorRange', forceGraph.graph.receptorRange);
       }
 
       function loadSelection() {
@@ -419,8 +419,8 @@
         $scope.selected.cells = $scope.data.cells.filter(_idin(_cells));
 
         //TODO: not this
-        //directedGraph.graph.ligandRange = localStorageService.get('ligandRange') || directedGraph.graph.ligandRange;
-        //directedGraph.graph.receptorRange = localStorageService.get('receptorRange') || directedGraph.graph.receptorRange;
+        //forceGraph.graph.ligandRange = localStorageService.get('ligandRange') || forceGraph.graph.ligandRange;
+        //forceGraph.graph.receptorRange = localStorageService.get('receptorRange') || forceGraph.graph.receptorRange;
         
       }
 
@@ -441,7 +441,7 @@
         $scope.$watch('options.maxEdges', updateNetwork); // TODO: filter in place
         $scope.$watch('options.showLabels', function() {
           saveSelection();
-          directedGraph.draw($scope.options);
+          forceGraph.draw($scope.options);
         });
 
       });

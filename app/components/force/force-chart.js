@@ -48,7 +48,7 @@
     return v(c*a.x - s*a.y, s*a.x + c*a.y);
   }
 
-  var networkGraph = function() {
+  var forceGraph = function() {
 
     // elements
     var nodes, links;
@@ -290,11 +290,11 @@
 
       //force.drag.on("dragstart", function() { d3.event.sourceEvent.stopPropagation(); });
 
-      var g = container.selectAll('.networkGraph').data([1]);
+      var g = container.selectAll('.forceGraph').data([1]);
 
       g.enter()
         .append('g')
-        .attr('class', 'networkGraph');
+        .attr('class', 'forceGraph');
 
       // rescale g
       function rescale() {
@@ -420,6 +420,6 @@
     return chart;
   };
 
-  window.networkGraph = networkGraph;
+  window.forceGraph = forceGraph;
 
 })(window.d3);

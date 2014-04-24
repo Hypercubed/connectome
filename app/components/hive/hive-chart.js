@@ -12,9 +12,11 @@
     return radians / Math.PI * 180-90;
   }
 
-  var treeGraph = function() {
+  var hiveGraph = function() {
 
-    //console.log('Tree graph');
+    function chart(selection) {
+      selection.each(chart.draw);
+    }
 
     // elements
     var nodes, links;
@@ -59,7 +61,7 @@
       return [-this.getBBox().height / 2, -rsize(value(this.__data__))];
     });
 
-    function nodeClassed(name, value) {  // TODO: imporve this
+    var nodeClassed = function nodeClassed(name, value) {  // TODO: imporve this
 
       if (arguments.length < 2) {value = true;}
       name = name || 'active';
@@ -85,11 +87,9 @@
 
       });
       
-    }
+    };
 
-    function chart(selection) {
-      selection.each(chart.draw);
-    }
+
 
     chart.draw = function draw(graph) {
 
@@ -123,7 +123,7 @@
         .entries(graph.nodes);
 
       nodesByType.forEach(function(type) { // Setup domain for position range
-        var group = groups.indexOf(type.key);  // TODO: eliminte y and node.group?
+        //var group = groups.indexOf(type.key);  // TODO: eliminte y and node.group?
         _y[type.key].domain(d3.range(type.values.length));
 
         type.values.forEach(function(node,i) {
@@ -174,10 +174,7 @@
           .data(groups)
         .enter().append('line')
           .attr('class', 'axis')
-          .style({
-            stroke: '#000',
-            'stroke-width': '1.5px'
-          })
+          .style({ stroke: '#000', 'stroke-width': '1.5px'})
           .attr('transform', function(d) { return 'rotate(' + degrees(angle(d)) + ')'; })
           .attr('x1', radius.range()[0])
           .attr('x2', radius.range()[1]);
@@ -228,12 +225,7 @@
       // Create
       var nodesEnter = nodes.enter().append('g')
           .classed('node', true)
-          .style({
-            fill: '#ccc',
-            'fill-opacity': 1,
-            stroke: '#333',
-            'stroke-width': '1px',
-          })
+          .style({fill: '#ccc','fill-opacity': 1,stroke: '#333','stroke-width': '1px'})
           .on('dblclick', function(d) { d3.event.stopPropagation(); d.fixed = (d.fixed) ? false : true; nodeClassed.call(this, 'fixed', d.fixed); })
           .on('mouseover.highlight', function() { nodeClassed.call(this, 'hover', true); })
           .on('mouseout.highlight', function() { nodeClassed.call(this, 'hover', false); })
@@ -245,12 +237,7 @@
 
       nodesEnter
         .append('text')
-          .style({
-            stroke: 'none',
-            fill: '#333',
-            'stroke-width': '1px',
-            'font-size': '10px'
-          })
+          .style({'stroke': 'none','fill': '#333','stroke-width': '1px','font-size': '10px'})
           .attr('text-anchor', 'start')
           .attr('dy', 3)
           .attr('dx', 15)
@@ -292,6 +279,6 @@
     return chart;
   };
 
-  window.treeGraph = treeGraph;
+  window.hiveGraph = hiveGraph;
 
 })(window.d3);
