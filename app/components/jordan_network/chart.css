@@ -12,6 +12,7 @@
   
   text-rendering: optimizeLegibility;
   shape-rendering: geometricPrecision;
+  
   font-family: Helvetica, Arial, sans-serif;
 }
 
@@ -24,17 +25,21 @@
   fill: #ccc;
   fill-opacity: 1;
   stroke: #333;
-  stroke-width: 1.5px;
+  stroke-width: 1px;
   cursor: pointer;
 }
 
 .node text {
-  stroke: #333;
+  stroke: none;
   fill: #333;
   stroke-width: 1px;
-  font-size: 8px;
+  font-size: 10px;
   cursor: pointer;
   display: none;
+  /* shape-rendering: crispEdges;
+  writing-mode: tb;
+  glyph-orientation-vertical: 0;
+  kerning: -3; */
 }
 
 svg.labels .node text {
@@ -48,10 +53,10 @@ svg.labels .node text {
 }
 
 .node:hover text, .node.hover text, .node.fixed text {
-  font-size: 18px;
+  font-size: 18px !important;
 }
 
-.node.fixed circle {
+.node.fixed circle, .node.fixed rect {
   stroke: red !important;
   stroke-width: 3px !important;
 }

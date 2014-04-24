@@ -1,11 +1,14 @@
 
-<div snap-drawer id="ui" ui-view="panel">
-
+<div snap-drawer id="ui">
+  <div ui-view="panel"></div>
+  <p>
+    <button class="btn btn-primary" svg-download="#vis" title="lr-graph">Download svg</button>
+  </p>
 </div>
 <div id="content" snap-content id="content" style="-webkit-transform: translate3d(350px, 0px, 0px);">
 
+  <noscript>Missing javascript</noscript>
   <div id="vis">
-    <noscript>Missing javascript</noscript>
     <svg></svg>
   </div>
 

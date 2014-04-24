@@ -174,6 +174,10 @@
           .data(groups)
         .enter().append('line')
           .attr('class', 'axis')
+          .style({
+            stroke: '#000',
+            'stroke-width': '1.5px'
+          })
           .attr('transform', function(d) { return 'rotate(' + degrees(angle(d)) + ')'; })
           .attr('x1', radius.range()[0])
           .attr('x2', radius.range()[1]);
@@ -190,6 +194,12 @@
 
       links.enter().append('svg:path')
         .classed('link', true)
+        .style({
+          fill: 'none',
+          stroke: '#666',
+          'stroke-width': '1.5px',
+          opacity: '0.6',
+        })
         .on('mouseover', linkTooltip.show)
         .on('mouseout', linkTooltip.hide)
         ;
@@ -218,6 +228,12 @@
       // Create
       var nodesEnter = nodes.enter().append('g')
           .classed('node', true)
+          .style({
+            fill: '#ccc',
+            'fill-opacity': 1,
+            stroke: '#333',
+            'stroke-width': '1px',
+          })
           .on('dblclick', function(d) { d3.event.stopPropagation(); d.fixed = (d.fixed) ? false : true; nodeClassed.call(this, 'fixed', d.fixed); })
           .on('mouseover.highlight', function() { nodeClassed.call(this, 'hover', true); })
           .on('mouseout.highlight', function() { nodeClassed.call(this, 'hover', false); })
@@ -229,8 +245,16 @@
 
       nodesEnter
         .append('text')
+          .style({
+            stroke: 'none',
+            fill: '#333',
+            'stroke-width': '1px',
+            'font-size': '10px'
+          })
           .attr('text-anchor', 'start')
-          .attr('dy', 3);
+          .attr('dy', 3)
+          .attr('dx', 15)
+          ;
           
       nodes
         .attr('id', function(d) { return 'node-'+d.index; })
@@ -257,7 +281,9 @@
       nodes
         .select('text')
           .text(name)
-          .attr('dx',function(d) { return rsize(d.value)+5; });
+          .attr('dy',function(d) { return (d.type === 'gene') ? 0 : 3; })
+          .attr('dx',function(d) { return (d.type === 'gene') ? 10 : 15; })
+          ;
 
       nodes.exit().remove();
 
