@@ -181,7 +181,7 @@
         var filter0 = d3.quantile(ligands, options.ligandRankFilter);
         var filter1 = d3.quantile(receptors, options.receptorRankFilter);
 
-        console.log('filter',filter0,filter1);
+        //console.log('filter',filter0,filter1);
 
         return nodes.filter(function(d) {
           if (d.value === 0) {return false;}
