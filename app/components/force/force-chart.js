@@ -343,7 +343,12 @@
 
       links.enter().append('svg:path')
         .classed('link', true)
-        //.call(linkTooltip)
+        .style({
+          fill: 'none',
+          stroke: '#666',
+          'stroke-width': '1.5px',
+          opacity: '0.6',
+        })
         .on('mouseover', linkTooltip.show)
         .on('mouseout', linkTooltip.hide)
         ;
@@ -393,10 +398,12 @@
 
       nodesEnter
         .append('circle')
+          .style({fill: '#ccc','fill-opacity': 1,stroke: '#333','stroke-width': '1px'})
           .attr('r',rsize(1));
 
       nodesEnter
         .append('text')
+          .style({'stroke': 'none','fill': '#333','stroke-width': '1px','font-size': '10px'})
           .attr('text-anchor', 'start')
           .attr('dy', 3)
           .attr('dx', rsize(1)+3)

@@ -12,13 +12,14 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [x] Debounce slider
 - [ ] Add log scale to sliders
 - [x] Move components
-- [ ] Download button
+- [x] Download button
 - [x] Panels directive?
 - [x] Move network stuff to a service
 - [ ] dat.gui ish
-- [ ] hive plot
+- [x] hive plot
 - [ ] deploy using grunt
 - [ ] debounce number input
 - [ ] debouce more
 - [ ] add limits to avoid lockup
-- [ ] Fix range... gain
+- [x] Fix range... gain
+- [ ] Change edge and node rank filters
