@@ -74,6 +74,17 @@
     </ul>
 
   </accordion-group>
+
+  <accordion-group heading="Download" is-open="panelState.download" ng-class="{'collapsed': !panelState.download}">
+
+  <p>
+    <button class="btn btn-primary" svg-download="#vis" title="lr-graph">Vector graphic (svg)</button>
+    <button class="btn btn-default" ng-click="saveJson()">Data model (json)</button>
+  </p>
+
+  </accordion-group>
 </accordion>
+
+
 
 

@@ -437,9 +437,37 @@
         if (newVal === oldVal) {return;}
         hiveGraph.makeNetwork($scope.selected.pairs, $scope.selected.cells, $scope.data.expr, $scope.options);
         hiveGraph.draw($scope.options);
-
-        console.log(formatGraphData(hiveGraph.data));
       }
+
+      $scope.saveJson = function() {
+        var txt = graphDataToJSON(hiveGraph.data);
+        var blob = new Blob([txt], { type: 'data:text/json' });
+        saveAs(blob, 'lr-graph.json');
+      }
+
+      function graphDataToJSON(data) {
+        var _json = {};
+
+        _json.nodes = data.nodes.map(function(node) {
+          return {
+            name: node.name,
+            type: node.type.split('.')[1],
+            value: node.value,
+            genes: node.genes
+          }
+        });
+
+        _json.links = data.edges.map(function(edge) {
+          return {
+            name: edge.name,
+            source: data.nodes.indexOf(edge.source),
+            target: data.nodes.indexOf(edge.target),
+            value: edge.value
+          }
+        });
+
+        return JSON.stringify(_json);
+      }      
 
       /* Load Data */
       $scope.selected = {
@@ -508,21 +536,7 @@
 
       });
 
-      function formatGraphData(data) {
-        var _data = {};
-        _data.nodes = data.nodes.map(function(node) {
-          return node;
-        });
 
-
-
-        _data.links = data.edges.slice(0);
-
-
-        
-
-        return _data;
-      }
 
     });
 

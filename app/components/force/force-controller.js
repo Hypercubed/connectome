@@ -446,6 +446,37 @@
 
       });
 
+      $scope.saveJson = function() {  // TODO: make a service?
+        var txt = graphDataToJSON(forceGraph.data);
+        var blob = new Blob([txt], { type: 'data:text/json' });
+        saveAs(blob, 'lr-graph.json');
+      }
+
+      function graphDataToJSON(data) {
+        var _json = {};
+
+        _json.nodes = data.nodes.map(function(node) {
+          return {
+            name: node.name,
+            values: node.values,
+            ligands: node.ligands,
+            receptors: node.receptors
+          }
+        });
+
+        _json.links = data.edges.map(function(edge) {
+          return {
+            name: edge.name,
+            source: data.nodes.indexOf(edge.source),
+            target: data.nodes.indexOf(edge.target),
+            value: edge.value,
+            values: edge.values
+          }
+        });
+
+        return JSON.stringify(_json);
+      }
+
     });
 
 })();
