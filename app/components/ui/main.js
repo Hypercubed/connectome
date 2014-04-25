@@ -1,3 +1,4 @@
+/* global saveAs */
 
 (function() {
   'use strict';
@@ -35,7 +36,7 @@
     });
 
   app
-    .controller('PanelCtrl', function ($scope, $log, $state, localStorageService, ligandReceptorData, graphService, hiveGraph, forceGraph) {
+    .controller('PanelCtrl', function ($scope, $log, $state, localStorageService, ligandReceptorData, graphService) {
 
       localStorageService.bind($scope, 'options', {
         showLabels: true,
@@ -72,11 +73,10 @@
         cells: []
       };
 
-      localStorageService.bind($scope, 'pairs', [317]);
-      localStorageService.bind($scope, 'cells', [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]);
+      var _id = function(d) { return d.id; };
 
       function saveSelection() {
-        var _id = function(d) { return d.id; };
+        
 
         $scope.pairs = $scope.selected.pairs.map(_id);
         $scope.cells = $scope.selected.cells.map(_id);
@@ -100,6 +100,11 @@
 
         $log.debug('load from local stoarge');
 
+        console.log($scope.data.cells.map(_id));
+
+        localStorageService.bind($scope, 'pairs', [317]);
+        localStorageService.bind($scope, 'cells', $scope.data.cells.map(_id));        
+
         //if (_pairs.length < 1) { _pairs = [317]; }
         //if (_cells.length < 1) { _cells = [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]; }
 
@@ -120,7 +125,7 @@
         updateNetwork(true,false);
 
         $scope.$watchCollection('options', saveSelection);
-        $scope.$watchCollection('selected', saveSelection);        
+        $scope.$watchCollection('selected', saveSelection);
 
         $scope.$watchCollection('selected', updateNetwork);
         $scope.$watch('options.ligandFilter', updateNetwork);

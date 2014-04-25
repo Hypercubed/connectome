@@ -1,6 +1,5 @@
 /* global d3 */
 /* global forceGraph */
-/* global saveAs */
 
 (function() {
   'use strict';
@@ -211,13 +210,6 @@
         }
       }
 
-      function _maxCheck() {
-        if (edges.length > MAXEDGES) {
-            $log.warn('Maximum number of edges exceeded');
-            throw StopIteration;
-          }
-      }
-
       function __makeEdges(nodes, pairs, expr, options) {
 
         var edges = [];
@@ -267,10 +259,10 @@
        
                 }
 
-              if (edges.length > MAXEDGES) {
-                $log.warn('Maximum number of edges exceeded');
-                throw StopIteration;
-              }
+                if (edges.length > MAXEDGES) {
+                  $log.warn('Maximum number of edges exceeded');
+                  throw StopIteration;
+                }
 
               });
             });
@@ -286,7 +278,7 @@
       function _draw(options) {
         $log.debug('Drawing');
 
-        if (data.nodes.length < 1 || data.edges.length < 1) { 
+        if (data.nodes.length < 1 || data.edges.length < 1) {
           _clear();
           return;
         }
@@ -307,7 +299,7 @@
       function _makeNetwork(pairs, cells, expr, options) {
         $log.debug('Constructing');
 
-        if (cells.length < 1 || pairs.length < 1) { 
+        if (cells.length < 1 || pairs.length < 1) {
           data.nodes = [];
           data.edges = [];
           return;
