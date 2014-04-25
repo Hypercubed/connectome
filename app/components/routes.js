@@ -16,15 +16,17 @@
       })
       .state('home.force-graph', {
         url: '^/force',
+        resolve: { graphService: 'forceGraph' },
         views: {
-          'panel': { templateUrl: 'components/force/panel.html', controller: 'ForceGraphCtrl' },
+          'panel': { templateUrl: 'components/force/panel.html', controller: 'PanelCtrl' },
           'header': { templateUrl: 'components/force/force-legend.html' }
         }
       })
       .state('home.hive-graph', {
         url: '^/hive',
+        resolve: { graphService: 'hiveGraph' },
         views: {
-          'panel': { templateUrl: 'components/force/panel.html', controller: 'HiveGraphCtrl' },
+          'panel': { templateUrl: 'components/force/panel.html', controller: 'PanelCtrl' },
           'header': { templateUrl: 'components/hive/hive-legend.html' }
         }
       });

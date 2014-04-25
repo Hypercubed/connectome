@@ -1,5 +1,6 @@
 /* global d3 */
 /* global forceGraph */
+/* global saveAs */
 
 (function() {
   'use strict';
@@ -85,7 +86,7 @@
     });
 
   app
-    .service('forceGraph', function($log, cfpLoadingBar) {  // TODO: should be a directive
+    .service('forceGraph', function($log, $window, cfpLoadingBar) {  // TODO: should be a directive
 
       var data = {
         nodes: {},
@@ -139,6 +140,8 @@
 
         var nodes = cells;
 
+
+
         nodes.forEach(function(_node) {
           _node.ligands = [];
           _node.receptors = [];
@@ -165,6 +168,8 @@
           });
         });
 
+        data.nodeCount = nodes.length;
+
         return nodes;
 
       }
@@ -179,8 +184,8 @@
         data.ligandExtent = d3.extent(ranked0);
         data.receptorExtent = d3.extent(ranked1);
 
-        var filter0 = d3.quantile(ranked0, options.receptorRankFilter);
-        var filter1 = d3.quantile(ranked1, options.ligandRankFilter);
+        var filter0 = d3.quantile(ranked0, 1-options.receptorRankFilter);
+        var filter1 = d3.quantile(ranked1, 1-options.ligandRankFilter);
 
         return nodes.filter(function(d) {
           return d.values[0] > 0 &&
@@ -189,12 +194,36 @@
         });
       }
 
-      function _makeEdges(nodes, pairs, expr, options) {
+      var MAXEDGES = 1000;
+
+      var StopIteration = new Error('Maximum number of edges exceeded');
+
+      function _makeEdges(nodes, pairs, expr, options) { // TODO: better 
+        try {
+          return __makeEdges(nodes, pairs, expr, options);
+        } catch(e) {
+          if(e !== StopIteration) {
+            throw e;
+          } else {
+            $window.alert(StopIteration.message);
+            return [];
+          }
+        }
+      }
+
+      function _maxCheck() {
+        if (edges.length > MAXEDGES) {
+            $log.warn('Maximum number of edges exceeded');
+            throw StopIteration;
+          }
+      }
+
+      function __makeEdges(nodes, pairs, expr, options) {
 
         var edges = [];
 
         pairs.forEach(function addLinks(_pair) {
-          $log.debug('Constructing network for',_pair);
+          //$log.debug('Constructing network for',_pair);
 
           var lindex = _pair.index[0];
           var rindex = _pair.index[1];
@@ -238,6 +267,10 @@
        
                 }
 
+              if (edges.length > MAXEDGES) {
+                $log.warn('Maximum number of edges exceeded');
+                throw StopIteration;
+              }
 
               });
             });
@@ -251,6 +284,13 @@
       }
 
       function _draw(options) {
+        $log.debug('Drawing');
+
+        if (data.nodes.length < 1 || data.edges.length < 1) { 
+          _clear();
+          return;
+        }
+
         d3.select('#vis svg')
           .classed('labels',options.showLabels)
           .datum(data)
@@ -258,13 +298,20 @@
       }
 
       function _clear() {
+        $log.debug('Clearing');
         d3.select('#vis svg g').remove();
       }
 
-      function _makeNetwork(pairs, cells, expr, options) {
 
-        $log.debug('Constructing network');
-        if (cells.length < 1 || pairs.length < 1) { return;}
+
+      function _makeNetwork(pairs, cells, expr, options) {
+        $log.debug('Constructing');
+
+        if (cells.length < 1 || pairs.length < 1) { 
+          data.nodes = [];
+          data.edges = [];
+          return;
+        }
 
         cfpLoadingBar.start();
 
@@ -288,13 +335,13 @@
 
         cfpLoadingBar.inc();
 
-        if (data.edges.length > options.maxEdges) {
+        if (data.edges.length > options.edgeRankFilter*data.edges.length) {
 
           $log.warn('Too many edges', data.edges.length);
 
           data.edges = data.edges
             .sort(function(a,b) { return b.value - a.value; })
-            .slice(0,options.maxEdges);
+            .slice(0,options.edgeRankFilter*data.edges.length);
 
         }
 
@@ -323,52 +370,54 @@
 
       }
 
+      function _graphDataToJSON() {
+        var _json = {};
+
+        _json.nodes = data.nodes.map(function(node) {
+          return {
+            name: node.name,
+            values: node.values,
+            ligands: node.ligands,
+            receptors: node.receptors
+          };
+        });
+
+        _json.links = data.edges.map(function(edge) {
+          return {
+            name: edge.name,
+            source: data.nodes.indexOf(edge.source),
+            target: data.nodes.indexOf(edge.target),
+            value: edge.value,
+            values: edge.values
+          };
+        });
+
+        return JSON.stringify(_json);
+      }
+
       return {
         data: data,
         chart: chart,
         makeNetwork: _makeNetwork,
         draw: _draw,
-        clear: _clear
+        clear: _clear,
+        getJSON: _graphDataToJSON
       };
 
     });
 
-  app
+  /* app
     .controller('ForceGraphCtrl', function ($scope, $log, localStorageService, ligandReceptorData, forceGraph) {
 
-      localStorageService.bind = function(scope, key, def) {
-        var value = localStorageService.get(key);
-
-        if (value === null && angular.isDefined(def)) {
-          value = def;
-        } else if (angular.isObject(value) && angular.isObject(def)) {
-          value = angular.extend(def, value);
-        }
-
-        scope[key] = value;
-
-        scope.$watchCollection(key, function(newVal) {
-          localStorageService.set(key, newVal);
-        });
-      };
-
-      /* Manage panel state */
-     
-      localStorageService.bind($scope, 'panelState', {
-        filters: true,
-        options: false,
-        help: true
-      });
-
-      /* Make network */
-
+      // Make network
       localStorageService.bind($scope, 'options', {
         showLabels: true,
         maxEdges: 100,
         ligandFilter: 10,
         receptorFilter: 10,
-        ligandRankFilter: 0.8,
-        receptorRankFilter: 0.8
+        ligandRankFilter: 0.1,
+        receptorRankFilter: 0.1,
+        edgeRankFilter: 0.1,
       });
 
       forceGraph.clear();
@@ -381,7 +430,7 @@
         forceGraph.draw($scope.options);
       }
 
-      /* Load Data */
+      // Load Data
       $scope.selected = {
         pairs: [],
         cells: []
@@ -438,7 +487,7 @@
         $scope.$watch('options.ligandRankFilter', updateNetwork);
         $scope.$watch('options.receptorRankFilter', updateNetwork);
 
-        $scope.$watch('options.maxEdges', updateNetwork); // TODO: filter in place
+        $scope.$watch('options.edgeRankFilter', updateNetwork); // TODO: filter in place
         $scope.$watch('options.showLabels', function() {
           saveSelection();
           forceGraph.draw($scope.options);
@@ -450,7 +499,7 @@
         var txt = graphDataToJSON(forceGraph.data);
         var blob = new Blob([txt], { type: 'data:text/json' });
         saveAs(blob, 'lr-graph.json');
-      }
+      };
 
       function graphDataToJSON(data) {
         var _json = {};
@@ -461,7 +510,7 @@
             values: node.values,
             ligands: node.ligands,
             receptors: node.receptors
-          }
+          };
         });
 
         _json.links = data.edges.map(function(edge) {
@@ -471,12 +520,12 @@
             target: data.nodes.indexOf(edge.target),
             value: edge.value,
             values: edge.values
-          }
+          };
         });
 
         return JSON.stringify(_json);
       }
 
-    });
+    }); */
 
 })();

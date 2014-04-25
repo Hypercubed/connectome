@@ -23,3 +23,6 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [ ] add limits to avoid lockup
 - [x] Fix range... gain
 - [ ] Change edge and node rank filters
+- [ ] combine hive and force controller
+- [ ] make hive and force directives
+- [ ] Raise alerts on internal limits

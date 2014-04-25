@@ -1,5 +1,6 @@
 /* global d3 */
 /* global hiveGraph */
+/* global saveAs */
 
 (function() {
   'use strict';
@@ -7,7 +8,7 @@
   var app = angular.module('lrSpaApp');
 
   app
-    .service('hiveGraph', function($log, cfpLoadingBar) {  // TODO: should be a directive
+    .service('hiveGraph', function($log, $window, cfpLoadingBar) {  // TODO: should be a directive
 
       var data = {
         nodes: {},
@@ -30,8 +31,7 @@
         return l;
       }
 
-      function toTitleCase(str)
-      {
+      function toTitleCase(str) {
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
       }
 
@@ -160,24 +160,24 @@
 
       }
 
-      var _F = function(key) { return function(d) {return d[key];} }
+      var _F = function(key) { return function(d) {return d[key];}; };
       var value = _F('value');
-      var type = _F('type');
+      //var type = _F('type');
       var valueComp = function(a,b) { return value(b) - value(a); };
       var valueFilter = function(d) {return value(d)>0;};
-      var typeFilter = function(type) { return function(d) {return d.type === type;} };       
+      var typeFilter = function(type) { return function(d) {return d.type === type;}; };
 
       function _sortAndFilterNodes(nodes, options) {  //TODO: DRY this
 
-
+        data.nodeCount = nodes.length;
 
         nodes = nodes.sort(valueComp).filter(valueFilter);    // Sort and filter out zeros
 
         var ligands = nodes.filter(typeFilter('node.ligand'));
-        var topLigands = ligands.slice(0,-options.ligandRankFilter*ligands.length-1);
-console.log(options.ligandRankFilter*ligands.length);
+        var topLigands = ligands.slice(0,options.ligandRankFilter*ligands.length+1);
+
         var receptors = nodes.filter(typeFilter('node.receptor'));
-        var topReceptors = receptors.slice(0,-options.receptorRankFilter*receptors.length-1);
+        var topReceptors = receptors.slice(0,options.receptorRankFilter*receptors.length+1);
 
         data.ligandExtent = d3.extent(ligands,value);
         data.receptorExtent = d3.extent(receptors,value);
@@ -185,7 +185,7 @@ console.log(options.ligandRankFilter*ligands.length);
         return topLigands.concat(topReceptors);
       }
 
-      function __sortAndFilterNodes(nodes, options) {
+      /* function __sortAndFilterNodes(nodes, options) {
 
         nodes = nodes.sort(valueComp);
 
@@ -212,9 +212,26 @@ console.log(options.ligandRankFilter*ligands.length);
           return d.value > 0  && d.value > limit;
         });
 
+      } */
+
+      var MAXEDGES = 1000;
+
+      var StopIteration = new Error('Maximum number of edges exceeded');
+
+      function _makeEdges(nodes, pairs, expr, options) { // TODO: better 
+        try {
+          return __makeEdges(nodes, pairs, expr, options);
+        } catch(e) {
+          if(e !== StopIteration) {
+            throw e;
+          } else {
+            $window.alert(StopIteration.message);
+            return [];
+          }
+        }
       }
 
-      function _makeEdges(nodes, pairs, expr, options) {
+      function __makeEdges(nodes, pairs, expr, options) {
 
         var edges = [];
 
@@ -229,6 +246,12 @@ console.log(options.ligandRankFilter*ligands.length);
           var _pairNode = new Node(i,name,'gene');  // Todo: move this?
 
           nodes.push(_pairNode);
+          data.nodeCount++;
+
+          if (edges.length > MAXEDGES) {
+            $log.warn('Maximum number of edges exceeded');
+            throw StopIteration;
+          }
 
           data.nodes.forEach(function(_node) {
             if (!_node.type.match('node')) {return;}
@@ -246,72 +269,24 @@ console.log(options.ligandRankFilter*ligands.length);
             _edge.value = _expr;
             
             edges.push(_edge);
+
+
           });
 
         });
-
-        /* pairs.forEach(function addLinks(_pair) {
-          $log.debug('Constructing network for',_pair);
-
-          var lindex = _pair.index[0];
-          var rindex = _pair.index[1];
-           
-          if (lindex > -1 && rindex > -1) {
-
-            data.nodes.forEach(function(src) {  // all selected cell-cell pairs
-
-              if (src.type !== 'ligand') return;
-
-              var lexpr = +expr[lindex][src.id+1];
-              if (lexpr === 0) {return;}
-
-              data.nodes.forEach(function(tgt) {
-                if (tgt.type !== 'receptor') return;
-
-                var rexpr = +expr[rindex][tgt.id+1];
-                if (rexpr === 0) {return;}
-
-                //$log.debug('Non-zero product',src,tgt);
-
-                var value = lexpr*rexpr;
-
-                if (value > 0 && lexpr >= options.ligandFilter && rexpr >= options.receptorFilter) {  // src and tgt are talking!!!
-                  var name = src.name + ' -> ' + tgt.name;
-
-                  var edge = edges.filter(function(d) { return d.name === name; });
-
-                  if (edge.length === 0) {
-                    edge = {
-                      source: src,
-                      target: tgt,
-                      value:0,
-                      name: name,
-                      values: [0, 0]
-                    };
-                    edges.push(edge);
-                  } else if (edge.length === 1 && pairs.length > 1) {
-                    edge = edge[0];
-                  } else {
-                    $log.warn('Duplicate edges found', edge.length);
-                  }
-
-                  edge.value += value;
-       
-                }
-
-
-              });
-            });
-
-          }
-
-        }); */
 
         return edges;
 
       }
 
       function _draw(options) {
+        $log.debug('Drawing');
+
+        if (data.nodes.length < 1 || data.edges.length < 1) { 
+          _clear();
+          return;
+        }
+
         d3.select('#vis svg')
           .classed('labels',options.showLabels)
           .datum(data)
@@ -319,13 +294,18 @@ console.log(options.ligandRankFilter*ligands.length);
       }
 
       function _clear() {
+        $log.debug('Clearing');
         d3.select('#vis svg g').remove();
       }
 
       function _makeNetwork(pairs, cells, expr, options) {
+        $log.debug('Constructing');
 
-        $log.debug('Constructing network');
-        if (cells.length < 1 || pairs.length < 1) { return;}
+        if (cells.length < 1 || pairs.length < 1) { 
+          data.nodes = [];
+          data.edges = [];
+          return;
+        }
 
         cfpLoadingBar.start();
 
@@ -349,13 +329,11 @@ console.log(options.ligandRankFilter*ligands.length);
 
         cfpLoadingBar.inc();
 
-        if (data.edges.length > options.maxEdges) {
-
-          $log.warn('Too many edges', data.edges.length);
+        if (data.edges.length > options.edgeRankFilter*data.edges.length) {
 
           data.edges = data.edges
             .sort(valueComp)
-            .slice(0,options.maxEdges);
+            .slice(0,options.edgeRankFilter*data.edges.length);
 
         }
 
@@ -385,51 +363,53 @@ console.log(options.ligandRankFilter*ligands.length);
 
       }
 
+      function _getJSON() {  // This is hive version, move to service
+        var _json = {};
+
+        _json.nodes = data.nodes.map(function(node) {
+          return {
+            name: node.name,
+            type: node.type.split('.')[1],
+            value: node.value,
+            genes: node.genes
+          };
+        });
+
+        _json.links = data.edges.map(function(edge) {
+          return {
+            name: edge.name,
+            source: data.nodes.indexOf(edge.source),
+            target: data.nodes.indexOf(edge.target),
+            value: edge.value
+          };
+        });
+
+        return JSON.stringify(_json);
+      }
+
       return {
         data: data,
         chart: chart,
         makeNetwork: _makeNetwork,
         draw: _draw,
-        clear: _clear
+        clear: _clear,
+        getJSON: _getJSON
       };
 
     });
 
-  app
+  /* app
     .controller('HiveGraphCtrl', function ($scope, $log, localStorageService, ligandReceptorData, hiveGraph) {
 
-      localStorageService.bind = function(scope, key, def) {
-        var value = localStorageService.get(key);
-
-        if (value === null && angular.isDefined(def)) {
-          value = def;
-        } else if (angular.isObject(value) && angular.isObject(def)) {
-          value = angular.extend(def, value);
-        }
-
-        scope[key] = value;
-
-        scope.$watchCollection(key, function(newVal) {
-          localStorageService.set(key, newVal);
-        });
-      };
-
-      /* Manage panel state */
-     
-      localStorageService.bind($scope, 'panelState', {
-        filters: true,
-        options: false,
-        help: true
-      });
-
-      /* Make network */
+      // Make network
       localStorageService.bind($scope, 'options', {
         showLabels: true,
         maxEdges: 100,
         ligandFilter: 10,
         receptorFilter: 10,
-        ligandRankFilter: 0.8,
-        receptorRankFilter: 0.8
+        ligandRankFilter: 0.1,
+        receptorRankFilter: 0.1,
+        edgeRankFilter: 0.1,
       });
 
       hiveGraph.clear();
@@ -445,7 +425,7 @@ console.log(options.ligandRankFilter*ligands.length);
         var txt = graphDataToJSON(hiveGraph.data);
         var blob = new Blob([txt], { type: 'data:text/json' });
         saveAs(blob, 'lr-graph.json');
-      }
+      };
 
       function graphDataToJSON(data) {
         var _json = {};
@@ -456,7 +436,7 @@ console.log(options.ligandRankFilter*ligands.length);
             type: node.type.split('.')[1],
             value: node.value,
             genes: node.genes
-          }
+          };
         });
 
         _json.links = data.edges.map(function(edge) {
@@ -465,13 +445,13 @@ console.log(options.ligandRankFilter*ligands.length);
             source: data.nodes.indexOf(edge.source),
             target: data.nodes.indexOf(edge.target),
             value: edge.value
-          }
+          };
         });
 
         return JSON.stringify(_json);
-      }      
+      }
 
-      /* Load Data */
+      // Load Data
       $scope.selected = {
         pairs: [],
         cells: []
@@ -531,357 +511,13 @@ console.log(options.ligandRankFilter*ligands.length);
         $scope.$watch('options.ligandRankFilter', updateNetwork);
         $scope.$watch('options.receptorRankFilter', updateNetwork);
 
-        $scope.$watch('options.maxEdges', updateNetwork); // TODO: filter in place
+        $scope.$watch('options.edgeRankFilter', updateNetwork); // TODO: filter in place
         $scope.$watch('options.showLabels', function() {
           hiveGraph.draw($scope.options);
         });
 
       });
 
-
-
-    });
+    }); */
 
 })();
-
-/*
-
-{
-  "nodes":[
-    {"name":"Myriel","group":1},
-    {"name":"Napoleon","group":1},
-    {"name":"Mlle.Baptistine","group":1},
-    {"name":"Mme.Magloire","group":1},
-    {"name":"CountessdeLo","group":1},
-    {"name":"Geborand","group":1},
-    {"name":"Champtercier","group":1},
-    {"name":"Cravatte","group":1},
-    {"name":"Count","group":1},
-    {"name":"OldMan","group":1},
-    {"name":"Labarre","group":2},
-    {"name":"Valjean","group":2},
-    {"name":"Marguerite","group":3},
-    {"name":"Mme.deR","group":2},
-    {"name":"Isabeau","group":2},
-    {"name":"Gervais","group":2},
-    {"name":"Tholomyes","group":3},
-    {"name":"Listolier","group":3},
-    {"name":"Fameuil","group":3},
-    {"name":"Blacheville","group":3},
-    {"name":"Favourite","group":3},
-    {"name":"Dahlia","group":3},
-    {"name":"Zephine","group":3},
-    {"name":"Fantine","group":3},
-    {"name":"Mme.Thenardier","group":4},
-    {"name":"Thenardier","group":4},
-    {"name":"Cosette","group":5},
-    {"name":"Javert","group":4},
-    {"name":"Fauchelevent","group":0},
-    {"name":"Bamatabois","group":2},
-    {"name":"Perpetue","group":3},
-    {"name":"Simplice","group":2},
-    {"name":"Scaufflaire","group":2},
-    {"name":"Woman1","group":2},
-    {"name":"Judge","group":2},
-    {"name":"Champmathieu","group":2},
-    {"name":"Brevet","group":2},
-    {"name":"Chenildieu","group":2},
-    {"name":"Cochepaille","group":2},
-    {"name":"Pontmercy","group":4},
-    {"name":"Boulatruelle","group":6},
-    {"name":"Eponine","group":4},
-    {"name":"Anzelma","group":4},
-    {"name":"Woman2","group":5},
-    {"name":"MotherInnocent","group":0},
-    {"name":"Gribier","group":0},
-    {"name":"Jondrette","group":7},
-    {"name":"Mme.Burgon","group":7},
-    {"name":"Gavroche","group":8},
-    {"name":"Gillenormand","group":5},
-    {"name":"Magnon","group":5},
-    {"name":"Mlle.Gillenormand","group":5},
-    {"name":"Mme.Pontmercy","group":5},
-    {"name":"Mlle.Vaubois","group":5},
-    {"name":"Lt.Gillenormand","group":5},
-    {"name":"Marius","group":8},
-    {"name":"BaronessT","group":5},
-    {"name":"Mabeuf","group":8},
-    {"name":"Enjolras","group":8},
-    {"name":"Combeferre","group":8},
-    {"name":"Prouvaire","group":8},
-    {"name":"Feuilly","group":8},
-    {"name":"Courfeyrac","group":8},
-    {"name":"Bahorel","group":8},
-    {"name":"Bossuet","group":8},
-    {"name":"Joly","group":8},
-    {"name":"Grantaire","group":8},
-    {"name":"MotherPlutarch","group":9},
-    {"name":"Gueulemer","group":4},
-    {"name":"Babet","group":4},
-    {"name":"Claquesous","group":4},
-    {"name":"Montparnasse","group":4},
-    {"name":"Toussaint","group":5},
-    {"name":"Child1","group":10},
-    {"name":"Child2","group":10},
-    {"name":"Brujon","group":4},
-    {"name":"Mme.Hucheloup","group":8}
-  ],
-  "links":[
-    {"source":1,"target":0,"value":1},
-    {"source":2,"target":0,"value":8},
-    {"source":3,"target":0,"value":10},
-    {"source":3,"target":2,"value":6},
-    {"source":4,"target":0,"value":1},
-    {"source":5,"target":0,"value":1},
-    {"source":6,"target":0,"value":1},
-    {"source":7,"target":0,"value":1},
-    {"source":8,"target":0,"value":2},
-    {"source":9,"target":0,"value":1},
-    {"source":11,"target":10,"value":1},
-    {"source":11,"target":3,"value":3},
-    {"source":11,"target":2,"value":3},
-    {"source":11,"target":0,"value":5},
-    {"source":12,"target":11,"value":1},
-    {"source":13,"target":11,"value":1},
-    {"source":14,"target":11,"value":1},
-    {"source":15,"target":11,"value":1},
-    {"source":17,"target":16,"value":4},
-    {"source":18,"target":16,"value":4},
-    {"source":18,"target":17,"value":4},
-    {"source":19,"target":16,"value":4},
-    {"source":19,"target":17,"value":4},
-    {"source":19,"target":18,"value":4},
-    {"source":20,"target":16,"value":3},
-    {"source":20,"target":17,"value":3},
-    {"source":20,"target":18,"value":3},
-    {"source":20,"target":19,"value":4},
-    {"source":21,"target":16,"value":3},
-    {"source":21,"target":17,"value":3},
-    {"source":21,"target":18,"value":3},
-    {"source":21,"target":19,"value":3},
-    {"source":21,"target":20,"value":5},
-    {"source":22,"target":16,"value":3},
-    {"source":22,"target":17,"value":3},
-    {"source":22,"target":18,"value":3},
-    {"source":22,"target":19,"value":3},
-    {"source":22,"target":20,"value":4},
-    {"source":22,"target":21,"value":4},
-    {"source":23,"target":16,"value":3},
-    {"source":23,"target":17,"value":3},
-    {"source":23,"target":18,"value":3},
-    {"source":23,"target":19,"value":3},
-    {"source":23,"target":20,"value":4},
-    {"source":23,"target":21,"value":4},
-    {"source":23,"target":22,"value":4},
-    {"source":23,"target":12,"value":2},
-    {"source":23,"target":11,"value":9},
-    {"source":24,"target":23,"value":2},
-    {"source":24,"target":11,"value":7},
-    {"source":25,"target":24,"value":13},
-    {"source":25,"target":23,"value":1},
-    {"source":25,"target":11,"value":12},
-    {"source":26,"target":24,"value":4},
-    {"source":26,"target":11,"value":31},
-    {"source":26,"target":16,"value":1},
-    {"source":26,"target":25,"value":1},
-    {"source":27,"target":11,"value":17},
-    {"source":27,"target":23,"value":5},
-    {"source":27,"target":25,"value":5},
-    {"source":27,"target":24,"value":1},
-    {"source":27,"target":26,"value":1},
-    {"source":28,"target":11,"value":8},
-    {"source":28,"target":27,"value":1},
-    {"source":29,"target":23,"value":1},
-    {"source":29,"target":27,"value":1},
-    {"source":29,"target":11,"value":2},
-    {"source":30,"target":23,"value":1},
-    {"source":31,"target":30,"value":2},
-    {"source":31,"target":11,"value":3},
-    {"source":31,"target":23,"value":2},
-    {"source":31,"target":27,"value":1},
-    {"source":32,"target":11,"value":1},
-    {"source":33,"target":11,"value":2},
-    {"source":33,"target":27,"value":1},
-    {"source":34,"target":11,"value":3},
-    {"source":34,"target":29,"value":2},
-    {"source":35,"target":11,"value":3},
-    {"source":35,"target":34,"value":3},
-    {"source":35,"target":29,"value":2},
-    {"source":36,"target":34,"value":2},
-    {"source":36,"target":35,"value":2},
-    {"source":36,"target":11,"value":2},
-    {"source":36,"target":29,"value":1},
-    {"source":37,"target":34,"value":2},
-    {"source":37,"target":35,"value":2},
-    {"source":37,"target":36,"value":2},
-    {"source":37,"target":11,"value":2},
-    {"source":37,"target":29,"value":1},
-    {"source":38,"target":34,"value":2},
-    {"source":38,"target":35,"value":2},
-    {"source":38,"target":36,"value":2},
-    {"source":38,"target":37,"value":2},
-    {"source":38,"target":11,"value":2},
-    {"source":38,"target":29,"value":1},
-    {"source":39,"target":25,"value":1},
-    {"source":40,"target":25,"value":1},
-    {"source":41,"target":24,"value":2},
-    {"source":41,"target":25,"value":3},
-    {"source":42,"target":41,"value":2},
-    {"source":42,"target":25,"value":2},
-    {"source":42,"target":24,"value":1},
-    {"source":43,"target":11,"value":3},
-    {"source":43,"target":26,"value":1},
-    {"source":43,"target":27,"value":1},
-    {"source":44,"target":28,"value":3},
-    {"source":44,"target":11,"value":1},
-    {"source":45,"target":28,"value":2},
-    {"source":47,"target":46,"value":1},
-    {"source":48,"target":47,"value":2},
-    {"source":48,"target":25,"value":1},
-    {"source":48,"target":27,"value":1},
-    {"source":48,"target":11,"value":1},
-    {"source":49,"target":26,"value":3},
-    {"source":49,"target":11,"value":2},
-    {"source":50,"target":49,"value":1},
-    {"source":50,"target":24,"value":1},
-    {"source":51,"target":49,"value":9},
-    {"source":51,"target":26,"value":2},
-    {"source":51,"target":11,"value":2},
-    {"source":52,"target":51,"value":1},
-    {"source":52,"target":39,"value":1},
-    {"source":53,"target":51,"value":1},
-    {"source":54,"target":51,"value":2},
-    {"source":54,"target":49,"value":1},
-    {"source":54,"target":26,"value":1},
-    {"source":55,"target":51,"value":6},
-    {"source":55,"target":49,"value":12},
-    {"source":55,"target":39,"value":1},
-    {"source":55,"target":54,"value":1},
-    {"source":55,"target":26,"value":21},
-    {"source":55,"target":11,"value":19},
-    {"source":55,"target":16,"value":1},
-    {"source":55,"target":25,"value":2},
-    {"source":55,"target":41,"value":5},
-    {"source":55,"target":48,"value":4},
-    {"source":56,"target":49,"value":1},
-    {"source":56,"target":55,"value":1},
-    {"source":57,"target":55,"value":1},
-    {"source":57,"target":41,"value":1},
-    {"source":57,"target":48,"value":1},
-    {"source":58,"target":55,"value":7},
-    {"source":58,"target":48,"value":7},
-    {"source":58,"target":27,"value":6},
-    {"source":58,"target":57,"value":1},
-    {"source":58,"target":11,"value":4},
-    {"source":59,"target":58,"value":15},
-    {"source":59,"target":55,"value":5},
-    {"source":59,"target":48,"value":6},
-    {"source":59,"target":57,"value":2},
-    {"source":60,"target":48,"value":1},
-    {"source":60,"target":58,"value":4},
-    {"source":60,"target":59,"value":2},
-    {"source":61,"target":48,"value":2},
-    {"source":61,"target":58,"value":6},
-    {"source":61,"target":60,"value":2},
-    {"source":61,"target":59,"value":5},
-    {"source":61,"target":57,"value":1},
-    {"source":61,"target":55,"value":1},
-    {"source":62,"target":55,"value":9},
-    {"source":62,"target":58,"value":17},
-    {"source":62,"target":59,"value":13},
-    {"source":62,"target":48,"value":7},
-    {"source":62,"target":57,"value":2},
-    {"source":62,"target":41,"value":1},
-    {"source":62,"target":61,"value":6},
-    {"source":62,"target":60,"value":3},
-    {"source":63,"target":59,"value":5},
-    {"source":63,"target":48,"value":5},
-    {"source":63,"target":62,"value":6},
-    {"source":63,"target":57,"value":2},
-    {"source":63,"target":58,"value":4},
-    {"source":63,"target":61,"value":3},
-    {"source":63,"target":60,"value":2},
-    {"source":63,"target":55,"value":1},
-    {"source":64,"target":55,"value":5},
-    {"source":64,"target":62,"value":12},
-    {"source":64,"target":48,"value":5},
-    {"source":64,"target":63,"value":4},
-    {"source":64,"target":58,"value":10},
-    {"source":64,"target":61,"value":6},
-    {"source":64,"target":60,"value":2},
-    {"source":64,"target":59,"value":9},
-    {"source":64,"target":57,"value":1},
-    {"source":64,"target":11,"value":1},
-    {"source":65,"target":63,"value":5},
-    {"source":65,"target":64,"value":7},
-    {"source":65,"target":48,"value":3},
-    {"source":65,"target":62,"value":5},
-    {"source":65,"target":58,"value":5},
-    {"source":65,"target":61,"value":5},
-    {"source":65,"target":60,"value":2},
-    {"source":65,"target":59,"value":5},
-    {"source":65,"target":57,"value":1},
-    {"source":65,"target":55,"value":2},
-    {"source":66,"target":64,"value":3},
-    {"source":66,"target":58,"value":3},
-    {"source":66,"target":59,"value":1},
-    {"source":66,"target":62,"value":2},
-    {"source":66,"target":65,"value":2},
-    {"source":66,"target":48,"value":1},
-    {"source":66,"target":63,"value":1},
-    {"source":66,"target":61,"value":1},
-    {"source":66,"target":60,"value":1},
-    {"source":67,"target":57,"value":3},
-    {"source":68,"target":25,"value":5},
-    {"source":68,"target":11,"value":1},
-    {"source":68,"target":24,"value":1},
-    {"source":68,"target":27,"value":1},
-    {"source":68,"target":48,"value":1},
-    {"source":68,"target":41,"value":1},
-    {"source":69,"target":25,"value":6},
-    {"source":69,"target":68,"value":6},
-    {"source":69,"target":11,"value":1},
-    {"source":69,"target":24,"value":1},
-    {"source":69,"target":27,"value":2},
-    {"source":69,"target":48,"value":1},
-    {"source":69,"target":41,"value":1},
-    {"source":70,"target":25,"value":4},
-    {"source":70,"target":69,"value":4},
-    {"source":70,"target":68,"value":4},
-    {"source":70,"target":11,"value":1},
-    {"source":70,"target":24,"value":1},
-    {"source":70,"target":27,"value":1},
-    {"source":70,"target":41,"value":1},
-    {"source":70,"target":58,"value":1},
-    {"source":71,"target":27,"value":1},
-    {"source":71,"target":69,"value":2},
-    {"source":71,"target":68,"value":2},
-    {"source":71,"target":70,"value":2},
-    {"source":71,"target":11,"value":1},
-    {"source":71,"target":48,"value":1},
-    {"source":71,"target":41,"value":1},
-    {"source":71,"target":25,"value":1},
-    {"source":72,"target":26,"value":2},
-    {"source":72,"target":27,"value":1},
-    {"source":72,"target":11,"value":1},
-    {"source":73,"target":48,"value":2},
-    {"source":74,"target":48,"value":2},
-    {"source":74,"target":73,"value":3},
-    {"source":75,"target":69,"value":3},
-    {"source":75,"target":68,"value":3},
-    {"source":75,"target":25,"value":3},
-    {"source":75,"target":48,"value":1},
-    {"source":75,"target":41,"value":1},
-    {"source":75,"target":70,"value":1},
-    {"source":75,"target":71,"value":1},
-    {"source":76,"target":64,"value":1},
-    {"source":76,"target":65,"value":1},
-    {"source":76,"target":66,"value":1},
-    {"source":76,"target":63,"value":1},
-    {"source":76,"target":62,"value":1},
-    {"source":76,"target":48,"value":1},
-    {"source":76,"target":58,"value":1}
-  ]
-}
-
-*/

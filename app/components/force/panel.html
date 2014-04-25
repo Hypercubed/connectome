@@ -4,8 +4,8 @@
 
 <p class="ng-cloak">
   Pairs: {{selected.pairs.length}} / {{data.pairs.length}}
-  <br />Nodes: {{graphData.nodes.length}} / {{data.cells.length}}
-  <br />Edges: {{graphData.edges.length}} / {{graphData.edgeCount}} <span class="bg-danger" ng-show="graphData.edgeCount > options.maxEdges">Maximum shown</span></span>
+  <br />Nodes: {{graphData.nodes.length}} / {{graphData.nodeCount}}
+  <br />Edges: {{graphData.edges.length}} / {{graphData.edgeCount}}
 </p>
 
 <accordion close-others="false">
@@ -20,12 +20,12 @@
     </div>
 
     <p />
-    <div panel heading="Ligand rank" is-open="panelState.receptorRank" label="p = {{options.ligandRankFilter | number:2}}">
+    <div panel heading="Ligand cutoff" is-open="panelState.receptorRank" label="top {{options.ligandRankFilter | percentage}}" title="Showing only top {{options.ligandRankFilter | percentage}} of ligands">
       <div slider ng-model="options.ligandRankFilter" max="1" min="0" step="0.01"></div>
     </div>
     
     <p />
-    <div panel heading="Receptor rank" is-open="panelState.ligandRank" label="p = {{options.receptorRankFilter | number:2}}">
+    <div panel heading="Receptor rank" is-open="panelState.ligandRank" label="top {{options.receptorRankFilter | percentage}}" title="Showing only top {{options.receptorRankFilter | percentage}}% of receptors">
       <div slider ng-model="options.receptorRankFilter" max="1" min="0" step="0.01"></div>
     </div>
 
@@ -41,19 +41,19 @@
     </div>
 
     <p />
-    <div panel heading="Ligand TPM" is-open="panelState.ligand" label="&gt; {{options.ligandFilter | number:0}} tpm">
+    <div panel heading="Ligand TPM" is-open="panelState.ligand" label="&gt; {{options.ligandFilter | number:0}} tpm" title="Only showing edges where the ligand expression exceeds {{options.ligandFilter | number:0}} tpm">
       <div slider ng-model="options.ligandFilter" max="graphData.ligandExtent[1]" min="0"></div>
     </div>
 
     <p />
-    <div panel heading="Receptor TPM" is-open="panelState.receptor" label="&gt; {{options.receptorFilter | number:0}} tpm">
+    <div panel heading="Receptor TPM" is-open="panelState.receptor" label="&gt; {{options.receptorFilter | number:0}} tpm" title="Only showing edges where the receptor expression exceeds {{options.receptorFilter | number:0}} tpm">
       <div slider ng-model="options.receptorFilter" max="graphData.receptorExtent[1]" min="0"></div>
     </div>
 
     <p />
-    <div panel heading="Edge rank" label="{{options.maxEdges | number:0}}" is-open="panelState.edges" >
-      <div slider ng-model="options.maxEdges" max="1000" min="1"></div>
-    </div>    
+    <div panel heading="Edge cutoff" label="top {{options.edgeRankFilter | percentage}}" is-open="panelState.edges" title="Showing only top {{options.edgeRankFilter |percentage}}% of edges">
+      <div slider ng-model="options.edgeRankFilter" max="1" min="0" step="0.01"></div>
+    </div>
   </accordion-group>
 
   <accordion-group heading="Options" is-open="panelState.options" ng-class="{'collapsed': !panelState.options}">
@@ -61,13 +61,16 @@
       Show node labels
       <div class="pull-right small"><input type="checkbox" ng-model="options.showLabels"></div>
     </div>
+
+    <p/>
+      <span ng-click="go('home.force-graph')"><input type="radio" ng-model="state" value="home.force-graph"> force directed graph</span>
+      <br /><span ng-click="go('home.hive-graph')"><input type="radio" ng-model="state" value="home.hive-graph"> hive plot</span>
   </accordion-group>
 
   <accordion-group heading="Explanation" is-open="panelState.help" ng-class="{'collapsed': !panelState.help}">
     <ul>
-      <li>Select Ligand - Receptor pair in the filter.
-      <li>Select cell samples.
-      <li>The top 100 edges for the selected cells will appear.
+      <li>Select samples and node cut offs from node filter section.
+      <li>Select Ligand - Receptor pairs and edge cut offs from the edge filter section.
       <li>Hover over nodes and edges to get more information.
       <li>Click and drag nodes to move.
       <li>Double click a node to fix in place.  Double click again to release.

@@ -51,8 +51,6 @@
     function linkName(d) { return d.source.name + ':' + d.name + ':' + d.target.name; }
     function _ncolor(d) {  return ncolor(d.type); }
 
-
-
     // Tooltips
     var nodeTooltip = chart.nodeTooltip = d3.tip().attr('class', 'd3-tip node').html(_F('name'));
     var linkTooltip = chart.linkTooltip = d3.tip().attr('class', 'd3-tip link').html(_F('name'));
@@ -88,8 +86,6 @@
       });
       
     };
-
-
 
     chart.draw = function draw(graph) {
 
