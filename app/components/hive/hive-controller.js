@@ -169,13 +169,15 @@
 
       function _sortAndFilterNodes(nodes, options) {  //TODO: DRY this
 
+
+
         nodes = nodes.sort(valueComp).filter(valueFilter);    // Sort and filter out zeros
 
         var ligands = nodes.filter(typeFilter('node.ligand'));
-        var topLigands = ligands.slice(0,-options.ligandRankFilter*ligands.length);
-
+        var topLigands = ligands.slice(0,-options.ligandRankFilter*ligands.length-1);
+console.log(options.ligandRankFilter*ligands.length);
         var receptors = nodes.filter(typeFilter('node.receptor'));
-        var topReceptors = receptors.slice(0,-options.receptorRankFilter*receptors.length);
+        var topReceptors = receptors.slice(0,-options.receptorRankFilter*receptors.length-1);
 
         data.ligandExtent = d3.extent(ligands,value);
         data.receptorExtent = d3.extent(receptors,value);
