@@ -172,7 +172,9 @@
     }
 
     //var opacity = d3.scale.log().range([1, 1]);
-    var slog = d3.scale.log().range([2,9]).clamp(true);     // Maps value to normalized edge width
+    var ewidth = d3.scale.linear().range([1,10]).clamp(true);     // Maps value to normalized edge width
+    var eopac = d3.scale.linear().range([0.2,0.8]).clamp(true);     // Maps value to normalized edge width
+    var ecolor = d3.scale.linear().range(['red','blue']);     // Maps value to normalized edge width
     var rsize = d3.scale.linear().range([10, 10]).clamp(true);  // Maps value to size
     //var nindex = d3.scale.linear().range([10, 1]);
 
@@ -273,9 +275,9 @@
 
       // Ranges
       var _s = d3.extent(graph.edges, _F('value'));
-      slog.domain(_s);
-      //color.domain(_s);
-      //opacity.domain(_s);
+      ewidth.domain(_s);
+      ecolor.domain(_s);
+      eopac.domain(_s);
 
       var _e = d3.extent(graph.nodes, sumValues);
       rsize.domain(_e);
@@ -319,8 +321,8 @@
             .attr('viewBox', '0 -5 10 10')
             .attr('refY', 0)
             .attr('refX', 1)
-            .attr('markerWidth', function(d) { return 2.5*slog(d.value); })
-            .attr('markerHeight', function(d) { return 2.5*slog(d.value); })
+            .attr('markerWidth', function(d) { return 2.5*ewidth(d.value); })
+            .attr('markerHeight', function(d) { return 2.5*ewidth(d.value); })
             .attr('stroke-width', 1)
             .attr('markerUnits','userSpaceOnUse')
             //.style('stroke', function(d) { return color(d.value); })
@@ -355,9 +357,9 @@
 
       links
         .attr('id', function(d) { return 'link-'+d.index; })
-        //.style('stroke', function(d) { return color(d.value); })
-        //.style('opacity', function(d) { return opacity(d.value); })
-        .style('stroke-width', function(d) { return slog(d.value); })
+        .style('stroke', function(d) { console.log(ecolor(d.value)); return ecolor(d.value); })
+        .style('opacity', function(d) { return eopac(d.value); })
+        .style('stroke-width', function(d) { return ewidth(d.value); })
         .attr('marker-mid', function(d) { return 'url(#arrow-'+d.index+')'; })
         ;
 
