@@ -174,7 +174,7 @@
     //var opacity = d3.scale.log().range([1, 1]);
     var ewidth = d3.scale.linear().range([1,10]).clamp(true);     // Maps value to normalized edge width
     var eopac = d3.scale.linear().range([0.2,0.8]).clamp(true);     // Maps value to normalized edge width
-    var ecolor = d3.scale.linear().range(['red','blue']);     // Maps value to normalized edge width
+    var ecolor = d3.scale.linear().range(['black','black']);     // Maps value to normalized edge width
     var rsize = d3.scale.linear().range([10, 10]).clamp(true);  // Maps value to size
     //var nindex = d3.scale.linear().range([10, 1]);
 
@@ -400,14 +400,19 @@
 
       nodesEnter
         .append('circle')
-          .style({fill: '#ccc','fill-opacity': 1,stroke: '#333','stroke-width': '1px'})
+          .style({'fill': '#ccc','fill-opacity': 1,'stroke': '#333','stroke-width': '1px'})
           .attr('r',rsize(1));
+
+      //nodesEnter
+      //  .append('rect')
+      //    .attr({'x':0, 'y':-10, 'width': 200, 'height': 20,'fill': '#ccc'})
+       //   .style({'stroke': 'none'});
 
       nodesEnter
         .append('text')
-          .style({'stroke': 'none','fill': '#333','stroke-width': '1px','font-size': '10px'})
+          .style({'stroke': 'none','fill': '#333','stroke-width': '0.5px','font-size': '10px','font-variant':'small-caps','font-weight':'bold','text-shadow': '2px 2px 1px #fff, -1px -1px 1px #fff'})
           .attr('text-anchor', 'start')
-          .attr('dy', 3)
+          .attr('dy', '0.5em')
           .attr('dx', rsize(1)+3)
           .text(_F('name'));
 
@@ -419,6 +424,10 @@
       nodes
         .select('circle')
           .style('fill',ncolor);
+
+      //nodes
+       // .select('rect')
+      //    .style('fill',ncolor);
 
       nodes.exit().remove();
 

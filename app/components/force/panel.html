@@ -6,6 +6,10 @@
   Pairs: {{selected.pairs.length}} / {{data.pairs.length}}
   <br />Nodes: {{graphData.nodes.length}} / {{graphData.nodeCount}}
   <br />Edges: {{graphData.edges.length}} / {{graphData.edgeCount}}
+
+  <div>
+    <alert ng-if="alert.msg">{{alert.msg}}</alert>
+  </div>
 </p>
 
 <accordion close-others="false">

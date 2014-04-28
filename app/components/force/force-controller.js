@@ -85,7 +85,7 @@
     });
 
   app
-    .service('forceGraph', function($log, $window, cfpLoadingBar) {  // TODO: should be a directive
+    .service('forceGraph', function($log, $window, $rootScope, cfpLoadingBar) {  // TODO: should be a directive
 
       var data = {
         nodes: {},
@@ -198,13 +198,15 @@
       var StopIteration = new Error('Maximum number of edges exceeded');
 
       function _makeEdges(nodes, pairs, expr, options) { // TODO: better 
+
+        $rootScope.alert = { msg: null };
         try {
           return __makeEdges(nodes, pairs, expr, options);
         } catch(e) {
           if(e !== StopIteration) {
             throw e;
           } else {
-            $window.alert(StopIteration.message);
+            $rootScope.alert = { msg: StopIteration.message };
             return [];
           }
         }

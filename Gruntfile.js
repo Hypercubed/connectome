@@ -13,7 +13,7 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
   // Time how long tasks take. Can help when optimizing build times
-  //require('time-grunt')(grunt);
+  require('time-grunt')(grunt);
 
   // Define the configuration for all the tasks
   grunt.initConfig({
@@ -429,9 +429,15 @@ module.exports = function (grunt) {
     'htmlmin'
   ]);
 
+  grunt.registerTask('deploy', [
+    'build',
+    'rsync:prod'
+  ]);
+
   grunt.registerTask('default', [
-    'newer:jshint',
+    'jshint',
     'test',
     'build'
   ]);
+
 };

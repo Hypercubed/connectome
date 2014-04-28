@@ -36,7 +36,7 @@
     });
 
   app
-    .controller('PanelCtrl', function ($scope, $log, $state, localStorageService, ligandReceptorData, graphService) {
+    .controller('PanelCtrl', function ($scope, $rootScope, $log, $state, localStorageService, ligandReceptorData, graphService) {
 
       localStorageService.bind($scope, 'options', {
         showLabels: true,

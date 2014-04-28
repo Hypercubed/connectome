@@ -26,3 +26,4 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [ ] combine hive and force controller
 - [ ] make hive and force directives
 - [ ] Raise alerts on internal limits
+- [ ] Page title
