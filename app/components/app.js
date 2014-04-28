@@ -4,7 +4,7 @@
   'use strict';
   
   var app = angular
-    .module('lrSpaApp', [ 'sliders', 'debounce', 'panels', 'ui.router','chieffancypants.loadingBar','localytics.directives','snap','LocalStorageModule','ui.bootstrap','hc.downloader']);
+    .module('lrSpaApp', [ 'sliders', 'debounce', 'panels', 'ngAnimate', 'ui.router','chieffancypants.loadingBar','localytics.directives','snap','LocalStorageModule','ui.bootstrap','hc.downloader','angular-growl']);
 
   app
   .config(function(localStorageServiceProvider){
@@ -13,8 +13,13 @@
 
   app
     .config(function($logProvider) {
-      $logProvider.debugEnabled(true);
+      $logProvider.debugEnabled(false);
     });
+
+  app
+    .config(['growlProvider', function(growlProvider) {
+      growlProvider.globalTimeToLive(5000);
+    }]);
 
 })();
 

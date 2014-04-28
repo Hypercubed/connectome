@@ -357,7 +357,7 @@
 
       links
         .attr('id', function(d) { return 'link-'+d.index; })
-        .style('stroke', function(d) { console.log(ecolor(d.value)); return ecolor(d.value); })
+        .style('stroke', function(d) { return ecolor(d.value); })
         .style('opacity', function(d) { return eopac(d.value); })
         .style('stroke-width', function(d) { return ewidth(d.value); })
         .attr('marker-mid', function(d) { return 'url(#arrow-'+d.index+')'; })

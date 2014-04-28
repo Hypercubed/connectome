@@ -85,7 +85,7 @@
     });
 
   app
-    .service('forceGraph', function($log, $window, $rootScope, cfpLoadingBar) {  // TODO: should be a directive
+    .service('forceGraph', function($log, $window, growl, cfpLoadingBar) {  // TODO: should be a directive
 
       var data = {
         nodes: {},
@@ -199,14 +199,13 @@
 
       function _makeEdges(nodes, pairs, expr, options) { // TODO: better 
 
-        $rootScope.alert = { msg: null };
         try {
           return __makeEdges(nodes, pairs, expr, options);
         } catch(e) {
           if(e !== StopIteration) {
             throw e;
           } else {
-            $rootScope.alert = { msg: StopIteration.message };
+            growl.addErrorMessage(StopIteration.message);
             return [];
           }
         }
@@ -304,6 +303,9 @@
         if (cells.length < 1 || pairs.length < 1) {
           data.nodes = [];
           data.edges = [];
+
+          if (cells.length < 1) {growl.addWarnMessage('No cells selected');}
+          if (pairs.length < 1) {growl.addWarnMessage('No pairs selected.  Select at least one L-R pair.');}
           return;
         }
 

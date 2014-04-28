@@ -7,7 +7,7 @@
   var app = angular.module('lrSpaApp');
 
   app
-    .service('hiveGraph', function($log, $window, cfpLoadingBar) {  // TODO: should be a directive
+    .service('hiveGraph', function($log, $window, growl, cfpLoadingBar) {  // TODO: should be a directive
 
       var data = {
         nodes: {},
@@ -218,13 +218,14 @@
       var StopIteration = new Error('Maximum number of edges exceeded');
 
       function _makeEdges(nodes, pairs, expr, options) { // TODO: better 
+
         try {
           return __makeEdges(nodes, pairs, expr, options);
         } catch(e) {
           if(e !== StopIteration) {
             throw e;
           } else {
-            $window.alert(StopIteration.message);
+            growl.addErrorMessage(StopIteration.message);
             return [];
           }
         }
@@ -303,6 +304,9 @@
         if (cells.length < 1 || pairs.length < 1) {
           data.nodes = [];
           data.edges = [];
+
+          if (cells.length < 1) {growl.addWarnMessage('No cells selected');}
+          if (pairs.length < 1) {growl.addWarnMessage('No pairs selected.  Select at least one L-R pair.');}
           return;
         }
 

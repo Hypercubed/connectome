@@ -76,7 +76,6 @@
       var _id = function(d) { return d.id; };
 
       function saveSelection() {
-        
 
         $scope.pairs = $scope.selected.pairs.map(_id);
         $scope.cells = $scope.selected.cells.map(_id);
@@ -100,7 +99,7 @@
 
         $log.debug('load from local stoarge');
 
-        console.log($scope.data.cells.map(_id));
+        //console.log($scope.data.cells.map(_id));
 
         localStorageService.bind($scope, 'pairs', [317]);
         localStorageService.bind($scope, 'cells', $scope.data.cells.map(_id));        

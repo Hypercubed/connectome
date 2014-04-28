@@ -164,3 +164,13 @@ height: auto;
 #ui .panel.collapsed .panel-title a:after {
     content: "\e080";    /* adjust as needed, taken from bootstrap.css */
 }
+
+.growl {
+position: fixed;
+left: 10px;
+right: auto;
+top: 45px;
+float: right;
+width: 30%;
+text-align: center;
+}
