@@ -21,12 +21,12 @@
 
     <p />
     <div panel heading="Ligand cutoff" is-open="panelState.receptorRank" label="top {{options.ligandRankFilter | percentage}}" title="Showing only top {{options.ligandRankFilter | percentage}} of ligands">
-      <div slider ng-model="options.ligandRankFilter" max="1" min="0" step="0.01"></div>
+      <div hc-slider ng-model="options.ligandRankFilter" max="1" min="0" step="0.01"></div>
     </div>
     
     <p />
     <div panel heading="Receptor rank" is-open="panelState.ligandRank" label="top {{options.receptorRankFilter | percentage}}" title="Showing only top {{options.receptorRankFilter | percentage}}% of receptors">
-      <div slider ng-model="options.receptorRankFilter" max="1" min="0" step="0.01"></div>
+      <div hc-slider ng-model="options.receptorRankFilter" max="1" min="0" step="0.01"></div>
     </div>
 
   </accordion-group>
@@ -42,17 +42,17 @@
 
     <p />
     <div panel heading="Ligand TPM" is-open="panelState.ligand" label="&gt; {{options.ligandFilter | number:0}} tpm" title="Only showing edges where the ligand expression exceeds {{options.ligandFilter | number:0}} tpm">
-      <div slider ng-model="options.ligandFilter" max="graphData.ligandExtent[1]" min="0" step="1"></div>
+      <div hc-slider ng-model="options.ligandFilter" max="graphData.ligandExtent[1]" min="0" step="1"></div>
     </div>
 
     <p />
     <div panel heading="Receptor TPM" is-open="panelState.receptor" label="&gt; {{options.receptorFilter | number:0}} tpm" title="Only showing edges where the receptor expression exceeds {{options.receptorFilter | number:0}} tpm">
-      <div slider ng-model="options.receptorFilter" max="graphData.receptorExtent[1]" min="0" step="1"></div>
+      <div hc-slider ng-model="options.receptorFilter" max="graphData.receptorExtent[1]" min="0" step="1"></div>
     </div>
 
     <p />
     <div panel heading="Edge cutoff" label="top {{options.edgeRankFilter | percentage}}" is-open="panelState.edges" title="Showing only top {{options.edgeRankFilter |percentage}}% of edges">
-      <div slider ng-model="options.edgeRankFilter" max="1" min="0" step="0.01"></div>
+      <div hc-slider ng-model="options.edgeRankFilter" max="1" min="0" step="0.01"></div>
     </div>
   </accordion-group>
 

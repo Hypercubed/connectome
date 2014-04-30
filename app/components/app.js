@@ -4,7 +4,7 @@
   'use strict';
   
   var app = angular
-    .module('lrSpaApp', [ 'sliders', 'debounce', 'panels', 'ngAnimate', 'ui.router','chieffancypants.loadingBar','localytics.directives','snap','LocalStorageModule','ui.bootstrap','hc.downloader','angular-growl']);
+    .module('lrSpaApp', [ 'hc.slider', 'debounce', 'panels', 'ngAnimate', 'ui.router','chieffancypants.loadingBar','localytics.directives','snap','LocalStorageModule','ui.bootstrap','hc.downloader','angular-growl']);
 
   app
   .config(function(localStorageServiceProvider){

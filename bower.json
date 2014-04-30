@@ -13,13 +13,14 @@
     "angular-snap": "~1.4.1",
     "d3-tip": "~0.6.4",
     "angular-bootstrap": "~0.10.0",
-    "angular-local-storage": "https://github.com/Hypercubed/angular-local-storage.git#feature/bind",
     "angular-ui-router": "~0.2.10",
     "ng-debounce": "~0.1.1",
     "d3-plugins": "*",
     "angular-downloadsvg-directive": "~0.0.4",
     "angular-growl": "~0.4.0",
-    "angular-animate": "~1.2.16"
+    "angular-animate": "~1.2.16",
+    "angular-slider-widget": "~1.2.16",
+    "angular-local-storage": "https://github.com/grevory/angular-local-storage.git#master"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",
