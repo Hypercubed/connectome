@@ -139,9 +139,8 @@
 
         var nodes = cells;
 
-
-
         nodes.forEach(function(_node) {
+
           _node.ligands = [];
           _node.receptors = [];
           _node.lout = [];
@@ -167,6 +166,8 @@
           });
         });
 
+        //console.log(nodes);
+
         data.nodeCount = nodes.length;
 
         return nodes;
@@ -186,10 +187,11 @@
         var filter0 = d3.quantile(ranked0, 1-options.receptorRankFilter);
         var filter1 = d3.quantile(ranked1, 1-options.ligandRankFilter);
 
+        filter0 = Math.max(filter0, 0);
+        filter1 = Math.max(filter1, 0);
+
         return nodes.filter(function(d) {
-          return d.values[0] > 0 &&
-                 d.values[1] > 0 &&
-                 ( d.values[0] > filter0 || d.values[1] > filter1 );
+          return ( d.values[0] > filter0 || d.values[1] > filter1 );
         });
       }
 
