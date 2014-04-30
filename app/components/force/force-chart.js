@@ -156,20 +156,23 @@
       .gravity(1)
       .on('tick', tick);
 
+    var groups = ['ligand','both','receptor'];
+    var ncolor = d3.scale.ordinal().domain(groups).range(['#ed1940','#a650e2','#3349ff']);
+
     // Scales
     //var color = d3.scale.log().range(['blue', 'green']);
-    function ncolor(d) {
+    /* function ncolor(d) {
       var type = d.type;
-      if (!type) {
-        if (d.values[0] > 10) {type='ligand';} //  Ligand only, lime green
-        if (d.values[1] > 10) {type='receptor';}   //  Receptor only, Very light blue
-        if (d.values[0] > 10 && d.values[1] > 10) {type='both';}   //  Both, Dark moderate magenta
+      if (!type) {  // Get rid of this
+        if (d.lout.length > 0) {type='ligand';}
+        if (d.lin.length > 0) {type='receptor';}
+        if (d.lout.length > 0 && d.lin.length > 0) {type='both';}
       }
       
-      if (type==='both') {return '#cc66cc';}   //  Both, Dark moderate magenta
-      if (type==='receptor')  {return '#99ccff';}   //  Receptor only, Very light blue
-      if (type==='ligand') {return '#00cc66';} //  Ligand only, lime green
-    }
+      if (type==='both') {return '#a650e2';}   //  Both, purple
+      if (type==='receptor')  {return '#3349ff';}   //  Receptor only, blue
+      if (type==='ligand') {return '#ed1940';} //  Ligand only, red
+    } */
 
     //var opacity = d3.scale.log().range([1, 1]);
     var ewidth = d3.scale.linear().range([1,10]).clamp(true);     // Maps value to normalized edge width
@@ -421,9 +424,11 @@
         .classed('fixed', _F('fixed'))
         ;
 
+      function _ncolor(d) {  return ncolor(d.type); }
+      
       nodes
         .select('circle')
-          .style('fill',ncolor);
+          .style('fill',_ncolor);
 
       //nodes
        // .select('rect')

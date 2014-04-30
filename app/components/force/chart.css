@@ -119,15 +119,15 @@ svg.fixed .link.fixed {
 }
 
 #legend .node.receptor {
-  background-color: #99ccff;
+  background-color: #3349ff;
 }
 
 #legend .node.ligand {
-  background-color: #00cc66;
+  background-color: #ed1940;
 }
 
 #legend .node.both {
-  background-color: #cc33cc;
+  background-color: #a650e2;
 }
 
 

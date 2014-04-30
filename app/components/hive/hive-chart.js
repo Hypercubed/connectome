@@ -31,10 +31,7 @@
     var groups = ['node.ligand','gene','node.receptor'];
 
     // Scales
-    var ncolor = d3.scale.ordinal().domain(groups).range(['#00cc66','#cc66cc','#99ccff']);
-      //  Receptor only, Very light blue
-      //  Receptor only, Very light blue
-      //  Ligand only, lime green
+    var ncolor = d3.scale.ordinal().domain(groups).range(['#ed1940','#a650e2','#3349ff']);
 
     var slog = d3.scale.log().range([2,9]).clamp(true);     // Maps value to normalized edge width
     var rsize = d3.scale.linear().range([3, 12]).clamp(true);  // Maps value to size

@@ -361,6 +361,9 @@
         });
 
         data.nodes = data.nodes.filter(function(d) {   // Filtered nodes
+          if (d.lout.length > 0) {d.type='ligand';} //  Ligand only, lime green
+          if (d.lin.length > 0) {d.type='receptor';}   //  Receptor only, Very light blue
+          if (d.lout.length > 0 && d.lin.length > 0) {d.type='both';}   //  Both, Dark moderate magenta
           return (d.lout.length + d.lin.length) > 0;
         });
 
