@@ -1,11 +1,20 @@
 (function() {
   'use strict';
 
-  // Todo: min, customize labels, scale function
+  // Todo: customize labels, scale function
 
-  var baseUrl = 'components/slider/';
+  var template = '<div class="hc-slider">\
+    <div class="hc-number">\
+      <input type="number" min="{{min}}" max="{{max}}" ng-model="numberValue" step="{{step}}">\
+    </div>\
+    <div class="hc-range">\
+      <input type="range" class="" ng-model="rangeValue">\
+      <span class="bubble limit floor" ng-show="left" >{{min | number:fractionSize}}</span>\
+      <span class="bubble limit ceiling" ng-show="right">{{max | number:fractionSize}}</span>\
+    </div>\
+  </div>'
 
-  var app = angular.module('sliders',[]);
+  var app = angular.module('sliders',['debounce']);
 
   app
     .directive('slider', function($timeout, debounce) {
@@ -14,12 +23,10 @@
           value: '=ngModel',
           max: '=',
           min: '=',
-          step: '=?'
+          step: '=?',
+          fractionSize: '=?'
         },
-        templateUrl: baseUrl+'slider.html',
-        compile: function(tElement, tAttrs, transclude) {
-          return this.link
-        },
+        template: template,
         link: function(scope, element) {
           element.addClass('slider');
           var $range = element.find('input[type=range]');
@@ -27,7 +34,7 @@
           scope.max = +scope.max || 1;
           scope.min = +scope.min || 0;
           scope.step = +scope.step || 0.01;
-          scope.fractionSize = parseInt(Math.log(scope.step)/Math.log(0.1));
+          scope.fractionSize = scope.fractionSize || parseInt(Math.log(scope.step)/Math.log(0.1));
           console.log(scope.fractionSize);
           scope.value = +scope.value || 0;
           scope.rangeValue = +scope.value || 0;
@@ -65,9 +72,9 @@
           }
 
           function updateDom() {
-            scope.percent = (+scope.value-scope.min)/(scope.max-scope.min)*100;
-            scope.left = scope.percent > 10;
-            scope.right = scope.percent < 90;
+            var percent = (+scope.rangeValue-scope.min)/(scope.max-scope.min)*100;
+            scope.left = percent > 10;
+            scope.right = percent < 90;
           }
 
           updateRange();

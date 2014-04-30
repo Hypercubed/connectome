@@ -1,9 +1,30 @@
-.slider {
-    position:    relative;
-    width:       100%;
+.hc-slider {
+    position: relative;
+    width: 100%;
+    height: 2em;
   }
 
-  .slider span.bubble {
+  .hc-slider:before, .hc-slider:after {
+    display: table;
+    content: " ";
+  }
+
+  .hc-number {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 25%;
+    padding: 0 5px 0 0;
+  }
+
+  .hc-range {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 75%;
+  }
+
+  .hc-slider span.bubble {
     position: absolute;
     font-size:   1.0em;
     line-height: 1.4em;
@@ -15,30 +36,14 @@
     margin: 0 5px;
   }
 
-  .slider span.bubble.ceiling {
+  .hc-slider span.bubble.ceiling {
     left: auto;
-    right: 15px;
+    right: 0;
   }
 
-  .slider input[type=number] {
-    position: relative;
-    overflow: hidden;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  .hc-slider input[type=number] {
     width: 100%;
-    height: auto !important;
-    height: 1%;
-    border: 1px solid #aaa;
-    background-color: #fff;
-    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(1%, #eeeeee), color-stop(15%, #ffffff));
-    background-image: -webkit-linear-gradient(#eeeeee 1%, #ffffff 15%);
-    background-image: -moz-linear-gradient(#eeeeee 1%, #ffffff 15%);
-    background-image: -o-linear-gradient(#eeeeee 1%, #ffffff 15%);
-    background-image: linear-gradient(#eeeeee 1%, #ffffff 15%);
+    overflow: hidden;
     cursor: text;
   }
-
 
