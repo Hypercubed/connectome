@@ -43,6 +43,13 @@
         if (d.value > 0) {html.push([(d.genes.length > 1) ? 'Sum of' : '',type, 'expression:',valueFormat(d.value),'tpm']);}
         if (d.genes.length > 0)   {html.push(['Genes:',formatList(d.genes,4)]);}
 
+        if (d.meta) {
+          var keys = ['Ligand.Name', 'Ligand.HGNCID', 'Ligand.UniprotID', 'Receptor.Name', 'Receptor.HGNCID', 'Receptor.UniprotID', 'Ligand.Taxon', 'Ligand.Age', 'Receptor.Taxon', 'Receptor.Age'];
+          keys.forEach(function(k) {
+            html.push([k+':',d.meta[k]]);
+          });
+        }
+
         return html.map(join).join('<br>');
       });
 
@@ -98,7 +105,7 @@
 
           cells.forEach(function(cell) {
             var _node = new Node(cell.id,cell.name+'.'+type,'node.'+type);
-            
+
             pairs.forEach(function(_pair) {
               var index = _pair.index[i];
               var exprValue = +expr[index][_node.id+1];
@@ -141,7 +148,7 @@
 
             if (exprValues[0] > 0 && _node.ligands.indexOf(_pair.Ligand) < 0) {
               _node.ligands.push(_pair.Ligand);
-              _node.values[0] += +exprValues[0]; 
+              _node.values[0] += +exprValues[0];
             }
 
             if (exprValues[1] > 0 && _node.receptors.indexOf(_pair.Receptor) < 0) {
@@ -217,7 +224,7 @@
 
       var StopIteration = new Error('Maximum number of edges exceeded');
 
-      function _makeEdges(nodes, pairs, expr, options) { // TODO: better 
+      function _makeEdges(nodes, pairs, expr, options) { // TODO: better
 
         try {
           return __makeEdges(nodes, pairs, expr, options);
@@ -244,6 +251,8 @@
           var name = _pair.Ligand + ' -> ' + _pair.Receptor;
 
           var _pairNode = new Node(i,name,'gene');  // Todo: move this?
+          _pairNode.meta = _pair;
+          //console.log(_pair);
 
           nodes.push(_pairNode);
           data.nodeCount++;
@@ -267,7 +276,7 @@
               new Edge(_pairNode,_node);
 
             _edge.value = _expr;
-            
+
             edges.push(_edge);
 
 
@@ -494,7 +503,7 @@
         //TODO: not this
         //hiveGraph.graph.ligandRange = localStorageService.get('ligandRange') || hiveGraph.graph.ligandRange;
         //hiveGraph.graph.receptorRange = localStorageService.get('receptorRange') || hiveGraph.graph.receptorRange;
-        
+
       }
 
       ligandReceptorData.load().then(function() {

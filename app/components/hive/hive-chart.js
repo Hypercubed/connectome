@@ -81,7 +81,7 @@
         }
 
       });
-      
+
     };
 
     chart.draw = function draw(graph) {
@@ -158,7 +158,7 @@
       function rescale() {
         var trans=d3.event.translate;
         var scale=d3.event.scale;
-       
+
         g.attr('transform',
             'translate(' + trans + ') scale(' + scale + ')');
       }
@@ -235,7 +235,7 @@
           .attr('dy', 3)
           .attr('dx', 15)
           ;
-          
+
       nodes
         .attr('id', function(d) { return 'node-'+d.index; })
         .classed('fixed', _F('fixed'))

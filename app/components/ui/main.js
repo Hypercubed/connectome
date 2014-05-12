@@ -102,7 +102,7 @@
         //console.log($scope.data.cells.map(_id));
 
         localStorageService.bind($scope, 'pairs', [317]);
-        localStorageService.bind($scope, 'cells', $scope.data.cells.map(_id));        
+        localStorageService.bind($scope, 'cells', $scope.data.cells.map(_id));
 
         //if (_pairs.length < 1) { _pairs = [317]; }
         //if (_cells.length < 1) { _cells = [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]; }
@@ -113,7 +113,7 @@
         //TODO: not this
         //graph.graph.ligandRange = localStorageService.get('ligandRange') || graph.graph.ligandRange;
         //graph.graph.receptorRange = localStorageService.get('receptorRange') || graph.graph.receptorRange;
-        
+
       }
 
       ligandReceptorData.load().then(function() {

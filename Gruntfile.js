@@ -374,10 +374,10 @@ module.exports = function (grunt) {
         recursive: true
       },
       prod: {
-          options: {
-            src: '<%= build.dist %>/',
-            dest: '<%= build.prod %>'
-          }
+        options: {
+          src: '<%= build.dist %>/',
+          dest: '<%= build.prod %>'
+        }
       }
     }
 
