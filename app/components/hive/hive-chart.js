@@ -44,7 +44,7 @@
     });
 
     // Accessors
-    function value(d) { return d.value; }
+    //function value(d) { return d.value; }
     function linkName(d) { return d.source.name + ':' + d.name + ':' + d.target.name; }
     function _ncolor(d) {  return ncolor(d.class); }
 
@@ -52,7 +52,7 @@
     var nodeTooltip = chart.nodeTooltip = d3.tip().attr('class', 'd3-tip node').html(_F('name'));
     var linkTooltip = chart.linkTooltip = d3.tip().attr('class', 'd3-tip link').html(_F('name'));
 
-    nodeTooltip.offset(function(d) {
+    nodeTooltip.offset(function() {
       return [-this.getBBox().height, 0]; //-2*this.getBBox().height
     });
 
@@ -216,23 +216,6 @@
 
       nodes = nodesLayer.selectAll('.node').data(_D, _F('name'));
 
-      // Create
-      var nodesEnter = nodes.enter().append('g')
-          .classed('node', true)
-          .style({fill: '#ccc','fill-opacity': 1,stroke: '#333','stroke-width': '1px'})
-          .on('dblclick', function(d) { 
-            d3.event.stopPropagation();
-            var node = d3.select(this);
-            d.fixed = (d.fixed) ? false : true;
-
-            nodes.classed('fixed', _F('fixed'));
-            links.classed('fixed', function(d) { return d.source.fixed && d.target.fixed; });
-          })
-          .on('mouseover.highlight', mouseoverHighlight) //function() { nodeClassed.call(this, 'hover', true); })
-          .on('mouseout.highlight', mouseoutHighlight) //function() { nodeClassed.call(this, 'hover', false); })
-          .on('mouseover', nodeTooltip.show)
-          .on('mouseout', nodeTooltip.hide);
-
       function sign(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
 
       function _mout(d, dir, key, value) {  // Abstract this into helper link d3.drag
@@ -255,22 +238,22 @@
       }
 
       function classLinks(dir, key, value) {  // Later us dir as recursion limit
-        if (arguments.length < 3) { value = true};
+        if (arguments.length < 3) { value = true; }
 
         return function(d) {
           _mout(d, dir, key, value);
-        }
+        };
       }
 
-      function mouseoverHighlight(d) {
-        var node = d3.select(this);  
+      var mouseoverHighlight = function mouseoverHighlight(d) {
+        var node = d3.select(this);
 
         d.hover = true;
 
-        if (d.type === 'node') { 
+        if (d.type === 'node') {
           node.each(classLinks(3, 'hover'));
         } else {
-          var _l = d.class == "ligand";
+          var _l = d.class === 'ligand';
           node.each(classLinks(_l ? -1 : -2, 'hover'));
           node.each(classLinks(_l ? +2 : +1, 'hover'));
         }
@@ -278,9 +261,9 @@
         chart.container.classed('hover',true);
         nodes.classed('hover', _F('hover'));
         links.classed('hover', _F('hover'));
-      }
+      };
 
-      function mouseoutHighlight(d) {
+      function mouseoutHighlight() {
         chart.container.classed('hover',false);
 
         nodes
@@ -291,6 +274,25 @@
           .each(function(d) {d.hover = false; })
           .classed('hover',false);
       }
+
+      // Create
+      var nodesEnter = nodes.enter().append('g')
+          .classed('node', true)
+          .style({fill: '#ccc','fill-opacity': 1,stroke: '#333','stroke-width': '1px'})
+          .on('dblclick', function(d) {
+            d3.event.stopPropagation();
+            //var node = d3.select(this);
+            d.fixed = (d.fixed) ? false : true;
+
+            nodes.classed('fixed', _F('fixed'));
+            links.classed('fixed', function(d) { return d.source.fixed && d.target.fixed; });
+          })
+          .on('mouseover.highlight', mouseoverHighlight) //function() { nodeClassed.call(this, 'hover', true); })
+          .on('mouseout.highlight', mouseoutHighlight) //function() { nodeClassed.call(this, 'hover', false); })
+          .on('mouseover', nodeTooltip.show)
+          .on('mouseout', nodeTooltip.hide);
+
+
 
       nodesEnter
         .append('rect');

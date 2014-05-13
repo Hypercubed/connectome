@@ -30,9 +30,9 @@
         return l;
       }
 
-      function toTitleCase(str) {
-        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-      }
+      //function toTitleCase(str) {
+      //  return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+      //}
 
       chart.nodeTooltip.html(function(d) {  // Todo: clean this up
         var s = d.name.split('.');
@@ -217,7 +217,7 @@
       //var type = _F('type');
       var valueComp = function(a,b) { return value(b) - value(a); };
       var valueFilter = function(d) {return value(d)>0;};
-      var typeFilter = function(type) { return function(d) {return d.type === type;}; };
+      //var typeFilter = function(type) { return function(d) {return d.type === type;}; };
 
       var value0 = function(d) { return d.values[0]; };
       var value1 = function(d) { return d.values[1]; };
@@ -340,7 +340,7 @@
             data.nodeCount++;
           }
 
-          var name = _pair.Ligand + ' -> ' + _pair.Receptor;
+          //var name = _pair.Ligand + ' -> ' + _pair.Receptor;
           edges.push(new Edge(_ligand,_receptor));
 
           if (edges.length > MAXEDGES) {
@@ -353,7 +353,7 @@
 
             [lindex,rindex].forEach(function(index,i) {
               var min = (i === 0) ? options.ligandFilter : options.receptorFilter;
-              var row = expr[index]
+              var row = expr[index];
               if (!row) { return; }
               var _expr = +row[_node.id+1];
 
@@ -454,8 +454,8 @@
         });
 
         data.nodes.forEach(function(d) {
-          if (d.type.match(/gene/)) { 
-            d.class=d.type.replace('gene.','') 
+          if (d.type.match(/gene/)) {
+            d.class=d.type.replace('gene.','');
           } else {
             if (d.lout.length > 0) {d.class='ligand';} //  Ligand only, lime green
             if (d.lin.length > 0) {d.class='receptor';}   //  Receptor only, Very light blue
