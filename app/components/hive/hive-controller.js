@@ -37,14 +37,14 @@
       chart.nodeTooltip.html(function(d) {  // Todo: clean this up
         var s = d.name.split('.');
         var name = s[0];
-        var type = (d.genes.length === 1) ? toTitleCase(s[1]) : s[1];
         var html = [['<b>',name,'</b>']];
 
-        if (d.value > 0) {html.push([(d.genes.length > 1) ? 'Sum of' : '',type, 'expression:',valueFormat(d.value),'tpm']);}
+        if (d.values[0] > 0) {html.push([(d.lin.length > 1) ? 'Sum of' : '', 'Ligand expression:',valueFormat(d.values[0])]);}
+        if (d.values[1] > 0) {html.push([(d.lout.length > 1) ? 'Sum of' : '', 'Receptor expression:',valueFormat(d.values[1])]);}
         if (d.genes.length > 0)   {html.push(['Genes:',formatList(d.genes,4)]);}
 
         if (d.meta) {
-          var keys = ['Ligand.Name', 'Ligand.HGNCID', 'Ligand.UniprotID', 'Receptor.Name', 'Receptor.HGNCID', 'Receptor.UniprotID', 'Ligand.Taxon', 'Ligand.Age', 'Receptor.Taxon', 'Receptor.Age'];
+          var keys = ['Name', 'HGNCID', 'UniprotID','Taxon', 'Age'];
           keys.forEach(function(k) {
             html.push([k+':',d.meta[k]]);
           });
@@ -78,6 +78,8 @@
           value: 0,
           lout: [],
           lin: [],
+          out: [],
+          in: [],
           genes: [],
           ligands: [],  // remove these
           receptors: [],
@@ -96,41 +98,9 @@
         };
       }
 
-      function _makeNodes(pairs, cells, expr) {
+      /*       function _makeNodes(pairs, cells, expr) {
 
-        var _nodes = [];
-
-        ['Ligand','Receptor'].forEach(function(d,i) {
-          var type = d.toLowerCase();
-
-          cells.forEach(function(cell) {
-            var _node = new Node(cell.id,cell.name+'.'+type,'node.'+type);
-
-            pairs.forEach(function(_pair) {
-              var index = _pair.index[i];
-              var exprValue = +expr[index][_node.id+1];
-
-              if (exprValue > 0 && _node.genes.indexOf(_pair[d]) < 0) {
-                _node.genes.push(_pair[d]);
-                _node.value += +exprValue;
-              }
-            });
-
-            _nodes.push(_node);
-          });
-
-          //pairs.forEach(function(_pair) {
-          //  var _node = new Node(_pair.id,_pair[d]+'.'+type,type);
-          //  _nodes.push(_node);
-          //});
-
-        });
-
-        if (_nodes.length !== 2*cells.length) {
-          $log.error('Inconsistancy found in number of generated nodes.');
-        }
-
-        /* var nodes = cells.slice(0);
+        var nodes = cells;
 
         nodes.forEach(function(_node) {
 
@@ -157,14 +127,90 @@
             }
 
           });
+        });
+
+        //console.log(nodes);
+
+        data.nodeCount = nodes.length;
+
+        return nodes;
+
+      } */
+
+      function _makeNodes(pairs, cells, expr) {
+
+        var _nodes = cells.slice(0);
+
+        _nodes.forEach(function(_node) {
+          _node.type = 'node';
+          _node.genes = [];
+          _node.lout = [];
+          _node.lin = [];
+          _node.out = [];
+          _node.in = [];
+          _node.values = [0,0];
+          _node.value = 0;
+
+
+          pairs.forEach(function(_pair) {
+            ['Ligand','Receptor'].forEach(function(d,i) {
+              var index = _pair.index[i];
+              if (!expr[index]) { return; }
+              var exprValue = +expr[index][_node.id+1];
+
+              if (exprValue > 0 && _node.genes.indexOf(_pair[d]) < 0) {
+                _node.genes.push(_pair[d]);  // Change to hash of values?
+                _node.value += +exprValue;
+                _node.values[i] += +exprValue;
+              }
+
+            });
+          });
 
         });
 
-        return nodes; */
+        //console.log(_nodes.length, cells.length);
+
+        if (_nodes.length !== cells.length) {
+          $log.error('Inconsistancy found in number of generated nodes.');
+        }
 
         return _nodes;
 
       }
+
+      /* function _makeNodes(pairs, cells, expr) {
+
+        var _nodes = [];
+
+        ['Ligand','Receptor'].forEach(function(d,i) {
+          var type = d.toLowerCase();
+
+          cells.forEach(function(cell) {
+            var _node = new Node(cell.id,cell.name+'.'+type,'node.'+type);
+
+            pairs.forEach(function(_pair) {
+              var index = _pair.index[i];
+              var exprValue = +expr[index][_node.id+1];
+
+              if (exprValue > 0 && _node.genes.indexOf(_pair[d]) < 0) {
+                _node.genes.push(_pair[d]);
+                _node.value += +exprValue;
+              }
+            });
+
+            _nodes.push(_node);
+          });
+
+        });
+
+        if (_nodes.length !== 2*cells.length) {
+          $log.error('Inconsistancy found in number of generated nodes.');
+        }
+
+        return _nodes;
+
+      } */
 
       var _F = function(key) { return function(d) {return d[key];}; };
       var value = _F('value');
@@ -173,22 +219,31 @@
       var valueFilter = function(d) {return value(d)>0;};
       var typeFilter = function(type) { return function(d) {return d.type === type;}; };
 
+      var value0 = function(d) { return d.values[0]; };
+      var value1 = function(d) { return d.values[1]; };
+      var gtZero = function(d) {return d>0;};
+
       function _sortAndFilterNodes(nodes, options) {  //TODO: DRY this
 
         data.nodeCount = nodes.length;
 
         nodes = nodes.sort(valueComp).filter(valueFilter);    // Sort and filter out zeros
 
-        var ligands = nodes.filter(typeFilter('node.ligand'));
-        var topLigands = ligands.slice(0,options.ligandRankFilter*ligands.length+1);
+        var ranked0 = nodes.map(value0).filter(gtZero).sort(d3.ascending);
+        var ranked1 = nodes.map(value1).filter(gtZero).sort(d3.ascending);
 
-        var receptors = nodes.filter(typeFilter('node.receptor'));
-        var topReceptors = receptors.slice(0,options.receptorRankFilter*receptors.length+1);
+        data.ligandExtent = d3.extent(ranked0);
+        data.receptorExtent = d3.extent(ranked1);
 
-        data.ligandExtent = d3.extent(ligands,value);
-        data.receptorExtent = d3.extent(receptors,value);
+        var filter0 = d3.quantile(ranked0, 1-options.receptorRankFilter);
+        var filter1 = d3.quantile(ranked1, 1-options.ligandRankFilter);
 
-        return topLigands.concat(topReceptors);
+        filter0 = Math.max(filter0, 0);
+        filter1 = Math.max(filter1, 0);
+
+        return nodes.filter(function(d) {
+          return ( d.values[0] > filter0 || d.values[1] > filter1 );
+        });
       }
 
       /* function __sortAndFilterNodes(nodes, options) {
@@ -242,20 +297,51 @@
 
         var edges = [];
 
+        function matchKeys(meta, match) {  // Do this on load
+          var keys = d3.keys(meta);
+          var values = {};
+          
+          keys.forEach(function(k) {
+            if (k.match(match)) {
+              values[k.replace(match,'')] = meta[k];
+            }
+          });
+
+          return values;
+        }
+
+        var _l = {}, _r = {};
+
         pairs.forEach(function addLinks(_pair, i) {
           $log.debug('Constructing network for',_pair);
 
           var lindex = _pair.index[0];
           var rindex = _pair.index[1];
 
+          var _ligand = _l[_pair.Ligand];
+          if (!_ligand) {
+            _ligand = new Node(i,_pair.Ligand,'gene.ligand');
+            _ligand.meta = matchKeys(_pair, 'Ligand.');
+            nodes.push(_ligand);
+            _ligand.value = 0;  // Get real values
+            _ligand.values = [0,0];
+            _l[_pair.Ligand] = _ligand;
+            data.nodeCount++;
+          }
+
+          var _receptor = _r[_pair.Receptor];
+          if (!_receptor) {
+            _receptor = new Node(i,_pair.Receptor,'gene.receptor');
+            _receptor.meta = matchKeys(_pair, 'Receptor.');
+            _receptor.value = 0;  // Get real values
+            _receptor.values = [0,0];
+            nodes.push(_receptor);
+            _r[_pair.Receptor] = _receptor;
+            data.nodeCount++;
+          }
+
           var name = _pair.Ligand + ' -> ' + _pair.Receptor;
-
-          var _pairNode = new Node(i,name,'gene');  // Todo: move this?
-          _pairNode.meta = _pair;
-          //console.log(_pair);
-
-          nodes.push(_pairNode);
-          data.nodeCount++;
+          edges.push(new Edge(_ligand,_receptor));
 
           if (edges.length > MAXEDGES) {
             $log.warn('Maximum number of edges exceeded');
@@ -265,20 +351,22 @@
           data.nodes.forEach(function(_node) {
             if (!_node.type.match('node')) {return;}
 
-            var index = (_node.type === 'node.ligand') ? lindex : rindex;
-            var min = (_node.type === 'node.ligand') ? options.ligandFilter : options.receptorFilter;
+            [lindex,rindex].forEach(function(index,i) {
+              var min = (i === 0) ? options.ligandFilter : options.receptorFilter;
+              var row = expr[index]
+              if (!row) { return; }
+              var _expr = +row[_node.id+1];
 
-            var _expr = +expr[index][_node.id+1];
-            if (!_expr || _expr <= 0 || _expr < min) {return;}
+              if (!_expr || _expr <= 0 || _expr < min) {return;}
 
-            var _edge = (_node.type === 'node.ligand') ?
-              new Edge(_node,_pairNode) :
-              new Edge(_pairNode,_node);
+              var _edge = (i === 0) ?
+                new Edge(_node,_ligand) :
+                new Edge(_receptor,_node);
 
-            _edge.value = _expr;
+              _edge.value = _expr;
+              edges.push(_edge);
 
-            edges.push(_edge);
-
+            });
 
           });
 
@@ -359,17 +447,22 @@
           d.source.lout.push(i);
           d.target.lin.push(i);
 
-          d.count = d.source.lout.filter(function(_i) {
-            var _target = data.edges[_i].target;
-            return (_target === d.target);
+          d.count = d.source.lout.filter(function(_link) {
+            return (_link === d.target.index);
           }).length;
 
         });
 
-        //data.nodes = data.nodes.filter(function(d) {   // Filtered nodes
-        //  return true;
-        //  return (d.lout.length + d.lin.length) > 0;
-        //});
+        data.nodes.forEach(function(d) {
+          if (d.type.match(/gene/)) { 
+            d.class=d.type.replace('gene.','') 
+          } else {
+            if (d.lout.length > 0) {d.class='ligand';} //  Ligand only, lime green
+            if (d.lin.length > 0) {d.class='receptor';}   //  Receptor only, Very light blue
+            if (d.lout.length > 0 && d.lin.length > 0) {d.class='both';}   //  Both, Dark moderate magenta            
+          }
+          //console.log(d.ntype);
+        });
 
         cfpLoadingBar.complete();
 

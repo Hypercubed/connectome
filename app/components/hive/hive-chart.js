@@ -28,14 +28,14 @@
     // Private objects
     var zoom = d3.behavior.zoom();
 
-    var groups = ['node.ligand','gene','node.receptor'];
+    var groups = ['gene.ligand','gene.receptor','node'];
 
     // Scales
-    var ncolor = d3.scale.ordinal().domain(groups).range(['#ed1940','#a650e2','#3349ff']);
+    var ncolor = d3.scale.ordinal().domain(['ligand','both','receptor']).range(['#ed1940','yellow','#3349ff']); // ['#ed1940','#a650e2','#3349ff']
 
     var slog = d3.scale.log().range([2,9]).clamp(true);     // Maps value to normalized edge width
     var rsize = d3.scale.linear().range([3, 12]).clamp(true);  // Maps value to size
-    var angle = d3.scale.ordinal().domain(groups).range([4 * Math.PI/3, 0, 2 * Math.PI/3]);  // maps type to angle
+    var angle = d3.scale.ordinal().domain(groups).range([-Math.PI/4+Math.PI, Math.PI/4+Math.PI, 0]);  // maps type to angle
     var radius = d3.scale.linear();  // maps position to radius
 
     var _y = {};  // maps index to position
@@ -46,17 +46,17 @@
     // Accessors
     function value(d) { return d.value; }
     function linkName(d) { return d.source.name + ':' + d.name + ':' + d.target.name; }
-    function _ncolor(d) {  return ncolor(d.type); }
+    function _ncolor(d) {  return ncolor(d.class); }
 
     // Tooltips
     var nodeTooltip = chart.nodeTooltip = d3.tip().attr('class', 'd3-tip node').html(_F('name'));
     var linkTooltip = chart.linkTooltip = d3.tip().attr('class', 'd3-tip link').html(_F('name'));
 
-    nodeTooltip.offset(function() {
-      return [-this.getBBox().height / 2, -rsize(value(this.__data__))];
+    nodeTooltip.offset(function(d) {
+      return [-this.getBBox().height, 0]; //-2*this.getBBox().height
     });
 
-    var nodeClassed = function nodeClassed(name, value) {  // TODO: imporve this
+    /* var nodeClassed = function nodeClassed(name, value) {  // TODO: improve this
 
       if (arguments.length < 2) {value = true;}
       name = name || 'active';
@@ -69,20 +69,18 @@
       node.classed(name, value);
       data[name] = value;
 
-      links[0].forEach(function(d) {
-        var link = d3.select(d);
-        var index = d.__data__.index;
+      links.each(function(d) {
+        var link = d3.select(this);
+        var index = d.index;
 
-        var found = data.lout.indexOf(index) > -1 ||
-                    data.lin.indexOf(index) > -1;
-
-        if (found) {
+        if (data.lout.indexOf(index) > -1) {
           link.classed(name, value);
+          console.log(d.target);
         }
 
       });
 
-    };
+    }; */
 
     chart.draw = function draw(graph) {
 
@@ -115,6 +113,8 @@
         .sortKeys(d3.ascending)
         .entries(graph.nodes);
 
+      //console.log(nodesByType);
+
       nodesByType.forEach(function(type) { // Setup domain for position range
         //var group = groups.indexOf(type.key);  // TODO: eliminte y and node.group?
         _y[type.key].domain(d3.range(type.values.length));
@@ -134,8 +134,9 @@
       }
 
       function _labelAngle(d) {
-        var a = -_angle(d)-Math.PI;
-        if (a === -Math.PI) {return a;}
+        var a = -_angle(d)+Math.PI;
+        a = (a+2*Math.PI) % (2*Math.PI);
+        if (a > Math.PI/2 && a < 3*Math.PI/2) {return a;}
         return a+Math.PI/2;
       }
 
@@ -219,11 +220,77 @@
       var nodesEnter = nodes.enter().append('g')
           .classed('node', true)
           .style({fill: '#ccc','fill-opacity': 1,stroke: '#333','stroke-width': '1px'})
-          .on('dblclick', function(d) { d3.event.stopPropagation(); d.fixed = (d.fixed) ? false : true; nodeClassed.call(this, 'fixed', d.fixed); })
-          .on('mouseover.highlight', function() { nodeClassed.call(this, 'hover', true); })
-          .on('mouseout.highlight', function() { nodeClassed.call(this, 'hover', false); })
+          .on('dblclick', function(d) { 
+            d3.event.stopPropagation();
+            var node = d3.select(this);
+            d.fixed = (d.fixed) ? false : true;
+
+            nodes.classed('fixed', _F('fixed'));
+            links.classed('fixed', function(d) { return d.source.fixed && d.target.fixed; });
+          })
+          .on('mouseover.highlight', mouseoverHighlight) //function() { nodeClassed.call(this, 'hover', true); })
+          .on('mouseout.highlight', mouseoutHighlight) //function() { nodeClassed.call(this, 'hover', false); })
           .on('mouseover', nodeTooltip.show)
           .on('mouseout', nodeTooltip.hide);
+
+      function sign(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
+
+      function _mout(d, dir, key, value) {  // Abstract this into helper link d3.drag
+
+        var _dir = (dir <= 0) ? 'lin' : 'lout';
+        var _tgt = (dir <= 0) ? 'source' : 'target';
+
+        d[_dir]
+          .forEach(function(index) {
+            var d = graph.edges[index];
+            if(d) {
+              d[key] = value;
+              if (Math.abs(dir) > 1) {
+                d[_tgt][key] = value;
+                _mout(d[_tgt], dir - sign(dir), key, value);
+              }
+            }
+          });
+
+      }
+
+      function classLinks(dir, key, value) {  // Later us dir as recursion limit
+        if (arguments.length < 3) { value = true};
+
+        return function(d) {
+          _mout(d, dir, key, value);
+        }
+      }
+
+      function mouseoverHighlight(d) {
+        var node = d3.select(this);  
+
+        d.hover = true;
+
+        if (d.type === 'node') { 
+          node.each(classLinks(3, 'hover'));
+        } else {
+          var _l = d.class == "ligand";
+          node.each(classLinks(_l ? -1 : -2, 'hover'));
+          node.each(classLinks(_l ? +2 : +1, 'hover'));
+        }
+        
+        chart.container.classed('hover',true);
+        nodes.classed('hover', _F('hover'));
+        links.classed('hover', _F('hover'));
+      }
+
+      function mouseoutHighlight(d) {
+        chart.container.classed('hover',false);
+
+        nodes
+          .each(function(d) {d.hover = false; })
+          .classed('hover',false);
+
+        links
+          .each(function(d) {d.hover = false; })
+          .classed('hover',false);
+      }
 
       nodesEnter
         .append('rect');
@@ -246,7 +313,7 @@
       function _r(d) { return rsize(d.value); }
       function __r(d) { return -_r(d); }
       function _2r(d) { return 2*_r(d); }
-      function rx(d) { return (d.type === 'gene') ? 0 : _r(d); }
+      function rx(d) { return (d.type.match(/gene/)) ? 0 : _r(d); }
 
       nodes
         .select('rect')
@@ -261,8 +328,8 @@
       nodes
         .select('text')
           .text(name)
-          .attr('dy',function(d) { return (d.type === 'gene') ? 0 : 3; })
-          .attr('dx',function(d) { return (d.type === 'gene') ? 10 : 15; })
+          .attr('dy',function(d) { return (d.type.match(/gene/)) ? 0 : 3; })
+          .attr('dx',function(d) { return (d.type.match(/gene/)) ? 10 : 15; })
           ;
 
       nodes.exit().remove();

@@ -157,7 +157,7 @@
       .on('tick', tick);
 
     var groups = ['ligand','both','receptor'];
-    var ncolor = d3.scale.ordinal().domain(groups).range(['#ed1940','#a650e2','#3349ff']);
+    var ncolor = d3.scale.ordinal().domain(groups).range(['#ed1940','green','#3349ff']);  // ['#ed1940','#a650e2','#3349ff']
 
     // Scales
     //var color = d3.scale.log().range(['blue', 'green']);

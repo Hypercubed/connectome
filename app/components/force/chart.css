@@ -83,9 +83,9 @@ svg.hover .link.hover, .link:hover {
   opacity: 1 !important;
 }
 
-svg.fixed .link.fixed {
-  stroke: red;
-  opacity: 1;
+.link.fixed {
+  stroke: red !important;
+  opacity: 1 !important;
 }
 
 .target-arrow {
