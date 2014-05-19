@@ -4,8 +4,12 @@
 
   // Helpers
   //var _I = function(d, i) { return i; };
-  var _D = function(d) { return d; };
-  var _F = function(n) { return function(d) { return d[n]; }; };
+
+  var _F = function(n) { 
+    if (arguments.length < 1) { return function(d) { return d; }; }
+    return function(d) { return d[n]; };
+  };
+
   //var _AF = function(n) { return function(d) { return [d[n]]; }; };
 
   function degrees(radians) {
@@ -181,7 +185,7 @@
             .classed('links', true);
 
       links = gLinks.selectAll('path')
-          .data(_D, linkName);
+          .data(_F(), linkName);
 
       links.enter().append('svg:path')
         .classed('link', true)
@@ -214,7 +218,7 @@
 
       nodesLayer.selectAll('.node').remove();  // TODO: not this, hack to ensure nodes are stacked
 
-      nodes = nodesLayer.selectAll('.node').data(_D, _F('name'));
+      nodes = nodesLayer.selectAll('.node').data(_F(), _F('name'));
 
       function sign(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
 

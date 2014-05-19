@@ -341,7 +341,8 @@
           }
 
           //var name = _pair.Ligand + ' -> ' + _pair.Receptor;
-          edges.push(new Edge(_ligand,_receptor));
+          var _lredge = new Edge(_ligand,_receptor);
+          edges.push(_lredge);
 
           if (edges.length > MAXEDGES) {
             $log.warn('Maximum number of edges exceeded');
@@ -366,9 +367,13 @@
               _edge.value = _expr;
               edges.push(_edge);
 
+              _lredge.values[i] += _expr;
+
             });
 
           });
+
+          _lredge.value = _lredge.values[0] * _lredge.values[1];
 
         });
 
