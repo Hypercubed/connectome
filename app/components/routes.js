@@ -27,7 +27,7 @@
         resolve: { graphService: 'hiveGraph' },
         views: {
           'panel': { templateUrl: 'components/force/panel.html', controller: 'PanelCtrl' },
-          'header': { templateUrl: 'components/hive/hive-legend.html' }
+          'header': { template: '' }
         }
       });
 

@@ -17,6 +17,9 @@
   }
 
   var hiveGraph = function() {
+    var width = 500, height = 500;
+    var margin = { top: 120, right: 300, bottom: 240, left: 240};
+    //var padding = { top: 60, right: 100, bottom: 60, left: 60};
 
     function chart(selection) {
       selection.each(chart.draw);
@@ -24,10 +27,6 @@
 
     // elements
     var nodes, links;
-
-    // private
-    var width = 500,
-        height = 500;
 
     // Private objects
     var zoom = d3.behavior.zoom();
@@ -339,6 +338,44 @@
           ;
 
       nodes.exit().remove();
+
+      container.select('caxis').remove();  // TODO: not this
+
+      var _l = [
+        { label: 'Ligand expressing sample', class: 'ligand' },
+        { label: 'Receptor expressing sample', class: 'receptor' },
+        { label: 'Ligand and receptor expressing sample', class: 'both' },
+        { label: 'Ligand gene', class: 'ligand' },
+        { label: 'Receptor gene', class: 'receptor' }
+      ]
+
+      var _g = container.append('g')
+        .attr('class', 'axis caxis')
+        .attr('transform', 'translate('+(width-margin.right)+','+margin.top+')');
+
+      //_g.append('text')
+      //  .style({'stroke': 'none','fill': '#333','stroke-width': '1px','font-size': '10px'})
+      //  .text('Type');
+
+      _g = _g.selectAll('g').data(_l)
+          .enter().append('g')
+            //.on('mouseover', function(d) { highlight(d, cValue.key); })
+            //.on('mouseout', function() { highlight(null); })
+            .attr('transform', function(d,i) { return 'translate(0,'+((i+1)*20)+')' });
+
+      _g.append('rect')
+        .style({'stroke-width': '1px', 'stroke': 'rgb(51, 51, 51)'})
+        .attr('width', 15)
+        .attr('height', 15)
+          .attr('rx',function rx(d) { return (d.label.match(/gene/)) ? 0 : 15; })
+          .attr('ry',function rx(d) { return (d.label.match(/gene/)) ? 0 : 15; })
+        .style('fill', _ncolor);
+
+      _g.append('text')
+        .style({'stroke': 'none','fill': '#333','stroke-width': '1px','font-size': '10px'})
+        .attr('x', 20)
+        .attr('dy', '1.2em')
+        .text(_F('label'));
 
     };
 
