@@ -27,3 +27,5 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [ ] make hive and force directives
 - [ ] Raise alerts on internal limits
 - [ ] Page title
+- [ ] ontology
+- [ ] arrows

@@ -34,7 +34,7 @@
       //  return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
       //}
 
-      chart.nodeTooltip.html(function(d) {  // Todo: clean this up
+      var f = function(d) {  // Todo: clean this up
         var s = d.name.split('.');
         var name = s[0];
         var html = [['<b>',name,'</b>']];
@@ -51,7 +51,10 @@
         }
 
         return html.map(join).join('<br>');
-      });
+      };
+
+      chart.nodeTooltip.html(f);
+      chart.nodeLabelTooltip.html(f);
 
       chart.linkTooltip.html(function(d) {
         //var s = ''; //(selected.pairs.length > 1) ? 'Sum of' : '';
@@ -342,6 +345,7 @@
 
           //var name = _pair.Ligand + ' -> ' + _pair.Receptor;
           var _lredge = new Edge(_ligand,_receptor);
+          _lredge.type = 'pair';
           edges.push(_lredge);
 
           if (edges.length > MAXEDGES) {
@@ -365,6 +369,7 @@
                 new Edge(_receptor,_node);
 
               _edge.value = _expr;
+              _edge.type = 'expression';
               edges.push(_edge);
 
               _lredge.values[i] += _expr;
@@ -373,7 +378,7 @@
 
           });
 
-          _lredge.value = _lredge.values[0] * _lredge.values[1];
+          _lredge.value = 1;
 
         });
 
@@ -397,7 +402,7 @@
 
       function _clear() {
         $log.debug('Clearing');
-        d3.select('#vis svg g').remove();
+        d3.selectAll('#vis svg g').remove();
       }
 
       function _makeNetwork(pairs, cells, expr, options) {

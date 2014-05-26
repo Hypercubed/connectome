@@ -7,9 +7,13 @@
     .module('lrSpaApp', [ 'hc.slider', 'debounce', 'panels', 'ngAnimate', 'ui.router','chieffancypants.loadingBar','localytics.directives','snap','LocalStorageModule','ui.bootstrap','hc.downloader','angular-growl']);
 
   app
-  .config(function(localStorageServiceProvider){
-    localStorageServiceProvider.setPrefix('lr');
-  });
+    .constant('name','lr')
+    .constant('version','0.0.1');  // bump to clear local storage
+
+  app
+    .config(function(localStorageServiceProvider, name, version){
+      localStorageServiceProvider.setPrefix(name+'-'+version);
+    });
 
   app
     .config(function($logProvider) {

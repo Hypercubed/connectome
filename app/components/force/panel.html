@@ -59,33 +59,36 @@
   <accordion-group heading="Options" is-open="panelState.options" ng-class="{'collapsed': !panelState.options}">
     <div>
       Show node labels
-      <div class="pull-right small"><input type="checkbox" ng-model="options.showLabels"></div>
+      <div class="pull-right small"><input type="checkbox" ng-model="options.showLabels" /></div>
     </div>
 
-    <p/>
-      <span ng-click="go('home.force-graph')"><input type="radio" ng-model="state" value="home.force-graph"> force directed graph</span>
-      <br /><span ng-click="go('home.hive-graph')"><input type="radio" ng-model="state" value="home.hive-graph"> hive plot</span>
+    <p>
+      <span ng-click="go('home.force-graph')"><input type="radio" ng-model="state" value="home.force-graph" /> force directed graph</span>
+      <br /><span ng-click="go('home.hive-graph')"><input type="radio" ng-model="state" value="home.hive-graph" /> hive plot</span>
+    </p>
   </accordion-group>
 
   <accordion-group heading="Explanation" is-open="panelState.help" ng-class="{'collapsed': !panelState.help}">
+    <p>
     <ul>
-      <li>Select samples and node cut offs from node filter section.
-      <li>Select Ligand - Receptor pairs and edge cut offs from the edge filter section.
-      <li>Hover over nodes and edges to get more information.
-      <li>Click and drag nodes to move.
-      <li>Double click a node to fix in place.  Double click again to release.
+      <li>Select samples and node cut offs from node filter section.</li>
+      <li>Select Ligand - Receptor pairs and edge cut offs from the edge filter section.</li>
+      <li>Hover over nodes and edges to get more information.</li>
+      <li>Click and drag nodes to move.</li>
+      <li>Double click a node to fix in place.  Double click again to release.</li>
     </ul>
-
+    </p>
   </accordion-group>
 
   <accordion-group heading="Download" is-open="panelState.download" ng-class="{'collapsed': !panelState.download}">
 
-  <p>
-    <button class="btn btn-primary" svg-download="#vis" title="lr-graph">Vector graphic (svg)</button>
-    <button class="btn btn-default" ng-click="saveJson()">Data model (json)</button>
-  </p>
+    <p>
+      <button class="btn btn-primary" svg-download="#vis" title="lr-graph">Vector graphic (svg)</button>
+      <button class="btn btn-default" ng-click="saveJson()">Data model (json)</button>
+    </p>
 
   </accordion-group>
+
 </accordion>
 
 

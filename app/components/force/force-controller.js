@@ -294,7 +294,7 @@
 
       function _clear() {
         $log.debug('Clearing');
-        d3.select('#vis svg g').remove();
+        d3.selectAll('#vis svg g').remove();
       }
 
 

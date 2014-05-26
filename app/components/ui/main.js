@@ -45,7 +45,7 @@
         receptorFilter: 10,
         ligandRankFilter: 0.1,
         receptorRankFilter: 0.1,
-        edgeRankFilter: 0.1,
+        edgeRankFilter: 1,
       });
 
       var graph = graphService;  // TODO:  don't need this
