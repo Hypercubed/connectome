@@ -8,76 +8,110 @@
 
   app
     .constant('EXPRESSIONFILE', 'data/LR.expr.txt')
-    .constant('PAIRSFILE', 'data/LR.pairs.txt');
+    .constant('PAIRSFILE', 'data/LR.pairs.txt')
+    .constant('ONTOLGYFILE', 'data/ontology.txt');
 
   app
-    .service('ligandReceptorData', function($q, $log,$http,EXPRESSIONFILE,PAIRSFILE) {
+    .service('ligandReceptorData', function($q, $log,$http,EXPRESSIONFILE,PAIRSFILE,ONTOLGYFILE) {
       var service = {};
 
       service.data = {};
       service.data.expr = [];
       service.data.pairs = [];
       service.data.cells = [];
+      service.data.ontology = [];
 
-      service.load = function() {
-        var getPairs = $http.get(PAIRSFILE, {cache: true})
-          .success(function(data) {
-            data = d3.tsv.parse(data);
+      var _getPairs = function(filename) {
+        return $http.get(filename, {cache: true})
+          .error(function(data, status, headers, config) {
+            $log.warn('Error',data, status, headers, config);
+          })
+          .then(function(response) {
+            var _data = d3.tsv.parse(response.data);
 
-            $log.debug('Pairs loaded:',data.length);
+            $log.debug('Pairs loaded:',_data.length);
 
-            data.forEach(function(d,i) {
+            _data.forEach(function(d,i) {
               d.id = i;
             });
 
+            return _data;
+
             service.data.pairs = data;
 
-          }).error(function(data, status, headers, config) {
-            $log.warn('Error',data, status, headers, config);
           });
+      }
 
-        var getExpression = $http.get(EXPRESSIONFILE, {cache: true})
-          .success(function(data) {
-            data = d3.tsv.parseRows(data);
+      var _getExpression = function(filename) {
+        return $http.get(filename, {cache: true})
+          .error(function(data, status, headers, config) {
+            $log.warn('Error',data, status, headers, config);
+          })
+          .then(function(response) {
+            var _data = d3.tsv.parseRows(response.data);
 
-            $log.debug('Genes loaded:',data.length);
-
-            service.data.expr = data;
-
-            service.data.cells = data[0].slice(1).map(function(d,i) {
-              return { name: d, id: i };
-            });
-
+            $log.debug('Genes loaded:',_data.length);
             $log.debug('Samples loaded:',service.data.cells.length);
 
-          }).error(function(data, status, headers, config) {
+            return _data;
+          });
+      }
+
+      var _getOntology = function(filename) {
+        return $http.get(filename, {cache: true})
+          .error(function(data, status, headers, config) {
             $log.warn('Error',data, status, headers, config);
+          })
+          .then(function(data) {
+
+            var _ontology = {};
+
+            d3.tsv.parse(data.data).forEach(function(_item) {
+              _ontology[_item.Cell] = _item.Ontology;
+            });
+
+            return _ontology;
           });
+      }
 
-        return $q.all([getPairs, getExpression]).then(function() {
-          $log.debug('Done loading');
+      service.load = function() {
 
-          var _expr = service.data.expr;
+        return $q.all([_getPairs(PAIRSFILE), _getExpression(EXPRESSIONFILE), _getOntology(ONTOLGYFILE)])
+          .then(function(data) {
+            $log.debug('Done loading');
 
-          service.data.pairs.forEach(function(_pair) {  // Get ligand and receptor indecies in expression table
+            var _pairs = service.data.pairs = data[0];
+            var _expr = service.data.expr = data[1];
+            var _ontology = data[2];
+            
+            service.data.cells = _expr[0].slice(1).map(function(d,i) {
+              var _cell = { name: d, id: i };
+              var _o = _ontology[d];
+              if (_o) {
+                _cell.meta = _cell.meta || {};
+                _cell.meta.Ontology = _o;
+              }
+              return _cell;
+            });
 
-            _pair.index = [-1,-1];
+            _pairs.forEach(function(_pair) {  // Get ligand and receptor indecies in expression table
+              _pair.index = [-1,-1];
 
-            for (var i = 1; i < _expr.length; i++) {  // start from 1, skipping header
-              var gene = _expr[i][0];
+              for (var i = 1; i < _expr.length; i++) {  // start from 1, skipping header
+                var gene = _expr[i][0];
 
-              if (gene === _pair.Ligand)   {_pair.index[0] = i;}
-              if (gene === _pair.Receptor) {_pair.index[1] = i;}
+                if (gene === _pair.Ligand)   {_pair.index[0] = i;}
+                if (gene === _pair.Receptor) {_pair.index[1] = i;}
 
-              if (_pair.index[0] > -1 && _pair.index[1] >-1) {break;}
-            }
+                if (_pair.index[0] > -1 && _pair.index[1] >-1) {break;}
+              }
 
-            if (_pair.index[0] < 0 || _pair.index[1] < 0) {
-              $log.warn('Ligand or receptor missing from expression table');
-            }
+              if (_pair.index[0] < 0 || _pair.index[1] < 0) {
+                $log.warn('Ligand or receptor missing from expression table');
+              }
+            });
 
           });
-        });
       };
 
       return service;
@@ -114,6 +148,15 @@
 
         if (d.ligands.length > 0)   {html.push(['Ligands:',formatList(d.ligands,4)]);}
         if (d.receptors.length > 0) {html.push(['Receptors:',formatList(d.receptors,4)]);}
+
+        if (d.meta) {
+          var keys = ['Name', 'Ontology', 'HGNCID', 'UniprotID','Taxon', 'Age'];
+          keys.forEach(function(k) {
+            if (d.meta[k]) {
+              html.push([k+':',d.meta[k]]);
+            }
+          });
+        }
 
         return html.map(join).join('<br>');
       });

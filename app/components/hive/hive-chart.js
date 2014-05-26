@@ -66,7 +66,6 @@
       return [0, -40]; //-2*this.getBBox().height
     });
 
-
     nodeTooltip.offset(function() {
       //console.log(this.getBBox().width);
       return [0, -20]; //-2*this.getBBox().height
@@ -233,8 +232,9 @@
             var d = graph.edges[index];
             if(d) {
               d[key] = value;
+              d[_tgt][key] = value;
               if (Math.abs(dir) > 1) {
-                d[_tgt][key] = value;
+                //d[_tgt][key] = value;
                 _mout(d[_tgt], dir - sign(dir), key, value);
               }
             }
@@ -321,7 +321,7 @@
           return 'rotate( '+degrees(_angle(d))+' ) translate(' + _radius(d) + ') rotate( '+degrees(_labelAngle(d))+' )';
         });
 
-      var _r = _F('value', rsize);  //function _r(d) { return rsize(d.value); }
+      var _r = function _r(d) { return (d.type.match(/gene/)) ? 5 : rsize(d.value); }
       function __r(d) { return -_r(d); }
       function _2r(d) { return 2*_r(d); }
       function rx(d) { return (d.type.match(/gene/)) ? 0 : _r(d); }
@@ -348,21 +348,24 @@
       function highlight(d) {
 
         if (d === null) {
+          container.classed('hover', false);
           nodes.style('opacity', 1).classed('hover', false);
           labels.style('opacity', 1).classed('hover', false);
           return;
         }
 
         var h = _type.eq(d.type).and(_class.eq(d.class));
-        var o = function o(n) { return h(n) ? 1 : 0.3; };
+        var o = function o(n) { return h(n) ? 1 : 0.2; };
 
         nodes
-          .style('opacity', o)
+          //.style('opacity', o)
           .classed('hover', h);
 
         labels
-          .style('opacity', o)
+          //.style('opacity', o)
           .classed('hover', h);
+
+        container.classed('hover', true);
 
       };
 

@@ -46,12 +46,6 @@ svg.labels .node text {
   display: inherit;
 } 
 
-.node:hover, .node.hover {
-  stroke: #333;
-  fill: blue;
-  stroke-width: 2px;
-}
-
 .node:hover text, .node.hover text, .node.fixed text {
   font-size: 18px !important;
 }
@@ -80,6 +74,14 @@ svg.hover .link {
 
 svg.hover .link.hover, .link:hover {
   stroke: blue !important;
+  opacity: 1 !important;
+}
+
+svg.hover .node {
+  opacity: 0.1 !important;
+}
+
+svg.hover .node.hover, svg.hover .node:hover {
   opacity: 1 !important;
 }
 
@@ -142,6 +144,11 @@ svg.hover .link.hover, .link:hover {
 }
 
 /* Creates a small triangle extender for the tooltip */
+.d3-tip {
+  -webkit-transition: top 0.5s;
+  transition: top 0.5s;
+}
+
 .d3-tip:after {
   box-sizing: border-box;
   display: inline;

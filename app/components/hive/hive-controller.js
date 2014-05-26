@@ -44,9 +44,11 @@
         if (d.genes.length > 0)   {html.push(['Genes:',formatList(d.genes,4)]);}
 
         if (d.meta) {
-          var keys = ['Name', 'HGNCID', 'UniprotID','Taxon', 'Age'];
+          var keys = ['Name', 'Ontology', 'HGNCID', 'UniprotID','Taxon', 'Age'];
           keys.forEach(function(k) {
-            html.push([k+':',d.meta[k]]);
+            if (d.meta[k]) {
+              html.push([k+':',d.meta[k]]);
+            }
           });
         }
 
