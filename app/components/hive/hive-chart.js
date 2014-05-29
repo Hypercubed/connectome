@@ -159,12 +159,13 @@
 
       container.select('defs').remove();
 
-      container.append('defs')
+      var defs = container.append('defs')
+        .selectAll('marker').data(graph.edges).enter()
         .append('svg:marker')
             .attr('class', 'Triangle')
             .attr('viewBox', '0 -5 10 10')
-            .attr('refY', -2)
-            .attr('refX', -15)
+            .attr('refY', 0)
+            .attr('refX', 20)
             .attr('markerWidth', 10)
             .attr('markerHeight', 10)
             .attr('stroke-width', 1)
@@ -172,9 +173,10 @@
             //.style('fill', 'black')
             .attr('markerUnits','userSpaceOnUse')
             .attr('orient', 'auto')
-            .attr('id', 'arrow')
-            .append('svg:path')
-              .attr('d', 'M0,-5L10,0L0,5');
+            .attr('id', function(d,i) { return 'arrow-'+i; });
+
+      defs.append('svg:path')
+        .attr('d', 'M0,-5L10,0L0,5');
 
       // LINKS
       var gLinks = g.selectAll('g.links').data([graph.edges]);
@@ -202,10 +204,28 @@
         .attr('id', function(d) { return 'link-'+d.index; })
         .style('stroke-width', _slog)
         .attr('d', hiveLink)
-        .attr('marker-start', function(d) { return d.type === 'pair' ? 'url(#arrow)' : ''; })
+        .attr('marker-end', function(d,i) { 
+          return d.type === 'pair' ? 'url(#arrow-'+i+')' : ''; 
+        })
         ;
 
       links.exit().remove();
+
+      links.each(function(d, i) {
+        if (d.type !== 'pair') return;
+
+        var def = d3.select(defs[0][i]);
+        var dy = def.attr('refX');
+
+        var l = this.getTotalLength();
+        var p0 = this.getPointAtLength(l);
+        var pm1 = this.getPointAtLength(l-dy);
+
+        var a = Math.atan((pm1.y-p0.y)/(pm1.x-p0.x));
+
+        def
+          .attr('orient', degrees(a-Math.PI/2));
+      });
 
       // NODES
       var nodesLayer = g.selectAll('g.nodes').data([graph.nodes]);
@@ -320,6 +340,12 @@
         .attr('transform', function(d) {
           return 'rotate( '+degrees(_angle(d))+' ) translate(' + _radius(d) + ') rotate( '+degrees(_labelAngle(d))+' )';
         });
+
+      nodes.each(function(d) {  // Store the x-y position for output
+        var b = this.getBoundingClientRect();
+        d.x = b.left;
+        d.y = b.top;
+      });
 
       var _r = function _r(d) { return (d.type.match(/gene/)) ? 5 : rsize(d.value); }
       function __r(d) { return -_r(d); }

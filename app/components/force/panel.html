@@ -82,10 +82,11 @@
 
   <accordion-group heading="Download" is-open="panelState.download" ng-class="{'collapsed': !panelState.download}">
 
-    <p>
-      <button class="btn btn-primary" svg-download="#vis" title="lr-graph">Vector graphic (svg)</button>
-      <button class="btn btn-default" ng-click="saveJson()">Data model (json)</button>
-    </p>
+    <div class="btn-vert-block">
+      <button class="btn btn-primary col-xs-12" svg-download="#vis" filename="lr-graph"  title="Vector graphic in SVG format">Vector graphic (svg)</button>
+      <button class="btn btn-default col-xs-12" ng-click="saveJson()" filename="lr-graph" title="Download data in Cytoscape compatable JSON">Graph data (JSON)</button>
+      <button class="btn btn-default col-xs-12" ng-click="saveGml()" filename="lr-graph" title="Download data in GML format">Graph data (GML)</button>
+    </div>
 
   </accordion-group>
 

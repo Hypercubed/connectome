@@ -21,7 +21,8 @@
     "angular-animate": "~1.2.16",
     "angular-slider-widget": "Hypercubed/angular-slider-widget#~0.0.2",
     "angular-local-storage": "https://github.com/grevory/angular-local-storage.git#master",
-    "_F": "Hypercubed/_F#~0.0.2"
+    "_F": "Hypercubed/_F#~0.0.2",
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",

@@ -7,7 +7,7 @@
   var app = angular.module('lrSpaApp');
 
   app
-    .service('hiveGraph', function($log, $window, growl, cfpLoadingBar) {  // TODO: should be a directive
+    .service('hiveGraph', function($log, $window, growl, cfpLoadingBar, name, version) {  // TODO: should be a directive
 
       var data = {
         nodes: {},
@@ -80,14 +80,14 @@
           id: id,
           name: name,
           type: type,
-          value: 0,
           lout: [],
           lin: [],
-          out: [],
-          in: [],
+          //out: [],
+          //in: [],
           genes: [],
-          ligands: [],  // remove these
-          receptors: [],
+          //ligands: [],  // remove these
+          //receptors: [],
+          value: 0,
           values: [100,100]
         };
       }
@@ -280,7 +280,7 @@
 
       } */
 
-      var MAXEDGES = 1000;
+      var MAXEDGES = 10000;
 
       var StopIteration = new Error('Maximum number of edges exceeded');
 
@@ -320,9 +320,6 @@
         pairs.forEach(function addLinks(_pair, i) {
           $log.debug('Constructing network for',_pair);
 
-          var lindex = _pair.index[0];
-          var rindex = _pair.index[1];
-
           var _ligand = _l[_pair.Ligand];
           if (!_ligand) {
             _ligand = new Node(i,_pair.Ligand,'gene.ligand');
@@ -332,6 +329,8 @@
             _ligand.values = [0,0];
             _l[_pair.Ligand] = _ligand;
             data.nodeCount++;
+
+            _linkNodes(0, _ligand);
           }
 
           var _receptor = _r[_pair.Receptor];
@@ -343,6 +342,8 @@
             nodes.push(_receptor);
             _r[_pair.Receptor] = _receptor;
             data.nodeCount++;
+
+            _linkNodes(1, _receptor);
           }
 
           //var name = _pair.Ligand + ' -> ' + _pair.Receptor;
@@ -351,34 +352,35 @@
           edges.push(_lredge);
 
           if (edges.length > MAXEDGES) {
-            $log.warn('Maximum number of edges exceeded');
+            $log.warn('Maximum number of edges exceeded', edges.length);
             throw StopIteration;
           }
 
-          data.nodes.forEach(function(_node) {
-            if (!_node.type.match('node')) {return;}
+          function _linkNodes(i, target) {
 
-            [lindex,rindex].forEach(function(index,i) {
-              var min = (i === 0) ? options.ligandFilter : options.receptorFilter;
-              var row = expr[index];
-              if (!row) { return; }
+            var index = _pair.index[i];
+            var row = expr[index];
+            if (!row) { return; }
+
+            var min = (i === 0) ? options.ligandFilter : options.receptorFilter;
+
+            data.nodes.forEach(function(_node) {
+              if (!_node.type.match('node')) {return;}
+
               var _expr = +row[_node.id+1];
 
               if (!_expr || _expr <= 0 || _expr < min) {return;}
 
               var _edge = (i === 0) ?
-                new Edge(_node,_ligand) :
-                new Edge(_receptor,_node);
+                new Edge(_node,target) :
+                new Edge(target,_node);
 
               _edge.value = _expr;
               _edge.type = 'expression';
               edges.push(_edge);
 
-              _lredge.values[i] += _expr;
-
-            });
-
-          });
+            });            
+          }
 
           _lredge.value = 1;
 
@@ -480,28 +482,159 @@
 
       }
 
+      function __getDATA() {  // This is hive version, move to service
+        var _json = { 
+
+        };
+
+        _json.nodes = data.nodes.map(function(node, i) {
+
+          var _n = { 
+            data: {
+              id: i,
+              name: node.name,
+              type: node.type.split('.')[1] || 'sample',
+              value: String(node.value),
+              genes: node.genes
+            },
+            position: {
+              x: node.x,
+              y: node.y
+            }
+          };
+
+          _.extend(_n.data, node.meta);
+
+          return _n;
+        });
+
+        _json.edges = data.edges.map(function(edge) {
+          return {
+            data: {
+              id: edge.index,
+              name: edge.name,
+              source: data.nodes.indexOf(edge.source),
+              target: data.nodes.indexOf(edge.target),
+              value: String(edge.value)
+            }
+          };
+        });
+
+        return _json;
+      }
+
       function _getJSON() {  // This is hive version, move to service
-        var _json = {};
+        var _json = { 
+          "format_version" : "1.0",
+          "generated_by" : [name,version].join('-'),
+          "target_cytoscapejs_version" : "~2.1",
+          data: {}, 
+          elements: __getDATA()
+        };
 
-        _json.nodes = data.nodes.map(function(node) {
-          return {
-            name: node.name,
-            type: node.type.split('.')[1],
-            value: node.value,
-            genes: node.genes
-          };
+        _json.elements.nodes.forEach(function(d) {
+          d.data.id = String(d.data.id);
         });
 
-        _json.links = data.edges.map(function(edge) {
-          return {
-            name: edge.name,
-            source: data.nodes.indexOf(edge.source),
-            target: data.nodes.indexOf(edge.target),
-            value: edge.value
-          };
+        _json.elements.edges.forEach(function(d) {
+          d.data.id = String(d.data.id);
+          d.data.source = String(d.data.source);
+          d.data.target = String(d.data.target);
         });
+
+
 
         return JSON.stringify(_json);
+      }
+
+      function _getGML() {  // This is hive version, move to service
+
+        var _data = __getDATA();
+
+        var _gml = [];
+        _gml.push('graph [');
+
+        _data.nodes.forEach(function(d) {
+          _gml.push('  node [');
+          var e = _.map(d.data, convert).map(indent(4));
+          _gml = _gml.concat(e);
+
+          _gml.push('    graphics [');
+
+          _gml.push(indent(6)(convert(d.position, 'center')));
+
+          _gml.push('    ]');
+
+          _gml.push('  ]');
+        });
+
+        _data.edges.forEach(function(d) {
+          _gml.push('  edge [');
+          var e = _.map(d.data, convert).map(indent(4)); //function(v,k) { return '    '+convert(v,k); } );
+          _gml = _gml.concat(e);
+          _gml.push('  ]');
+        });
+
+        _gml.push(']');
+
+        return _gml.join('\n');       
+
+        function quote(str,start,stop) {
+          return '"'+str+'"';
+        }
+
+        function indent(n, p) {
+          n = n || 2;
+          p = p || ' ';
+          var pp = strRepeat(p, n);
+          return function(s) {
+            return pp+s;
+          }
+        }
+
+        function strRepeat(str, qty){
+          if (qty < 1) return '';
+          var result = '';
+          while (qty > 0) {
+            if (qty & 1) result += str;
+            qty >>= 1, str += str;
+          }
+          return result;
+        };
+
+        function convert(obj, k) {
+          if (_.isString(obj)) return [k,quote(obj)].join(' ');
+          if (_.isArray(obj)) {return [k,quote(String(obj))].join(' ')};
+          if (_.isObject(obj)) {
+            var e = _.map(obj, convert);
+            e.unshift(k,'[');
+            e.push(']');
+            return e.join(' ');
+          }
+          return [k,String(obj)].join(' ');
+        }
+
+        /*data.nodes.forEach(function(node, i) {
+          _gml.push(['  node','[']);
+          _gml.push(['    id',String(i)]);
+          _gml.push(['    label',quote(node.name)]);
+          _gml.push(['    type',quote(node.type.split('.')[1] || 'sample')]);
+          _gml.push(['    value',String(node.value)]);
+          _gml.push(['    genes',quote(String(node.genes))]);
+          _gml.push(['  ]']);
+        });*/
+
+        /* data.edges.forEach(function(edge,  i) {
+          _gml.push(['  edge','[']);
+          _gml.push(['    id',String(edge.index)]);
+          _gml.push(['    label',quote(edge.name)]);
+          _gml.push(['    source',String(data.nodes.indexOf(edge.source))]);
+          _gml.push(['    target',String(data.nodes.indexOf(edge.target))]);
+          _gml.push(['    value',String(edge.value)]);
+          _gml.push(['  ]']);
+        }); */
+
+
       }
 
       return {
@@ -510,7 +643,8 @@
         makeNetwork: _makeNetwork,
         draw: _draw,
         clear: _clear,
-        getJSON: _getJSON
+        getJSON: _getJSON,
+        getGML: _getGML
       };
 
     });

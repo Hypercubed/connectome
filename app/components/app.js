@@ -7,7 +7,7 @@
     .module('lrSpaApp', [ 'hc.slider', 'debounce', 'panels', 'ngAnimate', 'ui.router','chieffancypants.loadingBar','localytics.directives','snap','LocalStorageModule','ui.bootstrap','hc.downloader','angular-growl']);
 
   app
-    .constant('name','lr')
+    .constant('name','ligand-receptor-connectome')  // Change this to one meta object
     .constant('version','0.0.1');  // bump to clear local storage
 
   app

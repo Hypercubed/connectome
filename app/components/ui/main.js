@@ -67,6 +67,13 @@
         saveAs(blob, 'lr-graph.json');
       };
 
+      $scope.saveGml = function() {  // TODO: a service?
+        var txt = graph.getGML();
+        var blob = new Blob([txt], { type: 'data:text/gml' });
+        saveAs(blob, 'lr-graph.gml');
+      };
+
+
       /* Load Data */
       $scope.selected = {
         pairs: [],
