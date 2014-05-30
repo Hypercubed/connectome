@@ -17,15 +17,15 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [x] Move network stuff to a service
 - [ ] dat.gui ish
 - [x] hive plot
-- [ ] deploy using grunt
+- [x] deploy using grunt
 - [ ] debounce number input
 - [ ] debouce more
-- [ ] add limits to avoid lockup
+- [x] add limits to avoid lockup
 - [x] Fix range... gain
 - [ ] Change edge and node rank filters
 - [ ] combine hive and force controller
 - [ ] make hive and force directives
-- [ ] Raise alerts on internal limits
+- [x] Raise alerts on internal limits
 - [ ] Page title
-- [ ] ontology
-- [ ] arrows
+- [x] ontology
+- [x] arrows

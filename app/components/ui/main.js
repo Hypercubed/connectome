@@ -80,12 +80,15 @@
         cells: []
       };
 
-      var _id = function(d) { return d.id; };
+      var _id = _F('id');
+      var _index = _F('$index');
 
       function saveSelection() {
 
         $scope.pairs = $scope.selected.pairs.map(_id);
         $scope.cells = $scope.selected.cells.map(_id);
+
+        //console.log($scope.cells);
 
         //localStorageService.set('pairs', _pairs);
         //localStorageService.set('cells', _cells);
@@ -98,10 +101,15 @@
       function loadSelection() {
 
         function _idin(arr) {
-          return function(d) {
-            d.ticked = arr.indexOf(d.id) > -1;
-            return d.ticked;
+          return function(d,i) {
+            return d.ticked = arr.indexOf(d.id) > -1;
           };
+        }
+
+        function setTicked(v) {
+          return function(d) {
+            d.ticked = v;
+          }
         }
 
         //var _pairs = localStorageService.get('pairs') || [317];
@@ -109,16 +117,23 @@
 
         $log.debug('load from local storage');
 
-        //console.log($scope.data.cells.map(_id));
-
         localStorageService.bind($scope, 'pairs', [317]);
-        localStorageService.bind($scope, 'cells', $scope.data.cells.map(_id));
+        localStorageService.bind($scope, 'cells', []);
 
-        //if (_pairs.length < 1) { _pairs = [317]; }
-        //if (_cells.length < 1) { _cells = [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]; }
+        if ($scope.cells.length < 1) { 
+          $scope.cells = $scope.data.cells.map(_id);
+        }
+
+        //$scope.selected.pairs = _.at($scope.data.pairs, $scope.pairs);
+        //$scope.selected.cells = _.at($scope.data.cells, $scope.cells);
+
+        //$scope.selected.pairs.forEach(setTicked(true));
+        //$scope.selected.cells.forEach(setTicked(true));
 
         $scope.selected.pairs = $scope.data.pairs.filter(_idin($scope.pairs));
         $scope.selected.cells = $scope.data.cells.filter(_idin($scope.cells));
+
+
 
         //TODO: not this
         //graph.graph.ligandRange = localStorageService.get('ligandRange') || graph.graph.ligandRange;
