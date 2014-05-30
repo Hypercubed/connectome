@@ -21,7 +21,7 @@
       service.data.cells = [];
       service.data.ontology = [];
 
-      var _getPairs = function(filename) {
+      function _getPairs(filename) {
         return $http.get(filename, {cache: true})
           .error(function(data, status, headers, config) {
             $log.warn('Error',data, status, headers, config);
@@ -33,16 +33,15 @@
 
             _data.forEach(function(d,i) {
               d.id = i;
+              d.name = d.Ligand + '-' + d.Receptor;
             });
 
             return _data;
 
-            service.data.pairs = data;
-
           });
       }
 
-      var _getExpression = function(filename) {
+      function _getExpression(filename) {
         return $http.get(filename, {cache: true})
           .error(function(data, status, headers, config) {
             $log.warn('Error',data, status, headers, config);
@@ -57,7 +56,7 @@
           });
       }
 
-      var _getOntology = function(filename) {
+      function _getOntology(filename) {
         return $http.get(filename, {cache: true})
           .error(function(data, status, headers, config) {
             $log.warn('Error',data, status, headers, config);
@@ -80,7 +79,7 @@
           .then(function(data) {
             $log.debug('Done loading');
 
-            var _pairs = service.data.pairs = data[0];
+            var _pairs = data[0];
             var _expr = service.data.expr = data[1];
             var _ontology = data[2];
             
@@ -94,7 +93,8 @@
               return _cell;
             });
 
-            _pairs.forEach(function(_pair) {  // Get ligand and receptor indecies in expression table
+            service.data.pairs = _pairs.filter(function(_pair) {
+
               _pair.index = [-1,-1];
 
               for (var i = 1; i < _expr.length; i++) {  // start from 1, skipping header
@@ -108,7 +108,10 @@
 
               if (_pair.index[0] < 0 || _pair.index[1] < 0) {
                 $log.warn('Ligand or receptor missing from expression table');
+                return false;
               }
+
+              return true;
             });
 
           });
@@ -191,6 +194,12 @@
           _node.values = [0,0];
 
           pairs.forEach(function(_pair) {
+
+            if(_pair.index[0] === -1 || _pair.index[1] === -1) {
+              $log.warn('Ligand or receptor missing from expression table');
+              //console.log(_pair.Ligand+'-'+_pair.Receptor);
+              return;
+            }
 
             var exprValues = _pair.index.map(function(_index) {
               return +expr[_index][_node.id+1];

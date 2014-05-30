@@ -93,18 +93,21 @@
         //localStorageService.set('receptorRange', graph.graph.receptorRange);
       }
 
+
+
       function loadSelection() {
 
         function _idin(arr) {
           return function(d) {
-            return arr.indexOf(d.id) > -1;
+            d.ticked = arr.indexOf(d.id) > -1;
+            return d.ticked;
           };
         }
 
         //var _pairs = localStorageService.get('pairs') || [317];
         //var _cells = localStorageService.get('cells') || [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26];
 
-        $log.debug('load from local stoarge');
+        $log.debug('load from local storage');
 
         //console.log($scope.data.cells.map(_id));
 
@@ -124,6 +127,7 @@
       }
 
       ligandReceptorData.load().then(function() {
+
         $scope.data = ligandReceptorData.data;
 
         loadSelection();

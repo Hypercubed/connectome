@@ -42,13 +42,13 @@
     var _name = _F('name');
     var _class = _F('class');
     var _fixed = _F('fixed');
-    var _edge_fixed = _F('source',_fixed).and(_F('target',_fixed));
+    var _edgeFixed = _F('source',_fixed).and(_F('target',_fixed));
     var _hover = _F('hover');
 
-    var linkName = function(d) { return [d.source.name, d.name, d.target.name].join(':'); }
+    var linkName = function(d) { return [d.source.name, d.name, d.target.name].join(':'); };
     var nodeName = function(d) {  // TODO: not this
       return d.name.split('.')[0];
-    }
+    };
 
     // Range accesors
     var _angle = _F('type', angle); //function(d) { return angle(d.type); };
@@ -204,15 +204,15 @@
         .attr('id', function(d) { return 'link-'+d.index; })
         .style('stroke-width', _slog)
         .attr('d', hiveLink)
-        .attr('marker-end', function(d,i) { 
-          return d.type === 'pair' ? 'url(#arrow-'+i+')' : ''; 
+        .attr('marker-end', function(d,i) {
+          return d.type === 'pair' ? 'url(#arrow-'+i+')' : '';
         })
         ;
 
       links.exit().remove();
 
       links.each(function(d, i) {
-        if (d.type !== 'pair') return;
+        if (d.type !== 'pair') {return;}
 
         var def = d3.select(defs[0][i]);
         var dy = def.attr('refX');
@@ -311,7 +311,7 @@
             d.fixed = (d.fixed) ? false : true;
 
             nodes.classed('fixed', _fixed);
-            links.classed('fixed', _edge_fixed); //function(d) { return d.source.fixed && d.target.fixed; });
+            links.classed('fixed', _edgeFixed); //function(d) { return d.source.fixed && d.target.fixed; });
           })
           .on('mouseover.highlight', mouseoverHighlight) //function() { nodeClassed.call(this, 'hover', true); })
           .on('mouseout.highlight', mouseoutHighlight) //function() { nodeClassed.call(this, 'hover', false); })
@@ -347,7 +347,7 @@
         d.y = b.top;
       });
 
-      var _r = function _r(d) { return (d.type.match(/gene/)) ? 5 : rsize(d.value); }
+      function _r(d) { return (d.type.match(/gene/)) ? 5 : rsize(d.value); }
       function __r(d) { return -_r(d); }
       function _2r(d) { return 2*_r(d); }
       function rx(d) { return (d.type.match(/gene/)) ? 0 : _r(d); }
@@ -381,7 +381,7 @@
         }
 
         var h = _type.eq(d.type).and(_class.eq(d.class));
-        var o = function o(n) { return h(n) ? 1 : 0.2; };
+        //function o(n) { return h(n) ? 1 : 0.2; };
 
         nodes
           //.style('opacity', o)
@@ -393,7 +393,7 @@
 
         container.classed('hover', true);
 
-      };
+      }
 
       var _l = [
         { name: 'Ligand expressing sample', class: 'ligand', type: 'node' },
@@ -401,7 +401,7 @@
         { name: 'Ligand and receptor expressing sample', class: 'both', type: 'node' },
         { name: 'Ligand gene', class: 'ligand', type: 'gene.ligand' },
         { name: 'Receptor gene', class: 'receptor', type: 'gene.receptor' }
-      ]
+      ];
 
       container.selectAll('.caxis').remove();  // TODO: not this
 
@@ -412,7 +412,7 @@
           .attr('class', 'label')
           .on('mouseover', _F(null, highlight)) //function(d) { highlight(d); })  //function(d) { highlight(d); }
           .on('mouseout', function() { highlight(null); })
-          .attr('transform', function(d,i) { return 'translate(0,'+((i+1)*20)+')' });
+          .attr('transform', function(d,i) { return 'translate(0,'+((i+1)*20)+')'; });
 
       var _rx = function rx(d) { return (d.name.match(/gene/)) ? 0 : 15; };
 

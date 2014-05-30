@@ -1,5 +1,6 @@
 /* global d3 */
 /* global hiveGraph */
+/* global _ */
 
 (function() {
   'use strict';
@@ -305,7 +306,7 @@
         function matchKeys(meta, match) {  // Do this on load
           var keys = d3.keys(meta);
           var values = {};
-          
+
           keys.forEach(function(k) {
             if (k.match(match)) {
               values[k.replace(match,'')] = meta[k];
@@ -319,6 +320,32 @@
 
         pairs.forEach(function addLinks(_pair, i) {
           $log.debug('Constructing network for',_pair);
+
+          function _linkNodes(i, target) {
+
+            var index = _pair.index[i];
+            var row = expr[index];
+            if (!row) { return; }
+
+            var min = (i === 0) ? options.ligandFilter : options.receptorFilter;
+
+            data.nodes.forEach(function(_node) {
+              if (!_node.type.match('node')) {return;}
+
+              var _expr = +row[_node.id+1];
+
+              if (!_expr || _expr <= 0 || _expr < min) {return;}
+
+              var _edge = (i === 0) ?
+                new Edge(_node,target) :
+                new Edge(target,_node);
+
+              _edge.value = _expr;
+              _edge.type = 'expression';
+              edges.push(_edge);
+
+            });
+          }
 
           var _ligand = _l[_pair.Ligand];
           if (!_ligand) {
@@ -354,32 +381,6 @@
           if (edges.length > MAXEDGES) {
             $log.warn('Maximum number of edges exceeded', edges.length);
             throw StopIteration;
-          }
-
-          function _linkNodes(i, target) {
-
-            var index = _pair.index[i];
-            var row = expr[index];
-            if (!row) { return; }
-
-            var min = (i === 0) ? options.ligandFilter : options.receptorFilter;
-
-            data.nodes.forEach(function(_node) {
-              if (!_node.type.match('node')) {return;}
-
-              var _expr = +row[_node.id+1];
-
-              if (!_expr || _expr <= 0 || _expr < min) {return;}
-
-              var _edge = (i === 0) ?
-                new Edge(_node,target) :
-                new Edge(target,_node);
-
-              _edge.value = _expr;
-              _edge.type = 'expression';
-              edges.push(_edge);
-
-            });            
           }
 
           _lredge.value = 1;
@@ -473,7 +474,7 @@
           } else {
             if (d.lout.length > 0) {d.class='ligand';} //  Ligand only, lime green
             if (d.lin.length > 0) {d.class='receptor';}   //  Receptor only, Very light blue
-            if (d.lout.length > 0 && d.lin.length > 0) {d.class='both';}   //  Both, Dark moderate magenta            
+            if (d.lout.length > 0 && d.lin.length > 0) {d.class='both';}   //  Both, Dark moderate magenta
           }
           //console.log(d.ntype);
         });
@@ -483,13 +484,13 @@
       }
 
       function __getDATA() {  // This is hive version, move to service
-        var _json = { 
+        var _json = {
 
         };
 
         _json.nodes = data.nodes.map(function(node, i) {
 
-          var _n = { 
+          var _n = {
             data: {
               id: i,
               name: node.name,
@@ -524,11 +525,11 @@
       }
 
       function _getJSON() {  // This is hive version, move to service
-        var _json = { 
-          "format_version" : "1.0",
-          "generated_by" : [name,version].join('-'),
-          "target_cytoscapejs_version" : "~2.1",
-          data: {}, 
+        var _json = {
+          'format_version' : '1.0',
+          'generated_by' : [name,version].join('-'),
+          'target_cytoscapejs_version' : '~2.1',
+          data: {},
           elements: __getDATA()
         };
 
@@ -548,6 +549,40 @@
       }
 
       function _getGML() {  // This is hive version, move to service
+
+        function quote(str) {
+          return '"'+str+'"';
+        }
+
+        function indent(n, p) {
+          n = n || 2;
+          p = p || ' ';
+          var pp = strRepeat(p, n);
+          return function(s) {
+            return pp+s;
+          };
+        }
+
+        function strRepeat(str, qty){
+          var result = '';
+          while (qty > 0) {
+            result += str;
+            qty--;
+          }
+          return result;
+        }
+
+        function convert(obj, k) {
+          if (_.isString(obj)) {return [k,quote(obj)].join(' ');}
+          if (_.isArray(obj)) {return [k,quote(String(obj))].join(' ');}
+          if (_.isObject(obj)) {
+            var e = _.map(obj, convert);
+            e.unshift(k,'[');
+            e.push(']');
+            return e.join(' ');
+          }
+          return [k,String(obj)].join(' ');
+        }
 
         var _data = __getDATA();
 
@@ -577,42 +612,11 @@
 
         _gml.push(']');
 
-        return _gml.join('\n');       
+        return _gml.join('\n');
 
-        function quote(str,start,stop) {
-          return '"'+str+'"';
-        }
 
-        function indent(n, p) {
-          n = n || 2;
-          p = p || ' ';
-          var pp = strRepeat(p, n);
-          return function(s) {
-            return pp+s;
-          }
-        }
 
-        function strRepeat(str, qty){
-          if (qty < 1) return '';
-          var result = '';
-          while (qty > 0) {
-            if (qty & 1) result += str;
-            qty >>= 1, str += str;
-          }
-          return result;
-        };
 
-        function convert(obj, k) {
-          if (_.isString(obj)) return [k,quote(obj)].join(' ');
-          if (_.isArray(obj)) {return [k,quote(String(obj))].join(' ')};
-          if (_.isObject(obj)) {
-            var e = _.map(obj, convert);
-            e.unshift(k,'[');
-            e.push(']');
-            return e.join(' ');
-          }
-          return [k,String(obj)].join(' ');
-        }
 
         /*data.nodes.forEach(function(node, i) {
           _gml.push(['  node','[']);

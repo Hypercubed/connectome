@@ -178,3 +178,17 @@ text-align: center;
 .btn-vert-block > button{
     margin-bottom:10px;
 }
+
+.multiSelect.inlineBlock {
+  display: inline;
+}
+
+.multiSelect .button {
+  width: 100%;
+}
+
+.multiSelect .show {
+  width: 320px;
+  overflow: auto;
+  height: 300px;
+}
