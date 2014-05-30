@@ -100,16 +100,11 @@
 
       function loadSelection() {
 
-        function _idin(arr) {
-          return function(d,i) {
-            return d.ticked = arr.indexOf(d.id) > -1;
-          };
-        }
 
-        function setTicked(v) {
-          return function(d) {
-            d.ticked = v;
-          }
+        function _ticked(arr) {
+          return function(d,i) {
+            return d.ticked = _.has(arr, _id(d));
+          };
         }
 
         //var _pairs = localStorageService.get('pairs') || [317];
@@ -124,20 +119,8 @@
           $scope.cells = $scope.data.cells.map(_id);
         }
 
-        //$scope.selected.pairs = _.at($scope.data.pairs, $scope.pairs);
-        //$scope.selected.cells = _.at($scope.data.cells, $scope.cells);
-
-        //$scope.selected.pairs.forEach(setTicked(true));
-        //$scope.selected.cells.forEach(setTicked(true));
-
-        $scope.selected.pairs = $scope.data.pairs.filter(_idin($scope.pairs));
-        $scope.selected.cells = $scope.data.cells.filter(_idin($scope.cells));
-
-
-
-        //TODO: not this
-        //graph.graph.ligandRange = localStorageService.get('ligandRange') || graph.graph.ligandRange;
-        //graph.graph.receptorRange = localStorageService.get('receptorRange') || graph.graph.receptorRange;
+        $scope.selected.pairs = $scope.data.pairs.filter(_ticked($scope.pairs));
+        $scope.selected.cells = $scope.data.cells.filter(_ticked($scope.cells));
 
       }
 
