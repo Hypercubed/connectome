@@ -188,6 +188,6 @@ text-align: center;
 
 .multiSelect .show {
   width: 320px;
-  overflow: auto;
+  overflow-y: auto;
   height: 300px;
 }

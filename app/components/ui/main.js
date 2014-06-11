@@ -107,9 +107,6 @@
           };
         }
 
-        //var _pairs = localStorageService.get('pairs') || [317];
-        //var _cells = localStorageService.get('cells') || [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26];
-
         $log.debug('load from local storage');
 
         localStorageService.bind($scope, 'pairs', [317]);
