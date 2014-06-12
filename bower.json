@@ -23,7 +23,7 @@
     "_F": "Hypercubed/_F#~0.0.2",
     "lodash": "~2.4.1",
     "isteven-angular-multiselect": "~1.1.0",
-    "angular-dsv": "~0.0.1"
+    "angular-dsv": "Hypercubed/angular-dsv#~0.0.1"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",
