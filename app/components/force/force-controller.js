@@ -12,7 +12,7 @@
     .constant('ONTOLGYFILE', 'data/ontology.txt');
 
   app
-    .service('ligandReceptorData', function($q, $log,$http,EXPRESSIONFILE,PAIRSFILE,ONTOLGYFILE) {
+    .service('ligandReceptorData', function($q, $log,$http,dsv,EXPRESSIONFILE,PAIRSFILE,ONTOLGYFILE) {
       var service = {};
 
       service.data = {};
@@ -22,50 +22,49 @@
       service.data.ontology = [];
 
       function _getPairs(filename) {
-        return $http.get(filename, {cache: true})
+        return dsv.tsv.get(filename, {cache: true}, function(d,i) {
+            return {
+              id: i,
+              name: d.Ligand + '-' + d.Receptor,
+              Ligand: d.Ligand,
+              Receptor: d.Receptor
+            };
+          })
           .error(function(data, status, headers, config) {
             $log.warn('Error',data, status, headers, config);
           })
-          .then(function(response) {
-            var _data = d3.tsv.parse(response.data);
-
-            $log.debug('Pairs loaded:',_data.length);
-
-            _data.forEach(function(d,i) {
-              d.id = i;
-              d.name = d.Ligand + '-' + d.Receptor;
-            });
-
-            return _data;
-
+          .success(function(data) {
+            $log.debug('Pairs loaded:',data.length);
+          })
+          .then(function(res) {
+            return res.data;
           });
       }
 
       function _getExpression(filename) {
-        return $http.get(filename, {cache: true})
+        return dsv.tsv.getRows(filename, {cache: true})
           .error(function(data, status, headers, config) {
             $log.warn('Error',data, status, headers, config);
           })
-          .then(function(response) {
-            var _data = d3.tsv.parseRows(response.data);
-
-            $log.debug('Genes loaded:',_data.length);
-            $log.debug('Samples loaded:',service.data.cells.length);
-
-            return _data;
+          .success(function(data) {
+            $log.debug('Genes loaded:', data.length);
+            $log.debug('Samples loaded:', service.data.cells.length);
+          })
+          .then(function(res) {
+            return res.data;
           });
       }
 
       function _getOntology(filename) {
-        return $http.get(filename, {cache: true})
+        return dsv.tsv.get(filename, {cache: true})
           .error(function(data, status, headers, config) {
             $log.warn('Error',data, status, headers, config);
           })
-          .then(function(data) {
+          .then(function(res) {
 
             var _ontology = {};
 
-            d3.tsv.parse(data.data).forEach(function(_item) {
+            res.data.forEach(function(_item) {
               _ontology[_item.Cell] = _item.Ontology;
             });
 
@@ -82,7 +81,7 @@
             var _pairs = data[0];
             var _expr = service.data.expr = data[1];
             var _ontology = data[2];
-            
+
             service.data.cells = _expr[0].slice(1).map(function(d,i) {
               var _cell = { name: d, id: i };
               var _o = _ontology[d];
