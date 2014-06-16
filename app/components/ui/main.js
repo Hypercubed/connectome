@@ -8,10 +8,10 @@
   app
     .config(function(snapRemoteProvider) {
       snapRemoteProvider.globalOptions = {
-        disable: 'right',
+        //disable: 'right',
         maxPosition: 350,
         tapToClose: false,
-        touchToDrag: false
+        touchToDrag: true
       };
     });
 
@@ -73,53 +73,45 @@
         saveAs(blob, 'lr-graph.gml');
       };
 
-
       /* Load Data */
       $scope.selected = {
         pairs: [],
         cells: []
       };
 
+      $scope.selectedIds = {
+        pairs: [],
+        cells: []
+      }
+
       var _id = _F('id');
       var _index = _F('$index');
 
       function saveSelection() {
 
-        $scope.pairs = $scope.selected.pairs.map(_id);
-        $scope.cells = $scope.selected.cells.map(_id);
+        $scope.selectedIds.pairs = $scope.selected.pairs.map(_id);
+        $scope.selectedIds.cells = $scope.selected.cells.map(_id);
 
-        //console.log($scope.cells);
-
-        //localStorageService.set('pairs', _pairs);
-        //localStorageService.set('cells', _cells);
-        //localStorageService.set('ligandRange', graph.graph.ligandRange);
-        //localStorageService.set('receptorRange', graph.graph.receptorRange);
       }
-
-
 
       function loadSelection() {
 
-
         function _ticked(arr) {
           return function(d,i) {
-            return d.ticked = _.has(arr, _id(d));
+            return d.ticked = arr.indexOf(d.id) > -1;
           };
         }
 
         $log.debug('load from local storage');
 
-        localStorageService.bind($scope, 'pairs', [317]);
-        localStorageService.bind($scope, 'cells', []);
+        localStorageService.bind($scope, 'selectedIds', {pairs: [374], cells: [72,73] });
 
-        if ($scope.cells.length < 1) { 
-          $scope.cells = $scope.data.cells.map(_id);
-        }
-
-        $scope.selected.pairs = $scope.data.pairs.filter(_ticked($scope.pairs));
-        $scope.selected.cells = $scope.data.cells.filter(_ticked($scope.cells));
+        $scope.selected.pairs = $scope.data.pairs.filter(_ticked($scope.selectedIds.pairs));
+        $scope.selected.cells = $scope.data.cells.filter(_ticked($scope.selectedIds.cells));
 
       }
+
+      $scope.max = Math.max;
 
       ligandReceptorData.load().then(function() {
 
@@ -153,5 +145,36 @@
           return $filter('number')(input*100, decimals)+'%';
         };
     }]);
+
+  app
+  .filter('min', function() {
+    return function(input) {
+      var out;
+      if (input) {
+        for (var i in input) {
+          if (input[i] < out || out === undefined || out === null) {
+            out = input[i];
+          }
+        }
+      }
+      return out;
+    };
+  });
+
+  app
+  .filter('max', function() {
+      return function(input) {
+        var out;
+        if (input) {
+          for (var i in input) {
+            if (input[i] > out || out === undefined || out === null) {
+              out = input[i];
+            }
+          }
+        }
+        return out;
+      };
+    }
+  );
 
 })();

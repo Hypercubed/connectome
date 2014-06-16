@@ -61,12 +61,12 @@
 
     <p />
     <div panel heading="Ligand TPM" is-open="panelState.ligand" label="&gt; {{options.ligandFilter | number:0}} tpm" title="Only showing edges where the ligand expression exceeds {{options.ligandFilter | number:0}} tpm">
-      <div hc-slider ng-model="options.ligandFilter" max="graphData.ligandExtent[1]" min="0" step="1"></div>
+      <div hc-slider ng-model="options.ligandFilter" max="[graphData.ligandExtent[1], 10] | max" min="0" step="1"></div>
     </div>
 
     <p />
     <div panel heading="Receptor TPM" is-open="panelState.receptor" label="&gt; {{options.receptorFilter | number:0}} tpm" title="Only showing edges where the receptor expression exceeds {{options.receptorFilter | number:0}} tpm">
-      <div hc-slider ng-model="options.receptorFilter" max="graphData.receptorExtent[1]" min="0" step="1"></div>
+      <div hc-slider ng-model="options.receptorFilter" max="[graphData.receptorExtent[1],10] | max" min="0" step="1"></div>
     </div>
 
     <p />

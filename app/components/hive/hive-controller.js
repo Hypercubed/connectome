@@ -1,6 +1,7 @@
 /* global d3 */
 /* global hiveGraph */
 /* global _ */
+/* global _F */
 
 (function() {
   'use strict';
@@ -31,18 +32,18 @@
         return l;
       }
 
-      //function toTitleCase(str) {
-      //  return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-      //}
+      var _gene = _F('gene');
 
-      var f = function(d) {  // Todo: clean this up
+      function nodeTipText(d) {  // Todo: clean this up
+
         var s = d.name.split('.');
         var name = s[0];
         var html = [['<b>',name,'</b>']];
 
         if (d.values[0] > 0) {html.push([(d.lin.length > 1) ? 'Sum of' : '', 'Ligand expression:',valueFormat(d.values[0])]);}
         if (d.values[1] > 0) {html.push([(d.lout.length > 1) ? 'Sum of' : '', 'Receptor expression:',valueFormat(d.values[1])]);}
-        if (d.genes.length > 0)   {html.push(['Genes:',formatList(d.genes,4)]);}
+        if (d.genes && d.genes.length > 0)   {html.push(['Genes:',formatList(d.genes,4)]);}
+        if (d.expr && d.expr.length > 0)   {html.push(['Top genes:',formatList(d.expr.map(_gene),4)]);}
 
         if (d.meta) {
           var keys = ['Name', 'Ontology', 'HGNCID', 'UniprotID','Taxon', 'Age'];
@@ -56,10 +57,8 @@
         return html.map(join).join('<br>');
       };
 
-      chart.nodeTooltip.html(f);
-      chart.nodeLabelTooltip.html(f);
+      function edgeTipText(d) {
 
-      chart.linkTooltip.html(function(d) {
         //var s = ''; //(selected.pairs.length > 1) ? 'Sum of' : '';
 
         var html = [['<b>',d.name,'</b>']];
@@ -74,6 +73,13 @@
         ]);
 
         return html.map(join).join('<br>');
+      };
+
+      chart.tooltip.html(function(d) {
+
+        if (d.type === 'expression') { return edgeTipText(d); };
+        if (d.type === 'node' || d.type === 'gene') { return nodeTipText(d); };
+        return d.name;
       });
 
       function Node(id, name, type) {
@@ -218,7 +224,7 @@
 
       } */
 
-      var _F = function(key) { return function(d) {return d[key];}; };
+      //var _F = function(key) { return function(d) {return d[key];}; };
       var value = _F('value');
       //var type = _F('type');
       var valueComp = function(a,b) { return value(b) - value(a); };
@@ -235,8 +241,15 @@
 
         nodes = nodes.sort(valueComp).filter(valueFilter);    // Sort and filter out zeros
 
-        var ranked0 = nodes.map(value0).filter(gtZero).sort(d3.ascending);
-        var ranked1 = nodes.map(value1).filter(gtZero).sort(d3.ascending);
+        var ranked0 = nodes
+          .map(value0)
+          //.filter(gtZero)
+          .sort(d3.ascending);
+
+        var ranked1 = nodes
+          .map(value1)
+          //.filter(gtZero)
+          .sort(d3.ascending);
 
         data.ligandExtent = d3.extent(ranked0);
         data.receptorExtent = d3.extent(ranked1);
@@ -246,6 +259,8 @@
 
         filter0 = Math.max(filter0, 0);
         filter1 = Math.max(filter1, 0);
+
+        //console.log(filter0,filter1)
 
         return nodes.filter(function(d) {
           return ( d.values[0] > filter0 || d.values[1] > filter1 );

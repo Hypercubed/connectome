@@ -89,8 +89,19 @@
                 _cell.meta = _cell.meta || {};
                 _cell.meta.Ontology = _o;
               }
+
+
+              _cell.expr = 
+                _expr.slice(1).map(function(row) {
+                  return { gene: row[0], expr: +row[i+1] };
+                })
+                .filter(function(d) { return d.expr > 0; })
+                .sort(function(a,b) { return b.expr - a.expr; });
+
               return _cell;
             });
+
+            console.log(service.data.cells[0]);
 
             service.data.pairs = _pairs.filter(function(_pair) {
 
