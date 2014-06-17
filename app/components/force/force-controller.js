@@ -12,7 +12,7 @@
     .constant('ONTOLGYFILE', 'data/ontology.txt');
 
   app
-    .service('ligandReceptorData', function($q, $log,$http,dsv,EXPRESSIONFILE,PAIRSFILE,ONTOLGYFILE) {
+    .service('ligandReceptorData', function($q, $log,$http,$timeout,dsv,EXPRESSIONFILE,PAIRSFILE,ONTOLGYFILE) {
       var service = {};
 
       service.data = {};
@@ -48,7 +48,7 @@
           })
           .success(function(data) {
             $log.debug('Genes loaded:', data.length);
-            $log.debug('Samples loaded:', service.data.cells.length);
+
           })
           .then(function(res) {
             return res.data;
@@ -82,6 +82,8 @@
             var _expr = service.data.expr = data[1];
             var _ontology = data[2];
 
+            //var __expr = _expr.slice(1);
+
             service.data.cells = _expr[0].slice(1).map(function(d,i) {
               var _cell = { name: d, id: i };
               var _o = _ontology[d];
@@ -90,18 +92,43 @@
                 _cell.meta.Ontology = _o;
               }
 
+              /* _cell.expr = [];
+              __expr.forEach(function(row) {
+                var v = +row[i+1];
+                if (v > 0) {
+                  _cell.expr.push({ gene: row[0], expr: v });
 
-              _cell.expr = 
-                _expr.slice(1).map(function(row) {
-                  return { gene: row[0], expr: +row[i+1] };
-                })
-                .filter(function(d) { return d.expr > 0; })
-                .sort(function(a,b) { return b.expr - a.expr; });
+                }
+              })
+              _cell.expr.sort(function(a,b) { return b.expr - a.expr; }); */
+
+              //_cell.expr =
+              //    __expr.map(function(row) {                     // This takes too long
+              //      return { gene: row[0], expr: +row[i+1] };
+              //    })
+               //   .filter(function(d) { return d.expr > 0; })
+              //    .sort(function(a,b) { return b.expr - a.expr; });
 
               return _cell;
             });
 
-            console.log(service.data.cells[0]);
+            /* $timeout(function() {
+              console.log('adding extra data');
+
+              service.data.cells.forEach(function(_cell,i) {
+                console.log(_cell);
+
+                _cell.expr =
+                  _expr.slice(1).map(function(row) {
+                    return { gene: row[0], expr: +row[i+1] };
+                  })
+                  .filter(function(d) { return d.expr > 0; })
+                  .sort(function(a,b) { return b.expr - a.expr; });
+              });
+
+            },0); */
+
+            $log.debug('Samples loaded:', service.data.cells.length);
 
             service.data.pairs = _pairs.filter(function(_pair) {
 
@@ -261,7 +288,7 @@
 
       var StopIteration = new Error('Maximum number of edges exceeded');
 
-      function _makeEdges(nodes, pairs, expr, options) { // TODO: better 
+      function _makeEdges(nodes, pairs, expr, options) { // TODO: better
 
         try {
           return __makeEdges(nodes, pairs, expr, options);
@@ -284,7 +311,7 @@
 
           var lindex = _pair.index[0];
           var rindex = _pair.index[1];
-           
+
           if (lindex > -1 && rindex > -1) {
 
             data.nodes.forEach(function(src) {  // all selected cell-cell pairs
@@ -321,7 +348,7 @@
                   }
 
                   edge.value += value;
-       
+
                 }
 
                 if (edges.length > MAXEDGES) {
@@ -533,7 +560,7 @@
         //TODO: not this
         //forceGraph.graph.ligandRange = localStorageService.get('ligandRange') || forceGraph.graph.ligandRange;
         //forceGraph.graph.receptorRange = localStorageService.get('receptorRange') || forceGraph.graph.receptorRange;
-        
+
       }
 
       ligandReceptorData.load().then(function() {

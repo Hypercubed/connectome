@@ -2,9 +2,24 @@
 
 (function() {
   'use strict';
-  
+
   var app = angular
-    .module('lrSpaApp', [ 'multi-select', 'hc.slider', 'hc.dsv', 'debounce', 'panels', 'ngAnimate', 'ui.router','chieffancypants.loadingBar','snap','LocalStorageModule','ui.bootstrap','hc.downloader','angular-growl']);
+    .module('lrSpaApp', [
+      'ngSanitize',
+      'multi-select',
+      'hc.slider',
+      'hc.dsv',
+      'debounce',
+      'panels',
+      'ngAnimate',
+      'ui.router',
+      'chieffancypants.loadingBar',
+      'snap',
+      'LocalStorageModule',
+      'ui.bootstrap',
+      'hc.downloader',
+      'angular-growl'
+    ]);
 
   app
     .constant('name','ligand-receptor-connectome')  // Change this to one meta object
@@ -17,7 +32,7 @@
 
   app
     .config(function($logProvider) {
-      $logProvider.debugEnabled(false);
+      $logProvider.debugEnabled(true);
     });
 
   app
@@ -26,4 +41,3 @@
     }]);
 
 })();
-

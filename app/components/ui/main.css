@@ -49,6 +49,10 @@ body {
   padding: 0 5px;
 }
 
+#ui .title, #ui .title + p {
+  text-align: center;
+}
+
 #ui .collapsed > a > .caret, #ui a.collapsed > .caret, .caret.collapsed {
   border: 1px solid red;
   border-left: 4px solid;
@@ -164,15 +168,7 @@ height: auto;
     content: "\e080";    /* adjust as needed, taken from bootstrap.css */
 }
 
-.growl {
-position: fixed;
-left: 10px;
-right: auto;
-top: 45px;
-float: right;
-width: 30%;
-text-align: center;
-}
+
 
 .btn-vert-block > button{
     margin-bottom:10px;
@@ -190,4 +186,38 @@ text-align: center;
   width: 320px;
   overflow-y: auto;
   height: 300px;
+}
+
+.panel-right {
+  /* border: 2px solid green; */
+  padding: 2px;
+  position: absolute;
+  top: auto;
+  right: 20px;
+  width: 400px;
+  left: auto;
+  bottom: 40px;
+  z-index: 100;
+}
+
+.growl {
+  width: 100%;
+  position: relative;
+  top: auto;
+  right: auto;
+  float: none;
+}
+
+.growl .alert {
+  margin-bottom: 4px;
+}
+
+.new-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 4px;
+  width: 100%;
 }

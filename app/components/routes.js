@@ -8,27 +8,31 @@
     $urlRouterProvider.otherwise('/force');
 
     $stateProvider
-      .state('home', {
-        abastract: true,
-        url: '/',
-        templateUrl: 'components/ui/main.html',
-        controller: 'MainCtrl'
-      })
-      .state('home.force-graph', {
+      //.state('home', {
+        //abastract: true,
+        //url: '/',
+        //controller: 'MainCtrl'//,
+        //templateUrl: 'components/ui/main.html'
+      //})
+      .state('force-graph', {
         url: '^/force',
         resolve: { graphService: 'forceGraph' },
-        views: {
-          'panel': { templateUrl: 'components/force/panel.html', controller: 'PanelCtrl' },
-          'header': { templateUrl: 'components/force/force-legend.html' }
-        }
+        controller: 'MainCtrl',
+        templateUrl: 'components/ui/main.html'//,
+        //views: {
+        //  'panel': { templateUrl: 'components/force/panel.html' },
+        //  'header': { templateUrl: 'components/force/force-legend.html' }
+        //}
       })
-      .state('home.hive-graph', {
+      .state('hive-graph', {
         url: '^/hive',
         resolve: { graphService: 'hiveGraph' },
-        views: {
-          'panel': { templateUrl: 'components/force/panel.html', controller: 'PanelCtrl' },
-          'header': { template: '' }
-        }
+        controller: 'MainCtrl',
+        templateUrl: 'components/ui/main.html'//,
+        //views: {
+        //  'panel': { templateUrl: 'components/force/panel.html' },
+        //  'header': { template: '' }
+        //}
       });
 
   });

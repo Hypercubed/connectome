@@ -1,13 +1,14 @@
 
 <div snap-drawers>
   <div snap-drawer id="ui">
-    <div ui-view="panel"></div>
+    <div ng-include="'components/force/panel.html'"></div>
   </div>
 </div>
 
 <div id="content" snap-content id="content" style="-webkit-transform: translate3d(350px, 0px, 0px);">
 
   <noscript>Missing javascript</noscript>
+
   <div id="vis">
     <svg></svg>
   </div>
@@ -23,12 +24,49 @@
     </div>
   </div>
 
-  <div growl></div>
-  
   <div id="footer" class="footer text-center">
     <p>Made and maintained by J. Harshbarger.</p>
   </div>
 
 </div>
+
+<div class="panel-right">
+  <div growl></div>
+
+  <div class="new-tip" ng-cloak ng-show="graphData.nodes.length > 0">
+    <div>
+      Pairs: {{selected.pairs.length}} / {{data.pairs.length}}
+      <br />Nodes: {{graphData.nodes.length}} / {{graphData.nodeCount}}
+      <br />Edges: {{graphData.edges.length}} / {{graphData.edgeCount}}
+    </div>
+    <div ng-show="graphData.hoverText">
+      <hr>
+      <div class="animate-switch-container"
+      ng-switch on="graphData.hoverItem.type">
+        <div class="animate-switch" ng-switch-when="gene.ligand">
+          Ligand Gene
+        </div>
+        <div class="animate-switch" ng-switch-when="gene.receptor">
+          Receptor Gene
+        </div>
+        <div class="animate-switch" ng-switch-when="node">
+          Sample cell
+        </div>
+        <div class="animate-switch" ng-switch-when="expression">
+          Expression
+        </div>
+        <div class="animate-switch" ng-switch-when="pair">
+          L-R Pair 
+        </div>
+        <div class="animate-switch" ng-switch-default>
+          {{graphData.hoverItem.type}}
+        </div>
+      </div>
+      <div ng-bind-html="graphData.hoverText"></div>      
+    </div>
+
+  </div>  
+</div>
+
 
 

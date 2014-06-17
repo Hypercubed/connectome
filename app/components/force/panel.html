@@ -2,12 +2,6 @@
 <h4 class="title">Ligand Receptor Connectome</h4>
 <p>A visual guide to FANTOM5 Ligand-Receptor interactions</p>
 
-<p class="ng-cloak">
-  Pairs: {{selected.pairs.length}} / {{data.pairs.length}}
-  <br />Nodes: {{graphData.nodes.length}} / {{graphData.nodeCount}}
-  <br />Edges: {{graphData.edges.length}} / {{graphData.edgeCount}}
-</p>
-
 <accordion close-others="false">
 
   <accordion-group heading="Node Filters" is-open="panelState.nodeFilters" ng-class="{'collapsed': !panelState.nodeFilters}">
@@ -82,8 +76,8 @@
     </div>
 
     <p>
-      <span ng-click="go('home.force-graph')"><input type="radio" ng-model="state" value="home.force-graph" /> force directed graph</span>
-      <br /><span ng-click="go('home.hive-graph')"><input type="radio" ng-model="state" value="home.hive-graph" /> hive plot</span>
+      <span ng-click="go('force-graph')"><input type="radio" ng-model="state" value="force-graph" /> force directed graph</span>
+      <br /><span ng-click="go('hive-graph')"><input type="radio" ng-model="state" value="hive-graph" /> hive plot</span>
     </p>
   </accordion-group>
 

@@ -1,4 +1,5 @@
 /* global saveAs */
+/* global _F */
 
 (function() {
   'use strict';
@@ -16,7 +17,8 @@
     });
 
   app
-    .controller('MainCtrl', function ($scope,$state,localStorageService) {
+    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, localStorageService, ligandReceptorData, graphService) {
+
       $scope.state = $state.current.name;
 
       $scope.go = function(name) {
@@ -32,11 +34,6 @@
         help: true,
         download: true
       });
-
-    });
-
-  app
-    .controller('PanelCtrl', function ($scope, $rootScope, $log, $state, localStorageService, ligandReceptorData, graphService) {
 
       localStorageService.bind($scope, 'options', {
         showLabels: true,
@@ -82,10 +79,10 @@
       $scope.selectedIds = {
         pairs: [],
         cells: []
-      }
+      };
 
       var _id = _F('id');
-      var _index = _F('$index');
+      //var _index = _F('$index');
 
       function saveSelection() {
 
@@ -97,8 +94,9 @@
       function loadSelection() {
 
         function _ticked(arr) {
-          return function(d,i) {
-            return d.ticked = arr.indexOf(d.id) > -1;
+          return function(d) {
+            d.ticked = arr.indexOf(d.id) > -1;
+            return d.ticked;
           };
         }
 
@@ -133,6 +131,10 @@
         $scope.$watch('options.edgeRankFilter', updateNetwork); // TODO: filter in place
         $scope.$watch('options.showLabels', function() {
           graph.draw($scope.options);
+        });
+
+        $scope.$watch('graphData.hoverText', function() {
+          console.log('change');
         });
 
       });

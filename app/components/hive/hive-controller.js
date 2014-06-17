@@ -9,14 +9,16 @@
   var app = angular.module('lrSpaApp');
 
   app
-    .service('hiveGraph', function($log, $window, growl, cfpLoadingBar, name, version) {  // TODO: should be a directive
+    .service('hiveGraph', function($log, $window, $rootScope, growl, cfpLoadingBar, name, version) {  // TODO: should be a directive
 
       var data = {
         nodes: {},
         edges: {},
         edgeCount: 0,
         ligandExtent: [0,100000],
-        receptorExtent: [0,100000]
+        receptorExtent: [0,100000],
+        hoverItem: null,
+        hovertext: ''
       };
 
       var chart = hiveGraph();
@@ -55,7 +57,7 @@
         }
 
         return html.map(join).join('<br>');
-      };
+      }
 
       function edgeTipText(d) {
 
@@ -73,13 +75,18 @@
         ]);
 
         return html.map(join).join('<br>');
-      };
+      }
 
-      chart.tooltip.html(function(d) {
+      //var _hover = _F('hover');
+      chart.on('hover', function(d) {
 
-        if (d.type === 'expression') { return edgeTipText(d); };
-        if (d.type === 'node' || d.type === 'gene') { return nodeTipText(d); };
-        return d.name;
+        $rootScope.$apply(function() {
+          data.hoverItem = d;
+          if (d.type === 'expression') { data.hoverText = edgeTipText(d); return; }
+          if (d.type === 'node' || d.type.match(/^gene/)) { data.hoverText = nodeTipText(d); return; }
+          data.hoverText = d.name;
+        });
+
       });
 
       function Node(id, name, type) {
@@ -233,7 +240,7 @@
 
       var value0 = function(d) { return d.values[0]; };
       var value1 = function(d) { return d.values[1]; };
-      var gtZero = function(d) {return d>0;};
+      //var gtZero = function(d) {return d>0;};
 
       function _sortAndFilterNodes(nodes, options) {  //TODO: DRY this
 
@@ -418,6 +425,7 @@
           .classed('labels',options.showLabels)
           .datum(data)
           .call(chart);
+
       }
 
       function _clear() {
@@ -629,10 +637,6 @@
 
         return _gml.join('\n');
 
-
-
-
-
         /*data.nodes.forEach(function(node, i) {
           _gml.push(['  node','[']);
           _gml.push(['    id',String(i)]);
@@ -652,7 +656,6 @@
           _gml.push(['    value',String(edge.value)]);
           _gml.push(['  ]']);
         }); */
-
 
       }
 

@@ -9,7 +9,7 @@
 
   var hiveGraph = function() {
     var width = 500, height = 500;
-    var margin = { top: 120, right: 420, bottom: 240, left: 120};
+    var margin = { top: 60, right: 420, bottom: 240, left: 60};
     //var padding = { top: 60, right: 100, bottom: 60, left: 60};
 
     function chart(selection) {
@@ -58,9 +58,9 @@
     var _slog = _F(_value, slog);
 
     // Tooltips
-    var nodeLabelTooltip = chart.nodeLabelTooltip = d3.tip().attr('class', 'd3-tip node').html(_name).direction('w');
-    var tooltip = chart.tooltip = d3.tip().attr('class', 'd3-tip node').html(_name);
-    tooltip.fixed = false;
+    //var nodeLabelTooltip = chart.nodeLabelTooltip = d3.tip().attr('class', 'd3-tip node').html(_name).direction('w');
+    //var tooltip = chart.tooltip = d3.tip().attr('class', 'd3-tip node').html(_name);
+    //tooltip.fixed = false;
 
     /* tooltip.lastTarget = null;
     tooltip.toggle = function(target) {
@@ -81,6 +81,8 @@
     //  return [0, -20]; //-2*this.getBBox().height
     //});
 
+    var dispatch = d3.dispatch('hover');
+
     chart.draw = function draw(graph) {
 
       var container = d3.select(this);
@@ -97,7 +99,7 @@
       container
         .attr('width', width)
         .attr('height', height)
-        .call(tooltip)
+        //.call(tooltip)
         ;
 
       // Ranges
@@ -185,6 +187,84 @@
       defs.append('svg:path')
         .attr('d', 'M0,-5L10,0L0,5');
 
+      function sign(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
+
+      function classNeighbors(node, direction, key, value) {
+        if (arguments.length < 4) { value = true; }
+        var _tgt = (direction <= 0) ? 'source' : 'target';
+        var _dir = (direction <= 0) ? 'lin' : 'lout';
+
+        node[_dir].forEach(function(index) {
+          var d = graph.edges[index];
+          var t = d[_tgt];
+          if(d) {
+            d[key] = value;         // class edge
+            t[key] = value;   // class node
+            if (t.type !== 'node') {
+              classNeighbors(t, direction - sign(direction), key, value);
+            }
+          }
+        });
+      }
+
+      function mouseoverEdgeHighlight(d) {
+
+        //var edge = d3.select(this);
+
+        var tgt = d.target;
+        var src = d.source;
+
+        d.hover = tgt.hover = src.hover = true;
+
+        if (tgt.type !== 'node') {
+          classNeighbors(tgt, 3, 'hover');
+        }
+
+        if (src.type !== 'node') {
+          classNeighbors(src, -3, 'hover');
+        }
+
+        chart.container.classed('hover',true);
+        updateClasses();
+
+        dispatch.hover(d);
+      }
+
+      function mouseoverNodeHighlight(d) {
+
+        //var node = d3.select(this);
+
+        d.hover = true;
+
+        classNeighbors(d, 3, 'hover');
+        classNeighbors(d, -3, 'hover');
+
+        chart.container.classed('hover',true);
+        updateClasses();
+
+        dispatch.hover(d);
+      }
+
+      function updateClasses() {
+        nodes
+          .classed('hover', _hover)
+          .classed('fixed', _fixed);
+
+        links
+          .classed('hover', _hover)
+          .classed('fixed', _edgeFixed);
+      }
+
+      var _hoff = function(d) {d.hover = false; };
+      function mouseoutHighlight() {
+        chart.container.classed('hover',false);
+
+        nodes.each(_hoff);
+        links.each(_hoff);
+
+        updateClasses();
+      }
+
       // LINKS
       var gLinks = g.selectAll('g.links').data([graph.edges]);
 
@@ -249,92 +329,6 @@
 
       nodes = nodesLayer.selectAll('.node').data(_F(), _name);
 
-      function sign(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
-
-      function classNeighbors(node, direction, key, value) {
-        if (arguments.length < 4) { value = true; }
-        var _tgt = (direction <= 0) ? 'source' : 'target';
-        var _dir = (direction <= 0) ? 'lin' : 'lout';
-
-        node[_dir].forEach(function(index) {
-          var d = graph.edges[index];
-          var t = d[_tgt];
-          if(d) {
-            d[key] = value;         // class edge
-            t[key] = value;   // class node
-            if (t.type !== 'node') {
-              classNeighbors(t, direction - sign(direction), key, value);
-            }
-          }
-        });
-      }
-
-      function mouseoverEdgeHighlight(d) {
-        var edge = d3.select(this);
-
-        console.log(tooltip.fixed);
-        if(!tooltip.fixed) {
-          tooltip.show.apply(this,arguments);
-        }
-
-        var tgt = d.target;
-        var src = d.source;
-        
-        d.hover = tgt.hover = src.hover = true;
-
-        if (tgt.type !== 'node') {
-          classNeighbors(tgt, 3, 'hover');
-        }
-
-        if (src.type !== 'node') {
-          classNeighbors(src, -3, 'hover');
-        };
-        
-        chart.container.classed('hover',true);
-        updateClasses();
-      };
-
-      function mouseoverNodeHighlight(d) {
-        var node = d3.select(this);
-
-        console.log(tooltip.fixed);
-        if(!tooltip.fixed) {
-          tooltip.show.apply(this,arguments);
-        }
-
-        d.hover = true;
-
-        classNeighbors(d, 3, 'hover');
-        classNeighbors(d, -3, 'hover');
-        
-        chart.container.classed('hover',true);
-        updateClasses();
-      };
-
-      function updateClasses() {
-        nodes
-          .classed('hover', _hover)
-          .classed('fixed', _fixed);
-
-        links
-          .classed('hover', _hover)
-          .classed('fixed', _edgeFixed);
-      }
-
-      var _hoff = function(d) {d.hover = false; };
-      function mouseoutHighlight() {
-        chart.container.classed('hover',false);
-
-        if(!tooltip.fixed) {
-          tooltip.hide.apply(this,arguments);
-        }
-
-        nodes.each(_hoff);
-        links.each(_hoff);
-
-        updateClasses();
-      }
-
       // Create
       var nodesEnter = nodes.enter().append('g')
           .classed('node', true)
@@ -343,13 +337,6 @@
             d3.event.stopPropagation();
 
             d.fixed = (d.fixed) ? false : true;
-            tooltip.fixed = d.fixed;
-
-            if (tooltip.fixed) {
-              tooltip.show.apply(this, arguments);
-            } else {
-              tooltip.hide.apply(this, arguments);
-            }
 
             updateClasses(); //function(d) { return d.source.fixed && d.target.fixed; });
           })
@@ -473,6 +460,7 @@
 
     };
 
+    d3.rebind(chart, dispatch, 'on');
     return chart;
   };
 
