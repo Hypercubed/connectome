@@ -1,0 +1,56 @@
+<div class="animate-switch-container" ng-switch on="item.type">
+
+	<div class="animate-switch" ng-switch-when="gene.ligand">
+	  <ul  class="list-unstyled">
+	    <li>Ligand Gene: {{item.name}}</li>
+	  </ul>
+	  <ul class="list-unstyled">
+      	<li ng-repeat="(k,v) in item.meta">{{k}}: {{v}}</li>
+      </ul>
+	</div>
+
+	<div class="animate-switch" ng-switch-when="gene.receptor">
+	  <ul  class="list-unstyled">
+	    <li>Receptor Gene: {{item.name}}</li>
+	  </ul>
+	  <ul class="list-unstyled">
+      	<li ng-repeat="(k,v) in item.meta">{{k}}: {{v}}</li>
+      </ul>
+	</div>
+
+	<div class="animate-switch" ng-switch-when="node">
+	  <ul  class="list-unstyled">
+	    <li>Sample cell: {{item.name}}</li>
+	    <li>{{item.ligands.length > 0 ? 'Sum of ' : ''}}Ligand expression: {{item.values[0] | number:2}}</li>
+	    <li ng-if="item.ligands.length > 0">Ligands: <span gene-list="item.ligands"></span></li>
+	    <li>{{item.receptors.length > 0 ? 'Sum of ' : ''}}Receptor expression: {{item.values[1] | number:2}}
+	    <li ng-if="item.receptors.length > 0">Receptors: <span gene-list="item.receptors"></span></li>
+	  </ul>
+	  <ul  class="list-unstyled">  
+	    <li ng-if="item.expr.length > 0">Top genes: <span gene-list="item.expr"></span></li>
+	    <li><ul class="list-unstyled">
+	      <li ng-repeat="(k,v) in item.meta">{{k}}: {{v}}</li>
+	    </ul></li>           
+	  </ul>
+	</div>
+
+	<div class="animate-switch" ng-switch-when="expression">
+	  <ul  class="list-unstyled">
+	    <li>Expression: {{item.name}}</li>
+	    <li>Expression value: {{item.value | number:2}}
+	  </ul>
+	</div>
+
+	<div class="animate-switch" ng-switch-when="pair">
+	  <ul  class="list-unstyled">
+	    <li>L-R Pair: {{item.name}}</li>
+	  </ul>
+	</div>
+
+	<div class="animate-switch" ng-switch-default>
+	  <ul  class="list-unstyled">
+	    <li>{{item.type}}: {{item.name}}</li>
+	  </ul>
+	</div>
+
+</div>     

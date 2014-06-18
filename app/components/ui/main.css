@@ -190,14 +190,16 @@ height: auto;
 
 .panel-right {
   /* border: 2px solid green; */
-  padding: 2px;
+  padding: 5px;
   position: absolute;
-  top: auto;
-  right: 20px;
-  width: 400px;
+  top: 0px;
+  bottom: auto;
+  right: 0px;
   left: auto;
-  bottom: 40px;
+  width: 400px;
+  max-height: 100%;
   z-index: 100;
+  overflow-y: auto;
 }
 
 .growl {
@@ -216,8 +218,14 @@ height: auto;
   line-height: 1;
   font-weight: bold;
   padding: 12px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
+  opacity: 0.7;
+  /* background: rgba(0, 0, 0, 0.8); 
+  color: #fff;*/
   border-radius: 4px;
   width: 100%;
+  margin-bottom: 4px;
+}
+
+.new-tip:hover, .new-tip.hover {
+    opacity: 1;
 }

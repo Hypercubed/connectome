@@ -17,26 +17,26 @@
         edgeCount: 0,
         ligandExtent: [0,100000],
         receptorExtent: [0,100000],
-        hoverItem: null,
-        hovertext: ''
+        hoverItem: null//,
+        //hovertext: ''
       };
 
       var chart = hiveGraph();
 
       //console.log(chart);
 
-      var valueFormat = d3.format('.2f');
-      var join = function(d) {return d.join(' '); };
+      //var valueFormat = d3.format('.2f');
+      //var join = function(d) {return d.join(' '); };
 
-      function formatList(arr, max) {
-        var l = arr.slice(0,max).join(',');
-        if (arr.length > max) {l += ' ( +'+(arr.length-max)+' more)';}
-        return l;
-      }
+      //function formatList(arr, max) {
+      //  var l = arr.slice(0,max).join(',');
+      //  if (arr.length > max) {l += ' ( +'+(arr.length-max)+' more)';}
+      //  return l;
+      //}
 
       var _gene = _F('gene');
 
-      function nodeTipText(d) {  // Todo: clean this up
+      /* function nodeTipText(d) {  // Todo: clean this up
 
         var s = d.name.split('.');
         var name = s[0];
@@ -75,18 +75,22 @@
         ]);
 
         return html.map(join).join('<br>');
-      }
+      } */
 
       //var _hover = _F('hover');
       chart.on('hover', function(d) {
 
         $rootScope.$apply(function() {
           data.hoverItem = d;
-          if (d.type === 'expression') { data.hoverText = edgeTipText(d); return; }
-          if (d.type === 'node' || d.type.match(/^gene/)) { data.hoverText = nodeTipText(d); return; }
-          data.hoverText = d.name;
+          //if (d.type === 'expression') { data.hoverText = edgeTipText(d); return; }
+          //if (d.type === 'node' || d.type.match(/^gene/)) { data.hoverText = nodeTipText(d); return; }
+          //data.hoverText = d.name;
         });
 
+      });
+
+      chart.on('selectionChanged', function() {
+        $rootScope.$apply();
       });
 
       function Node(id, name, type) {
@@ -156,13 +160,34 @@
 
       } */
 
-      function _makeNodes(pairs, cells, expr) {
+      function _makeNodes(pairs, cells, expr) {  // Selected pairs, selected cells
 
         var _nodes = cells.slice(0);
 
         _nodes.forEach(function(_node) {
+
+          if (!_node.expr) {
+            $log.debug('getting all gene expression for'+_node.name);
+
+            _node.expr = [];
+            expr.forEach(function(e) {
+              var v = e[_node.id + 1];
+              if (v > 0) {
+                _node.expr.push({ gene: e[0], value: v });
+              }
+            });
+
+            _node.expr.sort(_valueComp);
+
+          }
+
+        });
+
+        _nodes.forEach(function(_node) {
           _node.type = 'node';
           _node.genes = [];
+          _node.ligands = [];
+          _node.receptors = [];
           _node.lout = [];
           _node.lin = [];
           _node.out = [];
@@ -170,21 +195,47 @@
           _node.values = [0,0];
           _node.value = 0;
 
+          //_node.expr = expr.map(function(row) {
+          //  return { gene: row[0], value: row[_node.id+1] };
+          //});
 
           pairs.forEach(function(_pair) {
             ['Ligand','Receptor'].forEach(function(d,i) {
               var index = _pair.index[i];
               if (!expr[index]) { return; }
+
               var exprValue = +expr[index][_node.id+1];
 
-              if (exprValue > 0 && _node.genes.indexOf(_pair[d]) < 0) {
-                _node.genes.push(_pair[d]);  // Change to hash of values?
-                _node.value += +exprValue;
-                _node.values[i] += +exprValue;
+              if (exprValue > 0) {
+                var geneList = _node[d.toLowerCase()+'s'];
+
+                var _geneMatch = _gene.eq(_pair[d]);
+                if (!geneList.some(_geneMatch)) {         // gene not already in list
+                  var g = _node.expr.filter(_geneMatch);  // find value
+                  if (g.length === 1) {
+                    if (g.type && g.type !== d.toLowerCase()) {
+                      $log.warn('unknown error');
+                    }
+                    g.type = d.toLowerCase();
+                    geneList.push(g[0]);
+                    _node.genes.push(g[0]); // do I need this?
+                  } else {
+                    $log.warn('unknown error');
+                  }
+                }
+              
               }
 
             });
           });
+
+          _node.values[0] = d3.sum(_node.ligands,_value);
+          _node.values[1] = d3.sum(_node.receptors,_value);
+          _node.value = d3.sum(_node.values);
+
+          _node.ligands.sort(_valueComp);
+          _node.receptors.sort(_valueComp);
+          _node.genes.sort(_valueComp);
 
         });
 
@@ -232,51 +283,58 @@
       } */
 
       //var _F = function(key) { return function(d) {return d[key];}; };
-      var value = _F('value');
+      var _value = _F('value');
       //var type = _F('type');
-      var valueComp = function(a,b) { return value(b) - value(a); };
-      var valueFilter = function(d) {return value(d)>0;};
+      var _valueComp = function(a,b) { return _value(b) - _value(a); };
+      var _valueFilter = function(d) {return _value(d)>0;};
       //var typeFilter = function(type) { return function(d) {return d.type === type;}; };
 
-      var value0 = function(d) { return d.values[0]; };
-      var value1 = function(d) { return d.values[1]; };
+      var _value0 = function(d) { return d.values[0]; };
+      var _value1 = function(d) { return d.values[1]; };
       //var gtZero = function(d) {return d>0;};
 
-      function _sortAndFilterNodes(nodes, options) {  //TODO: DRY this
+      function _sortAndFilterNodes(nodes, options) {  //TODO: DRY this!!!
 
         data.nodeCount = nodes.length;
 
-        nodes = nodes.sort(valueComp).filter(valueFilter);    // Sort and filter out zeros
+        //console.log(nodes.length);
 
-        var ranked0 = nodes
-          .map(value0)
+        nodes = nodes.sort(_valueComp).filter(_valueFilter);    // Sort and filter out zeros
+
+        var rankedLigands = nodes  // Ligand
+          .map(_value0)
           //.filter(gtZero)
           .sort(d3.ascending);
 
-        var ranked1 = nodes
-          .map(value1)
+        var rankedReceptors = nodes  // Receptor
+          .map(_value1)
           //.filter(gtZero)
           .sort(d3.ascending);
 
-        data.ligandExtent = d3.extent(ranked0);
-        data.receptorExtent = d3.extent(ranked1);
+        data.ligandExtent = d3.extent(rankedLigands);       // TODO: Already ranked, don't need extent
+        data.receptorExtent = d3.extent(rankedReceptors);
 
-        var filter0 = d3.quantile(ranked0, 1-options.receptorRankFilter);
-        var filter1 = d3.quantile(ranked1, 1-options.ligandRankFilter);
+        var filter0 = d3.quantile(rankedLigands, 1-options.ligandRankFilter);
+        var filter1 = d3.quantile(rankedReceptors, 1-options.receptorRankFilter);
 
         filter0 = Math.max(filter0, 0);
         filter1 = Math.max(filter1, 0);
 
         //console.log(filter0,filter1)
 
-        return nodes.filter(function(d) {
-          return ( d.values[0] > filter0 || d.values[1] > filter1 );
+        var filtered = nodes.filter(function(d) {
+          return ( d.values[0] >= filter0 || d.values[1] >= filter1 );
         });
+
+        //console.log(filtered.length);
+
+        return filtered;
+
       }
 
       /* function __sortAndFilterNodes(nodes, options) {
 
-        nodes = nodes.sort(valueComp);
+        nodes = nodes.sort(_valueComp);
 
         var ligands = nodes.map(function(d) {
           return d.type.match('ligand') ? d.value : 0;
@@ -303,7 +361,7 @@
 
       } */
 
-      var MAXEDGES = 10000;
+      var MAXEDGES = 1000;
 
       var StopIteration = new Error('Maximum number of edges exceeded');
 
@@ -414,9 +472,9 @@
       }
 
       function _draw(options) {
-        $log.debug('Drawing');
+        $log.debug('Drawing graph');
 
-        if (data.nodes.length < 1 || data.edges.length < 1) {
+        if (data.nodes.length < 1) {
           _clear();
           return;
         }
@@ -426,6 +484,11 @@
           .datum(data)
           .call(chart);
 
+      }
+
+      function _update() {
+        $log.debug('Updating graph');
+        chart.update();
       }
 
       function _clear() {
@@ -470,7 +533,7 @@
         if (data.edges.length > options.edgeRankFilter*data.edges.length) {
 
           data.edges = data.edges
-            .sort(valueComp)
+            .sort(_valueComp)
             .slice(0,options.edgeRankFilter*data.edges.length);
 
         }
@@ -662,6 +725,7 @@
       return {
         data: data,
         chart: chart,
+        update: _update,
         makeNetwork: _makeNetwork,
         draw: _draw,
         clear: _clear,

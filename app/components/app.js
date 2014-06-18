@@ -32,7 +32,7 @@
 
   app
     .config(function($logProvider) {
-      $logProvider.debugEnabled(true);
+      $logProvider.debugEnabled(false);
     });
 
   app

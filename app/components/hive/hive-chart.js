@@ -81,7 +81,7 @@
     //  return [0, -20]; //-2*this.getBBox().height
     //});
 
-    var dispatch = d3.dispatch('hover');
+    var dispatch = d3.dispatch('hover','selectionChanged');
 
     chart.draw = function draw(graph) {
 
@@ -93,7 +93,12 @@
       var size = Math.min(height, width)/(1+Math.cos(Math.PI/3))/1.5;
       radius.range([size/10, size]);
 
-      chart.update = function() { container.transition().call(chart); };
+      chart.update = function() {
+        //console.log('update chart');
+        updateClasses();
+        //container.transition().call(chart);
+      };
+
       chart.container = container;
 
       container
@@ -263,6 +268,7 @@
         links.each(_hoff);
 
         updateClasses();
+        dispatch.hover(null);
       }
 
       // LINKS
@@ -339,6 +345,7 @@
             d.fixed = (d.fixed) ? false : true;
 
             updateClasses(); //function(d) { return d.source.fixed && d.target.fixed; });
+            dispatch.selectionChanged(d);
           })
           .on('mouseover.highlight', mouseoverNodeHighlight) //function() { nodeClassed.call(this, 'hover', true); })
           .on('mouseout.highlight', mouseoutHighlight) //function() { nodeClassed.call(this, 'hover', false); })
@@ -445,18 +452,18 @@
       var _rx = function rx(d) { return (d.name.match(/gene/)) ? 0 : 15; };
 
       labels.append('rect')
-            .style({'stroke-width': '1px', 'stroke': 'rgb(51, 51, 51)'})
-            .attr('width', 15)
-            .attr('height', 15)
-            .attr('rx',_rx)
-            .attr('ry',_rx)
-            .style('fill', _ncolor);
+        .style({'stroke-width': '1px', 'stroke': 'rgb(51, 51, 51)'})
+        .attr('width', 15)
+        .attr('height', 15)
+        .attr('rx',_rx)
+        .attr('ry',_rx)
+        .style('fill', _ncolor);
 
       labels.append('text')
-              .style({'stroke': 'none','fill': '#333','stroke-width': '1px','font-size': '10px'})
-              .attr('x', 20)
-              .attr('dy', '1.2em')
-              .text(_F('name'));
+        .style({'stroke': 'none','fill': '#333','stroke-width': '1px','font-size': '10px'})
+        .attr('x', 20)
+        .attr('dy', '1.2em')
+        .text(_F('name'));
 
     };
 

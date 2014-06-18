@@ -33,39 +33,23 @@
 <div class="panel-right">
   <div growl></div>
 
-  <div class="new-tip" ng-cloak ng-show="graphData.nodes.length > 0">
-    <div>
-      Pairs: {{selected.pairs.length}} / {{data.pairs.length}}
-      <br />Nodes: {{graphData.nodes.length}} / {{graphData.nodeCount}}
-      <br />Edges: {{graphData.edges.length}} / {{graphData.edgeCount}}
-    </div>
-    <div ng-show="graphData.hoverText">
-      <hr>
-      <div class="animate-switch-container"
-      ng-switch on="graphData.hoverItem.type">
-        <div class="animate-switch" ng-switch-when="gene.ligand">
-          Ligand Gene
-        </div>
-        <div class="animate-switch" ng-switch-when="gene.receptor">
-          Receptor Gene
-        </div>
-        <div class="animate-switch" ng-switch-when="node">
-          Sample cell
-        </div>
-        <div class="animate-switch" ng-switch-when="expression">
-          Expression
-        </div>
-        <div class="animate-switch" ng-switch-when="pair">
-          L-R Pair 
-        </div>
-        <div class="animate-switch" ng-switch-default>
-          {{graphData.hoverItem.type}}
-        </div>
-      </div>
-      <div ng-bind-html="graphData.hoverText"></div>      
-    </div>
+  <div class="new-tip bg-info" ng-cloak ng-show="graphData.nodes.length > 0">
+    <ul class="list-unstyled">
+      <li>Pairs: {{selected.pairs.length}} / {{data.pairs.length}}</li>
+      <li>Nodes: {{graphData.nodes.length}} / {{graphData.nodeCount}}</li>
+      <li>Edges: {{graphData.edges.length}} / {{graphData.edgeCount}}</li>
+    </ul>
+  </div>
 
-  </div>  
+  <div class="new-tip bg-info hover" ng-cloak ng-show="graphData.hoverItem">
+    <div graph-item="graphData.hoverItem"></div>
+  </div>
+
+  <div class="new-tip bg-danger" ng-repeat="item in graphData.nodes | filter : { fixed: true }">
+    <button type="button" class="close" aria-hidden="true" ng-click="item.fixed = false; graph.update()">&times;</button>
+    <div graph-item="item"></div>
+  </div>
+
 </div>
 
 

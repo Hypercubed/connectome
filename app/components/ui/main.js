@@ -45,10 +45,11 @@
         edgeRankFilter: 1,
       });
 
-      var graph = graphService;  // TODO:  don't need this
+      var graph = graphService;  // TODO:  don't need this??
 
       /* network */
       graph.clear();
+      $scope.graph = graphService;
       $scope.graphData = graph.data;
 
       function updateNetwork(newVal, oldVal) {  // This should be handeled by the directive
@@ -133,10 +134,6 @@
           graph.draw($scope.options);
         });
 
-        $scope.$watch('graphData.hoverText', function() {
-          console.log('change');
-        });
-
       });
 
     });
@@ -178,5 +175,32 @@
       };
     }
   );
+
+  app
+  .directive('graphItem', function() {
+    return {
+      scope: { item: '=graphItem' },
+      templateUrl: 'components/ui/item.html'
+    };
+  });
+
+  app
+  .directive('geneList', function() {
+    return {
+      scope: {
+        genes: '=geneList'//,
+        //limit: '&limit'
+      },
+      template: '<span ng-repeat="gene in genes | limitTo : limit" title="{{gene.value | number:2}}">{{gene.gene}}{{$last ? "" : ","}}</span><a class="button btn-link" ng-if="genes.length > limit" ng-click="expand()">(+ {{genes.length - limit}} more)</a>',
+      link: function (scope) {
+        scope.limit = 3;
+
+        scope.expand = function() {
+          scope.limit = (scope.limit + 10 < scope.genes.length) ? scope.limit + 10 : scope.genes.length;
+        };
+
+      }
+    };
+  });
 
 })();

@@ -23,12 +23,10 @@
 
       function _getPairs(filename) {
         return dsv.tsv.get(filename, {cache: true}, function(d,i) {
-            return {
-              id: i,
-              name: d.Ligand + '-' + d.Receptor,
-              Ligand: d.Ligand,
-              Receptor: d.Receptor
-            };
+            d.id = i;
+            d.name = d.Ligand + '-' + d.Receptor;
+
+            return d;
           })
           .error(function(data, status, headers, config) {
             $log.warn('Error',data, status, headers, config);
@@ -96,11 +94,10 @@
               __expr.forEach(function(row) {
                 var v = +row[i+1];
                 if (v > 0) {
-                  _cell.expr.push({ gene: row[0], expr: v });
-
+                  _cell.expr.push({ gene: row[0], value: v });
                 }
               })
-              _cell.expr.sort(function(a,b) { return b.expr - a.expr; }); */
+              _cell.expr.sort(function(a,b) { return b.value - a.value; }); */
 
               //_cell.expr =
               //    __expr.map(function(row) {                     // This takes too long
