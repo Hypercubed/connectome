@@ -9,7 +9,7 @@
   var app = angular.module('lrSpaApp');
 
   app
-    .service('hiveGraph', function($log, $window, $rootScope, growl, cfpLoadingBar, name, version) {  // TODO: should be a directive
+    .service('hiveGraph', function($log, $window, $rootScope, $timeout, debounce, growl, cfpLoadingBar, name, version) {  // TODO: should be a directive
 
       var data = {
         nodes: {},
@@ -34,7 +34,10 @@
       //  return l;
       //}
 
-      var _gene = _F('gene');
+      //var _gene = _F('gene');
+      //var _type = _F('type');
+      //var _name = _F('name');
+      var _value = _F('value');
 
       /* function nodeTipText(d) {  // Todo: clean this up
 
@@ -78,22 +81,16 @@
       } */
 
       //var _hover = _F('hover');
-      chart.on('hover', function(d) {
-
-        $rootScope.$apply(function() {
-          data.hoverItem = d;
-          //if (d.type === 'expression') { data.hoverText = edgeTipText(d); return; }
-          //if (d.type === 'node' || d.type.match(/^gene/)) { data.hoverText = nodeTipText(d); return; }
-          //data.hoverText = d.name;
-        });
-
-      });
+      chart.on('hover', debounce(function(d) {
+        data.hoverEvent = true;
+        data.hoverItem = d;
+      }));
 
       chart.on('selectionChanged', function() {
         $rootScope.$apply();
       });
 
-      function Node(id, name, type) {
+      /* function Node(id, name, type) {
         return {
           id: id,
           name: name,
@@ -102,13 +99,13 @@
           lin: [],
           //out: [],
           //in: [],
-          genes: [],
+          //genes: [],
           //ligands: [],  // remove these
           //receptors: [],
           value: 0,
-          values: [100,100]
+          values: [0,0]
         };
-      }
+      } */
 
       function Edge(src,tgt,name) {
         name = name || src.name+'->'+tgt.name;
@@ -160,90 +157,101 @@
 
       } */
 
-      function _makeNodes(pairs, cells, expr) {  // Selected pairs, selected cells
 
-        var _nodes = cells.slice(0);
+      /* function Node(id, name, type) {
+        return {
+          id: id,
+          name: name,
+          type: type,
+          lout: [],
+          lin: [],
+          //out: [],
+          //in: [],
+          //genes: [],
+          //ligands: [],  // remove these
+          //receptors: [],
+          value: 0,
+          values: [0,0]
+        };
+      } */
 
-        _nodes.forEach(function(_node) {
+      /* function Node(_node, name, type) {
+        if (typeof _node !== 'object') { return Node({ id: _node, name: name, type: type }); }
 
-          if (!_node.expr) {
-            $log.debug('getting all gene expression for'+_node.name);
+        _node.values = [0,0];
+        _node.value = 0;
+        _node.lout = [];
+        _node.lin = [];
 
-            _node.expr = [];
-            expr.forEach(function(e) {
-              var v = e[_node.id + 1];
-              if (v > 0) {
-                _node.expr.push({ gene: e[0], value: v });
-              }
-            });
+        _node._expr = [];    // rename these
+        _node._ligands = [];
+        _node._receptors = [];
 
-            _node.expr.sort(_valueComp);
+        return _node;
+      } */
 
-          }
+      function Node(id, name, type) {
+        if (id) {this.id = id;}
+        if (name) {this.name = name;}
+        if (type) {this.type = type;}
+
+        this.values = [0,0];
+        this.value = 0;
+        this.lout = [];
+        this.lin = [];
+
+        this._expr = [];    // rename these
+        this._ligands = [];
+        this._receptors = [];
+      }
+
+      function _makeNodes(genes, pairs, cells) {  // Selected pairs, selected cells
+
+        var _nodes = [];
+
+        console.log(genes.length);
+
+        cells.forEach(function(cell) {
+          if (!cell.ticked) { return; }
+
+          var _node = angular.extend(cell, new Node());
+
+          _node.type = 'node';
+
+          //console.log(_node.expr);
+
+          _node._expr = _node.expr.filter(function(expr) {
+            return genes[expr.id].ticked;
+          });
+
+          _node._expr.sort(_valueComp);
+          _node._ligands = _node._expr.filter(_F('type').eq('ligand'));
+          _node._receptors = _node._expr.filter(_F('type').eq('receptor'));
+
+          _node.values[0] = d3.sum(_node._ligands,_value);
+          _node.values[1] = d3.sum(_node._receptors,_value);
+          _node.value = d3.sum(_node.values);
+
+          _nodes.push(_node);
 
         });
 
-        _nodes.forEach(function(_node) {
-          _node.type = 'node';
-          _node.genes = [];
-          _node.ligands = [];
-          _node.receptors = [];
-          _node.lout = [];
-          _node.lin = [];
-          _node.out = [];
-          _node.in = [];
-          _node.values = [0,0];
-          _node.value = 0;
+        genes.forEach(function(gene) {
+          if (!gene.ticked) { return; }
 
-          //_node.expr = expr.map(function(row) {
-          //  return { gene: row[0], value: row[_node.id+1] };
-          //});
-
-          pairs.forEach(function(_pair) {
-            ['Ligand','Receptor'].forEach(function(d,i) {
-              var index = _pair.index[i];
-              if (!expr[index]) { return; }
-
-              var exprValue = +expr[index][_node.id+1];
-
-              if (exprValue > 0) {
-                var geneList = _node[d.toLowerCase()+'s'];
-
-                var _geneMatch = _gene.eq(_pair[d]);
-                if (!geneList.some(_geneMatch)) {         // gene not already in list
-                  var g = _node.expr.filter(_geneMatch);  // find value
-                  if (g.length === 1) {
-                    if (g.type && g.type !== d.toLowerCase()) {
-                      $log.warn('unknown error');
-                    }
-                    g.type = d.toLowerCase();
-                    geneList.push(g[0]);
-                    _node.genes.push(g[0]); // do I need this?
-                  } else {
-                    $log.warn('unknown error');
-                  }
-                }
-              
-              }
-
-            });
-          });
-
-          _node.values[0] = d3.sum(_node.ligands,_value);
-          _node.values[1] = d3.sum(_node.receptors,_value);
-          _node.value = d3.sum(_node.values);
-
-          _node.ligands.sort(_valueComp);
-          _node.receptors.sort(_valueComp);
-          _node.genes.sort(_valueComp);
-
+          var _node = angular.extend(gene, new Node());
+          _node.type = 'gene.'+gene._type;
+          _nodes.push(_node);
         });
 
         //console.log(_nodes.length, cells.length);
 
-        if (_nodes.length !== cells.length) {
+        /* if (_nodes.length !== cells.length + genes.length) {
           $log.error('Inconsistancy found in number of generated nodes.');
-        }
+          $log.error('nodes',_nodes.length);
+          $log.error('cells',cells.length);
+          $log.error('genes',genes.length);
+        } */
 
         return _nodes;
 
@@ -283,10 +291,10 @@
       } */
 
       //var _F = function(key) { return function(d) {return d[key];}; };
-      var _value = _F('value');
+
       //var type = _F('type');
       var _valueComp = function(a,b) { return _value(b) - _value(a); };
-      var _valueFilter = function(d) {return _value(d)>0;};
+      var _valueFilter = function(d) { return d.type !== 'node' || d.value >= 0; };
       //var typeFilter = function(type) { return function(d) {return d.type === type;}; };
 
       var _value0 = function(d) { return d.values[0]; };
@@ -317,13 +325,14 @@
         var filter0 = d3.quantile(rankedLigands, 1-options.ligandRankFilter);
         var filter1 = d3.quantile(rankedReceptors, 1-options.receptorRankFilter);
 
-        filter0 = Math.max(filter0, 0);
-        filter1 = Math.max(filter1, 0);
+        filter0 = Math.max(filter0, 0) || 0;
+        filter1 = Math.max(filter1, 0) || 0;
 
-        //console.log(filter0,filter1)
+        console.log(filter0,filter1);
 
         var filtered = nodes.filter(function(d) {
-          return ( d.values[0] >= filter0 || d.values[1] >= filter1 );
+          //console.log(d);
+          return ( d.type !== 'node' || d.values[0] >= filter0 || d.values[1] >= filter1 );
         });
 
         //console.log(filtered.length);
@@ -365,10 +374,12 @@
 
       var StopIteration = new Error('Maximum number of edges exceeded');
 
-      function _makeEdges(nodes, pairs, expr, options) { // TODO: better
+      function _makeEdges(nodes, genes, pairs, expr, options) { // TODO: better
+
+        //console.log(genes);
 
         try {
-          return __makeEdges(nodes, pairs, expr, options);
+          return __makeEdges(nodes, genes, pairs, expr, options);
         } catch(e) {
           if(e !== StopIteration) {
             throw e;
@@ -379,11 +390,14 @@
         }
       }
 
-      function __makeEdges(nodes, pairs, expr, options) {
+      function __makeEdges(nodes, genes, pairs, expr, options) {
+
 
         var edges = [];
 
-        function matchKeys(meta, match) {  // Do this on load
+        if (nodes.length < 2) { return edges; }
+
+        /* function matchKeys(meta, match) {  // Do this on load
           var keys = d3.keys(meta);
           var values = {};
 
@@ -394,14 +408,63 @@
           });
 
           return values;
-        }
+        } */
 
-        var _l = {}, _r = {};
+        var _n = {};  // Make this better
 
-        pairs.forEach(function addLinks(_pair, i) {
-          $log.debug('Constructing network for',_pair);
+        nodes.forEach(function(node) {
+          _n[node.name] = node;
+        });
 
-          function _linkNodes(i, target) {
+        //console.log([_l,_r,_n]);
+
+        angular.forEach(_n, function(node) {  // Improve this
+
+          angular.forEach(node._expr, function(expr) {
+            var target = _n[genes[expr.id].name];
+            if (target) {
+              var min = (target.type === 'gene.receptor') ? options.receptorFilter : options.ligandFilter;
+              var _expr = expr.value;
+              if (_expr && _expr > 0 && _expr >= min) {
+                //console.log(target.type);
+                var _edge = (target.type === 'gene.receptor') ? new Edge(target,node) : new Edge(node,target);
+                _edge.value = _expr;
+                _edge.type = 'expression';
+                edges.push(_edge);
+
+                if (edges.length > MAXEDGES) {
+                  $log.warn('Maximum number of edges exceeded', edges.length);
+                  throw StopIteration;
+                }
+              }
+            }
+
+          });
+
+        });
+
+        pairs.forEach(function addLinks(_pair) {
+          //$log.debug('Constructing edges for',_pair);
+
+          //console.log(_pair);
+
+          var _ligand = _n[_pair.Ligand];
+          var _receptor = _n[_pair.Receptor];
+          if (_ligand && _receptor) {
+            var _lredge = new Edge(_ligand,_receptor);
+            _lredge.type = 'pair';
+            edges.push(_lredge);
+          }
+
+          if (edges.length > MAXEDGES) {
+            $log.warn('Maximum number of edges exceeded', edges.length);
+            throw StopIteration;
+          }
+          //var _l = nodes.filter()
+
+
+
+        /*   function _linkNodes(i, target) {
 
             var index = _pair.index[i];
             var row = expr[index];
@@ -463,7 +526,7 @@
             throw StopIteration;
           }
 
-          _lredge.value = 1;
+          _lredge.value = 1;*/
 
         });
 
@@ -479,16 +542,20 @@
           return;
         }
 
-        d3.select('#vis svg')
-          .classed('labels',options.showLabels)
-          .datum(data)
-          .call(chart);
+        //$timeout(function() {
+          d3.select('#vis svg')
+            .classed('labels',options.showLabels)
+            .datum(data)
+            .call(chart);
+        //});
 
       }
 
       function _update() {
-        $log.debug('Updating graph');
-        chart.update();
+        if (chart.update) {
+          $log.debug('Updating graph');
+          chart.update();
+        }
       }
 
       function _clear() {
@@ -496,21 +563,58 @@
         d3.selectAll('#vis svg g').remove();
       }
 
-      function _makeNetwork(pairs, cells, expr, options) {
+      function _makeNetwork(_data, options) {  // pairs, cells, expr, options
+
+        //var expr = data.expr;
+        //console.log(expr);
+
+        if (!_data) {return;}
+
+        var pairs = _data.pairs.filter(function(d) { return d.ticked; });
+        var cells = _data.cells.filter(function(d) { return d.ticked; });
+        var expr = _data.expr;
+        var genes = _data.genes.filter(function(d) { return d.ticked; });
+
         $log.debug('Constructing');
 
-        if (cells.length < 1 || pairs.length < 1) {
+        /* _selected.cells.forEach(function(cell) {  // TODO: move this, should only run when new cell is selected
+          //if (cell.expr) { return; };
+
+          cell.expr = [];
+
+          $log.debug('getting all gene expression for '+cell.name);
+
+          _data.genes.forEach(function(gene) {
+            var v = expr[gene.id + 1][cell.id + 1];
+            if (v > 0) {
+              cell.expr.push({
+                gene: gene,
+                type: gene.type,
+                value: v
+              });
+            }
+          });
+
+          cell.expr.sort(_valueComp);
+
+          cell.ligands = cell.expr.filter(_type.eq('Ligand'));
+          cell.receptors = cell.expr.filter(_type.eq('Receptor'));
+
+        }); */
+
+        if (cells.length < 1 && genes.length < 1) {
           data.nodes = [];
           data.edges = [];
 
-          if (cells.length < 1) {growl.addWarnMessage('No cells selected');}
-          if (pairs.length < 1) {growl.addWarnMessage('No pairs selected.  Select at least one L-R pair.');}
+          growl.addWarnMessage('No cells or genes selected');
+          //if (genes.length < 1) {growl.addWarnMessage('No genes selected');}
+          //if (pairs.length < 1) {growl.addWarnMessage('No pairs selected.  Select at least one L-R pair.');}
           return;
         }
 
         cfpLoadingBar.start();
 
-        data.nodes = _makeNodes(pairs, cells, expr);
+        data.nodes = _makeNodes(_data.genes, pairs, _data.cells, expr);
 
         $log.debug('Total nodes: ',data.nodes.length);
 
@@ -522,7 +626,7 @@
 
         $log.debug('Pairs: ',pairs.length);
 
-        data.edges = _makeEdges(data.nodes, pairs, expr, options);
+        data.edges = _makeEdges(data.nodes, _data.genes, pairs, expr, options);
 
         $log.debug('Total Edges: ',data.edges.length);
 
@@ -544,6 +648,8 @@
 
         data.edges.forEach(function(d, i) {  // Set in/out links
           d.index = i;
+
+          //console.log(d.source, d.target);
 
           d.source.lout.push(i);
           d.target.lin.push(i);

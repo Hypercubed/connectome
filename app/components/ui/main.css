@@ -216,7 +216,7 @@ height: auto;
 
 .new-tip {
   line-height: 1;
-  font-weight: bold;
+  /* font-weight: bold; */
   padding: 12px;
   opacity: 0.7;
   /* background: rgba(0, 0, 0, 0.8); 

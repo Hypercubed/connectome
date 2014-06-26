@@ -8,21 +8,32 @@
 
     <div panel heading="Samples" is-open="panelState.cells">
       <div panel-label>
-        {{selected.cells.length}} / {{data.cells.length}}
+        {{selectedIds.cells.length}} / {{data.cells.length}}
       </div>
       <div
             multi-select
             input-model="data.cells"
-            output-model="selected.cells"
             button-label="name"
             item-label="name"
             tick-property="ticked"
             max-labels="1" >
       </div>
-
     </div>
 
-
+    <p />
+    <div panel heading="Genes" is-open="panelState.genes">
+      <div panel-label>
+        {{selectedIds.genes.length}} / {{data.genes.length}}
+      </div>
+      <div
+            multi-select
+            input-model="data.genes"
+            button-label="name"
+            item-label="name description"
+            tick-property="ticked"
+            max-labels="1" >
+      </div>
+    </div>
 
     <p />
     <div panel heading="Ligand cutoff" is-open="panelState.receptorRank" label="top {{options.ligandRankFilter | percentage}}" title="Showing only top {{options.ligandRankFilter | percentage}} of ligands">
@@ -40,12 +51,11 @@
 
     <div panel heading="Ligand - Receptor Pairs" is-open="panelState.pairs">
       <div panel-label class="ng-cloak">
-        {{selected.pairs.length}} / {{data.pairs.length}}
+        {{selectedIds.pairs.length}} / {{data.pairs.length}}
       </div>
       <div
             multi-select
             input-model="data.pairs"
-            output-model="selected.pairs"
             button-label="name"
             item-label="name"
             tick-property="ticked"

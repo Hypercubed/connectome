@@ -1,11 +1,11 @@
 (function() {
   'use strict';
-  
+
   var app = angular.module('lrSpaApp');
 
   app.config(function($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise('/force');
+    $urlRouterProvider.otherwise('/hive');
 
     $stateProvider
       //.state('home', {

@@ -19,6 +19,7 @@
       service.data.expr = [];
       service.data.pairs = [];
       service.data.cells = [];
+      service.data.genes = [];
       service.data.ontology = [];
 
       function _getPairs(filename) {
@@ -76,7 +77,7 @@
           .then(function(data) {
             $log.debug('Done loading');
 
-            var _pairs = data[0];
+            service.data.pairs = data[0];
             var _expr = service.data.expr = data[1];
             var _ontology = data[2];
 
@@ -99,54 +100,111 @@
               })
               _cell.expr.sort(function(a,b) { return b.value - a.value; }); */
 
-              //_cell.expr =
-              //    __expr.map(function(row) {                     // This takes too long
-              //      return { gene: row[0], expr: +row[i+1] };
-              //    })
-               //   .filter(function(d) { return d.expr > 0; })
-              //    .sort(function(a,b) { return b.expr - a.expr; });
-
               return _cell;
             });
 
-            /* $timeout(function() {
-              console.log('adding extra data');
-
-              service.data.cells.forEach(function(_cell,i) {
-                console.log(_cell);
-
-                _cell.expr =
-                  _expr.slice(1).map(function(row) {
-                    return { gene: row[0], expr: +row[i+1] };
-                  })
-                  .filter(function(d) { return d.expr > 0; })
-                  .sort(function(a,b) { return b.expr - a.expr; });
-              });
-
-            },0); */
-
             $log.debug('Samples loaded:', service.data.cells.length);
 
-            service.data.pairs = _pairs.filter(function(_pair) {
+            function matchKeys(meta, match) {  // Do this on load
+              var keys = d3.keys(meta);
+              var values = {};
 
-              _pair.index = [-1,-1];
+              keys.forEach(function(k) {
+                if (k.match(match)) {
+                  values[k.replace(match,'').toLowerCase()] = meta[k];
+                }
+              });
 
-              for (var i = 1; i < _expr.length; i++) {  // start from 1, skipping header
-                var gene = _expr[i][0];
+              return values;
+            }
 
-                if (gene === _pair.Ligand)   {_pair.index[0] = i;}
-                if (gene === _pair.Receptor) {_pair.index[1] = i;}
+            service.data.genes = _expr.slice(1).map(function(row, i) {  // TODO: generate one gene file
+              return {
+                name: row[0],
+                id: i,
+                pairs: [],
+                type: 'unknown',
+                description: '',
+                _genes: [],
+                ligands: [],
+                receptors: []
+              };
+            });
 
-                if (_pair.index[0] > -1 && _pair.index[1] >-1) {break;}
-              }
+            service.data.pairs = service.data.pairs.filter(function(pair) {
 
-              if (_pair.index[0] < 0 || _pair.index[1] < 0) {
+              var _ligand, _receptor;
+
+              service.data.genes.forEach(function(gene) {
+                if (gene.name === pair.Ligand) {
+                  _ligand = gene;
+                } else if (gene.name === pair.Receptor) {
+                  _receptor = gene;
+                }
+              });
+
+              if (!_ligand || !_receptor) {
                 $log.warn('Ligand or receptor missing from expression table');
                 return false;
               }
 
+              pair.index = [_ligand.id,_receptor.id];
+
+              // cross reference
+              _ligand.type = _ligand._type = 'ligand';
+              _ligand._genes.push(_receptor.id);
+              _ligand.receptors.push({ id: _receptor.id });
+              _ligand.meta = matchKeys(pair, 'Ligand.');
+              _ligand.description = _ligand.meta.name;
+              delete _ligand.meta.name;
+
+              _receptor.type = _receptor._type = 'receptor';
+              _receptor._genes.push(_ligand.id);
+              _receptor.ligands.push({ id: _ligand.id });
+              _receptor.meta = matchKeys(pair, 'Receptor.');
+              _receptor.description = _receptor.meta.name;
+              delete _receptor.meta.name;
+
               return true;
             });
+
+            // do cross referencing here!!!!
+            /* service.data.genes = service.data.genes.filter(function(gene) {
+
+              service.data.pairs.forEach(function(pair) {  // TODO: DRY
+                if (gene.name == pair.Ligand) {
+                  gene.type = 'ligand';
+                  gene._type = 'ligand';
+                  gene._genes.push(pair);
+                  gene.meta = matchKeys(pair, 'Ligand.');
+                  gene.description = gene.meta.name;
+                  delete gene.meta.name;
+                  pair._ligand = gene;
+                } else if (gene.name == pair.Receptor) {
+                  gene.type = 'receptor';
+                  gene._type = 'receptor';
+                  gene.pairs.push(pair);
+                  gene.meta = matchKeys(pair, 'Receptor.');
+                  gene.description = gene.meta.name;
+                  delete gene.meta.name;
+                  pair._receptor = gene;
+                }
+              });
+
+              return gene.pairs.length > 0;
+            });
+
+
+            service.data.genes.forEach(function(gene) {  // TODO: shouldn't need this
+              if (gene.type == 'ligand') {
+                gene._genes = gene.pairs.map(function(d) {return  d._receptor.id; });
+              } else if (gene.type == 'receptor') {
+                //console.log(gene);
+                gene._genes = gene.pairs.map(function(d) {return  d._ligand.id; });
+              } else {
+                gene._genes = [];
+              }
+            }); */
 
           });
       };
@@ -218,6 +276,8 @@
       function _makeNodes(pairs, cells, expr) {
 
         var nodes = cells;
+
+        console.log(nodes);
 
         nodes.forEach(function(_node) {
 

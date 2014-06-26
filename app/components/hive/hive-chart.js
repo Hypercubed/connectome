@@ -122,6 +122,7 @@
 
       nodesByType.forEach(function(type) { // Setup domain for position range
         //var group = groups.indexOf(type.key);  // TODO: eliminte y and node.group?
+        //console.log(type);
         _y[type.key].domain(d3.range(type.values.length));
 
         type.values.forEach(function(node,i) {
@@ -322,6 +323,8 @@
           .attr('orient', degrees(a-Math.PI/2));
       });
 
+      //console.log(graph.edges);
+
       // NODES
       var nodesLayer = g.selectAll('g.nodes').data([graph.nodes]);
 
@@ -339,10 +342,16 @@
       var nodesEnter = nodes.enter().append('g')
           .classed('node', true)
           .style({fill: '#ccc','fill-opacity': 1,stroke: '#333','stroke-width': '1px'})
-          .on('dblclick', function(d) {
+          .on('click', function(d) {
+
+            //console.log(d3.event);
             d3.event.stopPropagation();
 
-            d.fixed = (d.fixed) ? false : true;
+            if (d3.event.altKey) {
+              d.ticked = (d.ticked) ? false : true;
+            } else {
+              d.fixed = (d.fixed) ? false : true;
+            }
 
             updateClasses(); //function(d) { return d.source.fixed && d.target.fixed; });
             dispatch.selectionChanged(d);

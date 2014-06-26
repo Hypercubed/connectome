@@ -22,7 +22,7 @@
     "angular-local-storage": "https://github.com/grevory/angular-local-storage.git#master",
     "_F": "Hypercubed/_F#~0.0.2",
     "lodash": "~2.4.1",
-    "isteven-angular-multiselect": "~1.1.0",
+    "isteven-angular-multiselect": "1.2.0",
     "angular-dsv": "~0.0.4",
     "angular-sanitize": "~1.2.18"
   },
