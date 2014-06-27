@@ -9,10 +9,10 @@
   app
     .config(function(snapRemoteProvider) {
       snapRemoteProvider.globalOptions = {
-        //disable: 'right',
+        disable: 'right',
         maxPosition: 350,
         tapToClose: false,
-        touchToDrag: true
+        touchToDrag: false
       };
     });
 
@@ -32,7 +32,8 @@
         edgeFilters: true,
         options: false,
         help: true,
-        download: true
+        download: true,
+        info: true
       });
 
       localStorageService.bind($scope, 'options', {
@@ -109,6 +110,13 @@
       }
 
       $scope.max = Math.max;
+
+      $scope.revoveSelectedItem = function(index) {  // TODO: move
+        //item.fixed = false; graphData.selectedItems.slice($index, 1); graph.update();
+        $scope.graphData.selectedItems[index].fixed = false;
+        $scope.graphData.selectedItems.splice(index, 1);
+        $scope.graph.update();
+      }
 
       function updateSampleExpression() {  // Todo: move
         //if (cells === old) { return; }
@@ -225,6 +233,7 @@
       function saveSelectionIds(key) {
         return function(newVal) {
           //return;
+
           if ($scope.graphData.hoverEvent) {
             graph.update();
             $scope.graphData.hoverEvent = false;
@@ -239,9 +248,10 @@
           if (!angular.equals(newIds, $scope.selectedIds[key])) {
             console.log('new ids', key);
             $scope.selectedIds[key] = newIds;
+            if (key === 'cells') {updateSampleExpression();}
             updateNetwork(newIds,$scope.selectedIds);
           } else {
-            graph.update();
+            //graph.update();
           }
 
         };
@@ -263,7 +273,7 @@
           //updateGenes();
           updateSampleExpression();
 
-          $scope.$watch('selectedIds.cells', updateSampleExpression);
+          //$scope.$watch('selectedIds.cells', updateSampleExpression);
           //$scope.$watch('selectedIds.genes', updateGenes);
         } else {
           //updateGenes($scope.data.genes);
@@ -280,16 +290,17 @@
         //$scope.$watch('selected.cells', saveSelectionIds('cells'));
         //$scope.$watch('selected.genes', saveSelectionIds('genes'));
 
-        $scope.$watchCollection('selectedIds.pairs', updateNetwork);
-        $scope.$watchCollection('selectedIds.cells', updateNetwork);
-        $scope.$watchCollection('selectedIds.genes', updateNetwork);
+        $scope.$watchCollection('selectedIds', updateNetwork);
+        //$scope.$watchCollection('selectedIds.pairs', updateNetwork);
+        //$scope.$watchCollection('selectedIds.cells', updateNetwork);
+        //$scope.$watchCollection('selectedIds.genes', updateNetwork);
 
-        $scope.$watch('options.ligandFilter', updateNetwork);
-        $scope.$watch('options.receptorFilter', updateNetwork);
-        $scope.$watch('options.ligandRankFilter', updateNetwork);
-        $scope.$watch('options.receptorRankFilter', updateNetwork);
+        $scope.$watchCollection('options', updateNetwork);
+        //$scope.$watch('options.receptorFilter', updateNetwork);
+        //$scope.$watch('options.ligandRankFilter', updateNetwork);
+        //$scope.$watch('options.receptorRankFilter', updateNetwork);
+        //$scope.$watch('options.edgeRankFilter', updateNetwork); // TODO: filter in place
 
-        $scope.$watch('options.edgeRankFilter', updateNetwork); // TODO: filter in place
         $scope.$watch('options.showLabels', function() {
           graph.draw($scope.options);
         });

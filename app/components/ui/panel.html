@@ -1,6 +1,6 @@
 <div ng-click="toggleOpen()" class="ng-scope">
-  <a href="">{{heading}}  <b class="caret collapsed" ng-class="{'collapsed': !isOpen}"></b></a>
+  <a href=""><span bindonce bo-text="heading"></span>  <b class="caret collapsed" ng-class="{'collapsed': !isOpen}"></b></a>
   <div class="pull-right small" panel-transclude="label">{{label}}</div>
 </div>
-<div collapse="!isOpen" ng-transclude>
+<div collapse="!isOpen" ng-transclude ng-if="isOpen">
 </div>

@@ -1,6 +1,13 @@
-<span ng-repeat="key in list | limitTo : limit" ng-init="item = get(key)">
-	<a href title="{{key.value | number:2}}" ng-click="click(item)" ng-mouseover="hover(item, true)"  ng-mouseout="hover(item, false)" ng-style="{'font-weight': item.ticked ? 'bold' : ''}">
-		{{item.name}}
-	</a>{{$last ? "" : ","}}
+<span bindonce ng-repeat="key in list | limitTo : limit track by key.id" ng-init="item = get(key)">
+	<a
+		href title="{{key.value | number:2}}"
+		ng-click="click(item)"
+		ng-mouseover="hover(item, true)"
+		ng-mouseout="hover(item, false)"
+		ng-style="{'font-weight': item.ticked ? 'bold' : ''}"
+		bo-text="item.name">
+	</a><span>{{$last ? '' : ','}}</span>
 </span>
-<a class="button btn-link" ng-if="list.length > limit" ng-click="expand()">(+ {{list.length - limit}} more)</a>
+<a class="button btn-link" ng-if="list.length > limit" ng-click="expand()">
+	(+ {{list.length - limit}} more)
+</a>

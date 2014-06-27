@@ -18,7 +18,8 @@
       'LocalStorageModule',
       'ui.bootstrap',
       'hc.downloader',
-      'angular-growl'
+      'angular-growl',
+      'pasvaz.bindonce'
     ]);
 
   app

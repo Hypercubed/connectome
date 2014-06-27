@@ -1,60 +1,77 @@
 <div class="animate-switch-container" ng-switch on="item.type">
-	<div class="animate-switch" ng-switch-when="gene.ligand">
+	<div class="animate-switch" ng-switch-when="gene.ligand" bindonce="item">
 	  <ul  class="list-unstyled">
-	    <li>Ligand: {{item.name}}</li>
+	    <li>Ligand: <span bindonce bo-text="item.name"></span></li>
 	  </ul>
-	  <ul class="list-unstyled">
-	  	<li>Paired receptors: <span expression-list="item.receptors" key="id" array="data.genes"></span></li>
-      	<li ng-repeat="(k,v) in item.meta">{{k}}: {{v}}</li>
-      </ul>
+	  <div 
+	  	panel
+	  	heading="more"
+	  	is-open="item.open"
+	  	label=""
+	  	title="Show more information">
+		  <ul class="list-unstyled">
+		  	<li>Paired receptors: <span expression-list="item.receptors" key="id" array="data.genes"></span></li>
+	      	<li bindonce ng-repeat="(k,v) in item.meta" bo-text="k + ': ' + v"></li>
+	      </ul>	      
+	  </div>
+
 	</div>
 
-	<div class="animate-switch" ng-switch-when="gene.receptor">
+	<div class="animate-switch" ng-switch-when="gene.receptor" bindonce="item">
 	  <ul  class="list-unstyled">
-	    <li>Receptor: {{item.name}}</li>
+	    <li>Receptor: <span bindonce bo-text="item.name"></span></li>
 	  </ul>
-	  <ul class="list-unstyled">
-	  	<li>Paired ligands: <span expression-list="item.ligands" key="id" array="data.genes"></span></li>
-      	<li ng-repeat="(k,v) in item.meta">{{k}}: {{v}}</li>
-      </ul>
+	  <div 
+	  	panel
+	  	heading="more"
+	  	is-open="item.open"
+	  	label=""
+	  	title="Show more information">
+		  <ul class="list-unstyled">
+		  	<li>Paired ligands: <span expression-list="item.ligands" key="id" array="data.genes"></span></li>
+	      	<li bindonce ng-repeat="(k,v) in item.meta" bo-text="k + ': ' + v"></li>
+	      </ul>    
+	  </div>
+
 	</div>
 
-	<div class="animate-switch" ng-switch-when="node">
+	<div class="animate-switch" ng-switch-when="node" bindonce="item">
 	  <ul  class="list-unstyled">
-	    <li>Sample cell: {{item.name}}</li>
-	    <li>{{item._ligands.length > 0 ? 'Sum of ' : ''}}Ligand expression: {{item.values[0] | number:2}}</li>
+	    <li>Sample cell: <span bo-text="item.name"></span></li>
+	    <li><span bo-text="item._ligands.length > 0 ? 'Sum of ' : ''"></span>Ligand expression: <span ng-bind="item.values[0] | number:2"></span></li>
 	    <li ng-if="item._ligands.length > 0">Ligands: <span expression-list="item._ligands"  key="id" array="data.genes"></span></li>
-	    <li>{{item._receptors.length > 0 ? 'Sum of ' : ''}}Receptor expression: {{item.values[1] | number:2}}
+	    <li><span bo-text="item._receptors.length > 0 ? 'Sum of ' : ''"></span>Receptor expression: <span ng-bind="item.values[1] | number:2"></span></li>
 	    <li ng-if="item._receptors.length > 0">Receptors: <span expression-list="item._receptors"  key="id" array="data.genes"></span></li>
 	  </ul>
-	  <ul  class="list-unstyled">
-	  	<!-- li ng-if="item.expr.length > 0">Ligands: <span expression-list="item.expr | filter : { gene: { type: 'Ligand' } } | limitTo : 5"></span></li>
-	    <li ng-if="item.expr.length > 0">Receptors: <span expression-list="item.expr | filter : { gene: { type: 'Receptor' } } | limitTo : 5"></span></li -->
-	    <li ng-if="item.ligands.length > 0">Ligands: <span expression-list="item.ligands"  key="id" array="data.genes"></span></li>
-	    <li ng-if="item.receptors.length > 0">Receptors: <span expression-list="item.receptors"  key="id" array="data.genes"></span></li>
-	    <li><ul class="list-unstyled">
-	      <li ng-repeat="(k,v) in item.meta">{{k}}: {{v}}</li>
-	    </ul></li>        
-	  </ul>
+	  <div 
+	  	panel
+	  	heading="more"
+	  	is-open="item.open"
+	  	label=""
+	  	title="Show more information">
+		  <ul class="list-unstyled">
+		    <li bo-if="item.ligands.length > 0">Ligands: <span expression-list="item.ligands"  key="id" array="data.genes"></span></li>
+		    <li bo-if="item.receptors.length > 0">Receptors: <span expression-list="item.receptors"  key="id" array="data.genes"></span></li>
+		    <li><ul class="list-unstyled">
+		      <li ng-repeat="(k,v) in item.meta" bo-text="k + ': ' + v"></li>
+		    </ul></li>
+		  </ul>	      
+	  </div>
+
+
 	</div>
 
-	<div class="animate-switch" ng-switch-when="expression">
+	<div class="animate-switch" ng-switch-when="expression" bindonce="item">
 	  <ul  class="list-unstyled">
-	    <li>Expression: {{item.name}}</li>
-	    <li>Expression value: {{item.value | number:2}}
+	    <li>Expression: <span bo-text="item.name"></span></li>
+	    <li>Expression value: <span ng-bind="item.value | number:2">
 	  </ul>
 	</div>
 
 	<div class="animate-switch" ng-switch-when="pair">
 	  <ul  class="list-unstyled">
-	    <li>L-R Pair: {{item.name}}</li>
+	    <li>L-R Pair: <span bindonce bo-text="item.name"></span></li>
 	  </ul>
 	</div>
 
-	<div class="animate-switch" ng-switch-default>
-	  <ul  class="list-unstyled">
-	    <li>{{item.type}}: {{item.name}}</li>
-	  </ul>
-	</div>
-
-</div>     
+</div>

@@ -17,8 +17,9 @@
         edgeCount: 0,
         ligandExtent: [0,100000],
         receptorExtent: [0,100000],
-        hoverItem: null//,
+        hoverItem: null,
         //hovertext: ''
+        selectedItems: [null]
       };
 
       var chart = hiveGraph();
@@ -81,13 +82,32 @@
       } */
 
       //var _hover = _F('hover');
-      chart.on('hover', debounce(function(d) {
-        data.hoverEvent = true;
-        data.hoverItem = d;
-      }));
+      chart.on('hover', function(d) {
+        $rootScope.$apply(function() {
+          data.hoverEvent = true;
 
-      chart.on('selectionChanged', function() {
-        $rootScope.$apply();
+          if (!d && !data.selectedItems[0].fixed) {
+            data.selectedItems.shift();
+          } else if (d && !d.fixed) {
+            data.selectedItems.unshift(d);
+          }
+
+        });
+      });
+
+      chart.on('selectionChanged', function(d) {
+        console.log('selectionChanged');
+        $rootScope.$apply(function() {
+
+          var index = data.selectedItems.indexOf(d);
+          if (index > 0) {data.selectedItems.splice(index, 1);}  // if already in list remove it
+
+          if (index !==0 && d.fixed) {
+            data.selectedItems.unshift(d);
+          }
+
+          //console.log(d.order);
+        });
       });
 
       /* function Node(id, name, type) {
@@ -209,7 +229,7 @@
 
         var _nodes = [];
 
-        console.log(genes.length);
+        //console.log(genes.length);
 
         cells.forEach(function(cell) {
           if (!cell.ticked) { return; }
@@ -831,7 +851,7 @@
       return {
         data: data,
         chart: chart,
-        update: _update,
+        update: debounce(_update, 30),
         makeNetwork: _makeNetwork,
         draw: _draw,
         clear: _clear,

@@ -22,7 +22,7 @@ body {
   border-top: 1px solid #e5e5e5;
 }
 
-#header .navbar-toggle {
+.navbar-toggle {
   display: inline-block;
   float: left;
   padding: 5px;
@@ -95,7 +95,7 @@ body {
 @media (min-width: 1200px) {
   .container {
     max-width: 1170px;
-  }  
+  }
 }
 .container-narrow > hr {
   margin: 30px 0;
@@ -156,7 +156,7 @@ height: auto;
 }
 
 #ui .panel .panel-title a:after {
-    font-family: 'Glyphicons Halflings'; 
+    font-family: 'Glyphicons Halflings';
     content: "\e114";
     float: right;
     color: grey;
@@ -190,13 +190,13 @@ height: auto;
 
 .panel-right {
   /* border: 2px solid green; */
-  padding: 5px;
+  padding: 0;
   position: absolute;
   top: 0px;
   bottom: auto;
   right: 0px;
   left: auto;
-  width: 400px;
+  /* width: 400px; */
   max-height: 100%;
   z-index: 100;
   overflow-y: auto;
@@ -219,11 +219,11 @@ height: auto;
   /* font-weight: bold; */
   padding: 12px;
   opacity: 0.7;
-  /* background: rgba(0, 0, 0, 0.8); 
+  /* background: rgba(0, 0, 0, 0.8);
   color: #fff;*/
   border-radius: 4px;
   width: 100%;
-  margin-bottom: 4px;
+  margin-top: 5px;
 }
 
 .new-tip:hover, .new-tip.hover {

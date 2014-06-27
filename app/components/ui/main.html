@@ -14,7 +14,7 @@
   </div>
 
   <div id="header" class="header row">
-    <button type="button" snap-toggle class="navbar-toggle" title="Click to show stats and options">
+    <button type="button" snap-toggle class="navbar-toggle" title="Click to show options">
       <span class="sr-only">Toggle navigation</span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
@@ -30,31 +30,53 @@
 
 </div>
 
-<div class="panel-right">
-  <div growl></div>
+<div class="panel-right col-md-3">
 
-  <div class="new-tip bg-info" ng-cloak ng-show="graphData.nodes.length > 0">
-    <ul class="list-unstyled">
-      <li>Samples: {{selected.cells.length}} / {{data.cells.length}}</li>
-      <li>Genes: {{selected.genes.length}} / {{data.genes.length}}</li>
-      <li>Pairs: {{selected.pairs.length}} / {{data.pairs.length}}</li>
-    </ul>
-    <ul class="list-unstyled">
-      <li>Nodes: {{graphData.nodes.length}} / {{graphData.nodeCount}}</li>
-      <li>Edges: {{graphData.edges.length}} / {{graphData.edgeCount}}</li>
-    </ul>
+  <div ng-class="panelState.info ? 'col-md-1' : ''" style="padding: 5px; min-width: 40px;">
+    <button type="button" ng-click="panelState.info = !panelState.info" class="navbar-toggle pull-right" title="Click to show options" style="display: inline-block;">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
   </div>
 
-  <div class="new-tip bg-info hover" ng-cloak ng-show="graphData.hoverItem">
-    <div graph-item="graphData.hoverItem" data="data"></div>
+  <div class="col-md-11" ng-if="panelState.info">
+    <div class="new-tip bg-info" ng-cloak ng-show="graphData.nodes.length > 0">
+      <ul class="list-unstyled">
+        <li>Samples: <span ng-bind="selectedIds.cells.length"></span> / <span bindonce="data.cells" bo-text="data.cells.length"></span></li>
+        <li>Genes:   <span ng-bind="selectedIds.genes.length"></span> / <span bindonce="data.genes" bo-text="data.genes.length"></span></li>
+        <li>Pairs:   <span ng-bind="selectedIds.pairs.length"></span> / <span bindonce="data.pairs" bo-text="data.pairs.length"></span></li>
+      </ul>
+      <ul class="list-unstyled">
+
+        <li>Nodes: <span ng-bind="graphData.nodes.length"></span> / <span ng-bind="graphData.nodeCount"></span></li>
+        <li>Edges: <span ng-bind="graphData.edges.length"></span> / <span ng-bind="graphData.edgeCount"></span></li>
+
+      </ul>
+    </div>    
+
+    <div growl></div>
+
+    <div class="new-tip bg-info hover" ng-cloak ng-if="graphData.hoverItem && !graphData.hoverItem.fixed">
+      <div graph-item="graphData.hoverItem" data="data"></div>
+    </div>
+
+    <div ng-repeat="item in graphData.selectedItems track by item.name" class="new-tip" ng-if="item.type" ng-class="item.hover ? 'bg-info' : 'bg-danger'">
+      <button type="button" class="close" aria-hidden="true" ng-click="revoveSelectedItem($index)">&times;</button>
+      <div graph-item="item" data="data"></div>
+    </div>
   </div>
 
-  <div class="new-tip bg-danger" ng-repeat="item in graphData.nodes | filter : { fixed: true }">
-    <button type="button" class="close" aria-hidden="true" ng-click="item.fixed = false; graph.update()">&times;</button>
-    <div graph-item="item" data="data"></div>
-  </div>
+  <!-- button type="button" class="navbar-toggle" title="Click to show stats" style="display: inline-block; position: relative;">
+    <span class="sr-only">Toggle navigation</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button -->
+
+ 
+
+
 
 </div>
-
-
-
