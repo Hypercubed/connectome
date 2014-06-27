@@ -168,8 +168,6 @@ height: auto;
     content: "\e080";    /* adjust as needed, taken from bootstrap.css */
 }
 
-
-
 .btn-vert-block > button{
     margin-bottom:10px;
 }
@@ -200,6 +198,7 @@ height: auto;
   max-height: 100%;
   z-index: 100;
   overflow-y: auto;
+  overflow-x: clip;
 }
 
 .growl {
@@ -228,4 +227,59 @@ height: auto;
 
 .new-tip:hover, .new-tip.hover {
     opacity: 1;
+}
+
+.animate-fade {
+
+}
+
+.animate-fade.ng-hide-add, .animate-fade.ng-hide-remove,
+.animate-fade.ng-enter, .animate-fade.ng-leave {
+  -webkit-transition:all linear 0.5s;
+  -moz-transition:all linear 0.5s;
+  -o-transition:all linear 0.5s;
+  transition:all linear 0.5s;
+  /* display:block!important; */
+}
+
+.animate-fade.ng-hide-add.ng-hide-add-active,
+.animate-fade.ng-hide-remove,
+.animate-fade.ng-enter,
+.animate-fade.ng-leave.ng-leave-active {
+  opacity: 0;
+}
+
+.animate-fade.ng-hide-add,
+.animate-fade.ng-hide-remove.ng-hide-remove-active,
+.animate-fade.ng-leave,
+.animate-fade.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+
+.animate-thin {
+
+}
+
+.animate-thin.ng-hide-add, .animate-thin.ng-hide-remove,
+.animate-thin.ng-enter, .animate-thin.ng-leave {
+  -webkit-transition:all linear 0.5s;
+  -moz-transition:all linear 0.5s;
+  -o-transition:all linear 0.5s;
+  transition:all linear 0.5s;
+  display:block!important;
+  position: relative;
+}
+
+.animate-thin.ng-hide-add.ng-hide-add-active,
+.animate-thin.ng-hide-remove,
+.animate-thin.ng-enter,
+.animate-thin.ng-leave.ng-leave-active {
+  left: 100%;
+}
+
+.animate-thin.ng-hide-add,
+.animate-thin.ng-hide-remove.ng-hide-remove-active,
+.animate-thin.ng-leave,
+.animate-thin.ng-enter.ng-enter-active {
+  left: 0;
 }

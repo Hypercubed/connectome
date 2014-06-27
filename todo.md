@@ -2,6 +2,12 @@
 
 _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 
+## Next
+- [ ] Fix force
+- [ ] Cross reference samples in genes
+- [ ] Split main.js into controlers and directives
+- [ ] move updateSampleExpression
+
 - [x] localStorage
 - [x] filters
 - [x] Use select2
@@ -21,11 +27,11 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [ ] debounce number input
 - [ ] debouce more
 - [x] add limits to avoid lockup
-- [x] Fix range... gain
+- [x] Fix range... again
 - [ ] Change edge and node rank filters
 - [ ] combine hive and force controller
 - [ ] make hive and force directives
 - [x] Raise alerts on internal limits
-- [ ] Page title
+- [x] Page title
 - [x] ontology
 - [x] arrows

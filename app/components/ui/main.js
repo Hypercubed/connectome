@@ -17,7 +17,15 @@
     });
 
   app
-    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, debounce, localStorageService, ligandReceptorData, graphService) {
+    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, debounce, localStorageService, ligandReceptorData, graphService, snapRemote) {
+
+
+
+      //$scope.$watch(function() { return $scope.snapper.state().state; }, function(state) {
+      //  console.log(state);
+      //})
+
+
 
       $scope.state = $state.current.name;
 
@@ -33,8 +41,30 @@
         options: false,
         help: true,
         download: true,
-        info: true
+        info: true,
+        snapper: true
       });
+
+      console.log('local storage state', $scope.panelState.snapperState);
+
+      snapRemote.getSnapper().then(function(snapper) {
+
+        if ($scope.panelState.snapperState) {
+          snapper.open();
+        } else {
+          snapper.close();
+        }
+
+        snapper.on('open', function() {
+          //console.log('Drawer opened!');
+          $scope.panelState.snapperState = true;
+        });
+        
+        snapper.on('close', function() {
+          //console.log('Drawer closed!');
+          $scope.panelState.snapperState = false;
+        });
+      });      
 
       localStorageService.bind($scope, 'options', {
         showLabels: true,
@@ -137,19 +167,21 @@
           //console.log($scope.data.genes[0].$$hashKey);
 
           cell.expr = [];
-          cell._genes = [];
+          //cell._genes = [];
 
           $log.debug('getting all gene expression for '+cell.name);
 
           $scope.data.genes.forEach(function(gene) {
             var v = +$scope.data.expr[gene.id + 1][cell.id + 1];
             if (v > 0) {
+
               cell.expr.push({
                 //gene: gene,
                 id: gene.id,
                 type: gene._type,
                 value: v
               });
+
             }
           });
 

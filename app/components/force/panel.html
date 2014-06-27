@@ -6,82 +6,146 @@
 
   <accordion-group heading="Node Filters" is-open="panelState.nodeFilters" ng-class="{'collapsed': !panelState.nodeFilters}">
 
-    <div panel heading="Samples" is-open="panelState.cells">
-      <div panel-label >
-        {{selectedIds.cells.length}} / <span bindonce="data.cells" bo-text="data.cells.length"></span>
+    <div>
+
+      <div panel
+        heading="Samples"
+        is-open="panelState.cells"
+        label="{{selectedIds.cells.length}} / {{data.cells.length}}">
+
+          <div
+                multi-select
+                input-model="data.cells"
+                button-label="name"
+                item-label="name"
+                tick-property="ticked"
+                max-labels="1" ng-if="panelState.nodeFilters">
+          </div>
+
       </div>
+
+      <p />
+      <div panel
+        heading="Genes"
+        is-open="panelState.genes"
+        label="{{selectedIds.genes.length}} / {{data.genes.length}}">
 
         <div
               multi-select
-              input-model="data.cells"
+              input-model="data.genes"
               button-label="name"
-              item-label="name"
+              item-label="name description"
               tick-property="ticked"
-              max-labels="1"
-              isDisabled="!panelState.cells">
-        </div>    
+              max-labels="3" ng-if="panelState.nodeFilters">
+        </div>
 
-    </div>
-
-    <p />
-    <div panel heading="Genes" x-is-open="panelState.genes">
-      <div panel-label>
-        {{selectedIds.genes.length}} / <span bindonce="data.genes" bo-text="data.genes.length"></span>
       </div>
-      <div
-            multi-select
-            input-model="data.genes"
-            button-label="name"
-            item-label="name description"
-            tick-property="ticked"
-            max-labels="1"
-            isDisabled="!panelState.genes"
-            ng-if="panelState.genes">
+
+      <p />
+      <div panel
+        heading="Ligand cutoff"
+        is-open="panelState.receptorRank"
+        label="top {{options.ligandRankFilter | percentage}}"
+        title="Showing only top ligands">
+
+        <div hc-slider
+          ng-model="options.ligandRankFilter"
+          max="1"
+          min="0"
+          step="0.01"
+          ng-if="panelState.nodeFilters">
+        </div>
+
       </div>
-    </div>
 
-    <p />
-    <div panel heading="Ligand cutoff" is-open="panelState.receptorRank" label="top {{options.ligandRankFilter | percentage}}" title="Showing only top {{options.ligandRankFilter | percentage}} of ligands">
-      <div hc-slider ng-model="options.ligandRankFilter" max="1" min="0" step="0.01"></div>
-    </div>
+      <p />
+      <div panel
+        heading="Receptor rank"
+        is-open="panelState.ligandRank"
+        label="top {{options.receptorRankFilter | percentage}}">
 
-    <p />
-    <div panel heading="Receptor rank" is-open="panelState.ligandRank" label="top {{options.receptorRankFilter | percentage}}" title="Showing only top {{options.receptorRankFilter | percentage}} of receptors">
-      <div hc-slider ng-model="options.receptorRankFilter" max="1" min="0" step="0.01"></div>
+        <div hc-slider
+          ng-model="options.receptorRankFilter"
+          max="1"
+          min="0"
+          step="0.01"
+          ng-if="panelState.nodeFilters">
+        </div>
+
+      </div>
+
     </div>
 
   </accordion-group>
 
   <accordion-group heading="Edge Filters" is-open="panelState.edgeFilters" ng-class="{'collapsed': !panelState.edgeFilters}">
 
-    <div panel heading="Ligand - Receptor Pairs" is-open="panelState.pairs">
-      <div panel-label class="ng-cloak">
-        {{selectedIds.pairs.length}} / <span bindonce="data.pairs" bo-text="data.pairs.length"></span>
-      </div>
-      <div
-            multi-select
+    <div panel 
+      heading="Ligand - Receptor Pairs"
+      is-open="panelState.pairs"
+      label="{{selectedIds.pairs.length}} / {{data.pairs.length}}">
+
+      <div multi-select
             input-model="data.pairs"
             button-label="name"
             item-label="name"
             tick-property="ticked"
-            max-labels="1"
-            isDisabled="!panelState.pairs">
+            max-labels="1" ng-if="panelState.edgeFilters">
       </div>
+
     </div>
 
     <p />
-    <div panel heading="Ligand TPM" is-open="panelState.ligand" label="&gt; {{options.ligandFilter | number:0}} tpm" title="Only showing edges where the ligand expression exceeds {{options.ligandFilter | number:0}} tpm">
-      <div hc-slider ng-model="options.ligandFilter" max="[graphData.ligandExtent[1], 10] | max" min="0" step="1"></div>
+    <div panel
+      heading="Ligand TPM"
+      is-open="panelState.ligand"
+      label="&gt; {{options.ligandFilter | number:0}} tpm"
+      title="Only showing edges where the receptor expression exceeds tpm">
+
+      <div hc-slider
+        ng-model="options.ligandFilter"
+        max="[graphData.ligandExtent[1], 10] | max"
+        min="0"
+        step="1"
+        ng-if="panelState.edgeFilters">
+      </div>
+
     </div>
 
     <p />
-    <div panel heading="Receptor TPM" is-open="panelState.receptor" label="&gt; {{options.receptorFilter | number:0}} tpm" title="Only showing edges where the receptor expression exceeds {{options.receptorFilter | number:0}} tpm">
-      <div hc-slider ng-model="options.receptorFilter" max="[graphData.receptorExtent[1],10] | max" min="0" step="1"></div>
+    <div 
+      panel
+      heading="Receptor TPM"
+      is-open="panelState.receptor"
+      label="&gt; {{options.receptorFilter | number:0}} tpm"
+      title="Only showing edges where the receptor expression exceeds tpm">
+      
+      <div
+        hc-slider
+        ng-model="options.receptorFilter"
+        max="[graphData.receptorExtent[1],10] | max"
+        min="0"
+        step="1"
+        ng-if="panelState.edgeFilters">
+      </div>
+
     </div>
 
     <p />
-    <div panel heading="Edge cutoff" label="top {{options.edgeRankFilter | percentage}}" is-open="panelState.edges" title="Showing only top {{options.edgeRankFilter |percentage}}% of edges">
-      <div hc-slider ng-model="options.edgeRankFilter" max="1" min="0" step="0.01"></div>
+    <div panel
+      heading="Edge cutoff"
+      label="top {{options.edgeRankFilter | percentage}}"
+      is-open="panelState.edges"
+      title="Showing only top {{options.edgeRankFilter |percentage}}% of edges">
+
+      <div hc-slider
+        ng-model="options.edgeRankFilter"
+        max="1"
+        min="0"
+        step="0.01"
+        ng-if="panelState.edgeFilters">
+      </div>
+
     </div>
   </accordion-group>
 

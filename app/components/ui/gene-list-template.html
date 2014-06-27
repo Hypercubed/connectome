@@ -1,4 +1,4 @@
-<span bindonce ng-repeat="key in list | limitTo : limit track by key.id" ng-init="item = get(key)">
+<span bindonce ng-repeat="key in list | limitTo : limit track by key.id" ng-init="item = get(key)" class="animate-fade" >
 	<a
 		href title="{{key.value | number:2}}"
 		ng-click="click(item)"

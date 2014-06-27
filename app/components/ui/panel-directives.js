@@ -6,7 +6,7 @@
   var app = angular.module('panels',[]);
 
   app
-    .directive('panel', function() {
+    .directive('panel', function($timeout) {
       return {
         scope: {
           heading: '@',
@@ -16,20 +16,38 @@
         restrict: 'EA',
         transclude: true,   // Grab the contents to be used as the heading
         templateUrl: baseUrl+'panel.html',
-        controller: function() {
-          this.setLabel = function(element) {
-            this.label = element;
-          };
-        },
+        //controller: function() {
+//
+        //  this.setLabel = function(element) {
+        //    this.label = element;
+        //  };
+
+        //},
         link: function(scope) {
-          scope.toggleOpen = function() {
-            scope.isOpen = !scope.isOpen;
+
+          scope.ngIf = scope.isOpen;
+
+          scope.toggleOpen = function(newVal) {
+
+            if (scope.isOpen) {
+              scope.isOpen = false;
+              $timeout(function() {
+                scope.ngIf = false;
+              })
+            } else {
+              scope.ngIf = true;
+              $timeout(function() {
+                scope.isOpen = true;
+              })
+            }
+            
           };
+
         }
       };
     });
 
-  app
+  /* app
     .directive('panelLabel', function() {
     return {
       restrict: 'EA',
@@ -56,6 +74,6 @@
         });
       }
     };
-  });
+  }); */
 
 })();
