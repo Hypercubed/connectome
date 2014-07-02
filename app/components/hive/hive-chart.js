@@ -22,7 +22,7 @@
     // Private objects
     var zoom = d3.behavior.zoom();
 
-    var groups = ['gene.ligand','gene.receptor','node'];
+    var groups = ['gene.ligand','gene.receptor','sample'];
 
     // Scales
     var ncolor = d3.scale.ordinal().domain(['ligand','both','receptor']).range(['#ed1940','yellow','#3349ff']); // ['#ed1940','#a650e2','#3349ff']
@@ -38,7 +38,8 @@
     });
 
     // Value accessors
-    var _type = _F('type');
+    //var _type = _F('type');
+    var _group = _F('group');
     var _value = _F('value');
     var _name = _F('name');
     var _class = _F('class');
@@ -52,8 +53,8 @@
     };
 
     // Range accesors
-    var _angle = _F('type', angle); //function(d) { return angle(d.type); };
-    var _radius = function(d) { return radius(_y[d.type](d.i)); };
+    var _angle = _F('group', angle); //function(d) { return angle(d.type); };
+    var _radius = function(d) { return radius(_y[_group(d)](d._i)); };
     var _ncolor = _F('class', ncolor); //function(d) {  return ncolor(d.class); };
     var _slog = _F(_value, slog);
 
@@ -108,29 +109,29 @@
         ;
 
       // Ranges
-      var _e = d3.extent(graph.edges, _value);  // Edge values
+      var _e = d3.extent(graph._edges, _value);  // Edge values
       slog.domain(_e);
       eopac.domain(_e);
 
-      var _n = d3.extent(graph.nodes, _value);  // Node values
+      var _n = d3.extent(graph._nodes, _value);  // Node values
       rsize.domain(_n);
 
       var nodesByType = d3.nest()   // Nest nodes by type
-        .key(_type)
+        .key(_group)
         .sortKeys(d3.ascending)
-        .entries(graph.nodes);
+        .entries(graph._nodes);
 
       nodesByType.forEach(function(type) { // Setup domain for position range
-        //var group = groups.indexOf(type.key);  // TODO: eliminte y and node.group?
+        //var group = groups._indexOf(type.key);  // TODO: eliminte y and node.group?
+        //console.log(type);
         //console.log(type);
         _y[type.key].domain(d3.range(type.values.length));
 
         type.values.forEach(function(node,i) {
-          node.i = i;
+          node._i = i;
           //node.group = group;
         });
       });
-
 
       function _labelAngle(d) {
         var a = -_angle(d)+Math.PI;
@@ -163,19 +164,25 @@
             'translate(' + trans + ') scale(' + scale + ')');
       }
 
-      g.selectAll('.axis')
-          .data(groups)
-        .enter().append('line')
-          .attr('class', 'axis')
-          .style({ stroke: '#000', 'stroke-width': '1.5px'})
+      //g.selectAll('.axis').remove();
+
+      var axes = g.selectAll('.axis')
+          .data(groups);
+
+      axes.enter().append('line')
+        .style({ stroke: '#000', 'stroke-width': '1.5px'});
+
+      axes.attr('class', 'axis')
           .attr('transform', function(d) { return 'rotate(' + degrees(angle(d)) + ')'; })
           .attr('x1', radius.range()[0])
           .attr('x2', radius.range()[1]);
 
       container.select('defs').remove();
 
+      //console.log(graph);
+
       var defs = container.append('defs')
-        .selectAll('marker').data(graph.edges).enter()
+        .selectAll('marker').data(graph._edges).enter()
         .append('svg:marker')
             .attr('class', 'Triangle')
             .attr('viewBox', '0 -5 10 10')
@@ -193,22 +200,27 @@
       defs.append('svg:path')
         .attr('d', 'M0,-5L10,0L0,5');
 
-      function sign(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
+      //function sign(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
 
       function classNeighbors(node, direction, key, value) {
         if (arguments.length < 4) { value = true; }
-        var _tgt = (direction <= 0) ? 'source' : 'target';
-        var _dir = (direction <= 0) ? 'lin' : 'lout';
 
-        node[_dir].forEach(function(index) {
-          var d = graph.edges[index];
-          var t = d[_tgt];
+        var _tgt = (direction <= 0) ? 'source' : 'target';
+        //var _dir = (direction <= 0) ? 'lin' : 'lout';
+
+        var edges = (direction <= 0) ? graph._inEdgesIndex[node.id] : graph._outEdgesIndex[node.id];
+
+        edges.forEach(function(d) {
           if(d) {
             d[key] = value;         // class edge
+
+            var t = d[_tgt];
             t[key] = value;   // class node
-            if (t.type !== 'node') {
-              classNeighbors(t, direction - sign(direction), key, value);
+
+            if (t.type === 'gene') {
+              classNeighbors(t, direction, key, value);
             }
+
           }
         });
       }
@@ -273,7 +285,7 @@
       }
 
       // LINKS
-      var gLinks = g.selectAll('g.links').data([graph.edges]);
+      var gLinks = g.selectAll('g.links').data([graph._edges]);
 
       gLinks.enter()
           .append('g')
@@ -297,7 +309,7 @@
         ;
 
       links
-        .attr('id', function(d) { return 'link-'+d.index; })
+        .attr('id', function(d) { return 'link-'+d._index; })
         .style('stroke-width', _slog)
         .attr('d', hiveLink)
         .attr('marker-end', function(d,i) {
@@ -326,7 +338,7 @@
       //console.log(graph.edges);
 
       // NODES
-      var nodesLayer = g.selectAll('g.nodes').data([graph.nodes]);
+      var nodesLayer = g.selectAll('g.nodes').data([graph._nodes]);
 
       nodesLayer.enter()
         .append('g')
@@ -379,7 +391,7 @@
           ;
 
       nodes
-        .attr('id', function(d) { return 'node-'+d.index; })
+        .attr('id', function(d) { return 'node-'+d._index; })
         .classed('fixed', _fixed)
         .attr('transform', function(d) {
           return 'rotate( '+degrees(_angle(d))+' ) translate(' + _radius(d) + ') rotate( '+degrees(_labelAngle(d))+' )';
@@ -391,10 +403,10 @@
         d.y = b.top;
       });
 
-      function _r(d) { return (d.type.match(/gene/)) ? 5 : rsize(d.value); }
+      function _r(d) { return (d.type === 'gene') ? 5 : rsize(d.value); }
       function __r(d) { return -_r(d); }
       function _2r(d) { return 2*_r(d); }
-      function rx(d) { return (d.type.match(/gene/)) ? 0 : _r(d); }
+      function rx(d) { return (d.type === 'gene') ? 0 : _r(d); }
 
       nodes
         .select('rect')
@@ -409,8 +421,8 @@
       nodes
         .select('text')
           .text(nodeName)
-          .attr('dy',function(d) { return (d.type.match(/gene/)) ? 0 : 3; })
-          .attr('dx',function(d) { return (d.type.match(/gene/)) ? 10 : 15; })
+          .attr('dy',function(d) { return (d.type === 'gene') ? 0 : 3; })
+          .attr('dx',function(d) { return (d.type === 'gene') ? 10 : 15; })
           ;
 
       nodes.exit().remove();
@@ -424,7 +436,7 @@
           return;
         }
 
-        var h = _type.eq(d.type).and(_class.eq(d.class));
+        var h = _group.eq(d.group).and(_class.eq(d.class));
         //function o(n) { return h(n) ? 1 : 0.2; };
 
         nodes
@@ -440,11 +452,11 @@
       }
 
       var _l = [
-        { name: 'Ligand expressing sample', class: 'ligand', type: 'node' },
-        { name: 'Receptor expressing sample', class: 'receptor', type: 'node' },
-        { name: 'Ligand and receptor expressing sample', class: 'both', type: 'node' },
-        { name: 'Ligand gene', class: 'ligand', type: 'gene.ligand' },
-        { name: 'Receptor gene', class: 'receptor', type: 'gene.receptor' }
+        { name: 'Ligand expressing sample', class: 'ligand', group: 'node' },
+        { name: 'Receptor expressing sample', class: 'receptor', group: 'node' },
+        { name: 'Ligand and receptor expressing sample', class: 'both', group: 'node' },
+        { name: 'Ligand gene', class: 'ligand', group: 'gene.ligand' },
+        { name: 'Receptor gene', class: 'receptor', group: 'gene.receptor' }
       ];
 
       container.selectAll('.caxis').remove();  // TODO: not this

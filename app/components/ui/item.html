@@ -1,7 +1,9 @@
 <div class="animate-switch-container" ng-switch on="item.type">
-	<div class="animate-switch" ng-switch-when="gene.ligand" bindonce="item">
+	<div class="animate-switch" ng-switch-when="gene" bindonce="item">
 	  <ul  class="list-unstyled">
-	    <li>Ligand: <span bindonce bo-text="item.name"></span></li>
+	    <li>
+	    	{{item.class}}: <span bindonce bo-text="item.name"></span>
+	    </li>
 	  </ul>
 	  <div 
 	  	panel
@@ -10,38 +12,35 @@
 	  	label=""
 	  	title="Show more information">
 		  <ul class="list-unstyled">
-		  	<li>Paired receptors: <span expression-list="item.receptors" key="id" array="data.genes"></span></li>
+		  	<li ng-if="item.class == 'ligand'">Paired receptors: <span expression-list="item.receptors" key="i" array="data.genes"></span></li>
+		  	<li ng-if="item.class == 'receptor'">Paired ligands: <span expression-list="item.ligands" key="i" array="data.genes"></span></li>
 	      	<li bindonce ng-repeat="(k,v) in item.meta" bo-text="k + ': ' + v"></li>
 	      </ul>	      
 	  </div>
 
 	</div>
 
-	<div class="animate-switch" ng-switch-when="gene.receptor" bindonce="item">
-	  <ul  class="list-unstyled">
-	    <li>Receptor: <span bindonce bo-text="item.name"></span></li>
-	  </ul>
-	  <div 
-	  	panel
-	  	heading="more"
-	  	is-open="item.open"
-	  	label=""
-	  	title="Show more information">
-		  <ul class="list-unstyled">
-		  	<li>Paired ligands: <span expression-list="item.ligands" key="id" array="data.genes"></span></li>
-	      	<li bindonce ng-repeat="(k,v) in item.meta" bo-text="k + ': ' + v"></li>
-	      </ul>    
-	  </div>
-
-	</div>
-
-	<div class="animate-switch" ng-switch-when="node" bindonce="item">
+	<div class="animate-switch" ng-switch-when="sample" bindonce="item">
 	  <ul  class="list-unstyled">
 	    <li>Sample cell: <span bo-text="item.name"></span></li>
-	    <li><span bo-text="item._ligands.length > 0 ? 'Sum of ' : ''"></span>Ligand expression: <span ng-bind="item.values[0] | number:2"></span></li>
-	    <li ng-if="item._ligands.length > 0">Ligands: <span expression-list="item._ligands"  key="id" array="data.genes"></span></li>
-	    <li><span bo-text="item._receptors.length > 0 ? 'Sum of ' : ''"></span>Receptor expression: <span ng-bind="item.values[1] | number:2"></span></li>
-	    <li ng-if="item._receptors.length > 0">Receptors: <span expression-list="item._receptors"  key="id" array="data.genes"></span></li>
+	    <li>
+	    	<span bo-text="graphData._outEdgesIndex[item.id].length > 0 ? 'Sum of ' : ''"></span>
+	    	Ligand expression:
+	    	<span ng-bind="item.values[0] | number:2"></span>
+	    </li>
+	    <li ng-if="graphData._outEdgesIndex[item.id].length > 0">
+	    	Ligands:
+	    	<span expression-list="graphData._outEdgesIndex[item.id]"  key="i" array="data.genes"></span>
+	    </li>
+	    <li>
+	    	<span bo-text="graphData._inEdgesIndex[item.id].length > 0 ? 'Sum of ' : ''"></span>
+	    	Receptor expression:
+	    	<span ng-bind="item.values[1] | number:2"></span>
+	    </li>
+	    <li ng-if="graphData._inEdgesIndex[item.id].length > 0">
+	    	Receptors:
+	    	<span expression-list="graphData._inEdgesIndex[item.id]"  key="i" array="data.genes"></span>
+	    </li>
 	  </ul>
 	  <div 
 	  	panel
@@ -49,9 +48,16 @@
 	  	is-open="item.open"
 	  	label=""
 	  	title="Show more information">
+	  	  
 		  <ul class="list-unstyled">
-		    <li bo-if="item.ligands.length > 0">Ligands: <span expression-list="item.ligands"  key="id" array="data.genes"></span></li>
-		    <li bo-if="item.receptors.length > 0">Receptors: <span expression-list="item.receptors"  key="id" array="data.genes"></span></li>
+		    <li bo-if="graphData.outEdgesIndex[item.id].length > 0">
+		    	Ligands:
+		    	<span expression-list="graphData.outEdgesIndex[item.id]"  key="i" array="data.genes"></span>
+		    </li>
+		    <li bo-if="graphData.inEdgesIndex[item.id].length > 0">
+		    	Receptors:
+		    	<span expression-list="graphData.inEdgesIndex[item.id]"  key="i" array="data.genes"></span>
+		    </li>
 		    <li><ul class="list-unstyled">
 		      <li ng-repeat="(k,v) in item.meta" bo-text="k + ': ' + v"></li>
 		    </ul></li>

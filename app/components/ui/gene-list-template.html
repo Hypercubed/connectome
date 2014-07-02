@@ -1,6 +1,6 @@
-<span bindonce ng-repeat="key in list | limitTo : limit track by key.id" ng-init="item = get(key)" class="animate-fade" >
+<span bindonce ng-repeat="edge in list | limitTo : limit track by edge[key]" ng-init="item = get(edge)" class="animate-fade" >
 	<a
-		href title="{{key.value | number:2}}"
+		href title="{{edge.value | number:2}}"
 		ng-click="click(item)"
 		ng-mouseover="hover(item, true)"
 		ng-mouseout="hover(item, false)"

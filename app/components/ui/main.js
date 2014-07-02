@@ -59,12 +59,12 @@
           //console.log('Drawer opened!');
           $scope.panelState.snapperState = true;
         });
-        
+
         snapper.on('close', function() {
           //console.log('Drawer closed!');
           $scope.panelState.snapperState = false;
         });
-      });      
+      });
 
       localStorageService.bind($scope, 'options', {
         showLabels: true,
@@ -107,16 +107,17 @@
         cells: []
       };
 
-      var _id = _F('id');
+      //var _id = _F('_id');
+      var _ticked = _F('ticked');
+      var _i = _F('i');
       //var _index = _F('$index');
-
-
+      //var _type = _F('type');
 
       function loadSelection() {
 
         function _ticked(arr) {
           return function(d) {
-            d.ticked = arr.indexOf(d.id) > -1;
+            d.ticked = arr.indexOf(d.i) > -1;
             return d.ticked;
           };
         }
@@ -128,6 +129,8 @@
           cells: [72,73],
           genes: []
         });
+
+        console.log($scope.selectedIds.pairs.length);
 
         $scope.data.pairs.forEach(_ticked($scope.selectedIds.pairs));
         $scope.data.cells.forEach(_ticked($scope.selectedIds.cells));
@@ -146,14 +149,14 @@
         $scope.graphData.selectedItems[index].fixed = false;
         $scope.graphData.selectedItems.splice(index, 1);
         $scope.graph.update();
-      }
+      };
 
-      function updateSampleExpression() {  // Todo: move
+      /* function updateSampleExpression() {  // Todo: move this
         //if (cells === old) { return; }
 
         console.log('update expression');
 
-        $scope.data.cells.forEach(function(cell) {  // TODO: move this, should only run when new cell is selected
+        $scope.data.cells.forEach(function(cell) {
           if (!cell.ticked) {return;}
           //return;
 
@@ -172,12 +175,13 @@
           $log.debug('getting all gene expression for '+cell.name);
 
           $scope.data.genes.forEach(function(gene) {
-            var v = +$scope.data.expr[gene.id + 1][cell.id + 1];
+            var v = +$scope.data.expr[gene.i + 1][cell.i + 1];
             if (v > 0) {
 
               cell.expr.push({
                 //gene: gene,
-                id: gene.id,
+                i: gene.i,
+                id: gene._id,
                 type: gene._type,
                 value: v
               });
@@ -193,46 +197,6 @@
           //console.log(cell.expr, cell.ligands);
 
         });
-      }
-
-      /* function crossReferencePairs(pairs) {  // Todo: move, optimize
-
-        pairs.forEach(function(pair) {
-          $scope.data.genes.forEach(function(gene) {
-            if (gene.name == pair.Ligand) {
-              gene._type = 'ligand';
-              pair._ligand = gene;
-            }
-            if (gene.name == pair.Receptor) {
-              gene._type = 'receptor';
-              pair._receptor = gene;
-            }
-          })
-        });
-
-      } */
-
-      /* function updateGenes(genes) {  // Todo: move, optimize
-        $scope.selected.genes.forEach(function(gene) {
-          if (gene.ticked !== true) {return;}
-          var _genes = [];
-          gene._type = 'ligand';  // needed because some genes are not either, fix
-
-          $scope.data.pairs.forEach(function(pair) {
-            //console.log(pair);
-            if (pair.Ligand == gene.name) {
-              gene._type = 'ligand';
-              _genes.push(pair._receptor.id);
-            }
-            if (pair.Receptor == gene.name) {
-              gene._type = 'receptor';
-              _genes.push(pair._ligand.id);
-            }
-          });
-
-          gene.geneIds = _genes;
-
-        })
       } */
 
       var updateNetwork = function updateNetwork() {  // This should be handeled by the directive
@@ -245,22 +209,7 @@
         graph.draw($scope.options);
       };
 
-      /* function saveSelectionIds(key) {
-        return function(newVal, oldVal) {
 
-          console.log('changed',key);
-
-          var oldIds = $scope.selectedIds[key];
-          var newIds = $scope.selected[key].map(_id);
-
-          //if (!angular.equals(oldIds, newIds)) {
-            console.log('new ids');
-            $scope.selectedIds[key] = newIds;
-          //}
-        }
-      } */
-
-      var _ticked = _F('ticked');
 
       function saveSelectionIds(key) {
         return function(newVal) {
@@ -271,16 +220,12 @@
             $scope.graphData.hoverEvent = false;
           }
 
-          //console.log('changed',key);
-
-          //graph.update();
-
-          var newIds = newVal.filter(_ticked).map(_id);
+          var newIds = newVal.filter(_ticked).map(_i);
 
           if (!angular.equals(newIds, $scope.selectedIds[key])) {
             console.log('new ids', key);
             $scope.selectedIds[key] = newIds;
-            if (key === 'cells') {updateSampleExpression();}
+            //if (key === 'cells') {updateSampleExpression();}
             updateNetwork(newIds,$scope.selectedIds);
           } else {
             //graph.update();
@@ -301,16 +246,16 @@
 
         loadSelection();
 
-        if (true) {   // lazy load
+        //if (true) {   // lazy load
           //updateGenes();
-          updateSampleExpression();
+          //updateSampleExpression();
 
           //$scope.$watch('selectedIds.cells', updateSampleExpression);
           //$scope.$watch('selectedIds.genes', updateGenes);
-        } else {
+        //} else {
           //updateGenes($scope.data.genes);
-          updateSampleExpression($scope.data.cells);
-        }
+          //updateSampleExpression($scope.data.cells);
+        //}
 
         updateNetwork(true,false);
 
@@ -388,12 +333,10 @@
     return {
       scope: {
         item: '=graphItem',
-        data: '='
+        data: '=',
+        graphData: '='
       },
-      templateUrl: 'components/ui/item.html',
-      link: function() {
-
-      }
+      templateUrl: 'components/ui/item.html'
     };
   });
 
@@ -410,6 +353,7 @@
         scope.limit = 3;
 
         attrs.key = attrs.key || 'gene';  // todo: change
+        scope.key = attrs.key;
 
         scope.get = function(_) {
           var __ = _[attrs.key];

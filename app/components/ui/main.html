@@ -41,21 +41,22 @@
       </ul>
       <ul class="list-unstyled">
 
-        <li>Nodes: <span ng-bind="graphData.nodes.length"></span> / <span ng-bind="graphData.nodeCount"></span></li>
-        <li>Edges: <span ng-bind="graphData.edges.length"></span> / <span ng-bind="graphData.edgeCount"></span></li>
+        <li>Nodes: <span ng-bind="graphData._nodes.length"></span> / <span ng-bind="graphData.nodes.length"></span></li>
+        <li>Edges: <span ng-bind="graphData._edges.length"></span> / <span ng-bind="graphData.edges.length"></span></li>
 
       </ul>
     </div>    
 
     <div growl></div>
 
-    <div class="new-tip bg-info hover" ng-cloak ng-if="graphData.hoverItem && !graphData.hoverItem.fixed">
-      <div graph-item="graphData.hoverItem" data="data"></div>
-    </div>
+    <!-- div class="new-tip bg-info hover" ng-cloak ng-if="graphData.hoverItem && !graphData.hoverItem.fixed">
+      <div graph-item="graphData.hoverItem" data="data" graphData="graphData"></div>
+    </div -->
 
     <div ng-repeat="item in graphData.selectedItems track by item.name" class="new-tip" ng-if="item.type" ng-class="item.hover ? 'bg-info' : 'bg-danger'">
       <button type="button" class="close" aria-hidden="true" ng-click="revoveSelectedItem($index)">&times;</button>
-      <div graph-item="item" data="data"></div>
+      <div ng-include="'components/ui/item.html'">
+      </div>
     </div>
   </div>
 

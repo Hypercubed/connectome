@@ -7,37 +7,40 @@
   var app = angular.module('lrSpaApp');
 
   app
-    .constant('EXPRESSIONFILE', 'data/LR.expr.txt')
+    .constant('EXPRESSIONFILE', 'data/LR.expr.txt')  // TODO: combine
     .constant('PAIRSFILE', 'data/LR.pairs.txt')
     .constant('ONTOLGYFILE', 'data/ontology.txt');
 
   app
-    .service('ligandReceptorData', function($q, $log,$http,$timeout,dsv,EXPRESSIONFILE,PAIRSFILE,ONTOLGYFILE) {
+    .service('ligandReceptorData', function($q, $log,$http,$timeout,dsv,EXPRESSIONFILE,PAIRSFILE,ONTOLGYFILE) {   // TODO: move
       var service = {};
 
-      service.data = {};
-      service.data.expr = [];
-      service.data.pairs = [];
-      service.data.cells = [];
-      service.data.genes = [];
-      service.data.ontology = [];
+      service.data = {
+        expr: [],
+        pairs: [],
+        cells: [],
+        genes: [],
+        ontology: []
+      };
 
       function _getPairs(filename) {
         return dsv.tsv.get(filename, {cache: true}, function(d,i) {
-            d.id = i;
-            d.name = d.Ligand + '-' + d.Receptor;
+          d.i = i;
+          d.id = i;
+          //d.id = i;
+          d.name = d.Ligand + '-' + d.Receptor;
 
-            return d;
-          })
-          .error(function(data, status, headers, config) {
-            $log.warn('Error',data, status, headers, config);
-          })
-          .success(function(data) {
-            $log.debug('Pairs loaded:',data.length);
-          })
-          .then(function(res) {
-            return res.data;
-          });
+          return d;
+        })
+        .error(function(data, status, headers, config) {
+          $log.warn('Error',data, status, headers, config);
+        })
+        .success(function(data) {
+          $log.debug('Pairs loaded:',data.length);
+        })
+        .then(function(res) {
+          return res.data;
+        });
       }
 
       function _getExpression(filename) {
@@ -84,7 +87,15 @@
             //var __expr = _expr.slice(1);
 
             service.data.cells = _expr[0].slice(1).map(function(d,i) {
-              var _cell = { name: d, id: i };
+
+              var _cell = {
+                name: d,
+                id: d,  // better name?
+                i:  i,
+                //id: i,   // TODO: get rid of this
+                type: 'sample'
+              };
+
               var _o = _ontology[d];
               if (_o) {
                 _cell.meta = _cell.meta || {};
@@ -121,12 +132,15 @@
             service.data.genes = _expr.slice(1).map(function(row, i) {  // TODO: generate one gene file
               return {
                 name: row[0],
-                id: i,
-                pairs: [],
-                type: 'unknown',
+                id: row[0],
+                //id: i, // todo: get rid of this
+                i: i,
+                pairs: [], // todo: get rid of this
+                type: 'gene',
+                class: 'unknown',
                 description: '',
-                _genes: [],
-                ligands: [],
+                _genes: [],  // todo: get rid of this
+                ligands: [],  // todo: get rid of this
                 receptors: []
               };
             });
@@ -148,63 +162,25 @@
                 return false;
               }
 
-              pair.index = [_ligand.id,_receptor.id];
+              pair.index = [_ligand.i,_receptor.i];
 
               // cross reference
-              _ligand.type = _ligand._type = 'ligand';
-              _ligand._genes.push(_receptor.id);
-              _ligand.receptors.push({ id: _receptor.id });
+              _ligand.class = 'ligand';
+              _ligand._genes.push(_receptor.i);
+              _ligand.receptors.push({ i: _receptor.i });
               _ligand.meta = matchKeys(pair, 'Ligand.');
               _ligand.description = _ligand.meta.name;
               delete _ligand.meta.name;
 
-              _receptor.type = _receptor._type = 'receptor';
-              _receptor._genes.push(_ligand.id);
-              _receptor.ligands.push({ id: _ligand.id });
+              _receptor.class = 'receptor';
+              _receptor._genes.push(_ligand.i);
+              _receptor.ligands.push({ i: _ligand.i });
               _receptor.meta = matchKeys(pair, 'Receptor.');
               _receptor.description = _receptor.meta.name;
               delete _receptor.meta.name;
 
               return true;
             });
-
-            // do cross referencing here!!!!
-            /* service.data.genes = service.data.genes.filter(function(gene) {
-
-              service.data.pairs.forEach(function(pair) {  // TODO: DRY
-                if (gene.name == pair.Ligand) {
-                  gene.type = 'ligand';
-                  gene._type = 'ligand';
-                  gene._genes.push(pair);
-                  gene.meta = matchKeys(pair, 'Ligand.');
-                  gene.description = gene.meta.name;
-                  delete gene.meta.name;
-                  pair._ligand = gene;
-                } else if (gene.name == pair.Receptor) {
-                  gene.type = 'receptor';
-                  gene._type = 'receptor';
-                  gene.pairs.push(pair);
-                  gene.meta = matchKeys(pair, 'Receptor.');
-                  gene.description = gene.meta.name;
-                  delete gene.meta.name;
-                  pair._receptor = gene;
-                }
-              });
-
-              return gene.pairs.length > 0;
-            });
-
-
-            service.data.genes.forEach(function(gene) {  // TODO: shouldn't need this
-              if (gene.type == 'ligand') {
-                gene._genes = gene.pairs.map(function(d) {return  d._receptor.id; });
-              } else if (gene.type == 'receptor') {
-                //console.log(gene);
-                gene._genes = gene.pairs.map(function(d) {return  d._ligand.id; });
-              } else {
-                gene._genes = [];
-              }
-            }); */
 
           });
       };
@@ -296,7 +272,7 @@
             }
 
             var exprValues = _pair.index.map(function(_index) {
-              return +expr[_index][_node.id+1];
+              return +expr[_index][_node.i+1];
             });
 
             if (exprValues[0] > 0 && _node.ligands.indexOf(_pair.Ligand) < 0) {
@@ -373,11 +349,11 @@
 
             data.nodes.forEach(function(src) {  // all selected cell-cell pairs
 
-              var lexpr = +expr[lindex][src.id+1];
+              var lexpr = +expr[lindex][src.i+1];
               if (lexpr === 0) {return;}
 
               data.nodes.forEach(function(tgt) {
-                var rexpr = +expr[rindex][tgt.id+1];
+                var rexpr = +expr[rindex][tgt.i+1];
                 if (rexpr === 0) {return;}
 
                 //$log.debug('Non-zero product',src,tgt);
@@ -552,127 +528,5 @@
       };
 
     });
-
-  /* app
-    .controller('ForceGraphCtrl', function ($scope, $log, localStorageService, ligandReceptorData, forceGraph) {
-
-      // Make network
-      localStorageService.bind($scope, 'options', {
-        showLabels: true,
-        maxEdges: 100,
-        ligandFilter: 10,
-        receptorFilter: 10,
-        ligandRankFilter: 0.1,
-        receptorRankFilter: 0.1,
-        edgeRankFilter: 0.1,
-      });
-
-      forceGraph.clear();
-      $scope.graphData = forceGraph.data;
-
-      function updateNetwork(newVal, oldVal) {
-        if (newVal === oldVal) {return;}
-        saveSelection();
-        forceGraph.makeNetwork($scope.selected.pairs, $scope.selected.cells, $scope.data.expr, $scope.options);
-        forceGraph.draw($scope.options);
-      }
-
-      // Load Data
-      $scope.selected = {
-        pairs: [],
-        cells: []
-      };
-
-      function saveSelection() {
-        var _id = function(d) { return d.id; };
-
-        var _pairs = $scope.selected.pairs.map(_id);
-        var _cells = $scope.selected.cells.map(_id);
-
-        localStorageService.set('pairs', _pairs);
-        localStorageService.set('cells', _cells);
-        //localStorageService.set('ligandRange', forceGraph.graph.ligandRange);
-        //localStorageService.set('receptorRange', forceGraph.graph.receptorRange);
-      }
-
-      function loadSelection() {
-
-        function _idin(arr) {
-          return function(d) {
-            return arr.indexOf(d.id) > -1;
-          };
-        }
-
-        var _pairs = localStorageService.get('pairs') || [317];
-        var _cells = localStorageService.get('cells') || [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26];
-
-        $log.debug('load from local stoarge',_pairs,_cells);
-
-        if (_pairs.length < 1) { _pairs = [317]; }
-        if (_cells.length < 1) { _cells = [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]; }
-
-        $scope.selected.pairs = $scope.data.pairs.filter(_idin(_pairs));
-        $scope.selected.cells = $scope.data.cells.filter(_idin(_cells));
-
-        //TODO: not this
-        //forceGraph.graph.ligandRange = localStorageService.get('ligandRange') || forceGraph.graph.ligandRange;
-        //forceGraph.graph.receptorRange = localStorageService.get('receptorRange') || forceGraph.graph.receptorRange;
-
-      }
-
-      ligandReceptorData.load().then(function() {
-        $scope.data = ligandReceptorData.data;
-
-        loadSelection();
-
-        updateNetwork(true,false);
-
-        $scope.$watchCollection('selected', updateNetwork);
-
-        $scope.$watch('options.ligandFilter', updateNetwork);
-        $scope.$watch('options.receptorFilter', updateNetwork);
-        $scope.$watch('options.ligandRankFilter', updateNetwork);
-        $scope.$watch('options.receptorRankFilter', updateNetwork);
-
-        $scope.$watch('options.edgeRankFilter', updateNetwork); // TODO: filter in place
-        $scope.$watch('options.showLabels', function() {
-          saveSelection();
-          forceGraph.draw($scope.options);
-        });
-
-      });
-
-      $scope.saveJson = function() {  // TODO: make a service?
-        var txt = graphDataToJSON(forceGraph.data);
-        var blob = new Blob([txt], { type: 'data:text/json' });
-        saveAs(blob, 'lr-graph.json');
-      };
-
-      function graphDataToJSON(data) {
-        var _json = {};
-
-        _json.nodes = data.nodes.map(function(node) {
-          return {
-            name: node.name,
-            values: node.values,
-            ligands: node.ligands,
-            receptors: node.receptors
-          };
-        });
-
-        _json.links = data.edges.map(function(edge) {
-          return {
-            name: edge.name,
-            source: data.nodes.indexOf(edge.source),
-            target: data.nodes.indexOf(edge.target),
-            value: edge.value,
-            values: edge.values
-          };
-        });
-
-        return JSON.stringify(_json);
-      }
-
-    }); */
 
 })();

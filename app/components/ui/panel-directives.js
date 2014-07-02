@@ -27,20 +27,20 @@
 
           scope.ngIf = scope.isOpen;
 
-          scope.toggleOpen = function(newVal) {
+          scope.toggleOpen = function() {
 
             if (scope.isOpen) {
               scope.isOpen = false;
               $timeout(function() {
                 scope.ngIf = false;
-              })
+              });
             } else {
               scope.ngIf = true;
               $timeout(function() {
                 scope.isOpen = true;
-              })
+              });
             }
-            
+
           };
 
         }
