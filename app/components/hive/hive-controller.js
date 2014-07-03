@@ -144,7 +144,7 @@
 
         data.nodeCount = data.nodes.length;
 
-        var nodes = data.nodes.sort(_valueComp).filter(_valueFilter);    // Sort and filter out zeros
+        var nodes = data._nodes.sort(_valueComp).filter(_valueFilter);    // Sort and filter out zeros
 
         var rankedLigands = nodes  // Ligand
           .map(_value0)
@@ -165,16 +165,16 @@
         filter0 = Math.max(filter0, 0) || 0;
         filter1 = Math.max(filter1, 0) || 0;
 
-        console.log(filter0,filter1);
+        //console.log(filter0,filter1);
 
         var filtered = nodes.filter(function(d) {
           //console.log(d);
-          return ( d.type !== 'node' || d.values[0] >= filter0 || d.values[1] >= filter1 );
+          return ( d.type !== 'sample' || d.values[0] >= filter0 || d.values[1] >= filter1 );
         });
 
         //console.log(filtered.length);
 
-        data.nodes = filtered;
+        data._nodes = filtered;
 
       }
 
@@ -550,13 +550,24 @@
 
         data.edgeCount = data.edges.length;
 
-        _sortAndFilterNodes(options);
         //_sortAndFilterEdges(options);
 
         cfpLoadingBar.inc();
 
+        data._nodes = data.nodes.filter(_ticked);  // combine these -> _sortAndFilterNodes
+        _sortAndFilterNodes(options);
+
+        data.edges.forEach(function(d) {  // -> sort and filter edges
+          d.ticked = false;
+        });
+
+        data._nodes.forEach(function(node) {
+          data.edgesIndex[node.id].forEach(function(d) {
+            d.ticked = true;
+          });
+        });
+
         data._edges = data.edges.filter(_ticked);
-        data._nodes = data.nodes.filter(_ticked);
 
         if (data._edges.length > options.edgeRankFilter*data._edges.length) {
 
@@ -591,7 +602,7 @@
 
         }); */
 
-        data.nodes.forEach(function(d) {
+        data._nodes.forEach(function(d) {
 
           if (d.type === 'gene') {
             d.group = 'gene.'+d.class;
