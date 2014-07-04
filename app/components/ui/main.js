@@ -169,7 +169,7 @@
           var newIds = newVal.filter(_ticked).map(_i);
 
           if (!angular.equals(newIds, $scope.selectedIds[key])) {
-            console.log('new ids', key);
+            //console.log('new ids', key);
             $scope.selectedIds[key] = newIds;
             //if (key === 'cells') {updateSampleExpression();}
             updateNetwork(newIds,$scope.selectedIds);

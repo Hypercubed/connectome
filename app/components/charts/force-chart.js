@@ -55,30 +55,6 @@
     var _ncolor = _F('class', ncolor); //function(d) {  return ncolor(d.class); };
     var _slog = _F(_value, slog);
 
-    // Tooltips
-    //var nodeLabelTooltip = chart.nodeLabelTooltip = d3.tip().attr('class', 'd3-tip node').html(_name).direction('w');
-    //var tooltip = chart.tooltip = d3.tip().attr('class', 'd3-tip node').html(_name);
-    //tooltip.fixed = false;
-
-    /* tooltip.lastTarget = null;
-    tooltip.toggle = function(target) {
-      if (!tooltip.lastTarget || tooltip.lastTarget !== target) {
-        tooltip.lastTarget = target;
-        return _tpshow.apply(this,arguments);
-      }
-      _tphide.apply(this,arguments);
-    } */
-
-    //nodeLabelTooltip.offset(function() {
-      //console.log(this.getBBox().width);
-    //  return [0, -40]; //-2*this.getBBox().height
-    //});
-
-    //tooltip.offset(function() {
-      //console.log(this.getBBox().width);
-    //  return [0, -20]; //-2*this.getBBox().height
-    //});
-
     var dispatch = d3.dispatch('hover','selectionChanged');
 
     chart.draw = function draw(graph) {
@@ -110,7 +86,7 @@
       var _n = d3.extent(graph._nodes, _value);  // Node values
       rsize.domain(_n);
 
-      var nodesByType = d3.nest()   // Nest nodes by type
+      /* var nodesByType = d3.nest()   // Nest nodes by type
         .key(_group)
         .sortKeys(d3.ascending)
         .entries(graph._nodes);
@@ -122,60 +98,10 @@
           node._i = i;
           //node.group = group;
         });
-      });
-
-      //var line = d3.svg.line()
-      //  .x(function(d) { return d.x; })
-      //  .y(function(d) { return d.y; });
+      }); */
 
       function tick() {
 
-        //links
-        //  .attr('x1', function(d) { return d.source.x; })
-        ////  .attr('y1', function(d) { return d.source.y; })
-        //  .attr('x2', function(d) { return d.target.x; })
-        //  .attr('y2', function(d) { return d.target.y; });
-
-        /* links.attr('d', function(d) {
-
-          if (d.target !== d.source) {
-            return line([d.target, d.source]);
-            //var dx = d.target.x - d.source.x,
-            //    dy = d.target.y - d.source.y,
-            //    dr = d.type === 'pair' ? 0 : Math.sqrt(dx * dx + dy * dy);
-            //return 'M' +
-            //    d.source.x + ',' +
-            //    d.source.y + 'A' +
-            //    dr + ',' + dr + ' 0 0,1 ' +
-            //    d.target.x + ',' +
-            //    d.target.y;
-          } else {
-            var dx = 100,
-                dy = 100,
-                dr = 1;
-            return 'M' +
-                d.source.x + ',' +
-                d.source.y + 'A' +
-                dr + ',' + dr + ' 0 0,1 ' +
-                (d.source.x - dx) + ',' +
-                (d.source.y - dy);
-          }
-
-        }); */
-
-        /* function linkArc(d) {
-          var t_radius = rsize(d.target.value);
-          var s_radius = rsize(d.source.value);
-          var dx = d.target.x - d.source.x;
-          var dy = d.target.y - d.source.y;
-          var gamma = Math.atan(dy / dx);
-          var tx = d.target.x - (Math.cos(gamma) * t_radius);
-          var ty = d.target.y - (Math.sin(gamma) * t_radius);
-          var sx = d.source.x - (Math.cos(gamma) * s_radius);
-          var sy = d.source.y - (Math.sin(gamma) * s_radius);
-
-          return 'M' + sx + ',' + sy + 'L' + tx + ',' + ty;
-        } */
 
         links.attr('d', function(d) {
 
@@ -195,29 +121,33 @@
               sweep = 1; // 1 or 0
 
           // Self edge.
-          if ( d.target === d.source ) {
-            //var dcx = x1 - width/2;
-            //var dcy = y1 - height/2;
-
-            // Fiddle with this angle to get loop oriented.
-            xRotation = -45; //Math.atan(dcy/dcx || 0)*90/Math.PI;
-            //console.log(xRotation);
+          if ( x1 === x1 && y1 === y2 ) {
 
             // Needs to be 1.
             largeArc = 1;
 
             // Change sweep to change orientation of loop.
-            //sweep = 0;
+            sweep = 1;
 
             // Make drx and dry different to get an ellipse
             // instead of a circle.
-            drx = 10;
-            dry = 30;
+            //drx = 30;
+            //dry = 10;
 
             // For whatever reason the arc collapses to a point if the beginning
             // and ending points of the arc are the same, so kludge it.
-            x2 = x2 + 1;
-            y2 = y2 - 1;
+            var dcx = x1 - width/2;
+            var dcy = y1 - height/2;
+            var dcr = Math.sqrt(dcx * dcx + dcy * dcy);
+
+            xRotation = Math.atan(dcy/dcx || 0)*180/Math.PI;
+
+            drx = 30;
+            dry = 20;
+
+            x2 -=  dcy/dcr;
+            y2 +=  dcx/dcr;
+
           } else {
             var _radius = 2*rsize(d.target.value)+_slog(d)+5;
             var theta = Math.PI/6; //Math.atan(dy / dx || 0);
@@ -261,10 +191,6 @@
           d3.event.sourceEvent.stopPropagation();
         });
 
-      //var hiveLink = d3.hive.link()
-      //  .angle(_angle)
-      //  .radius(_radius);
-
       var g = container.selectAll('.networkGraph').data([1]);
 
       g.enter()
@@ -290,21 +216,21 @@
 
       container.append('defs')
         .selectAll('marker')
-          .data(graph.edges)
+          .data(graph._edges)
         .enter()
         .append('svg:marker')
             .attr('class', 'Triangle')
             .attr('viewBox', '0 -5 10 10')
             .attr('refY', 0)
             .attr('refX', 0)
-            .attr('markerWidth', function(d) { return 7*_slog(d); })
-            .attr('markerHeight', function(d) { return 7*_slog(d); })
+            .attr('markerWidth', function(d) { return 2*_slog(d); })
+            .attr('markerHeight', function(d) { return 2*_slog(d); })
             .attr('stroke-width', 1)
             .attr('markerUnits','userSpaceOnUse')
             //.style('stroke', function(d) { return color(d.value); })
             //.style('fill', function(d) { return color(d.value); })
             .attr('orient', 'auto')
-            .attr('id', function(d,i) { return 'arrow-'+i; })
+            .attr('id', function(d,i) { d.i = i; return 'arrow-'+d.i; })
             .append('svg:path')
               .attr('d', 'M0,-5L10,0L0,5')
               ;
@@ -419,7 +345,7 @@
         .attr('id', function(d,i) { return 'link-'+i; })
         .style('stroke-width', _slog)
         //.attr('d', hiveLink)
-        .attr('marker-end', function(d,i) { return (d.source !== d.target) ? 'url(#arrow-'+i+')' : 'none'; })
+        .attr('marker-end', function(d,i) { return (d.source !== d.target) ? 'url(#arrow-'+d.i+')' : 'none'; })
         ;
 
       links.exit().remove();

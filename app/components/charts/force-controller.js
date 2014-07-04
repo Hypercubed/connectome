@@ -19,25 +19,27 @@
 
         // Events
         //var _hover = _F('hover');
-      chart.on('hover', function(d) {
+      chart.on('hover', debounce(function(d) {
         //console.log('hover');
-        $rootScope.$apply(function() {
+        //$rootScope.$apply(function() {
           graph.data.hoverEvent = true;
 
           //console.log(d);
+          graph.data.selectedItems = graph.data.selectedItems.filter(function(d) { return d.fixed; });
 
-          if (!d && graph.data.selectedItems.length > 0 && !graph.data.selectedItems[0].fixed) {
-            graph.data.selectedItems.shift();
-          } else if (d && !d.fixed) {
+          //if (!d && graph.data.selectedItems.length > 0 && !graph.data.selectedItems[0].fixed) {
+          //  graph.data.selectedItems = graph.data.selectedItems.filter(function(d) { return !d.fixed; });
+          //} else
+          if (d && !d.fixed) {
             graph.data.selectedItems.unshift(d);
           }
 
-        });
-      });
+        //});
+      }));
 
-      chart.on('selectionChanged', function(d) {
+      chart.on('selectionChanged', debounce(function(d) {
         //console.log('selectionChanged');
-        $rootScope.$apply(function() {
+        //$rootScope.$apply(function() {
 
           var index = graph.data.selectedItems.indexOf(d);
           if (index > 0) {graph.data.selectedItems.splice(index, 1);}  // if already in list remove it
@@ -47,8 +49,8 @@
           }
 
           //console.log(d.order);
-        });
-      });
+        //});
+      }));
       //}
 
       // Accesors

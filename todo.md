@@ -3,10 +3,11 @@
 _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 
 ## Next
-- [ ] Fix force
+- [x] Fix force
+  - [x] fix force arrows
 - [ ] Cross reference samples in genes
-- [ ] Split main.js into controlers and directives
-- [ ] move updateSampleExpression
+- [ ] Refactor main.js (controllers and directives)
+- [-] move updateSampleExpression
 
 - [x] localStorage
 - [x] filters
@@ -14,7 +15,7 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [x] Add pull out menu
 - [x] range directive?
 - [x] Fix loading of range.min
-- [ ] use vector lib?  (https://github.com/llafuente/js-2dmath)
+- [-] use vector lib?  (https://github.com/llafuente/js-2dmath)
 - [x] Debounce slider
 - [ ] Add log scale to sliders
 - [x] Move components
