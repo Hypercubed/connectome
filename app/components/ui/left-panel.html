@@ -80,7 +80,7 @@
 
   <accordion-group heading="Edge Filters" is-open="panelState.edgeFilters" ng-class="{'collapsed': !panelState.edgeFilters}">
 
-    <div panel 
+    <div panel
       heading="Ligand - Receptor Pairs"
       is-open="panelState.pairs"
       label="{{selectedIds.pairs.length}} / {{data.pairs.length}}">
@@ -113,13 +113,13 @@
     </div>
 
     <p />
-    <div 
+    <div
       panel
       heading="Receptor TPM"
       is-open="panelState.receptor"
       label="&gt; {{options.receptorFilter | number:0}} tpm"
       title="Only showing edges where the receptor expression exceeds tpm">
-      
+
       <div
         hc-slider
         ng-model="options.receptorFilter"

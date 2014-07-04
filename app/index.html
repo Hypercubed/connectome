@@ -19,10 +19,10 @@
     <link rel="stylesheet" href="bower_components/isteven-angular-multiselect/angular-multi-select.css" />
     <!-- endbower -->
     <!-- endbuild -->
-    
+
     <!-- build:css({.tmp,app}) styles/main.css -->
     <link rel="stylesheet" href="components/ui/main.css">
-    <link rel="stylesheet" href="components/force/chart.css">
+    <link rel="stylesheet" href="components/charts/chart.css">
     <!-- endbuild -->
   </head>
   <body ng-app="lrSpaApp">
@@ -82,11 +82,14 @@
     <script src="components/app.js"></script>
     <script src="components/routes.js"></script>
     <script src="components/ui/main.js"></script>
-    <script src="components/ui/panel-directives.js"></script>  
-    <script src="components/force/force-chart.js"></script>
-    <script src="components/force/force-controller.js"></script>
-    <script src="components/hive/hive-chart.js"></script>
-    <script src="components/hive/hive-controller.js"></script>
+    <script src="components/data/ligandReceptorData-service.js"></script>
+    <script src="components/graph/graph-factory.js"></script>
+    <script src="components/ui/panel-directives.js"></script>
+    <script src="components/charts/chart-legend-chart.js"></script>
+    <script src="components/charts/force2-chart.js"></script>
+    <script src="components/charts/force2-controller.js"></script>
+    <script src="components/charts/hive-chart.js"></script>
+    <script src="components/charts/hive-controller.js"></script>
     <!-- endbuild -->
 </body>
 </html>

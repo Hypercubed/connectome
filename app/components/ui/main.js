@@ -19,13 +19,9 @@
   app
     .controller('MainCtrl', function ($scope, $rootScope, $log, $state, debounce, localStorageService, ligandReceptorData, graphService, snapRemote) {
 
-
-
       //$scope.$watch(function() { return $scope.snapper.state().state; }, function(state) {
       //  console.log(state);
       //})
-
-
 
       $scope.state = $state.current.name;
 
@@ -45,7 +41,7 @@
         snapper: true
       });
 
-      console.log('local storage state', $scope.panelState.snapperState);
+      //console.log('local storage state', $scope.panelState.snapperState);
 
       snapRemote.getSnapper().then(function(snapper) {
 
@@ -337,6 +333,38 @@
         graphData: '='
       },
       templateUrl: 'components/ui/item.html'
+    };
+  });
+
+  app
+  .directive('neighborsList', function() {
+    return {
+      scope: {
+        list: '=neighborsList',
+        array: '=',
+        title: '&',
+        key: '&'
+      },
+      templateUrl: 'components/ui/neighbors-list-template.html',
+      link: function (scope, element, attrs) {
+        scope.limit = 3;
+        scope.key = attrs.key;
+
+        scope.hover = function(item, __) {
+          if (item.ticked) {
+            item.hover = __;
+          }
+        };
+
+        scope.click = function(item) {
+          item.ticked = !item.ticked;
+        };
+
+        scope.expand = function() {
+          scope.limit = (scope.limit + 10 < scope.list.length) ? scope.limit + 10 : scope.list.length;
+        };
+
+      }
     };
   });
 

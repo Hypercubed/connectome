@@ -5,7 +5,7 @@
 	    	{{item.class}}: <span bindonce bo-text="item.name"></span>
 	    </li>
 	  </ul>
-	  <div 
+	  <div
 	  	panel
 	  	heading="more"
 	  	is-open="item.open"
@@ -15,56 +15,78 @@
 		  	<li ng-if="item.class == 'ligand'">Paired receptors: <span expression-list="item.receptors" key="i" array="data.genes"></span></li>
 		  	<li ng-if="item.class == 'receptor'">Paired ligands: <span expression-list="item.ligands" key="i" array="data.genes"></span></li>
 	      	<li bindonce ng-repeat="(k,v) in item.meta" bo-text="k + ': ' + v"></li>
-	      </ul>	      
+	      </ul>
 	  </div>
 
 	</div>
 
-	<div class="animate-switch" ng-switch-when="sample" bindonce="item">
-	  <ul  class="list-unstyled">
+	<div class="animate-switch"
+		ng-switch-when="sample"
+		bindonce="item">
+	  <ul
+			class="list-unstyled"
+			ng-init="ligands = (graphData._outEdgesIndex[item.id] | filter : { type: 'expression' }); receptors = (graphData._inEdgesIndex[item.id] | filter : { type: 'expression' })">
 	    <li>Sample cell: <span bo-text="item.name"></span></li>
 	    <li>
-	    	<span bo-text="graphData._outEdgesIndex[item.id].length > 0 ? 'Sum of ' : ''"></span>
+	    	<span bo-text="ligands > 0 ? 'Sum of ' : ''"></span>
 	    	Ligand expression:
 	    	<span ng-bind="item.values[0] | number:2"></span>
 	    </li>
-	    <li ng-if="graphData._outEdgesIndex[item.id].length > 0">
-	    	Ligands:
-	    	<span expression-list="graphData._outEdgesIndex[item.id]"  key="i" array="data.genes"></span>
+	    <li ng-if="ligands.length > 0">Ligands:
+	    	<span
+					neighbors-list="ligands"
+					key="target"
+					array="graphData.nodesIndex"></span>
 	    </li>
 	    <li>
-	    	<span bo-text="graphData._inEdgesIndex[item.id].length > 0 ? 'Sum of ' : ''"></span>
+	    	<span bo-text="receptors > 0 ? 'Sum of ' : ''"></span>
 	    	Receptor expression:
 	    	<span ng-bind="item.values[1] | number:2"></span>
 	    </li>
-	    <li ng-if="graphData._inEdgesIndex[item.id].length > 0">
+	    <li ng-if="receptors.length > 0">
 	    	Receptors:
-	    	<span expression-list="graphData._inEdgesIndex[item.id]"  key="i" array="data.genes"></span>
+	    	<span neighbors-list="receptors"
+					key="source"
+					array="graphData.nodesIndex"></span>
 	    </li>
 	  </ul>
-	  <div 
+	  <div
 	  	panel
 	  	heading="more"
 	  	is-open="item.open"
 	  	label=""
 	  	title="Show more information">
-	  	  
-		  <ul class="list-unstyled">
+
+		  <ul class="list-unstyled"
+				ng-init="ligands = (graphData.outEdgesIndex[item.id] | filter : { type: 'expression' });
+				         receptors = (graphData.inEdgesIndex[item.id] | filter : { type: 'expression' })">
 		    <li bo-if="graphData.outEdgesIndex[item.id].length > 0">
 		    	Ligands:
-		    	<span expression-list="graphData.outEdgesIndex[item.id]"  key="i" array="data.genes"></span>
+		    	<span
+						neighbors-list="ligands"
+						key="target"
+						array="graphData.nodesIndex"></span>
 		    </li>
-		    <li bo-if="graphData.inEdgesIndex[item.id].length > 0">
+		    <li bo-if="receptors.length > 0">
 		    	Receptors:
-		    	<span expression-list="graphData.inEdgesIndex[item.id]"  key="i" array="data.genes"></span>
+		    	<span
+						neighbors-list="receptors"
+						key="source"
+						array="graphData.nodesIndex"></span>
 		    </li>
 		    <li><ul class="list-unstyled">
 		      <li ng-repeat="(k,v) in item.meta" bo-text="k + ': ' + v"></li>
 		    </ul></li>
-		  </ul>	      
+		  </ul>
 	  </div>
 
+	</div>
 
+	<div class="animate-switch" ng-switch-when="sample-sample" bindonce="item">
+		<ul  class="list-unstyled">
+			<li>Expression: <span bo-text="item.name"></span></li>
+			<li>Expression product: <span ng-bind="item.value | number:2">
+		</ul>
 	</div>
 
 	<div class="animate-switch" ng-switch-when="expression" bindonce="item">

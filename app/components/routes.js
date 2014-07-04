@@ -16,23 +16,15 @@
       //})
       .state('force-graph', {
         url: '^/force',
-        resolve: { graphService: 'forceGraph' },
+        resolve: { graphService: 'forceGraph2' },
         controller: 'MainCtrl',
-        templateUrl: 'components/ui/main.html'//,
-        //views: {
-        //  'panel': { templateUrl: 'components/force/panel.html' },
-        //  'header': { templateUrl: 'components/force/force-legend.html' }
-        //}
+        templateUrl: 'components/ui/main.html',
       })
       .state('hive-graph', {
         url: '^/hive',
         resolve: { graphService: 'hiveGraph' },
         controller: 'MainCtrl',
-        templateUrl: 'components/ui/main.html'//,
-        //views: {
-        //  'panel': { templateUrl: 'components/force/panel.html' },
-        //  'header': { template: '' }
-        //}
+        templateUrl: 'components/ui/main.html',
       });
 
   });
