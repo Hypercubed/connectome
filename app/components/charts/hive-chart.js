@@ -59,30 +59,6 @@
     var _ncolor = _F('class', ncolor); //function(d) {  return ncolor(d.class); };
     var _slog = _F(_value, slog);
 
-    // Tooltips
-    //var nodeLabelTooltip = chart.nodeLabelTooltip = d3.tip().attr('class', 'd3-tip node').html(_name).direction('w');
-    //var tooltip = chart.tooltip = d3.tip().attr('class', 'd3-tip node').html(_name);
-    //tooltip.fixed = false;
-
-    /* tooltip.lastTarget = null;
-    tooltip.toggle = function(target) {
-      if (!tooltip.lastTarget || tooltip.lastTarget !== target) {
-        tooltip.lastTarget = target;
-        return _tpshow.apply(this,arguments);
-      }
-      _tphide.apply(this,arguments);
-    } */
-
-    //nodeLabelTooltip.offset(function() {
-      //console.log(this.getBBox().width);
-    //  return [0, -40]; //-2*this.getBBox().height
-    //});
-
-    //tooltip.offset(function() {
-      //console.log(this.getBBox().width);
-    //  return [0, -20]; //-2*this.getBBox().height
-    //});
-
     var dispatch = d3.dispatch('hover','selectionChanged');
 
     chart.draw = function draw(graph) {
@@ -505,31 +481,6 @@
         .attr('transform', 'translate('+(margin.left)+','+margin.top+')')
         .datum(_l)
         .call(legend);
-
-      /* var labels = container.selectAll('.caxis').data([_l]).enter().append('g')
-        .attr('class', 'axis caxis')
-        .attr('transform', 'translate('+(margin.left)+','+margin.top+')')
-        .selectAll('.label').data(_F()).enter().append('g')
-          .attr('class', 'label')
-          .on('mouseover', _F(null, highlight)) //function(d) { highlight(d); })  //function(d) { highlight(d); }
-          .on('mouseout', function() { highlight(null); })
-          .attr('transform', function(d,i) { return 'translate(0,'+((i+1)*20)+')'; });
-
-      var _rx = function rx(d) { return (d.name.match(/gene/)) ? 0 : 15; };
-
-      labels.append('rect')
-        .style({'stroke-width': '1px', 'stroke': 'rgb(51, 51, 51)'})
-        .attr('width', 15)
-        .attr('height', 15)
-        .attr('rx',_rx)
-        .attr('ry',_rx)
-        .style('fill', _ncolor);
-
-      labels.append('text')
-        .style({'stroke': 'none','fill': '#333','stroke-width': '1px','font-size': '10px'})
-        .attr('x', 20)
-        .attr('dy', '1.2em')
-        .text(_F('name')); */
 
     };
 

@@ -126,7 +126,7 @@
           genes: []
         });
 
-        console.log($scope.selectedIds.pairs.length);
+        //console.log($scope.selectedIds.pairs.length);
 
         $scope.data.pairs.forEach(_ticked($scope.selectedIds.pairs));
         $scope.data.cells.forEach(_ticked($scope.selectedIds.cells));
@@ -147,54 +147,6 @@
         $scope.graph.update();
       };
 
-      /* function updateSampleExpression() {  // Todo: move this
-        //if (cells === old) { return; }
-
-        console.log('update expression');
-
-        $scope.data.cells.forEach(function(cell) {
-          if (!cell.ticked) {return;}
-          //return;
-
-          if (cell.expr) { return; }
-          //if (!$scope.data.genes[0].$$hashKey) { return; }
-
-          //if (cell.expr && $scope.data.genes[0].$$hashKey) {
-          //  return;
-          //}
-
-          //console.log($scope.data.genes[0].$$hashKey);
-
-          cell.expr = [];
-          //cell._genes = [];
-
-          $log.debug('getting all gene expression for '+cell.name);
-
-          $scope.data.genes.forEach(function(gene) {
-            var v = +$scope.data.expr[gene.i + 1][cell.i + 1];
-            if (v > 0) {
-
-              cell.expr.push({
-                //gene: gene,
-                i: gene.i,
-                id: gene._id,
-                type: gene._type,
-                value: v
-              });
-
-            }
-          });
-
-          cell.expr.sort(function(a,b) { return b.value - a.value; });
-
-          cell.ligands = cell.expr.filter(_F('type').eq('ligand'));       // store filtered lists for later
-          cell.receptors = cell.expr.filter(_F('type').eq('receptor'));
-
-          //console.log(cell.expr, cell.ligands);
-
-        });
-      } */
-
       var updateNetwork = function updateNetwork() {  // This should be handeled by the directive
         $log.debug('update network');
 
@@ -204,8 +156,6 @@
         graph.makeNetwork($scope.data, $scope.options);
         graph.draw($scope.options);
       };
-
-
 
       function saveSelectionIds(key) {
         return function(newVal) {
@@ -234,24 +184,7 @@
 
         $scope.data = ligandReceptorData.data;
 
-        //crossReferencePairs($scope.data.pairs);
-
-        //$scope.data.genes.forEach(function(g) {
-          //console.log(g);
-        //})
-
         loadSelection();
-
-        //if (true) {   // lazy load
-          //updateGenes();
-          //updateSampleExpression();
-
-          //$scope.$watch('selectedIds.cells', updateSampleExpression);
-          //$scope.$watch('selectedIds.genes', updateGenes);
-        //} else {
-          //updateGenes($scope.data.genes);
-          //updateSampleExpression($scope.data.cells);
-        //}
 
         updateNetwork(true,false);
 

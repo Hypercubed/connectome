@@ -16,7 +16,7 @@
       //})
       .state('force-graph', {
         url: '^/force',
-        resolve: { graphService: 'forceGraph2' },
+        resolve: { graphService: 'forceGraph' },
         controller: 'MainCtrl',
         templateUrl: 'components/ui/main.html',
       })

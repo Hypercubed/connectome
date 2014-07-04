@@ -1,5 +1,5 @@
 /* global d3 */
-/* global force2Graph */
+/* global forceGraph */
 /* global _ */
 /* global _F */
 
@@ -9,37 +9,10 @@
   var app = angular.module('lrSpaApp');
 
   app
-    .service('forceGraph2', function($log, $window, $rootScope, $timeout, Graph, debounce, growl, cfpLoadingBar, name, version) {  // TODO: should be a directive
+    .service('forceGraph', function($log, $window, $rootScope, $timeout, Graph, debounce, growl, cfpLoadingBar, name, version) {  // TODO: should be a directive
 
-      var chart = new force2Graph();
+      var chart = new forceGraph();
       var graph = new Graph();
-
-      /* var data = {
-        nodes: [],                  // -> nodesArray
-        edges: [],                  // -> edgesArray
-
-        nodesIndex: {},
-
-        edgesIndex: {},
-
-        inEdgesIndex: {},
-        outEdgesIndex: {},
-
-        _nodes: [],                  // -> nodesArray
-        _edges: [],                  // -> edgesArray
-        _inEdgesIndex: {},
-        _outEdgesIndex: {},
-
-        edgeCount: 0,               // get rid?
-        ligandExtent: [0,100000],   // get rid?
-        receptorExtent: [0,100000], // get rid?
-        //hoverItem: null,            // get rid?
-        //hovertext: ''
-
-        selectedItems: []
-      }; */
-
-      //var data = graph.data;
 
       //function setupChart() {
         //chart = force2Graph();  // TODO: look at options
@@ -91,52 +64,6 @@
       var _value0 = function(d) { return d.values[0]; };
       var _value1 = function(d) { return d.values[1]; };
       //var gtZero = function(d) {return d>0;};
-
-      /* function Edge(src,tgt,name) {
-        name = name || src.name+'->'+tgt.name;
-        return {
-          source: src,
-          target: tgt,
-          value: 10,
-          name: name,
-          values: [10, 10]  // remove these
-        };
-      } */
-
-      /* function Node(id, name, type) {
-        if (id) {this.id = id;}
-        if (name) {this.name = name;}
-        if (type) {this.type = type;}
-
-        this.values = [0,0];
-        this.value = 0;
-        this.lout = [];  // todo: remove
-        this.lin = [];
-
-        this._expr = [];    // rename these
-        this._ligands = [];
-        this._receptors = [];
-      } */
-
-      /* function addNode(node) {   // expose
-        if (typeof node !== 'object' || arguments.length !== 1) {
-          $log.error('addNode: Wrong arguments.');
-        }
-
-        //if (!node.ticked) { return; }
-
-        var id = node.id;
-
-        data.nodes.push(node);
-        data.nodesIndex[id] = node;
-
-        data.edgesIndex[id] = {};
-
-        data.inEdgesIndex[id] = [];
-        data.outEdgesIndex[id] = [];
-        data._inEdgesIndex[id] = [];
-        data._outEdgesIndex[id] = [];
-      } */
 
       function _makeNodes(genes, cells) {
 
@@ -197,68 +124,6 @@
 
       }
 
-      /* function __sortAndFilterNodes(nodes, options) {
-
-        nodes = nodes.sort(_valueComp);
-
-        var ligands = nodes.map(function(d) {
-          return d.type.match('ligand') ? d.value : 0;
-        }).filter(function(d) {return d>0;}).sort(d3.ascending);
-
-        var receptors = nodes.map(function(d) {
-          return d.type.match('receptor') ? d.value : 0;
-        }).filter(function(d) {return d>0;}).sort(d3.ascending);
-
-        data.ligandExtent = d3.extent(ligands);
-        data.receptorExtent = d3.extent(receptors);
-
-        var filter0 = d3.quantile(ligands, options.ligandRankFilter);
-        var filter1 = d3.quantile(receptors, options.receptorRankFilter);
-
-        //console.log('filter',filter0,filter1);
-
-        return nodes.filter(function(d) {
-          if (d.value === 0) {return false;}
-
-          var limit = (d.type.match('ligand')) ? filter0 : filter1;
-          return d.value > 0  && d.value > limit;
-        });
-
-      } */
-
-      /* function addEdge(edge) {   // expose
-        if (arguments.length !== 1 || typeof edge !== 'object') {
-          $log.error('addNode: Wrong arguments.');
-        }
-
-        edge.ticked = edge.source.ticked && edge.target.ticked;
-
-        if (edge.ticked) {
-          data.edges.push(edge);
-        }
-
-        var src = edge.source.id;
-        var tgt = edge.target.id;
-
-        if (edge.source.ticked) {  // todo: push sorted
-          data.edgesIndex[src] = data.edgesIndex[src] || {};
-          data.edgesIndex[src][tgt] = edge;
-
-          data.outEdgesIndex[src].push(edge);
-          if (edge.ticked) {
-            data._outEdgesIndex[src].push(edge);
-          }
-        }
-
-        if (edge.target.ticked) {
-          data.inEdgesIndex[tgt].push(edge);
-          if (edge.ticked) {
-            data._inEdgesIndex[tgt].push(edge);
-          }
-        }
-
-      } */
-
       var MAXEDGES = 1000;
 
       var StopIteration = new Error('Maximum number of edges exceeded');
@@ -282,14 +147,6 @@
       function __makeEdges(cells, genes, pairs, expr, options) { //selected nodes
 
         graph.data.edges = [];
-        //data.edgesIndex = {};
-        //data.outEdgesIndex = {};
-        //data.inEdgesIndex = {};
-
-        //data._outEdgesIndex = {};
-        //data._inEdgesIndex = {};
-
-        //if (data.nodes.length < 2) { return; }
 
         //var count = 0;
         cells.forEach(function(cell) {
@@ -328,154 +185,7 @@
             }
           });
 
-          //data.edgesIndex[cell.id] = nodeExpr.sort(function(a,b) { return b.value - a.value; });
-          //data.outEdgesIndex[cell.id]   = nodeExpr.filter(_F('_type').eq('ligand'));
-          //data.inEdgesIndex[cell.id] = nodeExpr.filter(_F('_type').eq('receptor'));
-
-          /* var geneTicked = function(expr) {
-            return genes[expr.i].ticked;
-          };
-
-          var edgeRef = function(edge) {  // temp
-            return {
-              i: edge.i,
-              id: edge.id,
-              type: edge.type,
-              class: edge.class,
-              value: edge.value
-            }
-          }
-
-          var nodeExpr = data.edgesIndex[cell.id] || [];
-
-          cell._expr = nodeExpr.filter(geneTicked).map(edgeRef);
-          cell._ligands   = cell._expr.filter(_F('class').eq('ligand'));
-          cell._receptors = cell._expr.filter(_F('class').eq('receptor'));
-          //_expr.sort(_valueComp);
-
-          //cell._ligands = data.outEdgesIndex[cell.id].filter(geneTicked).map(edgeRef);   // temp solution
-          //cell._receptors = data.inEdgesIndex[cell.id].filter(geneTicked).map(edgeRef);
-
-          cell.values = [0,0];
-          cell.values[0] = d3.sum(cell._ligands,_value);
-          cell.values[1] = d3.sum(cell._receptors,_value);
-          cell.value = d3.sum(cell.values); */
-
         });
-
-        //data.nodes.forEach(function(node) {
-
-        //});
-
-        /* angular.forEach(cells, function(node) {  // Improve this
-          if (!node.ticked || node.type !== 'node') { return; }
-
-          var nodeExpr = data.edgesIndex[node.id];
-
-          if (!nodeExpr) {  // todo: store in seperate table
-            $log.debug('getting all gene expression for '+node.name);
-
-            nodeExpr = [];
-
-            genes.forEach(function(gene) {
-              var v = +expr[gene.i + 1][node.i + 1];
-
-              if (v > 0) {
-
-                //console.log(gene,node);
-
-                var _edge = (gene._type === 'receptor') ? new Edge(gene,node) : new Edge(node,gene);
-                _edge.value = v;
-                _edge.i = gene.i; // remove
-                _edge.id = gene.id;  // remove {target, source}.id
-                _edge.type = 'expression';  // remove
-                _edge._type = gene._type;
-
-                nodeExpr.push(_edge);
-
-              }
-            });
-
-            // sort once
-            data.edgesIndex[node.id] = nodeExpr.sort(function(a,b) { return b.value - a.value; });
-
-            data.outEdgesIndex[node.id]   = nodeExpr.filter(_F('_type').eq('ligand'));
-            data.inEdgesIndex[node.id] = nodeExpr.filter(_F('_type').eq('receptor'));
-
-          }
-
-          var geneTicked = function(expr) {
-            return genes[expr.i].ticked;
-          };
-
-          var edgeRef = function(edge) {
-            return {
-              i: edge.i,
-              id: edge.id,
-              //type: edge.type,
-              value: edge.value
-            }
-          }
-
-          node._expr = nodeExpr.filter(geneTicked).map(edgeRef);
-
-          //_expr.sort(_valueComp);
-
-          node._ligands = data.outEdgesIndex[node.id].filter(geneTicked).map(edgeRef);   // temp solution
-          node._receptors = data.inEdgesIndex[node.id].filter(geneTicked).map(edgeRef);
-
-          node.values[0] = d3.sum(node._ligands,_value);
-          node.values[1] = d3.sum(node._receptors,_value);
-          node.value = d3.sum(node.values);
-
-        //});
-
-          nodeExpr.forEach(function(edge) {
-            if (edge.source.ticked && edge.target.ticked) {
-
-              var min = (edge._type === 'receptor') ? options.receptorFilter : options.ligandFilter;
-              var _v = edge.value;
-
-              if (_v && _v > 0 && _v >= min) {
-                data.edges.push(edge);
-              }
-
-            }
-          });
-
-        //angular.forEach(data.nodes, function(node) {  // Improve this
-
-          /* angular.forEach(data.edgesIndex[node.id], function(expr) {  // filtered edges, todo: move to filters
-
-            var min = (expr._type === 'receptor') ? options.receptorFilter : options.ligandFilter;
-            //var _v = expr.value;
-
-            //var target = data.nodesIndex[genes[expr.i].id];
-            if (expr.source.ticked && expr.target.ticked) {
-              //var min = (target.type === 'gene.receptor') ? options.receptorFilter : options.ligandFilter;
-              var _v = expr.value;
-              if (_v && _v > 0 && _v >= min) {
-                //console.log(target.type);
-                //var _edge = (target.type === 'gene.receptor') ? new Edge(target,node) : new Edge(node,target);
-                //_edge.value = _v;
-                //_edge.type = 'expression';
-
-                //console.log(expr);
-
-                data.edges.push(expr);
-
-                if (data.edges.length > MAXEDGES) {
-                  $log.warn('Maximum number of edges exceeded', data.edges.length);
-                  throw StopIteration;
-                }
-
-              }
-
-            }
-
-          });
-
-        });*/
 
         pairs.forEach(function addLinks(_pair) {
           //$log.debug('Constructing edges for',_pair);
@@ -552,8 +262,6 @@
           node.value = d3.sum(node.values);
           //console.log(node.id);
         });
-
-
 
       }
 
@@ -663,26 +371,6 @@
 
         cfpLoadingBar.inc();
 
-        /* data.edges.forEach(function(d, i) {  // Set in/out links
-          d.index = i;
-
-          //
-
-          //console.log(d.source, d.target);
-          d.source.lout = d.source.lout || [];
-          d.target.lin = d.source.lin || [];
-
-          d.source.lout.push(i);
-          d.target.lin.push(i);
-
-          d.count = d.source.lout.filter(function(_link) {
-            return (_link === d.target.index);
-          }).length;
-
-          //console.log(d.source, d.target);
-
-        }); */
-
         graph.data._nodes.forEach(function(d) {
 
           if (d.type === 'gene') {
@@ -759,8 +447,6 @@
           d.data.source = String(d.data.source);
           d.data.target = String(d.data.target);
         });
-
-
 
         return JSON.stringify(_json);
       }

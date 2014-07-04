@@ -4,7 +4,7 @@
 (function(d3) {
   'use strict';
 
-  var force2Graph = function() {
+  var forceGraph = function() {
     var width = 500, height = 500;
     var margin = { top: 60, right: 420, bottom: 240, left: 60};
     //var padding = { top: 60, right: 100, bottom: 60, left: 60};
@@ -616,6 +616,6 @@
     return chart;
   };
 
-  window.force2Graph = force2Graph;
+  window.forceGraph = forceGraph;
 
 })(window.d3);
