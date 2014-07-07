@@ -24,7 +24,7 @@
 
   app
     .constant('name','ligand-receptor-connectome')  // Change this to one meta object
-    .constant('version','0.0.2');  // bump to clear local storage
+    .constant('version','0.0.3');  // bump to clear local storage
 
   app
     .config(function(localStorageServiceProvider, name, version){
