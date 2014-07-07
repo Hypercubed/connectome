@@ -1,7 +1,8 @@
 /* global _F */
 /* global chartLegend */
+/* global d3 */
 
-(function(d3) {
+(function(root) {
   'use strict';
 
   var forceGraph = function() {
@@ -508,7 +509,7 @@
         //{ name: 'Receptor gene', class: 'receptor', group: 'gene.receptor' }
       ];
 
-      var legend = chartLegend()
+      var legend = root.models.legend()
         .colors(_ncolor)
         .on('mouseover', _F(null, legendHighlight))
         .on('mouseout', function() { legendHighlight(null); });
@@ -554,6 +555,6 @@
     return chart;
   };
 
-  window.forceGraph = forceGraph;
+  root.charts.forceGraph = forceGraph;
 
-})(window.d3);
+})(window.lrd3);

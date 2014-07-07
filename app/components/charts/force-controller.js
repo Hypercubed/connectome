@@ -11,7 +11,7 @@
   app
     .service('forceGraph', function($log, $window, $rootScope, $timeout, Graph, debounce, growl, cfpLoadingBar, name, version) {  // TODO: should be a directive
 
-      var chart = new forceGraph();
+      var chart = new lrd3.charts.forceGraph();
       var graph = new Graph();
 
       //function setupChart() {

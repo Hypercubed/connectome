@@ -12,7 +12,7 @@
     .service('hiveGraph', function($log, $window, $rootScope, $timeout, Graph, debounce, growl, cfpLoadingBar, name, version) {  // TODO: should be a directive
 
       var graph = new Graph();
-      var chart = new hiveGraph();  // Move?
+      var chart = new lrd3.charts.hiveGraph();  // Move?
 
       // Private Accesors
       var _value = _F('value');

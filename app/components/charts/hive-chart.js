@@ -1,7 +1,8 @@
+/* global d3 */
 /* global _F */
 /* global chartLegend */
 
-(function(d3) {
+(function(root) {
   'use strict';
 
   function degrees(radians) {
@@ -485,7 +486,7 @@
 
       }
 
-      var legend = chartLegend()
+      var legend = root.models.legend()
         .colors(_ncolor)
         .on('mouseover', _F(null, legendHighlight))
         .on('mouseout', function() { legendHighlight(null); });
@@ -512,6 +513,6 @@
     return chart;
   };
 
-  window.hiveGraph = hiveGraph;
+  root.charts.hiveGraph = hiveGraph;
 
-})(window.d3);
+})(window.lrd3);
