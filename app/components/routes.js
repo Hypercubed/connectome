@@ -25,6 +25,10 @@
         resolve: { graphService: 'hiveGraph' },
         controller: 'MainCtrl',
         templateUrl: 'components/ui/main.html',
+      })
+      .state('reset', {
+        url: '^/reset',
+        controller: 'ResetCtrl'
       });
 
   });

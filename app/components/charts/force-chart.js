@@ -78,6 +78,18 @@
         .attr('height', height)
         ;
 
+      container.on('click', function() {
+        if (d3.event.defaultPrevented) {return;}
+        d3.event.stopPropagation();
+
+        graph.nodes.forEach(function(d) {
+          d.fixed = false;
+        });
+
+        updateClasses();
+        dispatch.selectionChanged();
+      });
+
       // Ranges
       var _e = d3.extent(graph._edges, _value);  // Edge values
       slog.domain(_e);
@@ -127,15 +139,8 @@
             largeArc = 1;
 
             // Change sweep to change orientation of loop.
-            sweep = 1;
+            sweep = 0;
 
-            // Make drx and dry different to get an ellipse
-            // instead of a circle.
-            //drx = 30;
-            //dry = 10;
-
-            // For whatever reason the arc collapses to a point if the beginning
-            // and ending points of the arc are the same, so kludge it.
             var dcx = x1 - width/2;
             var dcy = y1 - height/2;
             var dcr = Math.sqrt(dcx * dcx + dcy * dcy);
@@ -145,8 +150,8 @@
             drx = 30;
             dry = 20;
 
-            x2 -=  dcy/dcr;
-            y2 +=  dcx/dcr;
+            x2 +=  dcy/dcr;
+            y2 -=  dcx/dcr;
 
           } else {
             var _radius = 2*rsize(d.target.value)+_slog(d)+5;
@@ -230,7 +235,7 @@
             //.style('stroke', function(d) { return color(d.value); })
             //.style('fill', function(d) { return color(d.value); })
             .attr('orient', 'auto')
-            .attr('id', function(d,i) { d.i = i; return 'arrow-'+d.i; })
+            .attr('id', function(d,i) { d.i = i; return 'arrow-'+i; })
             .append('svg:path')
               .attr('d', 'M0,-5L10,0L0,5')
               ;
@@ -342,10 +347,10 @@
         ;
 
       links
-        .attr('id', function(d,i) { return 'link-'+i; })
+        //.attr('id', function(d,i) { return 'link-'+i; })
         .style('stroke-width', _slog)
         //.attr('d', hiveLink)
-        .attr('marker-end', function(d,i) { return (d.source !== d.target) ? 'url(#arrow-'+d.i+')' : 'none'; })
+        .attr('marker-end', function(d,i) { return (d.source !== d.target) ? 'url(#arrow-'+i+')' : 'none'; })
         ;
 
       links.exit().remove();
@@ -362,29 +367,36 @@
 
       nodes = nodesLayer.selectAll('.node').data(_F(), _name);
 
+      function nodeClick(d) {
+        if (d3.event.defaultPrevented) {return;}
+        d3.event.stopPropagation();
+
+        var p = d.fixed;
+
+        if (d3.event.altKey) {                                // remove
+          d.ticked = (d.ticked) ? false : true;
+        } else if (d3.event.ctrlKey && !d3.event.shiftKey) {                        // add to selection
+          d.fixed = (d.fixed) ? false : true;
+        } else if (d3.event.shiftKey) {                       // add all to selection
+          graph.nodes.forEach(function(d) {
+            d.fixed = (d.hover) ? !p : (!d3.event.ctrlKey) ? false : d.fixed;
+          });
+        } else {                                              // change selection
+          graph.nodes.forEach(function(d) {
+            d.fixed = false;
+          });
+          d.fixed = (p) ? false : true;
+        }
+
+        updateClasses(); //function(d) { return d.source.fixed && d.target.fixed; });
+        dispatch.selectionChanged(d);
+      }
+
       // Create
       var nodesEnter = nodes.enter().append('g')
           .classed('node', true)
           .style({fill: '#ccc','fill-opacity': 1,stroke: '#333','stroke-width': '1px'})
-          .on('click', function(d) {
-            //if (d3.event.defaultPrevented) {return;}
-
-            //console.log(d3.event);
-            //d3.event.stopPropagation();
-
-            if (d3.event.altKey || d3.event.ctrlKey) {
-              d3.event.stopPropagation();
-              if (d3.event.altKey) {
-                d.ticked = (d.ticked) ? false : true;
-              } else if (d3.event.ctrlKey) {
-                d.fixed = (d.fixed) ? false : true;
-              }
-
-              updateClasses(); //function(d) { return d.source.fixed && d.target.fixed; });
-              dispatch.selectionChanged(d);
-            }
-
-          })
+          .on('click', nodeClick)
           .on('dblclick', function(d) {
             //if (d3.event.defaultPrevented) {return;}
 

@@ -14,39 +14,10 @@
       var graph = new Graph();
       var chart = new hiveGraph();  // Move?
 
-      // Events
-      //var _hover = _F('hover');
-      chart.on('hover', function(d) {
-        $rootScope.$apply(function() {
-          graph.data.hoverEvent = true;
-
-          //console.log(d);
-
-          if (!d && graph.data.selectedItems.length > 0 && !graph.data.selectedItems[0].fixed) {
-            graph.data.selectedItems.shift();
-          } else if (d && !d.fixed) {
-            graph.data.selectedItems.unshift(d);
-          }
-
-        });
-      });
-
-      chart.on('selectionChanged', function(d) {
-        $rootScope.$apply(function() {
-
-          var index = graph.data.selectedItems.indexOf(d);
-          if (index > 0) {graph.data.selectedItems.splice(index, 1);}  // if already in list remove it
-
-          if (index !==0 && d.fixed) {
-            graph.data.selectedItems.unshift(d);
-          }
-
-        });
-      });
-
-      // Accesors
+      // Private Accesors
       var _value = _F('value');
       var _ticked = _F('ticked');
+      var _fixed = _F('fixed');
       //var _F = function(key) { return function(d) {return d[key];}; };
 
       //var type = _F('type');
@@ -57,6 +28,22 @@
       var _value0 = function(d) { return d.values[0]; };
       var _value1 = function(d) { return d.values[1]; };
       //var gtZero = function(d) {return d>0;};
+
+      // Events
+      //var _hover = _F('hover');
+      chart.on('hover', debounce(function(d) {
+        graph.data.hoverEvent = true;
+
+        graph.data.selectedItems = graph.data.selectedItems.filter(_fixed);
+
+        if (d && !d.fixed) {
+          graph.data.selectedItems.unshift(d);
+        }
+      }));
+
+      chart.on('selectionChanged', debounce(function() {
+        graph.data.selectedItems = graph.data.nodes.filter(_fixed);
+      }));
 
       function _makeNodes(genes, cells) {
 

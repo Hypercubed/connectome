@@ -17,6 +17,13 @@
     });
 
   app
+    .controller('ResetCtrl', function ($state,localStorageService) {
+      localStorageService.clearAll();
+      $state.go('hive-graph');
+    });
+
+
+  app
     .controller('MainCtrl', function ($scope, $rootScope, $log, $state, debounce, localStorageService, ligandReceptorData, graphService, snapRemote) {
 
       //$scope.$watch(function() { return $scope.snapper.state().state; }, function(state) {
@@ -32,20 +39,18 @@
 
       /* Manage panel state */
       localStorageService.bind($scope, 'panelState', {
-        nodeFilters: true,
-        edgeFilters: true,
+        nodeFilters: false,
+        edgeFilters: false,
         options: false,
         help: true,
-        download: true,
+        download: false,
         info: true,
         snapper: true
       });
 
-      //console.log('local storage state', $scope.panelState.snapperState);
-
       snapRemote.getSnapper().then(function(snapper) {
 
-        if ($scope.panelState.snapperState) {
+        if ($scope.panelState.snapper) {
           snapper.open();
         } else {
           snapper.close();
@@ -53,12 +58,12 @@
 
         snapper.on('open', function() {
           //console.log('Drawer opened!');
-          $scope.panelState.snapperState = true;
+          $scope.panelState.snapper = true;
         });
 
         snapper.on('close', function() {
           //console.log('Drawer closed!');
-          $scope.panelState.snapperState = false;
+          $scope.panelState.snapper = false;
         });
       });
 
@@ -67,8 +72,8 @@
         maxEdges: 100,
         ligandFilter: 10,
         receptorFilter: 10,
-        ligandRankFilter: 0.1,
-        receptorRankFilter: 0.1,
+        ligandRankFilter: 1,
+        receptorRankFilter: 1,
         edgeRankFilter: 1,
       });
 
@@ -100,7 +105,8 @@
 
       $scope.selectedIds = {
         pairs: [],
-        cells: []
+        cells: [],
+        genes: []
       };
 
       //var _id = _F('_id');
@@ -121,9 +127,9 @@
         $log.debug('load from local storage');
 
         localStorageService.bind($scope, 'selectedIds', {
-          pairs: [374],
+          pairs: $scope.data.pairs.map(_i),
           cells: [72,73],
-          genes: []
+          genes: [201,202,203,204,205]
         });
 
         //console.log($scope.selectedIds.pairs.length);

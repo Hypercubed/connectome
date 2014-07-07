@@ -122,16 +122,28 @@
         .angle(_angle)
         .radius(_radius);
 
-      var g = container.selectAll('.treeGraph').data([1]);
+      var g = container.selectAll('.hiveGraph').data([1]);
 
       g.enter()
         .append('g')
-        .attr('class', 'treeGraph')
+        .attr('class', 'hiveGraph')
         .each(function() { // Only called once
           container.call(zoom.on('zoom', rescale));
           zoom.translate([(width-margin.left-margin.right)/2,height/2+(height/2-size)]);
           zoom.event(container);
         });
+
+      container.on('click', function() {
+        if (d3.event.defaultPrevented) {return;}
+        d3.event.stopPropagation();
+
+        graph.nodes.forEach(function(d) {
+          d.fixed = false;
+        });
+
+        updateClasses();
+        dispatch.selectionChanged();
+      });
 
       // rescale g
       function rescale() {
@@ -329,24 +341,36 @@
 
       nodes = nodesLayer.selectAll('.node').data(_F(), _name);
 
+      function nodeClick(d) {
+        if (d3.event.defaultPrevented) {return;}
+        d3.event.stopPropagation();
+
+        var p = d.fixed;
+
+        if (d3.event.altKey) {                                // remove
+          d.ticked = (d.ticked) ? false : true;
+        } else if (d3.event.ctrlKey && !d3.event.shiftKey) {                        // add to selection
+          d.fixed = (d.fixed) ? false : true;
+        } else if (d3.event.shiftKey) {                       // add all to selection
+          graph.nodes.forEach(function(d) {
+            d.fixed = (d.hover) ? !p : (!d3.event.ctrlKey) ? false : d.fixed;
+          });
+        } else {                                              // change selection
+          graph.nodes.forEach(function(d) {
+            d.fixed = false;
+          });
+          d.fixed = (p) ? false : true;
+        }
+
+        updateClasses(); //function(d) { return d.source.fixed && d.target.fixed; });
+        dispatch.selectionChanged(d);
+      }
+
       // Create
       var nodesEnter = nodes.enter().append('g')
           .classed('node', true)
           .style({fill: '#ccc','fill-opacity': 1,stroke: '#333','stroke-width': '1px'})
-          .on('click', function(d) {
-
-            //console.log(d3.event);
-            d3.event.stopPropagation();
-
-            if (d3.event.altKey) {
-              d.ticked = (d.ticked) ? false : true;
-            } else {
-              d.fixed = (d.fixed) ? false : true;
-            }
-
-            updateClasses(); //function(d) { return d.source.fixed && d.target.fixed; });
-            dispatch.selectionChanged(d);
-          })
+          .on('click', nodeClick)
           .on('dblclick', function(d) {
             //if (d3.event.defaultPrevented) {return;}
 
