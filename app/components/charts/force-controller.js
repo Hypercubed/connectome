@@ -1,6 +1,5 @@
 /* global d3 */
 /* global lrd3 */
-/* global _ */
 /* global _F */
 
 (function() {

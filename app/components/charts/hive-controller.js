@@ -1,6 +1,5 @@
 /* global d3 */
-/* global hiveGraph */
-/* global _ */
+/* global lrd3 */
 /* global _F */
 
 (function() {

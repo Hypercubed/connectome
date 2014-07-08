@@ -1,5 +1,4 @@
 /* global _F */
-/* global chartLegend */
 /* global d3 */
 
 (function(root) {

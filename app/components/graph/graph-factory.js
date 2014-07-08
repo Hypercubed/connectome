@@ -261,27 +261,7 @@
 
           return _gml.join('\n');
 
-          /*data.nodes.forEach(function(node, i) {
-            _gml.push(['  node','[']);
-            _gml.push(['    id',String(i)]);
-            _gml.push(['    label',quote(node.name)]);
-            _gml.push(['    type',quote(node.type.split('.')[1] || 'sample')]);
-            _gml.push(['    value',String(node.value)]);
-            _gml.push(['    genes',quote(String(node.genes))]);
-            _gml.push(['  ]']);
-          });*/
-
-          /* data.edges.forEach(function(edge,  i) {
-            _gml.push(['  edge','[']);
-            _gml.push(['    id',String(edge.index)]);
-            _gml.push(['    label',quote(edge.name)]);
-            _gml.push(['    source',String(data.nodes.indexOf(edge.source))]);
-            _gml.push(['    target',String(data.nodes.indexOf(edge.target))]);
-            _gml.push(['    value',String(edge.value)]);
-            _gml.push(['  ]']);
-          }); */
-
-        }
+        };
 
         return graph;
 
