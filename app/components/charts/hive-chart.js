@@ -123,6 +123,28 @@
         .angle(_angle)
         .radius(_radius);
 
+      container.selectAll('defs').remove();
+
+      var markers = container
+        .append('defs')
+        .selectAll('marker').data(graph._edges).enter()
+        .append('svg:marker')
+            .attr('class', 'Triangle')
+            .attr('viewBox', '0 -5 10 10')
+            .attr('refY', 0)
+            .attr('refX', 20)
+            .attr('markerWidth', 5)
+            .attr('markerHeight', 5)
+            .attr('stroke-width', 1)
+            //.style('stroke', 'black')
+            //.style('fill', 'black')
+            .attr('markerUnits','strokeWidth')
+            .attr('orient', 'auto')
+            .attr('id', function(d,i) { return 'arrow-'+i; });
+
+      markers.append('svg:path')
+        .attr('d', 'M0,-5L10,0L0,5');
+
       var g = container.selectAll('.hiveGraph').data([1]);
 
       g.enter()
@@ -167,29 +189,6 @@
           .attr('transform', function(d) { return 'rotate(' + degrees(angle(d)) + ')'; })
           .attr('x1', radius.range()[0])
           .attr('x2', radius.range()[1]);
-
-      container.select('defs').remove();
-
-      //console.log(graph);
-
-      var defs = container.append('defs')
-        .selectAll('marker').data(graph._edges).enter()
-        .append('svg:marker')
-            .attr('class', 'Triangle')
-            .attr('viewBox', '0 -5 10 10')
-            .attr('refY', 0)
-            .attr('refX', 20)
-            .attr('markerWidth', 10)
-            .attr('markerHeight', 10)
-            .attr('stroke-width', 1)
-            //.style('stroke', 'black')
-            //.style('fill', 'black')
-            .attr('markerUnits','userSpaceOnUse')
-            .attr('orient', 'auto')
-            .attr('id', function(d,i) { return 'arrow-'+i; });
-
-      defs.append('svg:path')
-        .attr('d', 'M0,-5L10,0L0,5');
 
       //function sign(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
 
@@ -282,7 +281,7 @@
           .append('g')
             .classed('links', true);
 
-      links = gLinks.selectAll('path')
+      links = gLinks.selectAll('.link')
           .data(_F(), linkName);
 
       links.enter().append('svg:path')
@@ -314,7 +313,7 @@
       links.each(function(d, i) {
         if (d.type !== 'pair') {return;}
 
-        var def = d3.select(defs[0][i]);
+        var def = d3.select(markers[0][i]);
         var dy = def.attr('refX');
 
         var l = this.getTotalLength();

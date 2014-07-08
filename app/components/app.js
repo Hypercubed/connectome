@@ -23,12 +23,14 @@
     ]);
 
   app
-    .constant('name','ligand-receptor-connectome')  // Change this to one meta object
-    .constant('version','0.0.3');  // bump to clear local storage
+    .constant('site', {
+      name: 'ligand-receptor-connectome',
+      version: '0.0.3'
+    });
 
   app
-    .config(function(localStorageServiceProvider, name, version){
-      localStorageServiceProvider.setPrefix(name+'-'+version);
+    .config(function(localStorageServiceProvider, site){
+      localStorageServiceProvider.setPrefix(site.name+'-'+site.version);
     });
 
   app

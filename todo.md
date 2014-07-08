@@ -4,10 +4,11 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 
 ## Next
 - [x] Fix force
-  - [x] fix force arrows
+  - [ ] fix force arrows
 - [ ] Cross reference samples in genes
-- [ ] Refactor main.js (controllers and directives)
+- [x] Refactor main.js (controllers and directives)
 - [-] move updateSampleExpression
+- [ ] Unit tests!!!
 
 - [x] localStorage
 - [x] filters
@@ -30,8 +31,8 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [x] add limits to avoid lockup
 - [x] Fix range... again
 - [ ] Change edge and node rank filters
-- [ ] combine hive and force controller
-- [ ] make hive and force directives
+- [ ] combine hive and force controller?
+- [ ] make chart directives
 - [x] Raise alerts on internal limits
 - [x] Page title
 - [x] ontology

@@ -77,22 +77,20 @@
         edgeRankFilter: 1,
       });
 
-      var graph = graphService;  // TODO:  don't need this??
-
       /* network */
-      graph.clear();
-      $scope.graph = graphService;
-      $scope.graphData = graph.data;
+      graphService.clear();
+      $scope.graph = graphService;  // TODO:  don't need this??
+      $scope.graphData = graphService.data;
 
       /* Save */
       $scope.saveJson = function() {  // TODO: a service?
-        var txt = graph.getJSON();
+        var txt = graphService.graph.getJSON();
         var blob = new Blob([txt], { type: 'data:text/json' });
         saveAs(blob, 'lr-graph.json');
       };
 
       $scope.saveGml = function() {  // TODO: a service?
-        var txt = graph.getGML();
+        var txt = graphService.graph.getGML();
         var blob = new Blob([txt], { type: 'data:text/gml' });
         saveAs(blob, 'lr-graph.gml');
       };
@@ -148,9 +146,9 @@
 
       $scope.revoveSelectedItem = function(index) {  // TODO: move
         //item.fixed = false; graphData.selectedItems.slice($index, 1); graph.update();
-        $scope.graphData.selectedItems[index].fixed = false;
-        $scope.graphData.selectedItems.splice(index, 1);
-        $scope.graph.update();
+        graphService.data.selectedItems[index].fixed = false;
+        graphService.data.selectedItems.splice(index, 1);
+        graphService.update();
       };
 
       var updateNetwork = function updateNetwork() {  // This should be handeled by the directive
@@ -159,17 +157,17 @@
         //console.log($scope.selected.genes);
         //if (newVal === oldVal) {return;}
         //if (angular.equals(newVal, oldVal)) {return;}
-        graph.makeNetwork($scope.data, $scope.options);
-        graph.draw($scope.options);
+        graphService.makeNetwork($scope.data, $scope.options);
+        graphService.draw($scope.options);
       };
 
       function saveSelectionIds(key) {
         return function(newVal) {
           //return;
 
-          if ($scope.graphData.hoverEvent) {
-            graph.update();
-            $scope.graphData.hoverEvent = false;
+          if (graphService.data.hoverEvent) {
+            graphService.update();
+            graphService.data.hoverEvent = false;
           }
 
           var newIds = newVal.filter(_ticked).map(_i);
@@ -180,7 +178,7 @@
             //if (key === 'cells') {updateSampleExpression();}
             updateNetwork(newIds,$scope.selectedIds);
           } else {
-            //graph.update();
+            //graphService.update();
           }
 
         };
@@ -214,7 +212,7 @@
         //$scope.$watch('options.edgeRankFilter', updateNetwork); // TODO: filter in place
 
         $scope.$watch('options.showLabels', function() {
-          graph.draw($scope.options);
+          graphService.draw($scope.options);
         });
 
       });

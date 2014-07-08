@@ -6,12 +6,14 @@
   var app = angular.module('lrSpaApp');
 
   app
-    .constant('EXPRESSIONFILE', 'data/LR.expr.txt')  // TODO: combine
-    .constant('PAIRSFILE', 'data/LR.pairs.txt')
-    .constant('ONTOLGYFILE', 'data/ontology.txt');
+    .constant('files', {
+      expression: 'data/LR.expr.txt',
+      pairs: 'data/LR.pairs.txt',
+      ontology: 'data/ontology.txt'
+    });
 
   app
-    .service('ligandReceptorData', function($q, $log,$http,$timeout,dsv,EXPRESSIONFILE,PAIRSFILE,ONTOLGYFILE) {   // TODO: move
+    .service('ligandReceptorData', function($q, $log,$http,$timeout,dsv,files) {
       var service = {};
 
       service.data = {
@@ -75,7 +77,7 @@
 
       service.load = function() {
 
-        return $q.all([_getPairs(PAIRSFILE), _getExpression(EXPRESSIONFILE), _getOntology(ONTOLGYFILE)])
+        return $q.all([_getPairs(files.pairs), _getExpression(files.expression), _getOntology(files.ontology)])
           .then(function(data) {
             $log.debug('Done loading');
 

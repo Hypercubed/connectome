@@ -1,3 +1,4 @@
+/* global _ */
 
 (function() {
   'use strict';
@@ -5,13 +6,13 @@
   var app = angular.module('lrSpaApp');
 
   app
-    .service('Graph', function($log) {
+    .service('Graph', function($log, site) {
 
       var defaultSettings = {};
 
       //TODO:
       //  use better class contructor pattern?
-      //  Expose data through methods?
+      //  Expose data through methods? (getNode, getFilteredNodes, getNeighbors?)
       //  replace with sigma.js?
 
       return function Graph(settings) {
@@ -129,6 +130,158 @@
           }
 
         };
+
+        function __getDATA() {
+          var _json = {
+
+          };
+
+          _json.nodes = graph.data._nodes.map(function(node, i) {
+
+            var _n = {
+              data: {
+                id: i,
+                name: node.name,
+                type: node.type,
+                class: node.class,
+                value: String(node.value)
+              },
+              position: {
+                x: node.x,
+                y: node.y
+              }
+            };
+
+            angular.extend(_n.data, node.meta);
+
+            return _n;
+          });
+
+          _json.edges = graph.data._edges.map(function(edge, i) {
+            return {
+              data: {
+                id: i,
+                name: edge.name,
+                interaction: edge.type,
+                source: graph.data._nodes.indexOf(edge.source),
+                target: graph.data._nodes.indexOf(edge.target),
+                value: String(edge.value)
+              }
+            };
+          });
+
+          return _json;
+        }
+
+        graph.getJSON =  function _getJSON() {
+          var _json = {
+            'format_version' : '1.0',
+            'generated_by' : [site.name,site.version].join('-'),
+            'target_cytoscapejs_version' : '~2.1',
+            data: {},
+            elements: __getDATA()
+          };
+
+          _json.elements.nodes.forEach(function(d) {
+            d.data.id = String(d.data.id);
+          });
+
+          _json.elements.edges.forEach(function(d) {
+            d.data.id = String(d.data.id);
+            d.data.source = String(d.data.source);
+            d.data.target = String(d.data.target);
+          });
+
+          return JSON.stringify(_json);
+        };
+
+        graph.getGML = function __getGML() {
+
+          function quote(str) {
+            return '"'+str+'"';
+          }
+
+          function indent(n, p) {
+            n = n || 2;
+            p = p || ' ';
+            var pp = strRepeat(p, n);
+            return function(s) {
+              return pp+s;
+            };
+          }
+
+          function strRepeat(str, qty){
+            var result = '';
+            while (qty > 0) {
+              result += str;
+              qty--;
+            }
+            return result;
+          }
+
+          function convert(obj, k) {
+            if (_.isString(obj)) {return [k,quote(obj)].join(' ');}
+            if (_.isArray(obj)) {return [k,quote(String(obj))].join(' ');}
+            if (_.isObject(obj)) {
+              var e = _.map(obj, convert);
+              e.unshift(k,'[');
+              e.push(']');
+              return e.join(' ');
+            }
+            return [k,String(obj)].join(' ');
+          }
+
+          var _data = __getDATA();
+
+          var _gml = [];
+          _gml.push('graph [');
+
+          _data.nodes.forEach(function(d) {
+            _gml.push('  node [');
+            var e = _.map(d.data, convert).map(indent(4));
+            _gml = _gml.concat(e);
+
+            _gml.push('    graphics [');
+
+            _gml.push(indent(6)(convert(d.position, 'center')));
+
+            _gml.push('    ]');
+
+            _gml.push('  ]');
+          });
+
+          _data.edges.forEach(function(d) {
+            _gml.push('  edge [');
+            var e = _.map(d.data, convert).map(indent(4)); //function(v,k) { return '    '+convert(v,k); } );
+            _gml = _gml.concat(e);
+            _gml.push('  ]');
+          });
+
+          _gml.push(']');
+
+          return _gml.join('\n');
+
+          /*data.nodes.forEach(function(node, i) {
+            _gml.push(['  node','[']);
+            _gml.push(['    id',String(i)]);
+            _gml.push(['    label',quote(node.name)]);
+            _gml.push(['    type',quote(node.type.split('.')[1] || 'sample')]);
+            _gml.push(['    value',String(node.value)]);
+            _gml.push(['    genes',quote(String(node.genes))]);
+            _gml.push(['  ]']);
+          });*/
+
+          /* data.edges.forEach(function(edge,  i) {
+            _gml.push(['  edge','[']);
+            _gml.push(['    id',String(edge.index)]);
+            _gml.push(['    label',quote(edge.name)]);
+            _gml.push(['    source',String(data.nodes.indexOf(edge.source))]);
+            _gml.push(['    target',String(data.nodes.indexOf(edge.target))]);
+            _gml.push(['    value',String(edge.value)]);
+            _gml.push(['  ]']);
+          }); */
+
+        }
 
         return graph;
 

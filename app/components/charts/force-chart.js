@@ -155,7 +155,7 @@
             y2 -=  dcx/dcr;
 
           } else {
-            var _radius = 2*rsize(d.target.value)+_slog(d)+5;
+            var _radius = rsize(d.target.value)+_slog(d)+5;
             var theta = Math.PI/6; //Math.atan(dy / dx || 0);
 
             var c = Math.cos(theta);
@@ -197,6 +197,27 @@
           d3.event.sourceEvent.stopPropagation();
         });
 
+      // MARKERS
+      container.selectAll('defs').remove();
+
+      container
+        .append('defs')
+          .append('svg:marker')
+              .attr('class', 'Triangle')
+              .attr('viewBox', '0 -5 10 10')
+              .attr('refY', 0)
+              .attr('refX', 2.5)
+              .attr('markerWidth', 2.5)
+              .attr('markerHeight', 2.5)
+              .attr('stroke-width', 1)
+              .attr('markerUnits','strokeWidth')
+              //.style('stroke', function(d) { return color(d.value); })
+              //.style('fill', function(d) { return color(d.value); })
+              .attr('orient', 'auto')
+              .attr('id', 'arrow')
+              .append('svg:path')
+                .attr('d', 'M0,-5L10,0L0,5');
+
       var g = container.selectAll('.networkGraph').data([1]);
 
       g.enter()
@@ -217,29 +238,7 @@
             'translate(' + trans + ') scale(' + scale + ')');
       }
 
-      // MARKERS
-      container.selectAll('defs').remove();
 
-      container.append('defs')
-        .selectAll('marker')
-          .data(graph._edges)
-        .enter()
-        .append('svg:marker')
-            .attr('class', 'Triangle')
-            .attr('viewBox', '0 -5 10 10')
-            .attr('refY', 0)
-            .attr('refX', 0)
-            .attr('markerWidth', function(d) { return 2*_slog(d); })
-            .attr('markerHeight', function(d) { return 2*_slog(d); })
-            .attr('stroke-width', 1)
-            .attr('markerUnits','userSpaceOnUse')
-            //.style('stroke', function(d) { return color(d.value); })
-            //.style('fill', function(d) { return color(d.value); })
-            .attr('orient', 'auto')
-            .attr('id', function(d,i) { d.i = i; return 'arrow-'+i; })
-            .append('svg:path')
-              .attr('d', 'M0,-5L10,0L0,5')
-              ;
 
       function classNeighbors(node, direction, key, value) {
         if (arguments.length < 4) { value = true; }
@@ -309,7 +308,9 @@
 
         links
           .classed('hover', _hover)
-          .classed('fixed', _edgeFixed);
+          .classed('fixed', _edgeFixed)
+          //.attr('marker-end', function(d,i) { return (d.source !== d.target) ? 'url("#arrow-'+i+'")' : ''; })
+          ;
       }
 
       var _hoff = function(d) {d.hover = false; };
@@ -330,7 +331,7 @@
           .append('g')
             .classed('links', true);
 
-      links = gLinks.selectAll('path')
+      links = gLinks.selectAll('.link')
           .data(_F(), linkName);
 
       links.enter().append('path')
@@ -345,13 +346,14 @@
         .on('mouseout.highlight',mouseoutHighlight)
         //.on('mouseover', tooltipShow)
         //.on('mouseout', tooltipHide)
+        .attr('marker-end', function(d) { return (d.source !== d.target) ? 'url("#arrow")' : ''; })
         ;
 
       links
         //.attr('id', function(d,i) { return 'link-'+i; })
         .style('stroke-width', _slog)
         //.attr('d', hiveLink)
-        .attr('marker-end', function(d,i) { return (d.source !== d.target) ? 'url(#arrow-'+i+')' : 'none'; })
+        //.attr('marker-end', function(d,i) { return (d.source !== d.target) ? 'url(#arrow-'+i+')' : 'none'; })
         ;
 
       links.exit().remove();
