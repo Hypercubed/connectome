@@ -1,6 +1,5 @@
 /* global d3 */
 /* global _F */
-/* global chartLegend */
 
 (function(root) {
   'use strict';

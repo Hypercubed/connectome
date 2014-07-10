@@ -4,13 +4,13 @@
 
 <accordion close-others="false">
 
-  <accordion-group heading="Node Filters" is-open="panelState.nodeFilters" ng-class="{'collapsed': !panelState.nodeFilters}">
+  <accordion-group heading="Node Filters" is-open="panels.state.nodeFilters" ng-class="{'collapsed': !panels.state.nodeFilters}">
 
     <div>
 
       <div panel
         heading="Samples"
-        is-open="panelState.cells"
+        is-open="panels.state.cells"
         label="{{selectedIds.cells.length}} / {{data.cells.length}}">
 
           <div
@@ -19,7 +19,7 @@
                 button-label="name"
                 item-label="name"
                 tick-property="ticked"
-                max-labels="1" ng-if="panelState.nodeFilters">
+                max-labels="1" ng-if="panels.state.nodeFilters">
           </div>
 
       </div>
@@ -27,7 +27,7 @@
       <p />
       <div panel
         heading="Genes"
-        is-open="panelState.genes"
+        is-open="panels.state.genes"
         label="{{selectedIds.genes.length}} / {{data.genes.length}}">
 
         <div
@@ -36,7 +36,7 @@
               button-label="name"
               item-label="name description"
               tick-property="ticked"
-              max-labels="3" ng-if="panelState.nodeFilters">
+              max-labels="3" ng-if="panels.state.nodeFilters">
         </div>
 
       </div>
@@ -44,7 +44,7 @@
       <p />
       <div panel
         heading="Ligand cutoff"
-        is-open="panelState.receptorRank"
+        is-open="panels.state.receptorRank"
         label="top {{options.ligandRankFilter | percentage}}"
         title="Showing only top ligands">
 
@@ -53,7 +53,7 @@
           max="1"
           min="0"
           step="0.01"
-          ng-if="panelState.nodeFilters">
+          ng-if="panels.state.nodeFilters">
         </div>
 
       </div>
@@ -61,7 +61,7 @@
       <p />
       <div panel
         heading="Receptor rank"
-        is-open="panelState.ligandRank"
+        is-open="panels.state.ligandRank"
         label="top {{options.receptorRankFilter | percentage}}">
 
         <div hc-slider
@@ -69,7 +69,7 @@
           max="1"
           min="0"
           step="0.01"
-          ng-if="panelState.nodeFilters">
+          ng-if="panels.state.nodeFilters">
         </div>
 
       </div>
@@ -78,11 +78,11 @@
 
   </accordion-group>
 
-  <accordion-group heading="Edge Filters" is-open="panelState.edgeFilters" ng-class="{'collapsed': !panelState.edgeFilters}">
+  <accordion-group heading="Edge Filters" is-open="panels.state.edgeFilters" ng-class="{'collapsed': !panels.state.edgeFilters}">
 
     <div panel
       heading="Ligand - Receptor Pairs"
-      is-open="panelState.pairs"
+      is-open="panels.state.pairs"
       label="{{selectedIds.pairs.length}} / {{data.pairs.length}}">
 
       <div multi-select
@@ -90,7 +90,7 @@
             button-label="name"
             item-label="name"
             tick-property="ticked"
-            max-labels="1" ng-if="panelState.edgeFilters">
+            max-labels="1" ng-if="panels.state.edgeFilters">
       </div>
 
     </div>
@@ -98,7 +98,7 @@
     <p />
     <div panel
       heading="Ligand TPM"
-      is-open="panelState.ligand"
+      is-open="panels.state.ligand"
       label="&gt; {{options.ligandFilter | number:0}} tpm"
       title="Only showing edges where the receptor expression exceeds tpm">
 
@@ -107,7 +107,7 @@
         max="[graphData.ligandExtent[1], 10] | max"
         min="0"
         step="1"
-        ng-if="panelState.edgeFilters">
+        ng-if="panels.state.edgeFilters">
       </div>
 
     </div>
@@ -116,7 +116,7 @@
     <div
       panel
       heading="Receptor TPM"
-      is-open="panelState.receptor"
+      is-open="panels.state.receptor"
       label="&gt; {{options.receptorFilter | number:0}} tpm"
       title="Only showing edges where the receptor expression exceeds tpm">
 
@@ -126,7 +126,7 @@
         max="[graphData.receptorExtent[1],10] | max"
         min="0"
         step="1"
-        ng-if="panelState.edgeFilters">
+        ng-if="panels.state.edgeFilters">
       </div>
 
     </div>
@@ -135,7 +135,7 @@
     <div panel
       heading="Edge cutoff"
       label="top {{options.edgeRankFilter | percentage}}"
-      is-open="panelState.edges"
+      is-open="panels.state.edges"
       title="Showing only top {{options.edgeRankFilter |percentage}}% of edges">
 
       <div hc-slider
@@ -143,25 +143,25 @@
         max="1"
         min="0"
         step="0.01"
-        ng-if="panelState.edgeFilters">
+        ng-if="panels.state.edgeFilters">
       </div>
 
     </div>
   </accordion-group>
 
-  <accordion-group heading="Options" is-open="panelState.options" ng-class="{'collapsed': !panelState.options}">
+  <accordion-group heading="Options" is-open="panels.state.options" ng-class="{'collapsed': !panels.state.options}">
     <div>
       Show node labels
       <div class="pull-right small"><input type="checkbox" ng-model="options.showLabels" /></div>
     </div>
 
     <p>
-      <span ng-click="go('force-graph')"><input type="radio" ng-model="state" value="force-graph" /> force directed graph</span>
-      <br /><span ng-click="go('hive-graph')"><input type="radio" ng-model="state" value="hive-graph" /> hive plot</span>
+      <span><input type="radio" ng-model="state.name" value="home.force-graph" /> force directed graph</span>
+      <br /><span><input type="radio" ng-model="state.name" value="home.hive-graph" /> hive plot</span>
     </p>
   </accordion-group>
 
-  <accordion-group heading="Explanation" is-open="panelState.help" ng-class="{'collapsed': !panelState.help}">
+  <accordion-group heading="Explanation" is-open="panels.state.help" ng-class="{'collapsed': !panels.state.help}">
     <p>
     <ul>
       <li>Select samples and genes from node filter section on the left.</li>
@@ -175,7 +175,7 @@
     </p>
   </accordion-group>
 
-  <accordion-group heading="Download" is-open="panelState.download" ng-class="{'collapsed': !panelState.download}">
+  <accordion-group heading="Download" is-open="panels.state.download" ng-class="{'collapsed': !panels.state.download}">
 
     <div class="btn-vert-block">
       <button class="btn btn-primary col-xs-12" svg-download="#vis" filename="lr-graph"  title="Vector graphic in SVG format">Vector graphic (svg)</button>

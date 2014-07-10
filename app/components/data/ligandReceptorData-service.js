@@ -183,6 +183,8 @@
               return true;
             });
 
+            return service.data;
+
           });
       };
 

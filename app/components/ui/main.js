@@ -22,23 +22,62 @@
       $state.go('hive-graph');
     });
 
+  /* app
+    .controller('GraphCtrl', function($scope, $rootScope, $state, forceGraph, hiveGraph) {
+      var self = this;
 
-  app
-    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, debounce, localStorageService, ligandReceptorData, graphService, snapRemote) {
+      self.graphService = ($state.current.name === 'home.hive-graph') ? hiveGraph : forceGraph;
+      self.graphData = this.graphService.data;
 
-      //$scope.$watch(function() { return $scope.snapper.state().state; }, function(state) {
-      //  console.log(state);
-      //})
+      $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+        if (self.graphService) {self.graphService.clear();}
+        self.graphService = (toState === 'home.hive-graph') ? hiveGraph : forceGraph;
+        self.graphData = self.graphService.data;
+      })
 
-      $scope.state = $state.current.name;
+      /* function updateNetwork() {  // This should be handeled by the directive
+        $log.debug('update network');
 
-      $scope.go = function(name) {
-        $scope.state = name;
-        $state.go(name);
+        if (self.graphService) {
+          self.graphService.makeNetwork($scope.data, $scope.options);
+          self.graphService.draw($scope.options);
+        }
+
       };
 
-      /* Manage panel state */
-      localStorageService.bind($scope, 'panelState', {
+    });*/
+
+  app
+    .controller('MainCtrl', function ($scope, $log, $state, localStorageService, loadedData, forceGraph, hiveGraph) {
+
+      // Graph service
+      var graphService; // = ($state.current.name === 'home.hive-graph') ? hiveGraph : forceGraph;
+
+      $scope.state = $state.current;
+
+      $scope.$watch('state.name', function(name) {
+        $state.go(name);
+        if (graphService) {graphService.clear();}
+        graphService = (name === 'home.hive-graph') ? hiveGraph : forceGraph;
+        $scope.graph = graphService;
+        $scope.graphData = graphService.data;
+        updateNetwork();
+      });
+
+      $scope.saveJson = function() {  // TODO: a service?
+        var txt = graphService.graph.getJSON();
+        var blob = new Blob([txt], { type: 'data:text/json' });
+        saveAs(blob, 'lr-graph.json');
+      };
+
+      $scope.saveGml = function() {  // TODO: a service?
+        var txt = graphService.graph.getGML();
+        var blob = new Blob([txt], { type: 'data:text/gml' });
+        saveAs(blob, 'lr-graph.gml');
+      };
+
+      // Panel state
+      /* localStorageService.bind($scope, 'panelState', {
         nodeFilters: false,
         edgeFilters: false,
         options: false,
@@ -49,7 +88,6 @@
       });
 
       snapRemote.getSnapper().then(function(snapper) {
-
         if ($scope.panelState.snapper) {
           snapper.open();
         } else {
@@ -65,8 +103,9 @@
           //console.log('Drawer closed!');
           $scope.panelState.snapper = false;
         });
-      });
+      }); */
 
+      // Options
       localStorageService.bind($scope, 'options', {
         showLabels: true,
         maxEdges: 100,
@@ -76,30 +115,6 @@
         receptorRankFilter: 1,
         edgeRankFilter: 1,
       });
-
-      /* network */
-      graphService.clear();
-      $scope.graph = graphService;  // TODO:  don't need this??
-      $scope.graphData = graphService.data;
-
-      /* Save */
-      $scope.saveJson = function() {  // TODO: a service?
-        var txt = graphService.graph.getJSON();
-        var blob = new Blob([txt], { type: 'data:text/json' });
-        saveAs(blob, 'lr-graph.json');
-      };
-
-      $scope.saveGml = function() {  // TODO: a service?
-        var txt = graphService.graph.getGML();
-        var blob = new Blob([txt], { type: 'data:text/gml' });
-        saveAs(blob, 'lr-graph.gml');
-      };
-
-      /* Load Data */
-      //$scope.selected = {
-      //  pairs: [],
-      //  cells: []
-      //};
 
       $scope.selectedIds = {
         pairs: [],
@@ -142,7 +157,7 @@
 
       }
 
-      $scope.max = Math.max;
+      $scope.max = Math.max;  // still used?
 
       $scope.revoveSelectedItem = function(index) {  // TODO: move
         //item.fixed = false; graphData.selectedItems.slice($index, 1); graph.update();
@@ -157,8 +172,11 @@
         //console.log($scope.selected.genes);
         //if (newVal === oldVal) {return;}
         //if (angular.equals(newVal, oldVal)) {return;}
-        graphService.makeNetwork($scope.data, $scope.options);
-        graphService.draw($scope.options);
+        if (graphService) {
+          graphService.makeNetwork($scope.data, $scope.options);
+          graphService.draw($scope.options);
+        }
+
       };
 
       function saveSelectionIds(key) {
@@ -184,44 +202,92 @@
         };
       }
 
-      ligandReceptorData.load().then(function() {
+      //ligandReceptorData.load().then(function(loadedData) {
 
-        $scope.data = ligandReceptorData.data;
+      $scope.data = loadedData;
 
-        loadSelection();
+      loadSelection();
 
-        updateNetwork(true,false);
+      updateNetwork(true,false);
 
-        $scope.$watch('data.cells', saveSelectionIds('cells'),true);
-        $scope.$watch('data.pairs', saveSelectionIds('pairs'),true);
-        $scope.$watch('data.genes', saveSelectionIds('genes'),true);
+      $scope.$watch('data.cells', saveSelectionIds('cells'),true);
+      $scope.$watch('data.pairs', saveSelectionIds('pairs'),true);
+      $scope.$watch('data.genes', saveSelectionIds('genes'),true);
 
-        //$scope.$watch('selected.pairs', saveSelectionIds('pairs'));
-        //$scope.$watch('selected.cells', saveSelectionIds('cells'));
-        //$scope.$watch('selected.genes', saveSelectionIds('genes'));
+      //$scope.$watch('selected.pairs', saveSelectionIds('pairs'));
+      //$scope.$watch('selected.cells', saveSelectionIds('cells'));
+      //$scope.$watch('selected.genes', saveSelectionIds('genes'));
 
-        $scope.$watchCollection('selectedIds', updateNetwork);
-        //$scope.$watchCollection('selectedIds.pairs', updateNetwork);
-        //$scope.$watchCollection('selectedIds.cells', updateNetwork);
-        //$scope.$watchCollection('selectedIds.genes', updateNetwork);
+      $scope.$watchCollection('selectedIds', updateNetwork);
+      //$scope.$watchCollection('selectedIds.pairs', updateNetwork);
+      //$scope.$watchCollection('selectedIds.cells', updateNetwork);
+      //$scope.$watchCollection('selectedIds.genes', updateNetwork);
 
-        $scope.$watchCollection('options', updateNetwork);
-        //$scope.$watch('options.receptorFilter', updateNetwork);
-        //$scope.$watch('options.ligandRankFilter', updateNetwork);
-        //$scope.$watch('options.receptorRankFilter', updateNetwork);
-        //$scope.$watch('options.edgeRankFilter', updateNetwork); // TODO: filter in place
+      $scope.$watchCollection('options', updateNetwork);
+      //$scope.$watch('options.receptorFilter', updateNetwork);
+      //$scope.$watch('options.ligandRankFilter', updateNetwork);
+      //$scope.$watch('options.receptorRankFilter', updateNetwork);
+      //$scope.$watch('options.edgeRankFilter', updateNetwork); // TODO: filter in place
 
-        $scope.$watch('options.showLabels', function() {
-          graphService.draw($scope.options);
-        });
+      //$scope.$watch('options.showLabels', function() {
+      //  graphService.draw($scope.options);
+      //});
 
-      });
+      //});
 
       //$scope.test = function() {
       //  console.log($scope.data.genes[417]);
       //}
 
     });
+
+  app
+    .controller('PanelCtrl', function ($scope, localStorageService, snapRemote) {
+
+      this.state = {
+        nodeFilters: false,
+        edgeFilters: false,
+        options: false,
+        help: true,
+        download: false,
+        info: true,
+        snapper: true
+      };
+
+      // Panel state
+      localStorageService.bind($scope, 'panelState', this.state);
+
+      snapRemote.getSnapper().then(function(snapper) {
+        if ($scope.panelState.snapper) {
+          snapper.open();
+        } else {
+          snapper.close();
+        }
+
+        snapper.on('open', function() {
+          //console.log('Drawer opened!');
+          $scope.panelState.snapper = true;
+        });
+
+        snapper.on('close', function() {
+          //console.log('Drawer closed!');
+          $scope.panelState.snapper = false;
+        });
+      });
+
+    });
+
+  /* app
+    .directive('graph', function() {
+      return {
+        scope: {
+          graphService: '=graphServce',
+          data: '=',
+          graphData: '='
+        },
+        template: '<svg></svg>'
+      };
+    }); */
 
   app
   .filter('percentage', ['$filter', function($filter) {
