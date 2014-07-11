@@ -18,39 +18,46 @@
 
     <div class="dropdown position-fixed" id="myMenu">
       <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
+
         <li ng-if="clickedItem" ng-click="clickedItem.fixed = true; updateSelection()" class="dropdown-header">{{clickedItem.name}}</li>
+
         <li  class="dropdown-submenu" ng-if="clickedItem.type == 'sample' || clickedItem.type == 'gene'">
-          <a class="pointer" role="menuitem" tabindex="2" ng-click="clickedItem.ticked = false">Hide</a>
+          <a class="pointer" role="menuitem">Hide</a>
           <ul class="dropdown-menu">
-            <li>
-              <a class="pointer" role="menuitem" tabindex="2" ng-click="hideChildren(clickedItem,100000)">All out edges</a>
-            </li>
-            <li>
-              <a class="pointer" role="menuitem" tabindex="2" ng-click="hideParents(clickedItem,100000)">All in edges</a>
-            </li>
+            <li><a class="pointer" role="menuitem" ng-click="clickedItem.ticked = false">This</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="hideChildren(clickedItem,100000)">All out neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="hideParents(clickedItem,100000)">All in neighbors</a></li>
           </ul>
         </li>
+
         <li class="dropdown-submenu" ng-if="clickedItem.type == 'sample' || clickedItem.type == 'gene'">
-          <a class="pointer" role="menuitem" tabindex="2" ng-click="showMoreChildren(clickedItem,3)">Show</a>
+          <a class="pointer" role="menuitem">Show</a>
+          <ul class="dropdown-menu">
+            <li><a class="pointer" role="menuitem" ng-click="showMoreChildren(clickedItem,3)">More out neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showMoreChildren(clickedItem,1000)">All out neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showMoreParents(clickedItem,3)">More in neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showMoreChildren(clickedItem,1000)">All in neighbors</a></li>
+          </ul>
+        </li>
+
+        <li class="divider" ng-if="clickedItem.type == 'sample' || clickedItem.type == 'gene'"></li>
+
+        <li class="dropdown-submenu">
+          <a class="pointer" role="menuitem">Panels</a>
           <ul class="dropdown-menu">
             <li>
-              <a class="pointer" role="menuitem" tabindex="2" ng-click="showMoreChildren(clickedItem,3)">More out edges</a>
+              <a class="pointer" role="menuitem" ng-click="panels.state.snapper = !panels.state.snapper">
+                <span ng-bind="panels.state.snapper ? '&#x2713;' : '&nbsp;'"></span> Options panel
+              </a>
             </li>
             <li>
-              <a class="pointer" role="menuitem" tabindex="2" ng-click="showMoreChildren(clickedItem,100000)">All out edges</a>
-            </li>
-            <li>
-              <a class="pointer" role="menuitem" tabindex="2" ng-click="showMoreParents(clickedItem,3)">More in edges</a>
-            </li>
-            <li>
-              <a class="pointer" role="menuitem" tabindex="2" ng-click="showMoreParents(clickedItem,100000)">All in edges</a>
+              <a class="pointer" role="menuitem" ng-click="panels.state.info = !panels.state.info">
+                <span ng-bind="panels.state.info ? '&#x2713;' : '&nbsp;'"></span> Info panel
+              </a>
             </li>
           </ul>
         </li>
-        <li class="divider"></li>
-        <li>
-          <a class="pointer" role="menuitem" tabindex="2" ng-click="panelState.info = !panelState.info">Toggle info menu</a>
-        </li>
+
       </ul>
     </div>
 

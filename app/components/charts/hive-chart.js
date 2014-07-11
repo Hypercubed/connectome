@@ -54,7 +54,11 @@
 
     // Range accesors
     var _angle = _F('group', angle); //function(d) { return angle(d.type); };
-    var _radius = function(d) { return radius(_y[_group(d)](d._i)); };
+    var _radius = function(d) {
+      if (!_y[_group(d)]) { return 0; };
+      
+      return radius(_y[_group(d)](d._i));
+    };
     var _ncolor = _F('class', ncolor); //function(d) {  return ncolor(d.class); };
     var _slog = _F(_value, slog);
 
@@ -95,11 +99,13 @@
         .entries(graph._nodes);
 
       nodesByType.forEach(function(type) { // Setup domain for position range
-        _y[type.key].domain(d3.range(type.values.length));
+        if (_y[type.key]) {
+          _y[type.key].domain(d3.range(type.values.length));
 
-        type.values.forEach(function(node,i) {
-          node._i = i;
-        });
+          type.values.forEach(function(node,i) {
+            node._i = i;
+          });
+        }
       });
 
       function _labelAngle(d) {

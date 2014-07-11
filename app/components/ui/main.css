@@ -73,6 +73,10 @@ body {
   overflow: hidden;
 }
 
+#vis .dropdown-menu {
+  min-width: 260px;
+}
+
 #footer {
   height: 30px;
   position: absolute;
