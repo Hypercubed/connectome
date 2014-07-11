@@ -6,7 +6,7 @@
 
   var forceGraph = function() {
     var width = 500, height = 500;
-    var margin = { top: 60, right: 420, bottom: 240, left: 60};
+    var margin = { top: 10, right: 370, bottom: 240, left: 370};
     //var padding = { top: 60, right: 100, bottom: 60, left: 60};
 
     function chart(selection) {
@@ -224,7 +224,7 @@
         .attr('class', 'networkGraph')
         .each(function() { // Only called once
           container.call(zoom.on('zoom', rescale));
-          zoom.translate([margin.left,margin.top]);
+          zoom.translate([0,margin.top]);
           zoom.event(container);
         });
 
@@ -236,8 +236,6 @@
         g.attr('transform',
             'translate(' + trans + ') scale(' + scale + ')');
       }
-
-
 
       function classNeighbors(node, direction, key, value) {
         if (arguments.length < 4) { value = true; }

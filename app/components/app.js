@@ -14,13 +14,13 @@
       'ngAnimate',
       'ui.router',
       'chieffancypants.loadingBar',
-      'snap',
       'LocalStorageModule',
       'ui.bootstrap',
       'hc.downloader',
       'angular-growl',
       'pasvaz.bindonce',
-      'ng-context-menu'
+      'ng-context-menu',
+      'pageslide-directive'
     ]);
 
   app

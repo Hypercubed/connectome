@@ -10,7 +10,7 @@
 
   var hiveGraph = function() {
     var width = 500, height = 500;
-    var margin = { top: 60, right: 350, bottom: 240, left: 350};
+    var margin = { top: 10, right: 370, bottom: 240, left: 370};
     //var padding = { top: 60, right: 100, bottom: 60, left: 60};
 
     function chart(selection) {
@@ -22,8 +22,6 @@
 
     // Private objects
     var zoom = d3.behavior.zoom();
-
-
 
     // Scales
     var groups = ['gene.ligand','gene.receptor','sample'];
@@ -68,8 +66,6 @@
 
       width = parseInt(container.style('width'));
       height = parseInt(container.style('height'));
-
-      console.log(width,height);
 
       var size = Math.min(height, width)/(1+Math.cos(Math.PI/3))/1.5;
       radius.range([size/10, size]);
@@ -343,8 +339,6 @@
       nodes = nodesLayer.selectAll('.node').data(_F(), _name);
 
       function nodeClick(d) {
-        console.log(d);
-        //if (d3.event.defaultPrevented) {return;}
         d3.event.stopPropagation();
 
         var p = d.fixed;

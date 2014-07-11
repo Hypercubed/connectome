@@ -9,7 +9,6 @@
     "bootstrap": "~3.1.1",
     "d3": "~3.4.5",
     "angular-loading-bar": "~0.3.0",
-    "angular-snap": "~1.4.1",
     "d3-tip": "~0.6.4",
     "angular-bootstrap": "~0.10.0",
     "angular-ui-router": "~0.2.10",
@@ -26,7 +25,8 @@
     "angular-dsv": "~0.0.4",
     "angular-sanitize": "~1.2.18",
     "angular-bindonce": "~0.3.1",
-    "ng-context-menu": "~0.1.4"
+    "ng-context-menu": "~0.1.4",
+    "angular-pageslide-directive": "~0.1.6"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",
@@ -49,9 +49,14 @@
         "./build/angular-growl.js",
         "./build/angular-growl.min.css"
       ]
+    },
+    "angular-pageslide-directive": {
+      "main": [
+        "./dist/angular-pageslide-directive.js"
+      ]
     }
   },
   "resolutions": {
-    "angular": "1.2.18"
+    "angular": "~1.2.0"
   }
 }

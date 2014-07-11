@@ -7,16 +7,6 @@
   var app = angular.module('lrSpaApp');
 
   app
-    .config(function(snapRemoteProvider) {
-      snapRemoteProvider.globalOptions = {
-        disable: 'right',
-        maxPosition: 350,
-        tapToClose: false,
-        touchToDrag: false
-      };
-    });
-
-  app
     .controller('ResetCtrl', function ($state,localStorageService) {
       localStorageService.clearAll();
       $state.go('hive-graph');
@@ -304,7 +294,7 @@
     });
 
   app
-    .controller('PanelCtrl', function ($scope, localStorageService, snapRemote) {
+    .controller('PanelCtrl', function ($scope, localStorageService) {
 
       this.state = {
         nodeFilters: false,
@@ -319,7 +309,7 @@
       // Panel state
       localStorageService.bind($scope, 'panelState', this.state);
 
-      snapRemote.getSnapper().then(function(snapper) {
+      /* snapRemote.getSnapper().then(function(snapper) {
         if ($scope.panelState.snapper) {
           snapper.open();
         } else {
@@ -335,7 +325,7 @@
           //console.log('Drawer closed!');
           $scope.panelState.snapper = false;
         });
-      });
+      }); */
 
     });
 

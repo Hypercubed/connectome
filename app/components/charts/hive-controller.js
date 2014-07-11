@@ -30,7 +30,7 @@
 
       // Events
       //var _hover = _F('hover');
-      /* chart.on('hover', debounce(function(d) {
+      chart.on('hover', debounce(function(d) {
         graph.data.hoverEvent = true;
 
         graph.data.selectedItems = graph.data.selectedItems.filter(_fixed);
@@ -38,12 +38,10 @@
         if (d && !d.fixed) {
           graph.data.selectedItems.unshift(d);
         }
-      })); */
+      }));
 
       chart.on('selectionChanged', function() {
-        console.log('selectionChanged');
 
-        graph.data.selectedItems = graph.data.nodes.filter(_fixed);
         $rootScope.$apply(function() {
           graph.data.selectedItems = graph.data.nodes.filter(_fixed);
         });
