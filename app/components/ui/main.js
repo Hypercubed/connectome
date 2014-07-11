@@ -48,7 +48,69 @@
     });*/
 
   app
-    .controller('MainCtrl', function ($scope, $log, $state, localStorageService, loadedData, forceGraph, hiveGraph) {
+    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, localStorageService, loadedData, forceGraph, hiveGraph) {
+
+      //Move
+
+      $scope.updateSelection = function() {
+        graphService.data.selectedItems = graphService.data.nodes.filter(_F('fixed'));
+      };
+
+      $scope.rightClick = function(e) {
+        if (e.target.__data__ && e.target.__data__.type) {
+          $scope.clickedItem = e.target.__data__;
+        } else {
+          $scope.clickedItem = null;
+        }
+      };
+
+      $scope.hideChildren = function(clickedItem) {
+        var arr = graphService.data.outEdgesIndex[clickedItem.id];
+        if (arr) {
+          for (var key in arr) {
+            arr[key].target.ticked = false;
+          }
+        }
+      };
+
+      $scope.hideParents = function(clickedItem) {
+        var arr = graphService.data.inEdgesIndex[clickedItem.id];
+        if (arr) {
+          for (var key in arr) {
+            arr[key].source.ticked = false;
+          }
+        }
+      };
+
+      $scope.showMoreChildren = function(clickedItem, N) {
+        N = N || 3;
+        var arr = graphService.data.outEdgesIndex[clickedItem.id];
+        if (arr) {
+          var count = 0;
+          for (var key in arr) {
+            if (!arr[key].target.ticked) {
+              count++;
+              arr[key].target.ticked = true;
+            }
+            if (count >= N) { break; }
+          }
+        }
+      }
+
+      $scope.showMoreParents = function(clickedItem, N) {
+        N = N || 3;
+        var arr = graphService.data.inEdgesIndex[clickedItem.id];
+        if (arr) {
+          var count = 0;
+          for (var key in arr) {
+            if (!arr[key].source.ticked) {
+              count++;
+              arr[key].source.ticked = true;
+            }
+            if (count >= N) { break; }
+          }
+        }
+      }
 
       // Graph service
       var graphService; // = ($state.current.name === 'home.hive-graph') ? hiveGraph : forceGraph;

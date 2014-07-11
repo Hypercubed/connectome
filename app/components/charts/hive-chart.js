@@ -10,7 +10,7 @@
 
   var hiveGraph = function() {
     var width = 500, height = 500;
-    var margin = { top: 60, right: 420, bottom: 240, left: 60};
+    var margin = { top: 60, right: 350, bottom: 240, left: 350};
     //var padding = { top: 60, right: 100, bottom: 60, left: 60};
 
     function chart(selection) {
@@ -23,9 +23,10 @@
     // Private objects
     var zoom = d3.behavior.zoom();
 
-    var groups = ['gene.ligand','gene.receptor','sample'];
+
 
     // Scales
+    var groups = ['gene.ligand','gene.receptor','sample'];
     var ncolor = d3.scale.ordinal().domain(['ligand','both','receptor']).range(['#ed1940','yellow','#3349ff']); // ['#ed1940','#a650e2','#3349ff']
     var slog = d3.scale.log().range([2,9]).clamp(true);     // Maps value to normalized edge width
     var eopac = d3.scale.linear().range([0.2,0.8]).clamp(true);
@@ -59,7 +60,7 @@
     var _ncolor = _F('class', ncolor); //function(d) {  return ncolor(d.class); };
     var _slog = _F(_value, slog);
 
-    var dispatch = d3.dispatch('hover','selectionChanged');
+    var dispatch = d3.dispatch('hover','selectionChanged','contextmenu');
 
     chart.draw = function draw(graph) {
 
@@ -68,13 +69,13 @@
       width = parseInt(container.style('width'));
       height = parseInt(container.style('height'));
 
+      console.log(width,height);
+
       var size = Math.min(height, width)/(1+Math.cos(Math.PI/3))/1.5;
       radius.range([size/10, size]);
 
       chart.update = function() {
-        //console.log('update chart');
         updateClasses();
-        //container.transition().call(chart);
       };
 
       chart.container = container;
@@ -82,12 +83,10 @@
       container
         .attr('width', width)
         .attr('height', height)
-        //.call(tooltip)
         ;
 
       // Ranges
       var _e = d3.extent(graph._edges, _value);  // Edge values
-      //console.log(_e);
       slog.domain(_e);
       eopac.domain(_e);
 
@@ -100,14 +99,10 @@
         .entries(graph._nodes);
 
       nodesByType.forEach(function(type) { // Setup domain for position range
-        //var group = groups._indexOf(type.key);  // TODO: eliminte y and node.group?
-        //console.log(type);
-        //console.log(type);
         _y[type.key].domain(d3.range(type.values.length));
 
         type.values.forEach(function(node,i) {
           node._i = i;
-          //node.group = group;
         });
       });
 
@@ -128,18 +123,18 @@
         .append('defs')
         .selectAll('marker').data(graph._edges).enter()
         .append('svg:marker')
-            .attr('class', 'Triangle')
-            .attr('viewBox', '0 -5 10 10')
-            .attr('refY', 0)
-            .attr('refX', 20)
-            .attr('markerWidth', 5)
-            .attr('markerHeight', 5)
-            .attr('stroke-width', 1)
-            //.style('stroke', 'black')
-            //.style('fill', 'black')
-            .attr('markerUnits','strokeWidth')
-            .attr('orient', 'auto')
-            .attr('id', function(d,i) { return 'arrow-'+i; });
+          .attr({
+            class:           'Triangle',
+            viewBox:         '0 -5 10 10',
+            refY:            0,
+            refX:            20,
+            markerWidth:     5,
+            markerHeight:    5,
+            'stroke-width':  1,
+            markerUnits:     'strokeWidth',
+            orient:          'auto',
+            id:              function(d,i) { return 'arrow-'+i; }
+          });
 
       markers.append('svg:path')
         .attr('d', 'M0,-5L10,0L0,5');
@@ -151,7 +146,7 @@
         .attr('class', 'hiveGraph')
         .each(function() { // Only called once
           container.call(zoom.on('zoom', rescale));
-          zoom.translate([(width-margin.left-margin.right)/2,height/2+(height/2-size)]);
+          zoom.translate([width/2,height/2+(height/2-size)]);
           zoom.event(container);
         });
 
@@ -179,15 +174,21 @@
       //g.selectAll('.axis').remove();
 
       var axes = g.selectAll('.axis')
-          .data(groups);
+        .data(groups);
 
       axes.enter().append('line')
-        .style({ stroke: '#000', 'stroke-width': '1.5px'});
+        .style({
+          stroke: '#000',
+          'stroke-width': '1.5px'
+        });
 
-      axes.attr('class', 'axis')
-          .attr('transform', function(d) { return 'rotate(' + degrees(angle(d)) + ')'; })
-          .attr('x1', radius.range()[0])
-          .attr('x2', radius.range()[1]);
+      axes
+        .attr({
+          class:     'axis',
+          transform: function(d) { return 'rotate(' + degrees(angle(d)) + ')'; },
+          x1:        radius.range()[0],
+          x2:        radius.range()[1]
+        });
 
       //function sign(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
 
@@ -290,7 +291,6 @@
           stroke: '#666',
           'stroke-width': '1.5px',
         })
-
         .on('mouseover.highlight',mouseoverEdgeHighlight)
         .on('mouseout.highlight',mouseoutHighlight)
         //.on('mouseover', tooltipShow)
@@ -298,12 +298,14 @@
         ;
 
       links
-        .attr('id', function(d) { return 'link-'+d._index; })
-        .style('stroke-width', _slog)
-        .style('opacity', function(d) { return eopac(d.value); })
-        .attr('d', hiveLink)
-        .attr('marker-end', function(d,i) {
-          return d.type === 'pair' ? 'url(#arrow-'+i+')' : '';
+        .attr({
+          id:           function(d) { return 'link-'+d._index; },
+          d:            hiveLink,
+          'marker-end': function(d,i) { return d.type === 'pair' ? 'url(#arrow-'+i+')' : ''; }
+        })
+        .style({
+          'stroke-width': _slog,
+          opacity:        function(d) { return eopac(d.value); }
         })
         ;
 
@@ -341,7 +343,8 @@
       nodes = nodesLayer.selectAll('.node').data(_F(), _name);
 
       function nodeClick(d) {
-        if (d3.event.defaultPrevented) {return;}
+        console.log(d);
+        //if (d3.event.defaultPrevented) {return;}
         d3.event.stopPropagation();
 
         var p = d.fixed;
@@ -368,7 +371,12 @@
       // Create
       var nodesEnter = nodes.enter().append('g')
           .classed('node', true)
-          .style({fill: '#ccc','fill-opacity': 1,stroke: '#333','stroke-width': '1px'})
+          .style({
+            fill: '#ccc',
+            'fill-opacity': 1,
+            stroke: '#333',
+            'stroke-width': '1px'
+          })
           .on('click', nodeClick)
           .on('dblclick', function(d) {
             //if (d3.event.defaultPrevented) {return;}
@@ -406,6 +414,10 @@
             } */
 
           })
+          .on('contextmenu', function(d) {
+            d3.event.preventDefault();
+            dispatch.contextmenu(d);
+          })
           .on('mouseover.highlight', mouseoverNodeHighlight) //function() { nodeClassed.call(this, 'hover', true); })
           .on('mouseout.highlight', mouseoutHighlight) //function() { nodeClassed.call(this, 'hover', false); })
           //.on('mouseover', tooltipShow)
@@ -420,13 +432,17 @@
 
       nodesEnter
         .append('text')
-          .style({'stroke': 'none','fill': '#333','stroke-width': '1px','font-size': '10px'})
-          .attr('text-anchor', 'start')
-          .attr('dy', 3)
-          .attr('dx', 15)
-          //.on('mouseover', nodeLabelTooltip.show)
-          //.on('mouseout', nodeLabelTooltip.hide)
-          ;
+          .style({
+            stroke:         'none',
+            fill:           '#333',
+            'stroke-width': '1px',
+            'font-size':    '10px'
+          })
+          .attr({
+            'text-anchor': 'start',
+            'dy':          3,
+            'dx':          15
+          });
 
       nodes
         .attr('id', function(d) { return 'node-'+d._index; })
@@ -448,20 +464,23 @@
 
       nodes
         .select('rect')
-          .attr('x',__r)
-          .attr('y',__r)
-          .attr('width',_2r)
-          .attr('height',_2r)
-          .attr('rx',rx)
-          .attr('ry',rx)
+          .attr({
+            x:      __r,
+            y:      __r,
+            width:  _2r,
+            height: _2r,
+            rx:     rx,
+            ry:     rx,
+          })
           .style('fill',_ncolor);
 
       nodes
         .select('text')
           .text(nodeName)
-          .attr('dy',function(d) { return (d.type === 'gene') ? 0 : 3; })
-          .attr('dx',function(d) { return (d.type === 'gene') ? 10 : 15; })
-          ;
+          .attr({
+            dy: function(d) { return (d.type === 'gene') ? 0 : 3; },
+            dx: function(d) { return (d.type === 'gene') ? 10 : 15; }
+          });
 
       nodes.exit().remove();
 
@@ -500,8 +519,10 @@
       container.selectAll('.caxis').remove();  // TODO: not this
 
       container.append('g')
-        .attr('class', 'axis caxis')
-        .attr('transform', 'translate('+(margin.left)+','+margin.top+')')
+        .attr({
+          class:     'axis caxis',
+          transform: 'translate('+(margin.left)+','+margin.top+')'
+        })
         .datum(_l)
         .call(legend);
 

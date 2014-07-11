@@ -19,7 +19,8 @@
       'ui.bootstrap',
       'hc.downloader',
       'angular-growl',
-      'pasvaz.bindonce'
+      'pasvaz.bindonce',
+      'ng-context-menu'
     ]);
 
   app

@@ -25,7 +25,8 @@
     "isteven-angular-multiselect": "1.2.0",
     "angular-dsv": "~0.0.4",
     "angular-sanitize": "~1.2.18",
-    "angular-bindonce": "~0.3.1"
+    "angular-bindonce": "~0.3.1",
+    "ng-context-menu": "~0.1.4"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",

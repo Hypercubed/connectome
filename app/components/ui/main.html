@@ -11,8 +11,50 @@
 
   <noscript>Missing javascript</noscript>
 
-  <div id="vis">
+  <div id="vis" context-menu="rightClick($event)" style=""
+    class="panel panel-default"
+    data-target="myMenu"
+    ng-class="{ 'highlight': panels.state.highlight, 'expanded': panels.state.contextmenu }">
     <svg></svg>
+
+    <div class="dropdown position-fixed" id="myMenu">
+      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
+        <li ng-if="clickedItem" ng-click="clickedItem.fixed = true; updateSelection()" class="dropdown-header">{{clickedItem.name}}</li>
+        <li  class="dropdown-submenu" ng-if="clickedItem.type == 'sample' || clickedItem.type == 'gene'">
+          <a class="pointer" role="menuitem" tabindex="2" ng-click="clickedItem.ticked = false">Hide</a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="pointer" role="menuitem" tabindex="2" ng-click="hideChildren(clickedItem,100000)">All out edges</a>
+            </li>
+            <li>
+              <a class="pointer" role="menuitem" tabindex="2" ng-click="hideParents(clickedItem,100000)">All in edges</a>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown-submenu" ng-if="clickedItem.type == 'sample' || clickedItem.type == 'gene'">
+          <a class="pointer" role="menuitem" tabindex="2" ng-click="showMoreChildren(clickedItem,3)">Show</a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="pointer" role="menuitem" tabindex="2" ng-click="showMoreChildren(clickedItem,3)">More out edges</a>
+            </li>
+            <li>
+              <a class="pointer" role="menuitem" tabindex="2" ng-click="showMoreChildren(clickedItem,100000)">All out edges</a>
+            </li>
+            <li>
+              <a class="pointer" role="menuitem" tabindex="2" ng-click="showMoreParents(clickedItem,3)">More in edges</a>
+            </li>
+            <li>
+              <a class="pointer" role="menuitem" tabindex="2" ng-click="showMoreParents(clickedItem,100000)">All in edges</a>
+            </li>
+          </ul>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <a class="pointer" role="menuitem" tabindex="2" ng-click="panelState.info = !panelState.info">Toggle info menu</a>
+        </li>
+      </ul>
+    </div>
+
   </div>
 
   <div id="header" class="header row">
