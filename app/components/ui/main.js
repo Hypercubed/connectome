@@ -101,35 +101,20 @@
         }
       }; */
 
-      $scope.showMoreOutNeighbors = function(clickedItem, N) {
-        N = N || 3;
+      $scope.showOutNeighbors = function(clickedItem, N) {
         var arr = graphService.data.outEdgesIndex[clickedItem.id];
-        console.log(arr);
-        if (arr) {
-          var count = 0;
-          for (var key in arr) {
-            if (!arr[key].target.ticked) {
-              count++;
-              arr[key].target.ticked = true;
-            }
-            if (count >= N) { break; }
-          }
-        }
+        N = (N || 1)*arr.length;
+        arr.slice(0,N).forEach(function(d) {
+          d.target.ticked = true;
+        });
       };
 
-      $scope.showMoreInNeighbors = function(clickedItem, N) {
-        N = N || 3;
+      $scope.showInNeighbors = function(clickedItem, N) {
         var arr = graphService.data.inEdgesIndex[clickedItem.id];
-        if (arr) {
-          var count = 0;
-          for (var key in arr) {
-            if (!arr[key].source.ticked) {
-              count++;
-              arr[key].source.ticked = true;
-            }
-            if (count >= N) { break; }
-          }
-        }
+        N = (N || 1)*arr.length;
+        arr.slice(0,N).forEach(function(d) {
+          d.source.ticked = true;
+        });
       };
 
       // Graph service

@@ -150,15 +150,16 @@
   </accordion-group>
 
   <accordion-group heading="Options" is-open="panels.state.options" ng-class="{'collapsed': !panels.state.options}">
-    <div>
-      Show node labels
-      <div class="pull-right small"><input type="checkbox" ng-model="options.showLabels" /></div>
-    </div>
 
-    <p>
-      <span><input type="radio" ng-model="state.name" value="home.force-graph" /> force directed graph</span>
-      <br /><span><input type="radio" ng-model="state.name" value="home.hive-graph" /> hive plot</span>
-    </p>
+    <ul class="list-unstyled">
+      <li><span><input type="checkbox" ng-model="options.showLabels" /> Show node labels</span>
+      <li><span><input type="radio" ng-model="state.name" value="home.force-graph" /> force directed graph</span>
+      <li><span><input type="radio" ng-model="state.name" value="home.hive-graph" /> hive plot</span>
+    </ul>
+
+    <div class="btn-vert-block">
+      <a class="btn btn-primary col-xs-12" ui-sref="reset">Reset all options</a>
+    </div>
   </accordion-group>
 
   <accordion-group heading="Explanation" is-open="panels.state.help" ng-class="{'collapsed': !panels.state.help}">

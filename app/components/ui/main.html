@@ -28,8 +28,10 @@
         <li class="dropdown-submenu" ng-if="clickedItem.type == 'sample' || clickedItem.type == 'gene'">
           <a class="pointer" role="menuitem">Show</a>
           <ul class="dropdown-menu">
-            <li><a class="pointer" role="menuitem" ng-click="showMoreOutNeighbors(clickedItem,1000)">All out neighbors</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="showMoreInNeighbors(clickedItem,1000)">All in neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showOutNeighbors(clickedItem,1)">All out neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showInNeighbors(clickedItem,1)">All in neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showOutNeighbors(clickedItem,0.2)">Top out neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showInNeighbors(clickedItem,0.2)">Top in neighbors</a></li>
           </ul>
         </li>
 
@@ -96,40 +98,37 @@
 
 </div -->
 
-  <div class="ng-pageslide ng-pageslide-left" ng-class="{'open': panels.state.snapper }">
-    <div id="ui">
-      <div ng-include="'components/ui/left-panel.html'"></div>
+  <div class="pageslide pageslide-left" ng-show="panels.state.snapper">
+    <div id="ui" ng-if="panels.state.snapper" ng-include="'components/ui/left-panel.html'">
     </div>
   </div>
 
-  <div class="ng-pageslide ng-pageslide-right" ng-class="{'open': panels.state.info }" >
-    <div>
+  <div class="pageslide pageslide-right" ng-show="panels.state.info" >
 
-      <div class="" ng-if="panels.state.info">
-        <div class="new-tip" ng-cloak ng-show="graphData.nodes.length > 0">
-          <ul class="list-unstyled">
-            <li>Samples: <span ng-bind="selectedIds.cells.length"></span> / <span bindonce="data.cells" bo-text="data.cells.length"></span></li>
-            <li>Genes:   <span ng-bind="selectedIds.genes.length"></span> / <span bindonce="data.genes" bo-text="data.genes.length"></span></li>
-            <li>Pairs:   <span ng-bind="selectedIds.pairs.length"></span> / <span bindonce="data.pairs" bo-text="data.pairs.length"></span></li>
-          </ul>
-          <ul class="list-unstyled">
+    <div class="" ng-if="panels.state.info">
+      <div class="new-tip" ng-cloak ng-show="graphData.nodes.length > 0">
+        <ul class="list-unstyled">
+          <li>Samples: <span ng-bind="selectedIds.cells.length"></span> / <span bindonce="data.cells" bo-text="data.cells.length"></span></li>
+          <li>Genes:   <span ng-bind="selectedIds.genes.length"></span> / <span bindonce="data.genes" bo-text="data.genes.length"></span></li>
+          <li>Pairs:   <span ng-bind="selectedIds.pairs.length"></span> / <span bindonce="data.pairs" bo-text="data.pairs.length"></span></li>
+        </ul>
+        <ul class="list-unstyled">
 
-            <li>Nodes: <span ng-bind="graphData._nodes.length"></span> / <span ng-bind="graphData.nodes.length"></span></li>
-            <li>Edges: <span ng-bind="graphData._edges.length"></span> / <span ng-bind="graphData.edges.length"></span></li>
+          <li>Nodes: <span ng-bind="graphData._nodes.length"></span> / <span ng-bind="graphData.nodes.length"></span></li>
+          <li>Edges: <span ng-bind="graphData._edges.length"></span> / <span ng-bind="graphData.edges.length"></span></li>
 
-          </ul>
-        </div>
-
-        <div growl></div>
-
-        <div ng-repeat="item in graphData.selectedItems track by item.name" class="new-tip" ng-class="item.hover ? 'bg-warning' : 'bg-danger'" ng-if="item.type">
-          <button type="button" class="close" aria-hidden="true" ng-click="revoveSelectedItem($index)">&times;</button>
-          <div ng-include="'components/ui/item.html'">
-          </div>
-        </div>
+        </ul>
       </div>
 
+      <div growl></div>
+
+      <div ng-repeat="item in graphData.selectedItems track by item.name" class="new-tip" ng-class="item.hover ? 'bg-warning' : 'bg-danger'" ng-if="item.type">
+        <button type="button" class="close" aria-hidden="true" ng-click="revoveSelectedItem($index)">&times;</button>
+        <div ng-include="'components/ui/item.html'">
+        </div>
+      </div>
     </div>
+
   </div>
 
   <div class="pageslide-toggle left">

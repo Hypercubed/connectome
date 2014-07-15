@@ -19,8 +19,7 @@
       'hc.downloader',
       'angular-growl',
       'pasvaz.bindonce',
-      'ng-context-menu',
-      'pageslide-directive'
+      'ng-context-menu'
     ]);
 
   app

@@ -17,15 +17,18 @@
       var _value = _F('value');
       var _ticked = _F('ticked');
       var _fixed = _F('fixed');
+      var _type = _F('type');
       //var _F = function(key) { return function(d) {return d[key];}; };
 
       //var type = _F('type');
-      var _valueComp = function(a,b) { return _value(b) - _value(a); };
-      var _valueFilter = function(d) { return d.type !== 'node' || d.value >= 0; };
+      //var _valueComp = function(a,b) { return _value(b) - _value(a); };
+      var _valueComp = _value.order(d3.descending);
+      //var _valueFilter = function(d) { return d.type !== 'node' || d.value >= 0; };
+      var _valueFilter = _type.neq('sample').or(_value.gte(0));
       //var typeFilter = function(type) { return function(d) {return d.type === type;}; };
 
-      var _value0 = function(d) { return d.values[0]; };
-      var _value1 = function(d) { return d.values[1]; };
+      var _value0 = _F(function(d) { return d.values[0]; });
+      var _value1 = _F(function(d) { return d.values[1]; });
       //var gtZero = function(d) {return d>0;};
 
       // Events
@@ -103,14 +106,10 @@
 
         //console.log(filter0,filter1);
 
-        var filtered = nodes.filter(function(d) {
-          //console.log(d);
-          return ( d.type !== 'sample' || d.values[0] >= filter0 || d.values[1] >= filter1 );
-        });
+        var _v = _value0.gte(filter0).or(_value1.gte(filter1));
+        var _t = _type.neq('sample');
 
-        //console.log(filtered.length);
-
-        graph.data._nodes = filtered;
+        graph.data._nodes = nodes.filter(_t.or(_v));
 
       }
 
@@ -199,22 +198,24 @@
 
         });
 
+        var _expression = _type.eq('expression');
+
         graph.data.nodes.forEach(function(node) {  // todo: move these (after filter?)
           if (!node.ticked) { return; }
 
-          var a = function(a,b) { return b.value - a.value; };
+          //var a = function(a,b) { return b.value - a.value; };
 
           //console.log(data.edgesIndex[node.id]);
 
           //data.edgesIndex[node.id] = data.edgesIndex[node.id].sort(a);
-          graph.data.outEdgesIndex[node.id] = graph.data.outEdgesIndex[node.id].sort(a);
-          graph.data.inEdgesIndex[node.id] = graph.data.inEdgesIndex[node.id].sort(a);
+          graph.data.outEdgesIndex[node.id] = graph.data.outEdgesIndex[node.id].sort(_valueComp);
+          graph.data.inEdgesIndex[node.id] = graph.data.inEdgesIndex[node.id].sort(_valueComp);
 
           graph.data._outEdgesIndex[node.id] = graph.data.outEdgesIndex[node.id].filter(_ticked);
           graph.data._inEdgesIndex[node.id] = graph.data.inEdgesIndex[node.id].filter(_ticked);
 
-          node.values[0] = d3.sum(graph.data._outEdgesIndex[node.id].filter(_F('type').eq('expression')),_value);
-          node.values[1] = d3.sum(graph.data._inEdgesIndex[node.id].filter(_F('type').eq('expression')),_value);
+          node.values[0] = d3.sum(graph.data._outEdgesIndex[node.id].filter(_expression),_value);
+          node.values[1] = d3.sum(graph.data._inEdgesIndex[node.id].filter(_expression),_value);
           node.value = d3.sum(node.values);
           //console.log(node.id);
         });

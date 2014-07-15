@@ -25,8 +25,7 @@
     "angular-dsv": "~0.0.4",
     "angular-sanitize": "~1.2.18",
     "angular-bindonce": "~0.3.1",
-    "ng-context-menu": "~0.1.4",
-    "angular-pageslide-directive": "~0.1.6"
+    "ng-context-menu": "~0.1.4"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",
