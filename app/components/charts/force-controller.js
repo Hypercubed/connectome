@@ -169,39 +169,15 @@
         });
 
         pairs.forEach(function addLinks(_pair) {
-          //$log.debug('Constructing edges for',_pair);
 
-          //console.log(_pair);
-
-          var _ligand = graph.data.nodesIndex[_pair.Ligand];
-          var _receptor = graph.data.nodesIndex[_pair.Receptor];
-
-          if (_ligand && _receptor) {
-            //console.log(data.edgesIndex[_pair.Ligand][_pair.Receptor]);
-            var _lredge = new graph.Edge(_ligand,_receptor);
-            _lredge.type = 'pair';
-            _lredge.value = 10;
-            graph.addEdge(_lredge);
-          }
-
-          if (graph.data.edges.length > MAXEDGES) {
-            $log.warn('Maximum number of edges exceeded', graph.data.edges.length);
-            throw StopIteration;
-          }
-
-        });
-
-        graph.data.edges.forEach(function(edge) {
-          if (edge.type !== 'pair') {return;}
-
-          var ligandEdges = graph.data._inEdgesIndex[edge.source.id];
-          var receptorEdges = graph.data._outEdgesIndex[edge.target.id];
+          var ligandEdges = graph.data.inEdgesIndex[_pair.Ligand];
+          var receptorEdges = graph.data.outEdgesIndex[_pair.Receptor];
 
           ligandEdges.forEach(function(ligand) {
             receptorEdges.forEach(function(receptor) {
 
               var value = ligand.value*receptor.value;
-              if (ligand.value > options.receptorFilter && receptor.value > options.ligandFilter && value > 0) {
+              if (value > 0 && ligand.value > options.receptorFilter && receptor.value > options.ligandFilter) {
                 //console.log(ligand.value,receptor.value,value);
 
                 //var _edge;

@@ -9,7 +9,7 @@
   app
     .controller('ResetCtrl', function ($state,localStorageService) {
       localStorageService.clearAll();
-      $state.go('hive-graph');
+      $state.go('home.hive-graph');
     });
 
   /* app
@@ -40,7 +40,36 @@
   app
     .controller('MainCtrl', function ($scope, $rootScope, $log, $state, localStorageService, loadedData, forceGraph, hiveGraph) {
 
-      //Move
+      var _ticked = _F('ticked');
+      var _i = _F('i');
+
+      var defaultOptions = {
+        showLabels: true,
+        maxEdges: 100,
+        ligandFilter: 10,
+        receptorFilter: 10,
+        ligandRankFilter: 1,
+        receptorRankFilter: 1,
+        edgeRankFilter: 1,
+      };
+
+      var defaultIds = {
+        pairs: loadedData.pairs.map(_i),
+        cells: [72,73],
+        genes: [201,202,203,204,205]
+      };
+
+      // Options
+      localStorageService.bind($scope, 'options', angular.extend({}, defaultOptions));
+      localStorageService.bind($scope, 'selectedIds', angular.extend({}, defaultIds));
+
+      $scope.reset = function() {
+        $scope.options = angular.extend({}, defaultOptions);
+        $scope.selectedIds = angular.extend({}, defaultIds);
+
+
+        loadSelection();
+      };
 
       $scope.updateSelection = function() {
         graphService.data.selectedItems = graphService.data.nodes.filter(_F('fixed'));
@@ -54,7 +83,7 @@
         }
       };
 
-      $scope.hideChildren = function(clickedItem) {
+      /* $scope.hideChildren = function(clickedItem) {
         var arr = graphService.data.outEdgesIndex[clickedItem.id];
         if (arr) {
           for (var key in arr) {
@@ -70,11 +99,12 @@
             arr[key].source.ticked = false;
           }
         }
-      };
+      }; */
 
-      $scope.showMoreChildren = function(clickedItem, N) {
+      $scope.showMoreOutNeighbors = function(clickedItem, N) {
         N = N || 3;
         var arr = graphService.data.outEdgesIndex[clickedItem.id];
+        console.log(arr);
         if (arr) {
           var count = 0;
           for (var key in arr) {
@@ -85,9 +115,9 @@
             if (count >= N) { break; }
           }
         }
-      }
+      };
 
-      $scope.showMoreParents = function(clickedItem, N) {
+      $scope.showMoreInNeighbors = function(clickedItem, N) {
         N = N || 3;
         var arr = graphService.data.inEdgesIndex[clickedItem.id];
         if (arr) {
@@ -100,7 +130,7 @@
             if (count >= N) { break; }
           }
         }
-      }
+      };
 
       // Graph service
       var graphService; // = ($state.current.name === 'home.hive-graph') ? hiveGraph : forceGraph;
@@ -157,22 +187,7 @@
         });
       }); */
 
-      // Options
-      localStorageService.bind($scope, 'options', {
-        showLabels: true,
-        maxEdges: 100,
-        ligandFilter: 10,
-        receptorFilter: 10,
-        ligandRankFilter: 1,
-        receptorRankFilter: 1,
-        edgeRankFilter: 1,
-      });
 
-      $scope.selectedIds = {
-        pairs: [],
-        cells: [],
-        genes: []
-      };
 
       //var _id = _F('_id');
       var _ticked = _F('ticked');
@@ -191,11 +206,11 @@
 
         $log.debug('load from local storage');
 
-        localStorageService.bind($scope, 'selectedIds', {
-          pairs: $scope.data.pairs.map(_i),
-          cells: [72,73],
-          genes: [201,202,203,204,205]
-        });
+        //localStorageService.bind($scope, 'selectedIds', {
+        //  pairs: $scope.data.pairs.map(_i),
+        //  cells: [72,73],
+        //  genes: [201,202,203,204,205]
+        //});
 
         //console.log($scope.selectedIds.pairs.length);
 

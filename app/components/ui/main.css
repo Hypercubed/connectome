@@ -73,10 +73,6 @@ body {
   overflow: hidden;
 }
 
-#vis .dropdown-menu {
-  min-width: 260px;
-}
-
 #footer {
   height: 30px;
   position: absolute;
@@ -317,6 +313,11 @@ height: auto;
 }
 
 /* Multilevel menu */
+
+#vis .dropdown-menu {
+  min-width: 260px;
+  z-index: 2000;
+}
 
 .dropdown-submenu {
     position: relative;

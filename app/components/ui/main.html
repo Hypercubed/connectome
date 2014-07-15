@@ -22,25 +22,22 @@
         <li ng-if="clickedItem" ng-click="clickedItem.fixed = true; updateSelection()" class="dropdown-header">{{clickedItem.name}}</li>
 
         <li  class="dropdown-submenu" ng-if="clickedItem.type == 'sample' || clickedItem.type == 'gene'">
-          <a class="pointer" role="menuitem">Hide</a>
-          <ul class="dropdown-menu">
-            <li><a class="pointer" role="menuitem" ng-click="clickedItem.ticked = false">This</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="hideChildren(clickedItem,100000)">All out neighbors</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="hideParents(clickedItem,100000)">All in neighbors</a></li>
-          </ul>
+          <a class="pointer" role="menuitem" ng-click="clickedItem.ticked = false">Hide</a>
         </li>
 
         <li class="dropdown-submenu" ng-if="clickedItem.type == 'sample' || clickedItem.type == 'gene'">
           <a class="pointer" role="menuitem">Show</a>
           <ul class="dropdown-menu">
-            <li><a class="pointer" role="menuitem" ng-click="showMoreChildren(clickedItem,3)">More out neighbors</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="showMoreChildren(clickedItem,1000)">All out neighbors</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="showMoreParents(clickedItem,3)">More in neighbors</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="showMoreChildren(clickedItem,1000)">All in neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showMoreOutNeighbors(clickedItem,1000)">All out neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showMoreInNeighbors(clickedItem,1000)">All in neighbors</a></li>
           </ul>
         </li>
 
+        <!-- state.name == 'home.force-graph' -->
+
         <li class="divider" ng-if="clickedItem.type == 'sample' || clickedItem.type == 'gene'"></li>
+
+        <li ng-click="state"><a class="pointer" ng-click="reset()">Reset visualization</a></li>
 
         <li class="dropdown-submenu">
           <a class="pointer" role="menuitem">Panels</a>
@@ -99,16 +96,16 @@
 
 </div -->
 
-  <div pageslide="left" ps-class="ng-pageslide-left" ps-open="panels.state.snapper" ps-size="350px">
+  <div class="ng-pageslide ng-pageslide-left" ng-class="{'open': panels.state.snapper }">
     <div id="ui">
       <div ng-include="'components/ui/left-panel.html'"></div>
     </div>
   </div>
 
-  <div pageslide="right" ps-class="ng-pageslide-right" ps-open="panels.state.info" ps-size="350px">
+  <div class="ng-pageslide ng-pageslide-right" ng-class="{'open': panels.state.info }" >
     <div>
 
-      <div class="" ng-if="panelState.info">
+      <div class="" ng-if="panels.state.info">
         <div class="new-tip" ng-cloak ng-show="graphData.nodes.length > 0">
           <ul class="list-unstyled">
             <li>Samples: <span ng-bind="selectedIds.cells.length"></span> / <span bindonce="data.cells" bo-text="data.cells.length"></span></li>

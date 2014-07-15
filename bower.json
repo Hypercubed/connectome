@@ -49,11 +49,6 @@
         "./build/angular-growl.js",
         "./build/angular-growl.min.css"
       ]
-    },
-    "angular-pageslide-directive": {
-      "main": [
-        "./dist/angular-pageslide-directive.js"
-      ]
     }
   },
   "resolutions": {
