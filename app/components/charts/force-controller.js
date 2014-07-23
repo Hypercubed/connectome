@@ -135,7 +135,8 @@
 
           genes.forEach(function(gene) {
             if (gene.ticked || cell.ticked) {
-              var v = +expr[gene.i + 1][cell.i + 1];
+              //console.log(gene.i, cell.i);
+              var v = (gene.i > -1 && cell.i > -1) ? +expr[gene.i + 1][cell.i + 1] : 0;
               var min = (gene.class === 'receptor') ? options.receptorFilter : options.ligandFilter;
               min = Math.max(min,0);
 
@@ -170,8 +171,8 @@
 
         pairs.forEach(function addLinks(_pair) {
 
-          var ligandEdges = graph.data.inEdgesIndex[_pair.Ligand];
-          var receptorEdges = graph.data.outEdgesIndex[_pair.Receptor];
+          var ligandEdges = graph.data.inEdgesIndex[_pair.ligandId];
+          var receptorEdges = graph.data.outEdgesIndex[_pair.receptorId];
 
           ligandEdges.forEach(function(ligand) {
             receptorEdges.forEach(function(receptor) {

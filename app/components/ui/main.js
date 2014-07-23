@@ -55,8 +55,8 @@
 
       var defaultIds = {
         pairs: loadedData.pairs.map(_i),
-        cells: [72,73],
-        genes: [201,202,203,204,205]
+        cells:[0,1,2,10,28,33,51,57,69,72,73,80,86,101,105,130,139,140],
+        genes:[282,283]
       };
 
       // Options

@@ -42,6 +42,7 @@
     var _group = _F('group');
     var _value = _F('value');
     var _name = _F('name');
+    var _id = _F('id');
     var _class = _F('class');
     var _fixed = _F('fixed');
     var _edgeFixed = _F('source',_fixed).and(_F('target',_fixed));
@@ -342,7 +343,7 @@
 
       nodesLayer.selectAll('.node').remove();  // TODO: not this, hack to ensure nodes are stacked
 
-      nodes = nodesLayer.selectAll('.node').data(_F(), _name);
+      nodes = nodesLayer.selectAll('.node').data(_F(), _id);
 
       function nodeClick(d) {
         d3.event.stopPropagation();

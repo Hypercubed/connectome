@@ -1,4 +1,5 @@
 /* global d3 */
+/* global _F */
 
 (function() {
   'use strict';
@@ -9,6 +10,7 @@
     .constant('files', {
       expression: 'data/LR.expr.txt',
       pairs: 'data/LR.pairs.txt',
+      genes: 'data/LR.genes.txt',
       ontology: 'data/ontology.txt'
     });
 
@@ -30,6 +32,10 @@
           d.id = i;
           //d.id = i;
           d.name = d.Ligand + '-' + d.Receptor;
+          d.ligandId = d.Ligand+'.ligand';
+          d.receptorId = d.Receptor+'.receptor';
+
+          //console.log(d);
 
           return d;
         })
@@ -50,8 +56,32 @@
             $log.warn('Error',data, status, headers, config);
           })
           .success(function(data) {
-            $log.debug('Genes loaded:', data.length);
+            $log.debug('Expression rows:', data.length);
+          })
+          .then(function(res) {
+            return res.data;
+          });
+      }
 
+      function _getGenes(filename) {
+        return dsv.tsv.get(filename, {cache: true}, function(d) {
+            d.id = d.name+'.'+d.class;
+            d.type = 'gene';
+
+            d.pairs = []; // todo: get rid of this
+            d._genes = [];  // todo: get rid of this
+            d.ligands = [];  // todo: get rid of this
+            d.receptors = [];
+
+            //console.log(d);
+
+            return d;
+          })
+          .error(function(data, status, headers, config) {
+            $log.warn('Error',data, status, headers, config);
+          })
+          .success(function(data) {
+            $log.debug('Genes loaded:', data.length);
           })
           .then(function(res) {
             return res.data;
@@ -77,23 +107,22 @@
 
       service.load = function() {
 
-        return $q.all([_getPairs(files.pairs), _getExpression(files.expression), _getOntology(files.ontology)])
+        return $q.all([_getPairs(files.pairs), _getExpression(files.expression), _getOntology(files.ontology), _getGenes(files.genes)])
           .then(function(data) {
             $log.debug('Done loading');
 
             service.data.pairs = data[0];
             var _expr = service.data.expr = data[1];
             var _ontology = data[2];
+            service.data.genes = data[3];
 
-            //var __expr = _expr.slice(1);
-
+            // get samples from expression table
             service.data.cells = _expr[0].slice(1).map(function(d,i) {
 
               var _cell = {
                 name: d,
                 id: d,  // better name?
                 i:  i,
-                //id: i,   // TODO: get rid of this
                 type: 'sample'
               };
 
@@ -103,21 +132,12 @@
                 _cell.meta.Ontology = _o;
               }
 
-              /* _cell.expr = [];
-              __expr.forEach(function(row) {
-                var v = +row[i+1];
-                if (v > 0) {
-                  _cell.expr.push({ gene: row[0], value: v });
-                }
-              })
-              _cell.expr.sort(function(a,b) { return b.value - a.value; }); */
-
               return _cell;
             });
 
             $log.debug('Samples loaded:', service.data.cells.length);
 
-            function matchKeys(meta, match) {  // Do this on load
+            /* function matchKeys(meta, match) {  // Do this on load
               var keys = d3.keys(meta);
               var values = {};
 
@@ -128,9 +148,16 @@
               });
 
               return values;
-            }
+            } */
 
-            service.data.genes = _expr.slice(1).map(function(row, i) {  // TODO: generate one gene file
+            // Get index for each gene in expression table
+            var _genesIndecies = _expr.slice(1).map(_F(0));
+            service.data.genes = service.data.genes.map(function(gene) {
+              gene.i = _genesIndecies.indexOf(gene.name);
+              return gene;
+            });
+
+            /* service.data.genes = _expr.slice(1).map(function(row, i) {  // TODO: generate one gene file
               return {
                 name: row[0],
                 id: row[0],
@@ -144,41 +171,57 @@
                 ligands: [],  // todo: get rid of this
                 receptors: []
               };
-            });
+            }); */
 
+            // corss reference pairs
             service.data.pairs = service.data.pairs.filter(function(pair) {
 
               var _ligand, _receptor;
 
               service.data.genes.forEach(function(gene) {
-                if (gene.name === pair.Ligand) {
+                if (gene.id === pair.ligandId) {
                   _ligand = gene;
-                } else if (gene.name === pair.Receptor) {
+                } else if (gene.id === pair.receptorId) {
                   _receptor = gene;
                 }
               });
 
               if (!_ligand || !_receptor) {
                 $log.warn('Ligand or receptor missing from expression table');
+                pair.index = [-1,-1];
                 return false;
               }
 
               pair.index = [_ligand.i,_receptor.i];
 
-              // cross reference
-              _ligand.class = 'ligand';
-              _ligand._genes.push(_receptor.i);
-              _ligand.receptors.push({ i: _receptor.i });
-              _ligand.meta = matchKeys(pair, 'Ligand.');
-              _ligand.description = _ligand.meta.name;
-              delete _ligand.meta.name;
+              if (_ligand.class !== 'ligand') {
+                $log.warn('Class inconsistancy',_ligand.name);
+                return false;
+              }
 
-              _receptor.class = 'receptor';
-              _receptor._genes.push(_ligand.i);
-              _receptor.ligands.push({ i: _ligand.i });
-              _receptor.meta = matchKeys(pair, 'Receptor.');
-              _receptor.description = _receptor.meta.name;
-              delete _receptor.meta.name;
+              if(_receptor.class !== 'receptor') {
+                $log.warn('Class inconsistancy',_receptor.name);
+                return false;
+              }
+
+              //console.log(_receptor.class == 'receptor');
+
+              // cross reference
+              //_ligand.class = 'ligand';
+              //_ligand._genes.push(_receptor.i);
+              //_ligand.receptors.push({ i: _receptor.i });
+              //_ligand.meta = matchKeys(pair, 'Ligand.');
+              //_ligand.description = _ligand.meta.name;
+              //delete _ligand.meta.name;
+
+              //_receptor.class = 'receptor';
+              //_receptor._genes.push(_ligand.i);
+              //_receptor.ligands.push({ i: _ligand.i });
+              ////_receptor.meta = matchKeys(pair, 'Receptor.');
+              //_receptor.description = _receptor.meta.name;
+              //delete _receptor.meta.name;
+
+              //console.log(pair);
 
               return true;
             });

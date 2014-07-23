@@ -33,7 +33,7 @@
 
       // Events
       //var _hover = _F('hover');
-      /* chart.on('hover', debounce(function(d) {
+      chart.on('hover', debounce(function(d) {
         graph.data.hoverEvent = true;
 
         graph.data.selectedItems = graph.data.selectedItems.filter(_fixed);
@@ -41,7 +41,7 @@
         if (d && !d.fixed) {
           graph.data.selectedItems.unshift(d);
         }
-      })); */
+      }));
 
       chart.on('selectionChanged', function() {
 
@@ -73,6 +73,8 @@
           //if (!gene.ticked) { return; }
           var _node = angular.extend(gene, new graph.Node());
           _node.type = 'gene';
+
+          //console.log(_node);
 
           graph.addNode(_node);
         });
@@ -143,7 +145,8 @@
 
           genes.forEach(function(gene) {
             if (gene.ticked || cell.ticked) {
-              var v = +expr[gene.i + 1][cell.i + 1];
+
+              var v = (gene.i > -1 && cell.i > -1) ? +expr[gene.i + 1][cell.i + 1] : 0;
               var min = (gene.class === 'receptor') ? options.receptorFilter : options.ligandFilter;
               min = Math.max(min,0);
 
@@ -182,8 +185,8 @@
 
           //console.log(_pair);
 
-          var _ligand = graph.data.nodesIndex[_pair.Ligand];
-          var _receptor = graph.data.nodesIndex[_pair.Receptor];
+          var _ligand = graph.data.nodesIndex[_pair.ligandId];
+          var _receptor = graph.data.nodesIndex[_pair.receptorId];
           if (_ligand && _receptor) {
             var _lredge = new graph.Edge(_ligand,_receptor);
             _lredge.type = 'pair';
