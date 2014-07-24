@@ -48,6 +48,11 @@
         "./build/angular-growl.js",
         "./build/angular-growl.min.css"
       ]
+    },
+    "ng-context-menu": {
+      "main": [
+        "dist/ng-context-menu.js"
+      ]
     }
   },
   "resolutions": {

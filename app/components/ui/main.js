@@ -40,6 +40,10 @@
   app
     .controller('MainCtrl', function ($scope, $rootScope, $log, $state, localStorageService, loadedData, forceGraph, hiveGraph) {
 
+      $rootScope.$on("$routeChangeError", function(event, current, previous, rejection) {
+          console.log(event);
+      });
+
       var _ticked = _F('ticked');
       var _i = _F('i');
 

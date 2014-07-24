@@ -43,7 +43,7 @@
       growlProvider.globalTimeToLive(5000);
     }]);
 
-  window.watchCount = function () {
+  /* window.watchCount = function () {
     var i, data, scope,
       count = 0,
       all = document.all,
@@ -61,6 +61,6 @@
       }
     }
     return count;
-  };
+  }; */
 
 })();

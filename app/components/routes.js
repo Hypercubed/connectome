@@ -10,9 +10,9 @@
     $stateProvider
       .state('home', {
         //abastract: true,
-        resolve: { loadedData: function(ligandReceptorData) {
+        resolve: { loadedData: ['ligandReceptorData', function(ligandReceptorData) {  // note: this injection gets ignored by ng-min
           return ligandReceptorData.load();
-        }},
+        }]},
         url: '/',
         controller: 'MainCtrl',
         templateUrl: 'components/ui/main.html'
