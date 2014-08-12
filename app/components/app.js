@@ -19,7 +19,9 @@
       'hc.downloader',
       'angular-growl',
       'pasvaz.bindonce',
-      'ng-context-menu'
+      'ng-context-menu',
+      'ngTable',
+      'ngGrid'
     ]);
 
   app

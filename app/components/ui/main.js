@@ -38,7 +38,7 @@
     });*/
 
   app
-    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, localStorageService, loadedData, forceGraph, hiveGraph) {
+    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, localStorageService, ngTableParams, loadedData, forceGraph, hiveGraph) {
 
       $rootScope.$on("$routeChangeError", function(event, current, previous, rejection) {
           console.log(event);
@@ -67,10 +67,11 @@
       localStorageService.bind($scope, 'options', angular.extend({}, defaultOptions));
       localStorageService.bind($scope, 'selectedIds', angular.extend({}, defaultIds));
 
+      $scope.selected = {};
+
       $scope.reset = function() {
         $scope.options = angular.extend({}, defaultOptions);
         $scope.selectedIds = angular.extend({}, defaultIds);
-
 
         loadSelection();
       };
@@ -107,16 +108,20 @@
 
       $scope.showOutNeighbors = function(clickedItem, N) {
         var arr = graphService.data.outEdgesIndex[clickedItem.id];
-        N = (N || 1)*arr.length;
-        arr.slice(0,N).forEach(function(d) {
+        if (N !== undefined) {
+          arr = arr.slice(0,N);
+        }
+        arr.forEach(function(d) {
           d.target.ticked = true;
         });
       };
 
       $scope.showInNeighbors = function(clickedItem, N) {
         var arr = graphService.data.inEdgesIndex[clickedItem.id];
-        N = (N || 1)*arr.length;
-        arr.slice(0,N).forEach(function(d) {
+        if (N !== undefined) {
+          arr = arr.slice(0,N);
+        }
+        arr.forEach(function(d) {
           d.source.ticked = true;
         });
       };
@@ -207,9 +212,11 @@
         $scope.data.cells.forEach(_ticked($scope.selectedIds.cells));
         $scope.data.genes.forEach(_ticked($scope.selectedIds.genes));
 
-        //$scope.selected.pairs = $scope.data.pairs.filter(_ticked($scope.selectedIds.pairs));
-        //$scope.selected.cells = $scope.data.cells.filter(_ticked($scope.selectedIds.cells));
-        //$scope.selected.genes = $scope.data.genes.filter(_ticked($scope.selectedIds.genes));
+        console.log('loadSelection');
+
+        $scope.selected.pairs = $scope.data.pairs.filter(_F('ticked'));
+        $scope.selected.cells = $scope.data.cells.filter(_F('ticked'));
+        $scope.selected.genes = $scope.data.genes.filter(_F('ticked'));
 
       }
 
@@ -235,27 +242,33 @@
 
       };
 
-      function saveSelectionIds(key) {
+      function dataChanged(key) {
         return function(newVal) {
-          //return;
-
+          console.log('dataChanged',key);
           if (graphService.data.hoverEvent) {
             graphService.update();
             graphService.data.hoverEvent = false;
           }
 
-          var newIds = newVal.filter(_ticked).map(_i);
-
-          if (!angular.equals(newIds, $scope.selectedIds[key])) {
-            //console.log('new ids', key);
-            $scope.selectedIds[key] = newIds;
-            //if (key === 'cells') {updateSampleExpression();}
-            updateNetwork(newIds,$scope.selectedIds);
-          } else {
-            //graphService.update();
-          }
+          $scope.selectedIds[key] = newVal.filter(_ticked).map(_i);
 
         };
+      }
+
+      function selectionIdsChanged(key) {
+        return function(newVal, oldVal) {
+          if (angular.equals(newVal, oldVal)) { return; }
+          console.log('selectionIdsChanged',key);
+
+          updateGridSelection(key);
+          updateNetwork();
+        }
+      }
+
+      function updateGridSelection(key) {
+        $scope.data[key].forEach(function(d,i) {
+          $scope.gridOptions[key].selectRow(i,d.ticked);
+        });
       }
 
       //ligandReceptorData.load().then(function(loadedData) {
@@ -266,34 +279,67 @@
 
       updateNetwork(true,false);
 
-      $scope.$watch('data.cells', saveSelectionIds('cells'),true);
-      $scope.$watch('data.pairs', saveSelectionIds('pairs'),true);
-      $scope.$watch('data.genes', saveSelectionIds('genes'),true);
+      $scope.$watch('data.cells', dataChanged('cells'),true);  // checks if ticked is changed, updates selection ids
+      $scope.$watch('data.pairs', dataChanged('pairs'),true);
+      $scope.$watch('data.genes', dataChanged('genes'),true);
 
-      //$scope.$watch('selected.pairs', saveSelectionIds('pairs'));
-      //$scope.$watch('selected.cells', saveSelectionIds('cells'));
-      //$scope.$watch('selected.genes', saveSelectionIds('genes'));
-
-      $scope.$watchCollection('selectedIds', updateNetwork);
-      //$scope.$watchCollection('selectedIds.pairs', updateNetwork);
-      //$scope.$watchCollection('selectedIds.cells', updateNetwork);
-      //$scope.$watchCollection('selectedIds.genes', updateNetwork);
+      $scope.$watchCollection('selectedIds.cells', selectionIdsChanged('cells'));
+      $scope.$watchCollection('selectedIds.pairs', selectionIdsChanged('pairs'));
+      $scope.$watchCollection('selectedIds.genes', selectionIdsChanged('genes'));
 
       $scope.$watchCollection('options', updateNetwork);
-      //$scope.$watch('options.receptorFilter', updateNetwork);
-      //$scope.$watch('options.ligandRankFilter', updateNetwork);
-      //$scope.$watch('options.receptorRankFilter', updateNetwork);
-      //$scope.$watch('options.edgeRankFilter', updateNetwork); // TODO: filter in place
 
-      //$scope.$watch('options.showLabels', function() {
-      //  graphService.draw($scope.options);
-      //});
+      $scope.gridOptions = {};
 
-      //});
+      $scope.gridOptions.default = {
+        showFooter: true,
+        enableSorting: true,
+        multiSelect: true,
+        showFilter: true,
+        showSelectionCheckbox: true,
+        enableCellSelection: false,
+        selectWithCheckboxOnly: true,
+        afterSelectionChange: function(rows,e) {
+          if (!angular.isArray(rows)) {
+            rows = [rows];
+          }
+          rows.forEach(function(row) {
+            row.entity.ticked = row.selected;
+          });
+          return true;
+        },
+        //selectedItems: $scope.mySelections,
+        //checkboxCellTemplate: '<div class="ngSelectionCell"><input tabindex="-1" class="ngSelectionCheckbox" type="checkbox" ng-model="row.entity.ticked" /></div>',
+        columnDefs: [{field:'name', displayName:'Name'}]
+      };
 
-      //$scope.test = function() {
-      //  console.log($scope.data.genes[417]);
-      //}
+      $scope.gridOptions.cells = angular.extend({}, $scope.gridOptions.default,{
+        data: 'data.cells',
+        selectedItems: $scope.data.cells.filter(_ticked),
+        columnDefs: [
+          {field:'name', displayName:'Name'},
+          {field:'meta.Ontology', displayName:'Meta'}
+        ]
+      });
+
+      $scope.gridOptions.genes = angular.extend({}, $scope.gridOptions.default, {
+        data: 'data.genes',
+        selectedItems: $scope.data.genes.filter(_ticked),
+        columnDefs: [
+          {field:'name', displayName:'Name'},
+          {field:'age', displayName:'Age'},
+          {field:'taxon', displayName:'Taxon'},
+          {field:'consensus', displayName:'Consensus'},
+          {field:'description', displayName:'Description'},
+          {field:'hgncid', displayName:'HGNC ID'},
+          {field:'uniprotid', displayName:'uniprot ID'}
+        ]
+      });
+
+      $scope.gridOptions.pairs = angular.extend({}, $scope.gridOptions.default, {
+        data: 'data.pairs',
+        selectedItems: $scope.data.pairs.filter(_ticked),
+      });
 
     });
 

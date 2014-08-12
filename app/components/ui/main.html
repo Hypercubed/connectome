@@ -28,10 +28,10 @@
         <li class="dropdown-submenu" ng-if="clickedItem.type == 'sample' || clickedItem.type == 'gene'">
           <a class="pointer" role="menuitem">Show</a>
           <ul class="dropdown-menu">
-            <li><a class="pointer" role="menuitem" ng-click="showOutNeighbors(clickedItem,1)">All out neighbors</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="showInNeighbors(clickedItem,1)">All in neighbors</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="showOutNeighbors(clickedItem,0.2)">Top out neighbors</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="showInNeighbors(clickedItem,0.2)">Top in neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showOutNeighbors(clickedItem)">All out neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showInNeighbors(clickedItem)">All in neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showOutNeighbors(clickedItem,10)">Top out neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showInNeighbors(clickedItem,10)">Top in neighbors</a></li>
           </ul>
         </li>
 
@@ -145,6 +145,36 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
+  </div>
+
+  <div class="pageslide pageslide-bottom" ng-show="panelState.data">
+    <ul class="nav nav-tabs" role="tablist">
+      <li ng-class="{ active: panelState.tab == 1 }"><a href ng-click="panelState.data = true; panelState.tab = 1">Samples</a></li>
+      <li ng-class="{ active: panelState.tab == 2 }"><a href ng-click="panelState.data = true; panelState.tab = 2">Genes</a></li>
+      <li ng-class="{ active: panelState.tab == 3 }"><a href ng-click="panelState.data = true; panelState.tab = 3">Pairs</a></li>
+      <li class="pull-right">
+        <button type="button" ng-click="panelState.data = !panelState.data" class="navbar-toggle pull-right" title="Click to show options" style="display: inline-block;">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </li>
+    </ul>
+
+    <div class="tab-content" ng-switch="panelState.tab" ng-if="panelState.data">
+        <div class="tab-pane active" ng-switch-when="1">
+          <div class="gridStyle" ng-grid="gridOptions.cells"></div>
+        </div>
+        <div class="tab-pane active" ng-switch-when="2">
+          <div class="gridStyle" ng-grid="gridOptions.genes"></div>
+        </div>
+        <div class="tab-pane active" ng-switch-when="3">
+          <div class="gridStyle" ng-grid="gridOptions.pairs"></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>
