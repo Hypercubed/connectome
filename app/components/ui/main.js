@@ -38,10 +38,12 @@
     });*/
 
   app
-    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, localStorageService, ngTableParams, loadedData, forceGraph, hiveGraph) {
+    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, site, localStorageService, loadedData, forceGraph, hiveGraph) {
+
+      $rootScope.site = site;
 
       $rootScope.$on("$routeChangeError", function(event, current, previous, rejection) {
-          console.log(event);
+        console.log(event);
       });
 
       var _ticked = _F('ticked');
@@ -140,13 +142,13 @@
         updateNetwork();
       });
 
-      $scope.saveJson = function() {  // TODO: a service?
+      $scope.saveJson = function() {  // TODO: a directive/service?
         var txt = graphService.graph.getJSON();
         var blob = new Blob([txt], { type: 'data:text/json' });
         saveAs(blob, 'lr-graph.json');
       };
 
-      $scope.saveGml = function() {  // TODO: a service?
+      $scope.saveGml = function() {  // TODO: a directive/service?
         var txt = graphService.graph.getGML();
         var blob = new Blob([txt], { type: 'data:text/gml' });
         saveAs(blob, 'lr-graph.gml');
@@ -212,7 +214,7 @@
         $scope.data.cells.forEach(_ticked($scope.selectedIds.cells));
         $scope.data.genes.forEach(_ticked($scope.selectedIds.genes));
 
-        console.log('loadSelection');
+        //console.log('loadSelection');
 
         $scope.selected.pairs = $scope.data.pairs.filter(_F('ticked'));
         $scope.selected.cells = $scope.data.cells.filter(_F('ticked'));
@@ -244,7 +246,7 @@
 
       function dataChanged(key) {
         return function(newVal) {
-          console.log('dataChanged',key);
+          //console.log('dataChanged',key);
           if (graphService.data.hoverEvent) {
             graphService.update();
             graphService.data.hoverEvent = false;
@@ -258,7 +260,7 @@
       function selectionIdsChanged(key) {
         return function(newVal, oldVal) {
           if (angular.equals(newVal, oldVal)) { return; }
-          console.log('selectionIdsChanged',key);
+          //console.log('selectionIdsChanged',key);
 
           updateGridSelection(key);
           updateNetwork();
@@ -266,9 +268,13 @@
       }
 
       function updateGridSelection(key) {
-        $scope.data[key].forEach(function(d,i) {
-          $scope.gridOptions[key].selectRow(i,d.ticked);
-        });
+        var grid = $scope.gridOptions[key];
+        grid.selectedItems = $scope.data[key].filter(_ticked);
+        if(grid.selectRow) {
+          $scope.data[key].forEach(function(d,i) {
+            grid.selectRow(i,d.ticked);
+          });
+        }
       }
 
       //ligandReceptorData.load().then(function(loadedData) {
@@ -341,19 +347,16 @@
         selectedItems: $scope.data.pairs.filter(_ticked),
       });
 
+      //console.log($scope.data.pairs);
+
     });
 
   app
     .controller('PanelCtrl', function ($scope, localStorageService) {
 
       this.state = {
-        nodeFilters: false,
-        edgeFilters: false,
-        options: false,
-        help: true,
-        download: false,
-        info: true,
-        snapper: true
+        info: false,
+        data: false
       };
 
       // Panel state

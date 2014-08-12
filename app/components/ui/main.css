@@ -169,7 +169,7 @@ height: auto;
 }
 
 .btn-vert-block > button{
-    margin-bottom:10px;
+  margin-bottom:5px;
 }
 
 .multiSelect.inlineBlock {
@@ -345,4 +345,8 @@ height: auto;
     -webkit-border-radius: 6px 0 6px 6px;
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
+}
+
+.nav-tabs > li {
+  cursor: pointer;
 }

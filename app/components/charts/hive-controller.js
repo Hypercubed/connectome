@@ -41,7 +41,7 @@
         if (d && !d.fixed) {
           graph.data.selectedItems.unshift(d);
         }
-      }));
+      }, 3000));
 
       chart.on('selectionChanged', function() {
 

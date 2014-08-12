@@ -35,7 +35,8 @@
 }
 
 .pageslide-toggle.bottom {
-  top: 10px;
+  top: 5px;
+  right: 5px;
 }
 
 .pageslide-right {
@@ -58,11 +59,15 @@
 .pageslide-bottom .gridStyle {
     border: 1px solid rgb(212,212,212);
     width: 100%;
-    height: 300px;
+    height: 350px;
 }
 
 .pageslide.ng-hide > div, .pageslide.ng-hide-remove > div {
   display: none;
+}
+
+.pageslide-bottom.ng-hide > div, .pageslide-bottom.ng-hide-remove > div {
+  display: block;
 }
 
 .pageslide-right.ng-hide {
@@ -78,6 +83,6 @@
 
 .pageslide-bottom.ng-hide {
   /* width: 0px; */
-  -webkit-transform: translateY(335px); /* Chrome, Safari, Opera */
-  transform: translateY(335px);
+  -webkit-transform: translateY(360px); /* Chrome, Safari, Opera */
+  transform: translateY(360px);
 }
