@@ -56,10 +56,20 @@
   width: auto;
 }
 
+.pageslide-bottom .tab-pane {
+  overflow-y: auto;
+  height: 350px;
+}
+
 .pageslide-bottom .gridStyle {
     border: 1px solid rgb(212,212,212);
     width: 100%;
-    height: 350px;
+    height: 340px;
+}
+
+.ngCellText input[type="checkbox"] {
+margin-top: 4px;
+margin-left: 6px;
 }
 
 .pageslide.ng-hide > div, .pageslide.ng-hide-remove > div {

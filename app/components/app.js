@@ -19,7 +19,8 @@
       'angular-growl',
       'pasvaz.bindonce',
       'ng-context-menu',
-      'ngGrid'
+      'ngGrid',
+      'hc.marked'
     ]);
 
   app

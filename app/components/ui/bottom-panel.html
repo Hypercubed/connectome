@@ -1,0 +1,122 @@
+<tabset>
+  <tab active="active1">
+    <tab-heading ng-click="panelState.data = true">Samples</tab-heading>
+    <div class="gridStyle" ng-grid="gridOptions.cells" ng-if="panelState.data && active1"></div>
+  </tab>
+  <tab active="active2">
+    <tab-heading ng-click="panelState.data = true">Genes</tab-heading>
+    <div class="gridStyle" ng-grid="gridOptions.genes" ng-if="panelState.data && active2"></div>
+  </tab>
+  <tab active="active3">
+    <tab-heading ng-click="panelState.data = true">Pairs</tab-heading>
+    <div class="gridStyle" ng-grid="gridOptions.pairs" ng-if="panelState.data && active3"></div>
+  </tab>
+  <tab active="active4">
+    <tab-heading ng-click="panelState.data = true">Options</tab-heading>
+    <div ng-if="active4">
+      <div class="col-md-3">
+        <h4>Graph</h4>
+        <form class="well">
+          <ul class="list-unstyled">
+            <li><span><input type="checkbox" ng-model="options.showLabels" /> Show node labels</span>
+            <li><span><input type="radio" ng-model="state.name" value="home.force-graph" /> force directed graph</span>
+            <li><span><input type="radio" ng-model="state.name" value="home.hive-graph" /> hive plot</span>
+          </ul>
+
+        </form>
+
+        <div class="btn-vert-block">
+          <button class="btn btn-primary col-xs-12" svg-download="#vis" filename="lr-graph"  title="Vector graphic in SVG format">Vector graphic (svg)</button>
+          <button class="btn btn-default col-xs-12" ng-click="saveJson()" filename="lr-graph" title="Download data in Cytoscape compatable JSON">Graph data (JSON)</button>
+          <button class="btn btn-default col-xs-12" ng-click="saveGml()" filename="lr-graph" title="Download data in GML format">Graph data (GML)</button>
+        </div>
+
+      </div>
+      <div class="col-md-3">
+        <h4>Edges</h4>
+        <form class="well">
+
+          <div>
+            <span>Ligand TPM</span>
+            <div class="pull-right small ng-binding">&gt; {{options.ligandFilter | number:0}} tpm</div>
+          </div>
+
+          <div hc-slider
+            ng-model="options.ligandFilter"
+            max="[graphData.ligandExtent[1], 10] | max"
+            min="0"
+            step="1">
+          </div>
+
+          <p />
+          <div>
+            <span>Receptor TPM</span>
+            <div class="pull-right small ng-binding">&gt; {{options.receptorFilter | number:0}} tpm</div>
+          </div>
+
+          <div
+            hc-slider
+            ng-model="options.receptorFilter"
+            max="[graphData.receptorExtent[1],10] | max"
+            min="0"
+            step="1">
+          </div>
+
+          <p />
+          <div>
+            <span>Edge cutoff</span>
+            <div class="pull-right small ng-binding">top {{options.edgeRankFilter | percentage}}</div>
+          </div>
+
+          <div hc-slider
+            ng-model="options.edgeRankFilter"
+            max="1"
+            min="0"
+            step="0.01">
+          </div>
+
+        </form>
+      </div>
+      <div class="col-md-12">
+        <div class="btn-vert-block pull-right">
+          <a class="btn btn-primary" ui-sref="reset">Reset all options</a>
+        </div>
+      </div>
+    </div>
+  </tab>
+  <tab active="active5">
+    <tab-heading ng-click="panelState.data = true">Help</tab-heading>
+    <div class="col-md-12">
+      <h4 class="title">Ligand Receptor Connectome <small>{{site.version}}</small></h4>
+      <p>A visual guide to FANTOM5 Ligand-Receptor interactions</p>
+
+      <marked>
+* Entity selection panel
+  * Use the toggle button on the bottom right to show and hide the entity selection and options panel.
+  * Switch between lists of nodes, genes, and ligand receptor pairs using the tabs.
+  * Turn on and off nodes, genes, and ligand receptors pairs using the toggle button on the left in each list.
+  * Use the arrow on the upper right of the data list to filter each lists.
+  * Switch between hive and force directed graph in the options tab.
+  * Download the visualization or data in the options panel.
+* Information panel
+  * Use the toggle button on the bottom right to show and hide the information panel.
+  * This panel will display information about the current network as well as additional information no selected nodes.
+  * Add or remove genes by clicking on gene names in the information box.
+* Visualization
+  * Click to select a node.  Click again to deselect.
+  * Hold the Ctrl key to selected multiple nodes.  Shift-Click to select a node and neighbors.
+  * Right click on a node to use the context menu.
+  * Use the context menu to show top neighbors.
+      </marked>
+    </div>
+  </tab>
+</tabset>
+
+<div class="pageslide-toggle bottom">
+  <button type="button" ng-click="panelState.data = !panelState.data; active5=true;" class="navbar-toggle pull-right" title="Click to show options" style="display: inline-block;">
+    <span class="sr-only">Toggle navigation</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
+</div>
