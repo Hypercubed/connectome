@@ -70,11 +70,19 @@
       localStorageService.bind($scope, 'selectedIds', angular.extend({}, defaultIds));
 
       //$scope.selected = {};
-
-      $scope.reset = function() {
+      $scope.resetOptions = function() {
         $scope.options = angular.extend({}, defaultOptions);
-        $scope.selectedIds = angular.extend({}, defaultIds);
+      }
 
+      $scope.resetVis = function() {
+        $scope.resetOptions();
+        $scope.selectedIds = angular.extend({}, defaultIds);
+        loadSelection();
+      };
+
+      $scope.clearVis = function() {
+        $scope.resetOptions();
+        $scope.selectedIds = angular.extend({}, {pairs:[],cells:[],genes:[]});
         loadSelection();
       };
 
@@ -242,6 +250,13 @@
       });
 
       $scope.data = loadedData;
+
+      $scope.map = {};
+      $scope.map.genes = {};
+      $scope.data.genes.forEach(function(d) {
+        $scope.map.genes[d.id] = d;
+      });
+
       loadSelection();
       updateNetwork();
 
@@ -260,102 +275,6 @@
 
       $scope.$watchCollection('options', updateNetwork);
 
-      $scope.gridOptions = {};
-
-      $scope.itemClicked = function(row) {
-        if (row.selected == true) {
-          console.log(row);
-          row.selectionProvider.selectedItems.forEach(function(d) {
-            d.ticked = row.entity.ticked;
-          });
-        }
-      }
-
-      $scope.gridOptions.default = {
-        showFooter: true,
-        enableSorting: true,
-        multiSelect: true,
-        showFilter: true,
-        showGroupPanel: true,
-        enableCellSelection: false,
-        selectWithCheckboxOnly: false,
-        showSelectionCheckbox: true,
-        enableColumnResize: true,
-        checkboxCellTemplate: '<div class="ngCellText"></div>',
-        beforeSelectionChange: function(row, e) {
-          if (!angular.isArray(row) && !e.ctrlKey && !e.shiftKey) {
-            row.selectionProvider.toggleSelectAll(false,true);
-            //console.log(row, this);
-            //row.selectionProvider.selectedItems.forEach(function(d) {
-              //d.ticked = row.entity.ticked;
-              //console.log(row.selectionProvider.getSelectionIndex(d));
-            //});
-            //row.selectionProvider.selectedItems = [];
-          }
-          return true;
-        },
-        //afterSelectionChange: function(rowItem) {
-        //  console.log(rowItem.entity);
-        //},
-        columnDefs: [
-          {
-            field:'ticked',
-            displayName:'Visible',
-            width: 60,
-            cellTemplate: '<div class="ngCellText"><input tabindex="-1" type="checkbox" ng-change="itemClicked(row)" ng-model="row.entity.ticked" /></div>'
-          },
-          {field:'name', displayName:'Name'}
-        ]
-      };
-
-      $scope.gridOptions.cells = angular.extend({}, $scope.gridOptions.default,{
-        data: 'data.cells',
-        columnDefs: $scope.gridOptions.default.columnDefs.concat([
-          {field:'meta.Ontology', displayName:'Ontology'}
-        ])
-        //columnDefs: [
-        //  {field:'ticked', displayName:'Selected',cellTemplate: '<div class="ngSelectionCell"><input tabindex="-1" class="ngSelectionCheckbox" type="checkbox" ng-model="row.entity.ticked" /></div>'},
-        //  {field:'name', displayName:'Name'},
-        //  {field:'meta.Ontology', displayName:'Ontology'}
-        //]
-      });
-
-      $scope.gridOptions.genes = angular.extend({}, $scope.gridOptions.default, {
-        data: 'data.genes',
-        columnDefs: $scope.gridOptions.default.columnDefs.concat([
-          {field:'class', displayName:'Type'},
-          {field:'age', displayName:'Age'},
-          {field:'taxon', displayName:'Taxon',cellFilter:'number'},
-          {field:'consensus', displayName:'Consensus'},
-          {field:'description', displayName:'Description'},
-          {field:'hgncid', displayName:'HGNC ID'},
-          {field:'uniprotid', displayName:'UniProt ID'}
-        ])
-      });
-
-      var cellLigandTemplate = '<div class="ngCellText">\
-        <input type="checkbox" ng-disabled="row.getProperty(\'index.0\') < 0" ng-model="data.genes[row.getProperty(\'index.0\')].ticked"></input> \
-        {{row.getProperty(col.field)}} \
-      </div>';
-
-      var cellReceptorTemplate = '<div class="ngCellText">\
-        <input type="checkbox" ng-disabled="row.getProperty(\'index.1\') < 0" ng-model="data.genes[row.getProperty(\'index.1\')].ticked"></input> \
-        {{row.getProperty(col.field)}} \
-      </div>';
-
-      $scope.gridOptions.pairs = angular.extend({}, $scope.gridOptions.default, {
-        data: 'data.pairs',
-        //selectedItems: $scope.data.pairs.filter(_ticked),
-        columnDefs: $scope.gridOptions.default.columnDefs.concat([
-          {field:'Ligand', displayName:'Ligand',cellTemplate: cellLigandTemplate},
-          {field:'Receptor', displayName:'Receptor',cellTemplate: cellReceptorTemplate},
-        ])
-      });
-
-      $scope.$watchCollection('gridOptions.cells.selectedItems', function() {
-        console.log($scope.gridOptions.cells);
-      });
-
       //console.log($scope.data.pairs);
 
     });
@@ -371,22 +290,106 @@
       // Panel state
       localStorageService.bind($scope, 'panelState', this.state);
 
-      /* snapRemote.getSnapper().then(function(snapper) {
-        if ($scope.panelState.snapper) {
-          snapper.open();
-        } else {
-          snapper.close();
+      $scope.gridOptions = {};
+
+      $scope.itemClicked = function(row) {
+        if (row.selected == true) {
+          row.selectionProvider.selectedItems.forEach(function(d) {
+            d.ticked = row.entity.ticked;
+          });
         }
+      }
 
-        snapper.on('open', function() {
-          //console.log('Drawer opened!');
-          $scope.panelState.snapper = true;
-        });
+      var GridOptions = function(options) {
 
-        snapper.on('close', function() {
-          //console.log('Drawer closed!');
-          $scope.panelState.snapper = false;
-        });
+        var defaults = {
+          showFooter: true,
+          enableSorting: true,
+          multiSelect: true,
+          showFilter: true,
+          showGroupPanel: false,
+          enableCellSelection: false,
+          selectWithCheckboxOnly: false,
+          showSelectionCheckbox: true,
+          enableColumnResize: true,
+          //checkboxCellTemplate: '<div class="ngCellText">{{row.rowIndex}}</div>',
+          beforeSelectionChange: function(row, e) {  // Without shift or ctrl deselect previous
+            if (!angular.isArray(row) && !e.ctrlKey && !e.shiftKey) {
+              row.selectionProvider.toggleSelectAll(false,true);
+            }
+            return true;
+          },
+          columnDefs: [
+            {
+              field:'ticked',
+              displayName:'Visible',
+              width: 60,
+              cellTemplate: 'cellTemplate'
+            },
+            {field:'name', displayName:'Name'}
+          ]
+        };
+
+        options.columnDefs = defaults.columnDefs.concat(options.columnDefs);
+        angular.extend(this, defaults, options);
+      };
+
+      $scope.gridOptions = {};
+
+      $scope.gridOptions.cells = new GridOptions({
+        data: 'data.cells',
+        columnDefs: [
+          {field:'meta.Ontology', displayName:'Ontology'}
+        ]
+      });
+
+      $scope.gridOptions.genes = new GridOptions({
+        data: 'data.genes',
+        columnDefs: [
+          {field:'class', displayName:'Type'},
+          {field:'age', displayName:'Age'},
+          {field:'taxon', displayName:'Taxon',cellFilter:'number'},
+          {field:'consensus', displayName:'Consensus'},
+          {field:'description', displayName:'Description'},
+          {field:'hgncid', displayName:'HGNC ID'},
+          {field:'uniprotid', displayName:'UniProt ID'}
+        ]
+      });
+
+      $scope.gridOptions.pairs = new GridOptions({
+        data: 'data.pairs',
+        columnDefs: [
+          {field:'Ligand', displayName:'Ligand',cellTemplate: 'cellLigandTemplate'},
+          {field:'Receptor', displayName:'Receptor',cellTemplate: 'cellReceptorTemplate'},
+        ]
+      });
+
+      //$scope.gridOptions.cells = angular.extend({}, defaultGridOptions,{
+      //  data: 'data.cells',
+      //  columnDefs: defaultGridOptions.columnDefs.concat([
+      //    {field:'meta.Ontology', displayName:'Ontology'}
+      //  ])
+      //});
+
+      /* $scope.gridOptions.genes = angular.extend({}, defaultGridOptions, {
+        data: 'data.genes',
+        columnDefs: defaultGridOptions.columnDefs.concat([
+          {field:'class', displayName:'Type'},
+          {field:'age', displayName:'Age'},
+          {field:'taxon', displayName:'Taxon',cellFilter:'number'},
+          {field:'consensus', displayName:'Consensus'},
+          {field:'description', displayName:'Description'},
+          {field:'hgncid', displayName:'HGNC ID'},
+          {field:'uniprotid', displayName:'UniProt ID'}
+        ])
+      }); */
+
+      /* $scope.gridOptions.pairs = angular.extend({}, defaultGridOptions, {
+        data: 'data.pairs',
+        columnDefs: defaultGridOptions.columnDefs.concat([
+          {field:'Ligand', displayName:'Ligand',cellTemplate: 'cellLigandTemplate'},
+          {field:'Receptor', displayName:'Receptor',cellTemplate: 'cellReceptorTemplate'},
+        ])
       }); */
 
     });

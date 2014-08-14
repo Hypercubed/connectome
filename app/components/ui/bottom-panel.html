@@ -1,14 +1,38 @@
+<script type="text/ng-template" id="cellTemplate">
+  <div class="ngCellText">
+    <input type="checkbox" class="glyphicon glyphicon-eye-close"
+      ng-change="itemClicked(row)"
+      ng-model="row.entity.ticked" /></input>
+  </div>
+</script>
+
+<script type="text/ng-template" id="cellLigandTemplate">
+  <div class="ngCellText">
+    <input type="checkbox" class="glyphicon glyphicon-eye-close"
+      ng-model="map.genes[row.entity.ligandId].ticked"></input>
+    {{row.getProperty(col.field)}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="cellReceptorTemplate">
+  <div class="ngCellText">
+    <input type="checkbox" class="glyphicon glyphicon-eye-close"
+      ng-model="map.genes[row.entity.receptorId].ticked"></input>
+    {{row.getProperty(col.field)}}
+  </div>
+</script>
+
 <tabset>
   <tab active="active1">
-    <tab-heading ng-click="panelState.data = true">Samples</tab-heading>
+    <tab-heading ng-click="panelState.data = true" bindonce="data">Samples ({{selectedIds.cells.length}}/<span bo-text="data.cells.length"></span>)</tab-heading>
     <div class="gridStyle" ng-grid="gridOptions.cells" ng-if="panelState.data && active1"></div>
   </tab>
   <tab active="active2">
-    <tab-heading ng-click="panelState.data = true">Genes</tab-heading>
+    <tab-heading ng-click="panelState.data = true" bindonce="data">Genes ({{selectedIds.genes.length}}/<span bo-text="data.genes.length"></span>)</tab-heading>
     <div class="gridStyle" ng-grid="gridOptions.genes" ng-if="panelState.data && active2"></div>
   </tab>
   <tab active="active3">
-    <tab-heading ng-click="panelState.data = true">Pairs</tab-heading>
+    <tab-heading ng-click="panelState.data = true" bindonce="data">Pairs ({{selectedIds.pairs.length}}/<span bo-text="data.pairs.length"></span>)</tab-heading>
     <div class="gridStyle" ng-grid="gridOptions.pairs" ng-if="panelState.data && active3"></div>
   </tab>
   <tab active="active4">
@@ -78,8 +102,8 @@
         </form>
       </div>
       <div class="col-md-12">
-        <div class="btn-vert-block pull-right">
-          <a class="btn btn-primary" ui-sref="reset">Reset all options</a>
+        <div class="pull-right">
+          <a class="btn btn-default" ng-click="resetOptions()">Reset options</a>
         </div>
       </div>
     </div>

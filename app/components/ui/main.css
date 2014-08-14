@@ -350,3 +350,15 @@ height: auto;
 .nav-tabs > li {
   cursor: pointer;
 }
+
+input[type=checkbox].glyphicon:before {
+  visibility: visible;
+  opacity:0.5;
+}
+input[type=checkbox].glyphicon.glyphicon-eye-close:checked:before {
+  content: "\e105";
+  opacity:1;
+}
+input[type=checkbox].glyphicon{
+  visibility: hidden;        
+}

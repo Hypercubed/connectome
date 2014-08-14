@@ -67,11 +67,6 @@
     height: 340px;
 }
 
-.ngCellText input[type="checkbox"] {
-margin-top: 4px;
-margin-left: 6px;
-}
-
 .pageslide.ng-hide > div, .pageslide.ng-hide-remove > div {
   display: none;
 }
