@@ -26,7 +26,7 @@
   app
     .constant('site', {
       name: 'ligand-receptor-connectome',
-      version: '0.0.4'
+      version: '0.0.5'
     });
 
   app
@@ -36,7 +36,7 @@
 
   app
     .config(function($logProvider) {
-      $logProvider.debugEnabled(false);
+      $logProvider.debugEnabled(true);
     });
 
   app

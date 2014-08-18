@@ -61,8 +61,8 @@
 
       var defaultIds = {
         pairs: loadedData.pairs.map(_i),
-        cells:[0,1,2,10,28,33,51,57,69,72,73,80,86,101,105,130,139,140],
-        genes:[282,283]
+        cells:[10,13,15,16,17,30,33,51,56,62,69,72,73,80,86,101,105,139],
+        genes:[145,768]
       };
 
       // Options
@@ -264,7 +264,7 @@
       $scope.map.cells = byId($scope.data.cells);
       $scope.map.pairs = byId($scope.data.pairs);
 
-      console.log($scope.data);  //expr[gene.i + 1][cell.i + 1]
+      /* console.log($scope.data);  //expr[gene.i + 1][cell.i + 1]
 
       var i = 0;  var a = [];
       $scope.data.cells.forEach(function(lcell) {
@@ -293,8 +293,8 @@
             };
 
             //a.push(aa);
-            
-            if (i % 1000000 == 0) { 
+
+            if (i % 1000000 == 0) {
               console.log(i, aa);
             }
 
@@ -302,7 +302,7 @@
           });
         });
       });
-      console.log(i);
+      console.log(i); */
 
       loadSelection();
       updateNetwork();
@@ -373,7 +373,7 @@
               width: 60,
               cellTemplate: 'cellTemplate'
             },
-            {field:'name', displayName:'Name'}
+            
           ]
         };
 
@@ -386,6 +386,7 @@
       $scope.gridOptions.cells = new GridOptions({
         data: 'data.cells',
         columnDefs: [
+        {field:'name', displayName:'Sample Name'},
           {field:'meta.Ontology', displayName:'Ontology'}
         ]
       });
@@ -393,11 +394,12 @@
       $scope.gridOptions.genes = new GridOptions({
         data: 'data.genes',
         columnDefs: [
-          {field:'class', displayName:'Type'},
-          {field:'age', displayName:'Age'},
-          {field:'taxon', displayName:'Taxon',cellFilter:'number'},
-          {field:'consensus', displayName:'Consensus'},
-          {field:'description', displayName:'Description'},
+          {field:'name', displayName:'Gene Symbol'},
+          {field:'class', displayName:'Class'},
+          {field:'age', displayName:'Age',cellFilter:'number'},
+          {field:'taxon', displayName:'Taxon'},
+          {field:'consensus', displayName:'Subcellular Localization'},
+          {field:'description', displayName:'Gene Name'},
           {field:'hgncid', displayName:'HGNC ID'},
           {field:'uniprotid', displayName:'UniProt ID'}
         ]
@@ -406,6 +408,7 @@
       $scope.gridOptions.pairs = new GridOptions({
         data: 'data.pairs',
         columnDefs: [
+          {field:'name', displayName:'Pair Name'},
           {field:'Ligand', displayName:'Ligand',cellTemplate: 'cellLigandTemplate'},
           {field:'Receptor', displayName:'Receptor',cellTemplate: 'cellReceptorTemplate'},
         ]

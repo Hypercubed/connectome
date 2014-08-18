@@ -18,6 +18,8 @@
     .service('ligandReceptorData', function($q, $log,$http,$timeout,dsv,files) {
       var service = {};
 
+      var cache = false;
+
       service.data = {
         expr: [],
         pairs: [],
@@ -27,17 +29,16 @@
       };
 
       function _getPairs(filename) {
-        return dsv.tsv.get(filename, {cache: true}, function(d,i) {
-          d.i = i;
-          d.id = i;
-          //d.id = i;
-          d.name = d.Ligand + '-' + d.Receptor;
-          d.ligandId = d.Ligand+'.ligand';
-          d.receptorId = d.Receptor+'.receptor';
-
-          //console.log(d);
-
-          return d;
+        return dsv.tsv.get(filename, {cache: cache}, function(d,i) {
+          return {
+            i: i,
+            id: i,
+            name: d.PairName,
+            Ligand: d.Ligand,
+            Receptor: d.Receptor,
+            ligandId: d.Ligand+'.ligand',
+            receptorId: d.Receptor+'.receptor',
+          }
         })
         .error(function(data, status, headers, config) {
           $log.warn('Error',data, status, headers, config);
@@ -51,7 +52,7 @@
       }
 
       function _getExpression(filename) {
-          return dsv.tsv.getRows(filename, {cache: true}, function(row, i) {
+          return dsv.tsv.getRows(filename, {cache: cache}, function(row, i) {
             if (i == 0) { return row; }
             return row.map(function(e,i) {
               return i == 0 ? e : +e;
@@ -69,32 +70,33 @@
       }
 
       function _getGenes(filename) {
-        return dsv.tsv.get(filename, {cache: true}, function(d) {
-            d.id = d.name+'.'+d.class;
-            d.type = 'gene';
-
-            d.pairs = []; // todo: get rid of this
-            d._genes = [];  // todo: get rid of this
-            d.ligands = [];  // todo: get rid of this
-            d.receptors = [];
-
-            //console.log(d);
-
-            return d;
-          })
-          .error(function(data, status, headers, config) {
-            $log.warn('Error',data, status, headers, config);
-          })
-          .success(function(data) {
-            $log.debug('Genes loaded:', data.length);
-          })
-          .then(function(res) {
-            return res.data;
-          });
+        return dsv.tsv.get(filename, {cache: cache}, function(d) {
+          return {
+            name: d.ApprovedSymbol,
+            description: d.ApprovedName,
+            class: d.Class.toLowerCase(),
+            id: d.ApprovedSymbol+'.'+d.Class.toLowerCase(),
+            age: d.Age,
+            taxon: d.Taxon,
+            consensus: d.Consensus_Call,
+            type: 'gene',
+            hgncid: d.HGNCID,
+            uniprotid: d.UniProtID
+          };
+        })
+        .error(function(data, status, headers, config) {
+          $log.warn('Error',data, status, headers, config);
+        })
+        .success(function(data) {
+          $log.debug('Genes loaded:', data.length);
+        })
+        .then(function(res) {
+          return res.data;
+        });
       }
 
       function _getOntology(filename) {
-        return dsv.tsv.get(filename, {cache: true})
+        return dsv.tsv.get(filename, {cache: cache})
           .error(function(data, status, headers, config) {
             $log.warn('Error',data, status, headers, config);
           })
@@ -114,8 +116,7 @@
 
         return $q.all([_getPairs(files.pairs), _getExpression(files.expression), _getOntology(files.ontology), _getGenes(files.genes)])
           .then(function(data) {
-            $log.debug('Done loading');
-
+            
             service.data.pairs = data[0];
             var _expr = service.data.expr = data[1];
             var _ontology = data[2];
@@ -141,6 +142,7 @@
             });
 
             $log.debug('Samples loaded:', service.data.cells.length);
+            $log.debug('Done loading');
 
             /* function matchKeys(meta, match) {  // Do this on load
               var keys = d3.keys(meta);
@@ -183,7 +185,10 @@
 
               var _ligand, _receptor;
 
-              service.data.genes.forEach(function(gene) {
+              service.data.genes.forEach(function(gene, i) {
+                if (i === 0) {
+                  console.log(gene.id, pair.ligandId);
+                };
                 if (gene.id === pair.ligandId) {
                   _ligand = gene;
                 } else if (gene.id === pair.receptorId) {
