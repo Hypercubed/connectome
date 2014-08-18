@@ -251,11 +251,58 @@
 
       $scope.data = loadedData;
 
+      function byId(arr) {
+        var r = {};
+        arr.forEach(function(d) {
+          r[d.id] = d;
+        });
+        return r;
+      }
+
       $scope.map = {};
-      $scope.map.genes = {};
-      $scope.data.genes.forEach(function(d) {
-        $scope.map.genes[d.id] = d;
+      $scope.map.genes = byId($scope.data.genes);
+      $scope.map.cells = byId($scope.data.cells);
+      $scope.map.pairs = byId($scope.data.pairs);
+
+      console.log($scope.data);  //expr[gene.i + 1][cell.i + 1]
+
+      var i = 0;  var a = [];
+      $scope.data.cells.forEach(function(lcell) {
+        var lc = lcell.i;
+        $scope.data.pairs.forEach(function(pair) {
+          var lg = pair.index[0];
+          var rg = pair.index[1];
+
+          var le = (lg > -1) ? $scope.data.expr[lg+1][lc+1] : 0;
+          if (le == 0) { return;}
+
+          $scope.data.cells.forEach(function(rcell) {
+            var rc = rcell.i;
+            var re = (rg > -1) ? $scope.data.expr[rg+1][rc+1] : 0;
+            var p = le*re;
+            if (re == 0 || p == 0) { return;}
+
+            var aa = {
+              lc: lc,
+              lg: lg,
+              rg: rg,
+              rc: rc,
+              le: le,
+              re: re,
+              p: p
+            };
+
+            //a.push(aa);
+            
+            if (i % 1000000 == 0) { 
+              console.log(i, aa);
+            }
+
+            i++;
+          });
+        });
       });
+      console.log(i);
 
       loadSelection();
       updateNetwork();

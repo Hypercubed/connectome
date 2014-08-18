@@ -51,7 +51,12 @@
       }
 
       function _getExpression(filename) {
-        return dsv.tsv.getRows(filename, {cache: true})
+          return dsv.tsv.getRows(filename, {cache: true}, function(row, i) {
+            if (i == 0) { return row; }
+            return row.map(function(e,i) {
+              return i == 0 ? e : +e;
+            });
+          })
           .error(function(data, status, headers, config) {
             $log.warn('Error',data, status, headers, config);
           })
