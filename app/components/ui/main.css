@@ -225,6 +225,10 @@ height: auto;
   margin-top: 5px;
 }
 
+.new-tip h5 {
+  font-weight: bold;
+}
+
 .position-fixed {
   position: fixed;
 }

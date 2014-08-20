@@ -203,6 +203,8 @@
               }
 
               pair.index = [_ligand.i,_receptor.i];
+              pair.ligand = _ligand;
+              pair.receptor = _receptor;
 
               if (_ligand.class !== 'ligand') {
                 $log.warn('Class inconsistancy',_ligand.name);

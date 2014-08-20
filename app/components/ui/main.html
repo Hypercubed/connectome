@@ -17,13 +17,30 @@
           <a class="pointer" role="menuitem" ng-click="clickedItem.ticked = false">Hide</a>
         </li>
 
-        <li class="dropdown-submenu" ng-if="clickedItem.type == 'sample' || clickedItem.type == 'gene'">
+        <li class="dropdown-submenu" ng-if="clickedItem.type == 'sample'">
           <a class="pointer" role="menuitem">Show</a>
           <ul class="dropdown-menu">
-            <li><a class="pointer" role="menuitem" ng-click="showOutNeighbors(clickedItem)">All out neighbors</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="showInNeighbors(clickedItem)">All in neighbors</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="showOutNeighbors(clickedItem,10)">Top out neighbors</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="showInNeighbors(clickedItem,10)">Top in neighbors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="graph.showExpressionEdges({sample: clickedItem},10)">Top expressed genes</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="graph.showExpressionEdges({source: clickedItem},10)">Top expressed ligands</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="graph.showExpressionEdges({target: clickedItem},10)">Top expressed receptors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="graph.showPaths({source: clickedItem}, 10)">Top out paths</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="graph.showPaths({target: clickedItem}, 10)">Top in paths</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown-submenu" ng-if="clickedItem.type == 'gene'">
+          <a class="pointer" role="menuitem">Show</a>
+          <ul class="dropdown-menu">
+            <li><a class="pointer" role="menuitem" ng-click="graph.showExpressionEdges({gene: clickedItem},10)">Top expressed samples</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="graph.showPaths({ligand: clickedItem}, 10)" ng-show="clickedItem.class == 'ligand'">Top paths</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="graph.showPaths({receptor: clickedItem}, 10)" ng-show="clickedItem.class == 'receptor'">Top paths</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown-submenu" ng-if="clickedItem.type == 'pair'">
+          <a class="pointer" role="menuitem">Show</a>
+          <ul class="dropdown-menu">
+            <li><a class="pointer" role="menuitem" ng-click="graph.showPaths({ligand: clickedItem.source, receptor: clickedItem.target}, 10)">Top paths</a></li>
           </ul>
         </li>
 
@@ -47,13 +64,13 @@
     <div class="" ng-if="panels.state.info">
       <div class="new-tip" ng-cloak ng-show="graphData.nodes.length > 0">
         <ul class="list-unstyled" bindonce="data">
-          <li>Samples: <span ng-bind="selectedIds.cells.length"></span> / <span bo-text="data.cells.length"></span></li>
-          <li>Genes:   <span ng-bind="selectedIds.genes.length"></span> / <span bo-text="data.genes.length"></span></li>
-          <li>Pairs:   <span ng-bind="selectedIds.pairs.length"></span> / <span bo-text="data.pairs.length"></span></li>
+          <li>Samples: {{selectedIds.cells.length}} / <span bo-text="data.cells.length"></span></li>
+          <li>Genes:   {{selectedIds.genes.length}} / <span bo-text="data.genes.length"></span></li>
+          <li>Pairs:   {{selectedIds.pairs.length}} / <span bo-text="data.pairs.length"></span></li>
         </ul>
         <ul class="list-unstyled" bindonce="graphData">
-          <li>Nodes: <span bo-text="graphData._nodes.length"></span> / <span bo-text="graphData.nodes.length"></span></li>
-          <li>Edges: <span bo-text="graphData._edges.length"></span> / <span bo-text="graphData.edges.length"></span></li>
+          <li>Nodes: {{graphData._nodes.length}} / {{graphData.nodes.length}}</li>
+          <li>Edges: {{graphData._edges.length}} / {{graphData.edges.length}}</li>
         </ul>
       </div>
 

@@ -116,28 +116,10 @@
         }
       }; */
 
-      $scope.showOutNeighbors = function(clickedItem, N) {
-        var arr = graphService.data.outEdgesIndex[clickedItem.id];
-        if (N !== undefined) {
-          arr = arr.slice(0,N);
-        }
-        arr.forEach(function(d) {
-          d.target.ticked = true;
-        });
-      };
-
-      $scope.showInNeighbors = function(clickedItem, N) {
-        var arr = graphService.data.inEdgesIndex[clickedItem.id];
-        if (N !== undefined) {
-          arr = arr.slice(0,N);
-        }
-        arr.forEach(function(d) {
-          d.source.ticked = true;
-        });
-      };
-
       // Graph service
       var graphService; // = ($state.current.name === 'home.hive-graph') ? hiveGraph : forceGraph;
+
+      //$scope.showNeighbors = graphService.showNeighbors;
 
       $scope.state = $state.current;
 
@@ -251,18 +233,18 @@
 
       $scope.data = loadedData;
 
-      function byId(arr) {
+      /* function byId(arr) {
         var r = {};
         arr.forEach(function(d) {
           r[d.id] = d;
         });
         return r;
-      }
+      } */
 
-      $scope.map = {};
-      $scope.map.genes = byId($scope.data.genes);
-      $scope.map.cells = byId($scope.data.cells);
-      $scope.map.pairs = byId($scope.data.pairs);
+      //$scope.map = {};
+      //$scope.map.genes = byId($scope.data.genes);
+      //$scope.map.cells = byId($scope.data.cells);
+      //$scope.map.pairs = byId($scope.data.pairs);
 
       /* console.log($scope.data);  //expr[gene.i + 1][cell.i + 1]
 
@@ -371,7 +353,8 @@
               field:'ticked',
               displayName:'Visible',
               width: 60,
-              cellTemplate: 'cellTemplate'
+              cellTemplate: 'cellTemplate',
+              headerCellTemplate: 'visibleHeaderCellTemplate'
             },
 
           ]

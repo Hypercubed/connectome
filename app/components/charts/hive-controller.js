@@ -10,6 +10,9 @@
   app
     .service('hiveGraph', function($log, $window, $rootScope, $timeout, Graph, debounce, growl, cfpLoadingBar) {  // TODO: should be a directive
 
+      var data = null;
+      var options = options;
+
       var graph = new Graph();
       var chart = new lrd3.charts.hiveGraph();  // Move?
 
@@ -139,51 +142,49 @@
 
         graph.data.edges = [];
 
-        //var count = 0;
+        // expression edges
         cells.forEach(function(cell) {
+          if (!cell.ticked) { return; }
           //var nodeExpr = [];
 
           genes.forEach(function(gene) {
-            if (gene.ticked || cell.ticked) {
+            if (!gene.ticked) { return; }
 
-              var v = (gene.i > -1 && cell.i > -1) ? +expr[gene.i + 1][cell.i + 1] : 0;
-              var min = (gene.class === 'receptor') ? options.receptorFilter : options.ligandFilter;
-              min = Math.max(min,0);
+            var v = (gene.i > -1 && cell.i > -1) ? +expr[gene.i + 1][cell.i + 1] : 0;
+            var min = (gene.class === 'receptor') ? options.receptorFilter : options.ligandFilter;
+            min = Math.max(min,0);
 
-              if (v > min) {
-                var src = cell, tgt = gene;
+            if (v > min) {
+              var src = cell, tgt = gene;
 
-                if (gene.class === 'receptor') {
-                  src = graph.data.nodesIndex[gene.id];
-                  tgt = graph.data.nodesIndex[cell.id];
-                } else {
-                  src = graph.data.nodesIndex[cell.id];
-                  tgt = graph.data.nodesIndex[gene.id];
-                }
-
-                //console.log(src,tgt);
-
-                var _edge = new graph.Edge(src,tgt);
-                _edge.value = v;
-                _edge.i = gene.i; // remove
-                _edge.id = gene.id;  // remove {target, source}.id
-                _edge.type = 'expression';  // remove
-                _edge.class = gene.class;
-
-                graph.addEdge(_edge);
-                //nodeExpr.push(_edge);
+              if (gene.class === 'receptor') {
+                src = graph.data.nodesIndex[gene.id];
+                tgt = graph.data.nodesIndex[cell.id];
+              } else {
+                src = graph.data.nodesIndex[cell.id];
+                tgt = graph.data.nodesIndex[gene.id];
               }
 
-            }
-          });
+              //console.log(src,tgt);
 
+              var _edge = new graph.Edge(src,tgt);
+              _edge.value = v;
+              _edge.i = gene.i; // remove
+              _edge.id = gene.id;  // remove {target, source}.id
+              _edge.type = 'expression';  // remove
+              _edge.class = gene.class;
+
+              graph.addEdge(_edge);
+              //nodeExpr.push(_edge);
+            }
+
+          });
 
         });
 
+        // pair edges
         pairs.forEach(function addLinks(_pair) {
-          //$log.debug('Constructing edges for',_pair);
-
-          //console.log(_pair);
+          if (!_pair.ticked) { return; }
 
           var _ligand = graph.data.nodesIndex[_pair.ligandId];
           var _receptor = graph.data.nodesIndex[_pair.receptorId];
@@ -225,6 +226,187 @@
 
       }
 
+      function _getExpression(gene, cell) {
+        return (gene.i > -1 && cell.i > -1) ? +data.expr[gene.i + 1][cell.i + 1] : 0;
+      }
+
+      function _showExpressionEdges(filter, max) {
+        var edges = [];
+
+        data.genes.forEach(function(gene) {
+          if (filter.gene && filter.gene !== gene) { return; }
+
+          if (gene.class === 'ligand' && filter.target && filter.target !== gene)  { return; }
+          if (gene.class === 'receptor' && filter.source && filter.source !== gene)  { return; }
+
+          data.cells.forEach(function(cell) {
+            if (filter.sample && filter.sample !== cell) { return; }
+
+            if (gene.class === 'ligand' && filter.source && filter.source !== cell)  { return; }
+            if (gene.class === 'receptor' && filter.target && filter.target !== cell)  { return; }
+
+            var v = _getExpression(gene, cell);
+            var min = (gene.class === 'receptor') ? options.receptorFilter : options.ligandFilter;
+            min = Math.max(min,0);
+            if (v > min) {
+              edges.push(
+              {
+                gene: gene,
+                cell: cell,
+                value: v
+              });
+            };
+          });
+        });
+
+        edges.sort(function(a,b) { return b.value - a.value; }).slice(0, max || paths.length).forEach(function(d) {
+          d.gene.ticked = true;
+          d.cell.ticked = true;
+        });
+
+      }
+
+      function _showNeighbors(node, max, _class) {
+
+        if (typeof node === 'string') {
+          node = graph.data.nodesIndex[node];
+        }
+
+        var values = [];
+
+        if (node.type == 'sample') {
+
+          var cell = node;
+          data.genes.forEach(function(gene) {
+            if (_class !== undefined && _class !== gene.class) { return; }
+            var v = _getExpression(gene, cell);
+            var min = (gene.class === 'receptor') ? options.receptorFilter : options.ligandFilter;
+            min = Math.max(min,0);
+            if (v > min) {
+              values.push([gene,cell,v]);
+            };
+          });
+
+        } else {
+
+          var gene = node;
+
+          var min = (gene.class === 'receptor') ? options.receptorFilter : options.ligandFilter;
+          min = Math.max(min,0);
+
+          data.cells.forEach(function(cell) {
+            var v = _getExpression(gene, cell);
+            if (v > min) {
+              values.push([gene,cell,v]);
+            };
+          });
+
+        }
+
+        //console.log(values);
+
+        values.sort(function(a,b) { return b[2] - a[2]; }).slice(0, max || values.length).forEach(function(d) {
+          d[0].ticked = true;
+          d[1].ticked = true;
+        });
+        
+      }
+
+      function _showPaths(filter, max) {
+
+        var paths = [];
+
+        data.pairs.forEach(function (pair) {
+          if (!pair.ticked) { return; }
+          if (filter.ligand && filter.ligand !== pair.ligand) { return; }
+          if (filter.receptor && filter.receptor !== pair.receptor) { return; }
+
+          data.cells.forEach(function(lcell) {
+            if (filter.source && filter.source !== lcell) { return; }
+            var l = _getExpression(pair.ligand,lcell);
+            if (l <= options.ligandFilter) { return; }
+
+            data.cells.forEach(function(rcell) {
+              if (filter.target && filter.target !== rcell) { return; }
+
+              var r = _getExpression(pair.receptor,rcell);
+              if (r <= options.receptorFilter) { return; }
+
+              if (l*r > 0) {
+                paths.push({
+                  source: lcell,
+                  ligand: pair.ligand,
+                  receptor: pair.receptor,
+                  target: rcell,
+                  ligandExpression: l,
+                  receptorExpression: r,
+                  product: l*r
+                });
+              }
+
+            });
+          });
+        });
+
+        console.log(paths);
+
+        paths.sort(function(a,b) { return b.product - a.product; }).slice(0, max || paths.length).forEach(function(d) {
+          d.source.ticked = true;
+          d.ligand.ticked = true;
+          d.receptor.ticked = true;
+          d.target.ticked = true;
+        });
+
+      }
+
+      /* function _showPaths(node, max, _class) {
+
+        if (typeof node === 'string') {
+          node = graph.data.nodesIndex[node];
+        }
+
+        var values = [];
+
+        //if (node.type == 'sample') {
+
+          if (_class == undefined || _class == 'ligand') {
+            data.pairs.forEach(function (pair) {
+              if (!pair.ticked) { return; }
+              var l = _getExpression(pair.ligand,node);
+              if (l == 0) { return; }
+              data.cells.forEach(function(cell) {
+                var r = _getExpression(pair.receptor,cell);
+                var v = l*r;
+                if (v > 0) {
+                  values.push([cell, pair.ligand, pair.receptor, v]);
+                }
+              });
+            });
+          }
+
+          if (_class == undefined || _class == 'receptor') {
+            data.pairs.forEach(function (pair) {
+              if (!pair.ticked) { return; }
+              var r = _getExpression(pair.receptor,node);
+              if (r == 0) { return; }
+              data.cells.forEach(function(cell) {
+                var l = _getExpression(pair.ligand,cell);
+                var v = l*r;
+                if (v > 0) {
+                  values.push([cell, pair.ligand, pair.receptor, v]);
+                }
+              });
+            });
+          }
+
+        //} else {
+
+        //}
+
+        values.sort(function(a,b) { return b[3] - a[3]; }).slice(0, max || values.length);
+
+      } */
+
       function _draw(options) {
         $log.debug('Drawing graph');
 
@@ -260,9 +442,12 @@
         d3.selectAll('#vis svg g').remove();
       }
 
-      function _makeNetwork(_data, options) {  // pairs, cells, expr, options
+      function _makeNetwork(_data, _options) {  // pairs, cells, expr, options
 
         if (!_data) {return;}
+
+        data = _data;
+        options = _options;
 
         var pairs = _data.pairs.filter(function(d) { return d.ticked; });  // remove?
         var cells = _data.cells.filter(function(d) { return d.ticked; });
@@ -483,7 +668,10 @@
         update: debounce(_update, 30),
         makeNetwork: _makeNetwork,
         draw: _draw,
-        clear: _clear//,
+        clear: _clear,
+        showNeighbors: _showNeighbors,
+        showPaths: _showPaths,
+        showExpressionEdges: _showExpressionEdges
         //getJSON: _getJSON,
         //getGML: _getGML
       };

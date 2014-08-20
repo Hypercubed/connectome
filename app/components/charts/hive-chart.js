@@ -10,7 +10,7 @@
 
   var hiveGraph = function() {
     var width = 500, height = 500;
-    var margin = { top: 10, right: 370, bottom: 240, left: 370};
+    var margin = { top: 10, right: 60, bottom: 240, left: 60};
     //var padding = { top: 60, right: 100, bottom: 60, left: 60};
 
     function chart(selection) {
@@ -227,11 +227,11 @@
 
         d.hover = tgt.hover = src.hover = true;
 
-        if (tgt.type !== 'node') {
+        if (tgt.type == 'gene') {
           classNeighbors(tgt, 3, 'hover');
         }
 
-        if (src.type !== 'node') {
+        if (src.type == 'gene') {
           classNeighbors(src, -3, 'hover');
         }
 

@@ -129,47 +129,50 @@
 
         graph.data.edges = [];
 
-        //var count = 0;
+        //expression edges
         cells.forEach(function(cell) {
+          if (!cell.ticked) { return; }
           //var nodeExpr = [];
 
           genes.forEach(function(gene) {
-            if (gene.ticked || cell.ticked) {
-              //console.log(gene.i, cell.i);
-              var v = (gene.i > -1 && cell.i > -1) ? +expr[gene.i + 1][cell.i + 1] : 0;
-              var min = (gene.class === 'receptor') ? options.receptorFilter : options.ligandFilter;
-              min = Math.max(min,0);
+            if (!gene.ticked) { return; }
 
-              if (v > min) {
-                var src, tgt;
+            //console.log(gene.i, cell.i);
+            var v = (gene.i > -1 && cell.i > -1) ? +expr[gene.i + 1][cell.i + 1] : 0;
+            var min = (gene.class === 'receptor') ? options.receptorFilter : options.ligandFilter;
+            min = Math.max(min,0);
 
-                if (gene.class === 'receptor') {
-                  src = gene;
-                  tgt = cell;
-                } else {
-                  src = cell;
-                  tgt = gene;
-                }
+            if (v > min) {
+              var src, tgt;
 
-                //console.log(data.edgesIndex[src.id][tgt.id]);
-
-                var _edge = new graph.Edge(graph.data.nodesIndex[src.id],graph.data.nodesIndex[tgt.id]);
-                _edge.value = v;
-                _edge.i = gene.i; // remove
-                _edge.id = gene.id;  // remove {target, source}.id
-                _edge.type = 'expression';  // remove
-                _edge.class = gene.class;
-
-                graph.addEdge(_edge);
-                //nodeExpr.push(_edge);
+              if (gene.class === 'receptor') {
+                src = gene;
+                tgt = cell;
+              } else {
+                src = cell;
+                tgt = gene;
               }
 
+              //console.log(data.edgesIndex[src.id][tgt.id]);
+
+              var _edge = new graph.Edge(graph.data.nodesIndex[src.id],graph.data.nodesIndex[tgt.id]);
+              _edge.value = v;
+              _edge.i = gene.i; // remove
+              _edge.id = gene.id;  // remove {target, source}.id
+              _edge.type = 'expression';  // remove
+              _edge.class = gene.class;
+
+              graph.addEdge(_edge);
+              //nodeExpr.push(_edge);
             }
+
           });
 
         });
 
+        // sample-sample edges
         pairs.forEach(function addLinks(_pair) {
+          if (!_pair.ticked) { return; }
 
           var ligandEdges = graph.data.inEdgesIndex[_pair.ligandId];
           var receptorEdges = graph.data.outEdgesIndex[_pair.receptorId];
@@ -187,7 +190,10 @@
                   //console.log(data.edgesIndex[ligand.source.id][receptor.target.id]);
                 //}
 
-                var _edge = graph.data.edgesIndex[ligand.source.id][receptor.target.id] || new graph.Edge(ligand.source,receptor.target);
+                var _edge = 
+                  graph.data.edgesIndex[ligand.source.id][receptor.target.id] || 
+                  new graph.Edge(ligand.source,receptor.target);
+
                 _edge.type = 'sample-sample';
                 _edge.name = ligand.source.name + ' -> ' + receptor.target.name;
                 _edge.value += value;
@@ -201,6 +207,7 @@
 
         });
 
+        
         graph.data.nodes.forEach(function(node) {  // todo: move
           if (!node.ticked) { return; }
 
