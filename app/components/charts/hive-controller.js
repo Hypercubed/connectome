@@ -226,7 +226,7 @@
 
       }
 
-      function _getExpression(gene, cell) {
+      /* function _getExpression(gene, cell) {
         return (gene.i > -1 && cell.i > -1) ? +data.expr[gene.i + 1][cell.i + 1] : 0;
       }
 
@@ -264,9 +264,9 @@
           d.cell.ticked = true;
         });
 
-      }
+      } */
 
-      function _showNeighbors(node, max, _class) {
+      /* function _showNeighbors(node, max, _class) {
 
         if (typeof node === 'string') {
           node = graph.data.nodesIndex[node];
@@ -310,9 +310,9 @@
           d[1].ticked = true;
         });
         
-      }
+      } */
 
-      function _showPaths(filter, max) {
+      /* function _showPaths(filter, max) {
 
         var paths = [];
 
@@ -357,7 +357,7 @@
           d.target.ticked = true;
         });
 
-      }
+      } */
 
       /* function _showPaths(node, max, _class) {
 
@@ -668,10 +668,10 @@
         update: debounce(_update, 30),
         makeNetwork: _makeNetwork,
         draw: _draw,
-        clear: _clear,
-        showNeighbors: _showNeighbors,
-        showPaths: _showPaths,
-        showExpressionEdges: _showExpressionEdges
+        clear: _clear//,
+        //showNeighbors: _showNeighbors,
+        //showPaths: _showPaths,
+        //showExpressionEdges: _showExpressionEdges
         //getJSON: _getJSON,
         //getGML: _getGML
       };

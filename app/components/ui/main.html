@@ -20,31 +20,33 @@
         <li class="dropdown-submenu" ng-if="clickedItem.type == 'sample'">
           <a class="pointer" role="menuitem">Show</a>
           <ul class="dropdown-menu">
-            <li><a class="pointer" role="menuitem" ng-click="graph.showExpressionEdges({sample: clickedItem},10)">Top expressed genes</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="graph.showExpressionEdges({source: clickedItem},10)">Top expressed ligands</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="graph.showExpressionEdges({target: clickedItem},10)">Top expressed receptors</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="graph.showPaths({source: clickedItem}, 10)">Top out paths</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="graph.showPaths({target: clickedItem}, 10)">Top in paths</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showExpressionEdges({sample: clickedItem},10)">Top expressed genes</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showExpressionEdges({source: clickedItem},10)">Top expressed ligands</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showExpressionEdges({target: clickedItem},10)">Top expressed receptors</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="_showPaths({source: clickedItem, pair: { ticked:  true } }, 10)">Top pathways starting here</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="_showPaths({target: clickedItem, pair: { ticked:  true } }, 10)">Top pathways ending here</a></li>
           </ul>
         </li>
 
         <li class="dropdown-submenu" ng-if="clickedItem.type == 'gene'">
           <a class="pointer" role="menuitem">Show</a>
           <ul class="dropdown-menu">
-            <li><a class="pointer" role="menuitem" ng-click="graph.showExpressionEdges({gene: clickedItem},10)">Top expressed samples</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="graph.showPaths({ligand: clickedItem}, 10)" ng-show="clickedItem.class == 'ligand'">Top paths</a></li>
-            <li><a class="pointer" role="menuitem" ng-click="graph.showPaths({receptor: clickedItem}, 10)" ng-show="clickedItem.class == 'receptor'">Top paths</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="showExpressionEdges({gene: clickedItem},10)">Top top expressed samples</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="_showPaths({ligand:   clickedItem, pair: { ticked:  true } }, 10)" ng-show="clickedItem.class == 'ligand'">Top pathways</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="_showPaths({receptor: clickedItem, pair: { ticked:  true } }, 10 )" ng-show="clickedItem.class == 'receptor'">Top pathways</a></li>
           </ul>
         </li>
 
         <li class="dropdown-submenu" ng-if="clickedItem.type == 'pair'">
           <a class="pointer" role="menuitem">Show</a>
           <ul class="dropdown-menu">
-            <li><a class="pointer" role="menuitem" ng-click="graph.showPaths({ligand: clickedItem.source, receptor: clickedItem.target}, 10)">Top paths</a></li>
+            <li><a class="pointer" role="menuitem" ng-click="_showPaths({ligand: clickedItem.source, receptor: clickedItem.target}, 10)">Top paths</a></li>
           </ul>
         </li>
 
-        <!-- state.name == 'home.force-graph' -->
+        <li class="divider" ng-if="clickedItem.type == 'sample' || clickedItem.type == 'gene'"></li>
+
+        <li><a class="pointer" ng-click="test()">Show top paths between all visible cells</a></li>
 
         <li class="divider" ng-if="clickedItem.type == 'sample' || clickedItem.type == 'gene'"></li>
 

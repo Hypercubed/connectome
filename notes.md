@@ -12,7 +12,7 @@ I. For my favourite cell X. Eg. hepatocyte - what are the top ligands and recept
       1) Click on Samples or the tab on the right to open the display panel.
       2) Click the down arrow on the upper right to open the search box.
       3) Type "hepatocyte" (without quotes)
-    c) Click teh visible icon (eye)
+    c) Click the visible icon (eye)
     d) In the visualization right click on the hepatocyte node.
     e) click on show -> top expressed ligands.
     f) again for show -> top  expressed receptors.
@@ -22,18 +22,19 @@ II. For a given receptor-ligand pair, which cells are communicating the most?
   A. CSF1 - CSF1R - figure 4
 
     a) Clear the visualization.
-    x) In the options tab, Set edge cutoff to 0.1.
     b) Select the pairs tab.
     c) clear all pairs.
-      1) Click the selct all button.
-      2) Click on the visible icon (eye) to turn off all pairs.
-    d) in the pairs tab search for "CSF1"
-    e) Turn on the CSF2_CSF2R pair and corresponding genes.  You will see the pair edge displayed.
-    g) Turn on all samples in the samples tab.
-    f) hive plot shows samples ranked by expression, swicth to force directed. 
+      1) Click the select all button.
+      2) Click on the first visible icon (eye) to turn off all pairs.
+      3) clear the select all button.
+    e) Search for "CSF1"
+    f) Turn on the CSF2_CSF2R pair and corresponding genes.  You will see the pair edge displayed.
+    g) Right click on the ligand-receptor pair edge, select show -> top paths.
+    h) hive plot shows samples ranked by expression product
 
   B. KITLG - KIT
 
+    [same as IIA]
 
 III. For a pair of cells (eg. Mast cells and Keratinocyte Epidermal) what are the top 5-10 pathways for communicating between them?
 

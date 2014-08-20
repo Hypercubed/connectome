@@ -38,7 +38,7 @@
     });*/
 
   app
-    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, debounce, site, localStorageService, loadedData, forceGraph, hiveGraph) {
+    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, filterFilter, cfpLoadingBar, debounce, site, localStorageService, loadedData, forceGraph, hiveGraph) {
 
       $rootScope.site = site;
 
@@ -219,7 +219,7 @@
 
       var updateNetwork = debounce(function updateNetwork() {  // This should be handeled by the directive
         $log.debug('update network');
-        console.log('update network');
+        //console.log('update network');
 
         //console.log($scope.selected.genes);
         //if (newVal === oldVal) {return;}
@@ -232,6 +232,175 @@
       });
 
       $scope.data = loadedData;
+
+
+      // TODO: move
+
+      function _getExpression(gene, cell) {
+        return (gene.i > -1 && cell.i > -1) ? +loadedData.expr[gene.i + 1][cell.i + 1] : 0;
+      }
+
+      $scope.showPaths = function _showPaths(filter, max) {
+
+        var paths = [];
+
+        loadedData.pairs.forEach(function (pair) {
+          if (!pair.ticked) { return; }
+          if (filter.ligand && filter.ligand !== pair.ligand) { return; }
+          if (filter.receptor && filter.receptor !== pair.receptor) { return; }
+
+          loadedData.cells.forEach(function(lcell) {
+            if (filter.source && filter.source !== lcell) { return; }
+            var l = _getExpression(pair.ligand,lcell);
+            if (l < $scope.options.ligandFilter) { return; }
+
+            loadedData.cells.forEach(function(rcell) {
+              if (filter.target && filter.target !== rcell) { return; }
+
+              var r = _getExpression(pair.receptor,rcell);
+              if (r < $scope.options.receptorFilter) { return; }
+
+              if (l*r > 0) {
+                paths.push({
+                  source: lcell,
+                  ligand: pair.ligand,
+                  receptor: pair.receptor,
+                  target: rcell,
+                  ligandExpression: l,
+                  receptorExpression: r,
+                  product: l*r
+                });
+              }
+
+            });
+          });
+        });
+
+        max = max || paths.length;
+        $log.debug('showing',max,'paths out of',paths.length,'matching paths');
+
+        paths.sort(function(a,b) { return b.product - a.product; }).slice(0, max).forEach(function(d) {
+          d.source.ticked = true;
+          d.ligand.ticked = true;
+          d.receptor.ticked = true;
+          d.target.ticked = true;
+        });
+
+      }
+
+      //function _filterFilter(o, filter) {
+      //  return filterFilter([o], filter.pair).length > 0;
+      //}
+
+      $scope._showPaths = function _showPaths(filter, max) {
+
+        var paths = [];
+
+        loadedData.pairs.forEach(function (pair,i) {
+          
+          if (filter.pair && filter.pair.id && filter.pair.id !== pair.id) { return; }
+          if (filter.pair && filter.pair.ticked !== undefined && filter.pair.ticked !== pair.ticked) { return; }
+
+          if (filter.ligand && filter.ligand.id !== pair.ligand.id) { return; }
+          if (filter.receptor && filter.ligand.id !== pair.ligand.id) { return; }
+
+          console.log(i);
+
+          loadedData.cells.forEach(function(lcell) {
+
+            if (filter.source && filter.source.id !== lcell.id) { return; }
+            
+            var l = _getExpression(pair.ligand,lcell);
+            if (l < $scope.options.ligandFilter) { return; }
+            
+            loadedData.cells.forEach(function(rcell) {
+
+              if (filter.target && filter.target.id !== rcell.id) { return; }
+
+              var r = _getExpression(pair.receptor,rcell);
+              if (r < $scope.options.receptorFilter) { return; }
+              
+              if (l*r > 0) {
+
+                paths.push({
+                  pair: pair,
+                  source: lcell,
+                  ligand: pair.ligand,
+                  receptor: pair.receptor,
+                  target: rcell,
+                  ligandExpression: l,
+                  receptorExpression: r,
+                  product: l*r
+                });
+
+              }
+
+            });
+          });
+        });
+
+        max = max || paths.length;
+
+        $log.debug('showing',max,'paths out of',paths.length,'matching paths');
+
+        paths.sort(function(a,b) { return b.product - a.product; }).slice(0, max).forEach(function(d) {
+          d.pair.ticked = true;
+          d.source.ticked = true;
+          d.ligand.ticked = true;
+          d.receptor.ticked = true;
+          d.target.ticked = true;
+        });
+
+      }
+
+      $scope.showExpressionEdges = function _showExpressionEdges(filter, max) {
+        var edges = [];
+
+        loadedData.genes.forEach(function(gene) {
+          if (filter.gene && filter.gene !== gene) { return; }
+
+          if (gene.class === 'ligand' && filter.target && filter.target !== gene)  { return; }
+          if (gene.class === 'receptor' && filter.source && filter.source !== gene)  { return; }
+
+          loadedData.cells.forEach(function(cell) {
+            if (filter.sample && filter.sample !== cell) { return; }
+
+            if (gene.class === 'ligand' && filter.source && filter.source !== cell)  { return; }
+            if (gene.class === 'receptor' && filter.target && filter.target !== cell)  { return; }
+
+            var v = _getExpression(gene, cell);
+            var min = Math.max($scope.options[gene.class+'Filter'],0);
+            if (v > min) {
+              edges.push(
+              {
+                gene: gene,
+                cell: cell,
+                value: v
+              });
+            };
+          });
+        });
+
+        max = max || edges.length;
+        $log.debug('showing',max,'edges out of',edges.length,'matching edges');
+
+        edges.sort(function(a,b) { return b.value - a.value; }).slice(0, max || paths.length).forEach(function(d) {
+          d.gene.ticked = true;
+          d.cell.ticked = true;
+        });
+
+      }
+
+      $scope.test = function() {
+        var _cells = loadedData.cells.filter(_ticked);
+
+        _cells.forEach(function(c1) {
+          _cells.forEach(function(c2) {
+            $scope._showPaths({source: c1, target: c2}, 10);
+          });
+        });
+
+      }
 
       /* function byId(arr) {
         var r = {};
@@ -295,7 +464,7 @@
           return arr.map(_ticked);
         };
         var callBack = function() {
-          console.log('dataChanged',key);
+          //console.log('dataChanged',key);
           $scope.selectedIds[key] = arr.filter(_ticked).map(_i);
           updateNetwork();
         };

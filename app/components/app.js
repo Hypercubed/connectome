@@ -36,7 +36,7 @@
 
   app
     .config(function($logProvider) {
-      $logProvider.debugEnabled(false);
+      $logProvider.debugEnabled(true);
     });
 
   app
