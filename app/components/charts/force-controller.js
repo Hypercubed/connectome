@@ -322,6 +322,19 @@
             .sort(_valueComp)
             .slice(0,options.edgeRankFilter*graph.data.edges.length);
 
+          graph.data._nodes.forEach(function(node) {
+            node.inDegree = node.outDegree = 0;
+          });
+
+          graph.data._edges.forEach(function(edge) {
+            edge.target.inDegree++;
+            edge.source.outDegree++;
+          });
+
+          graph.data._nodes = graph.data._nodes.filter(function(node) {
+            return node.inDegree > 0 || node.outDegree > 0;
+          });
+
         }
 
         $log.debug('Filtered nodes: ', graph.data._nodes.length);

@@ -116,7 +116,7 @@
 
         return $q.all([_getPairs(files.pairs), _getExpression(files.expression), _getOntology(files.ontology), _getGenes(files.genes)])
           .then(function(data) {
-            
+
             service.data.pairs = data[0];
             var _expr = service.data.expr = data[1];
             var _ontology = data[2];
@@ -186,9 +186,9 @@
               var _ligand, _receptor;
 
               service.data.genes.forEach(function(gene, i) {
-                if (i === 0) {
-                  console.log(gene.id, pair.ligandId);
-                };
+                //if (i === 0) {
+                //  console.log(gene.id, pair.ligandId);
+                //};
                 if (gene.id === pair.ligandId) {
                   _ligand = gene;
                 } else if (gene.id === pair.receptorId) {

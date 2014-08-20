@@ -87,7 +87,7 @@
 
         var nodes = graph.data._nodes.sort(_valueComp).filter(_valueFilter);    // Sort and filter out zeros
 
-        var rankedLigands = nodes  // Ligand
+        /* var rankedLigands = nodes  // Ligand
           .map(_value0)
           //.filter(gtZero)
           .sort(d3.ascending);
@@ -109,9 +109,9 @@
         //console.log(filter0,filter1);
 
         var _v = _value0.gte(filter0).or(_value1.gte(filter1));
-        var _t = _type.neq('sample');
+        var _t = _type.neq('sample'); */
 
-        graph.data._nodes = nodes.filter(_t.or(_v));
+        graph.data._nodes = nodes.slice(0);
 
       }
 
@@ -310,11 +310,14 @@
 
         graph.data._edges = graph.data.edges.filter(_ticked);
 
-        if (graph.data._edges.length > options.edgeRankFilter*graph.data._edges.length) {
+        if (graph.data._edges.length > options.edgeRankFilter*graph.data._edges.length) {  // Filter expression edges
 
-          graph.data._edges = graph.data._edges
+          var _pairs = graph.data._edges.filter(_type.eq('pair'));
+
+          graph.data._edges = graph.data._edges.filter(_type.eq('expression'))
             .sort(_valueComp)
-            .slice(0,options.edgeRankFilter*graph.data.edges.length);
+            .slice(0,options.edgeRankFilter*graph.data.edges.length)
+            .concat(_pairs);
 
         }
 

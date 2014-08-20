@@ -82,7 +82,7 @@
 
       $scope.clearVis = function() {
         $scope.resetOptions();
-        $scope.selectedIds = angular.extend({}, {pairs:[],cells:[],genes:[]});
+        $scope.selectedIds = angular.extend({}, {pairs:defaultIds.pairs,cells:[],genes:[]});
         loadSelection();
       };
 
@@ -359,7 +359,7 @@
           selectWithCheckboxOnly: false,
           showSelectionCheckbox: true,
           enableColumnResize: true,
-          //checkboxCellTemplate: '<div class="ngCellText">{{row.rowIndex}}</div>',
+          checkboxCellTemplate: '<div class="ngCellText"></div>',
           beforeSelectionChange: function(row, e) {  // Without shift or ctrl deselect previous
             if (!angular.isArray(row) && !e.ctrlKey && !e.shiftKey) {
               row.selectionProvider.toggleSelectAll(false,true);
@@ -373,7 +373,7 @@
               width: 60,
               cellTemplate: 'cellTemplate'
             },
-            
+
           ]
         };
 
@@ -386,8 +386,9 @@
       $scope.gridOptions.cells = new GridOptions({
         data: 'data.cells',
         columnDefs: [
-        {field:'name', displayName:'Sample Name'},
-          {field:'meta.Ontology', displayName:'Ontology'}
+          {field:'name', displayName:'Sample Name'},
+          {field:'meta.Ontology', displayName:'Ontology'},
+          {field:'value', displayName:'Value'}
         ]
       });
 
