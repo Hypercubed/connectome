@@ -38,7 +38,7 @@
     });*/
 
   app
-    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, filterFilter, cfpLoadingBar, debounce, site, localStorageService, loadedData, forceGraph, hiveGraph) {
+    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, $timeout, filterFilter, cfpLoadingBar, debounce, site, localStorageService, loadedData, forceGraph, hiveGraph) {
 
       $rootScope.site = site;
 
@@ -234,67 +234,74 @@
       $scope.data = loadedData;
 
 
-      // TODO: move
-
+      // TODO: move and use for constructing network
       function _getExpression(gene, cell) {
+        if (gene.type !== 'gene' || cell.type !== 'sample') {
+          $log.warn('Possible error in _getExpression');
+        }
         return (gene.i > -1 && cell.i > -1) ? +loadedData.expr[gene.i + 1][cell.i + 1] : 0;
       }
 
-      $scope.showPaths = function _showPaths(filter, max) {
+      function _match(a,b) {
+        if (angular.equals(a,b)) { return true; }
+        for (var key in b) {
+          if (a[key] !== b[key]) {
+            return false;
+          }
+        }
+        return true;
+      }
 
-        var paths = [];
+      function _getExpressionEdges(filter) {
+        var edges = [];
 
-        loadedData.pairs.forEach(function (pair) {
-          if (!pair.ticked) { return; }
-          if (filter.ligand && filter.ligand !== pair.ligand) { return; }
-          if (filter.receptor && filter.receptor !== pair.receptor) { return; }
+        loadedData.genes.forEach(function(gene) {
+          //console.log(filter.gene && !_match(gene,filter.gene), filter.gene && filter.gene !== gene);
+          if (filter.gene && !_match(gene,filter.gene)) { return; }
+          //if (filter.gene && filter.gene !== gene) { return; }
 
-          loadedData.cells.forEach(function(lcell) {
-            if (filter.source && filter.source !== lcell) { return; }
-            var l = _getExpression(pair.ligand,lcell);
-            if (l < $scope.options.ligandFilter) { return; }
+          //if (gene.class === 'ligand' && filter.target && filter.target !== gene)  { return; }
+          //if (gene.class === 'receptor' && filter.source && filter.source !== gene)  { return; }
 
-            loadedData.cells.forEach(function(rcell) {
-              if (filter.target && filter.target !== rcell) { return; }
+          loadedData.cells.forEach(function(cell) {
+            if (filter.sample && !_match(cell,filter.sample)) { return; }
 
-              var r = _getExpression(pair.receptor,rcell);
-              if (r < $scope.options.receptorFilter) { return; }
+            //if (gene.class === 'ligand' && filter.source && filter.source !== cell)  { return; }
+           // if (gene.class === 'receptor' && filter.target && filter.target !== cell)  { return; }
 
-              if (l*r > 0) {
-                paths.push({
-                  source: lcell,
-                  ligand: pair.ligand,
-                  receptor: pair.receptor,
-                  target: rcell,
-                  ligandExpression: l,
-                  receptorExpression: r,
-                  product: l*r
-                });
-              }
-
-            });
+            var v = _getExpression(gene, cell);
+            var min = Math.max($scope.options[gene.class+'Filter'],0);
+            if (v > min) {
+              edges.push(
+              {
+                gene: gene,
+                cell: cell,
+                value: v
+              });
+            };
           });
         });
 
-        max = max || paths.length;
-        $log.debug('showing',max,'paths out of',paths.length,'matching paths');
+        return edges;
+      }
 
-        paths.sort(function(a,b) { return b.product - a.product; }).slice(0, max).forEach(function(d) {
-          d.source.ticked = true;
-          d.ligand.ticked = true;
-          d.receptor.ticked = true;
-          d.target.ticked = true;
+      $scope.showExpressionEdges = function _showExpressionEdges(filter, max) {
+        var edges = _getExpressionEdges(filter);
+
+        max = max || edges.length;
+        $log.debug('showing',max,'edges out of',edges.length,'matching edges');
+
+        edges.sort(function(a,b) { return b.value - a.value; }).slice(0, max || paths.length).forEach(function(d) {
+          d.gene.ticked = true;
+          d.cell.ticked = true;
         });
 
       }
 
-      //function _filterFilter(o, filter) {
-      //  return filterFilter([o], filter.pair).length > 0;
-      //}
-
-      $scope._showPaths = function _showPaths(filter, max) {
-
+      function _getPathways(filter) {
         var paths = [];
+
+        
 
         loadedData.pairs.forEach(function (pair,i) {
           
@@ -302,40 +309,79 @@
           if (filter.pair && filter.pair.ticked !== undefined && filter.pair.ticked !== pair.ticked) { return; }
 
           if (filter.ligand && filter.ligand.id !== pair.ligand.id) { return; }
-          if (filter.receptor && filter.ligand.id !== pair.ligand.id) { return; }
+          if (filter.receptor && filter.receptor.id !== pair.receptor.id) { return; }
 
-          console.log(i);
+          var ligandExpressionEdges = _getExpressionEdges({ sample: filter.source, gene: pair.ligand });
+          if (ligandExpressionEdges.length < 1) { return; }
 
-          loadedData.cells.forEach(function(lcell) {
+          var receptorExpressionEdges = _getExpressionEdges({ sample: filter.target, gene: pair.receptor });
+          if (receptorExpressionEdges.length < 1) { return; }
 
-            if (filter.source && filter.source.id !== lcell.id) { return; }
-            
-            var l = _getExpression(pair.ligand,lcell);
-            if (l < $scope.options.ligandFilter) { return; }
-            
-            loadedData.cells.forEach(function(rcell) {
+          $log.debug('found',ligandExpressionEdges.length, 'ligand expression values');
+          $log.debug('found',receptorExpressionEdges.length, 'receptor expression values');
 
-              if (filter.target && filter.target.id !== rcell.id) { return; }
+          ligandExpressionEdges.forEach(function(ledge) {
 
-              var r = _getExpression(pair.receptor,rcell);
-              if (r < $scope.options.receptorFilter) { return; }
+            receptorExpressionEdges.forEach(function(redge) {
+ 
+              var v = ledge.value*redge.value;
               
-              if (l*r > 0) {
+              if (v > 0) {
 
                 paths.push({
                   pair: pair,
-                  source: lcell,
+                  source: ledge.cell,
                   ligand: pair.ligand,
                   receptor: pair.receptor,
-                  target: rcell,
-                  ligandExpression: l,
-                  receptorExpression: r,
-                  product: l*r
+                  target: redge.cell,
+                  ligandExpression: ledge.value,
+                  receptorExpression: redge.value,
+                  product: v
                 });
 
               }
 
             });
+          });
+        });
+
+        
+
+        return paths;
+      }
+
+      $scope.showPaths = function _showPaths(filter, max) {
+
+        cfpLoadingBar.start();
+
+        $timeout(function() {
+          var paths = _getPathways(filter);
+
+          max = max || paths.length;
+
+          $log.debug('showing',max,'paths out of',paths.length,'matching paths');
+
+          paths.sort(function(a,b) { return b.product - a.product; }).slice(0, max).forEach(function(d) {
+            d.pair.ticked = true;
+            d.source.ticked = true;
+            d.ligand.ticked = true;
+            d.receptor.ticked = true;
+            d.target.ticked = true;
+          });
+
+          cfpLoadingBar.complete();
+        });
+
+      }
+
+      $scope.showAllPaths = function(max) {
+        var _cells = loadedData.cells.filter(_ticked);
+
+        var paths = [];
+
+        _cells.forEach(function(c1) {
+          _cells.forEach(function(c2) {
+            paths = paths.concat(_getPathways({source: c1, target: c2}));
           });
         });
 
@@ -353,53 +399,13 @@
 
       }
 
-      $scope.showExpressionEdges = function _showExpressionEdges(filter, max) {
-        var edges = [];
-
-        loadedData.genes.forEach(function(gene) {
-          if (filter.gene && filter.gene !== gene) { return; }
-
-          if (gene.class === 'ligand' && filter.target && filter.target !== gene)  { return; }
-          if (gene.class === 'receptor' && filter.source && filter.source !== gene)  { return; }
-
-          loadedData.cells.forEach(function(cell) {
-            if (filter.sample && filter.sample !== cell) { return; }
-
-            if (gene.class === 'ligand' && filter.source && filter.source !== cell)  { return; }
-            if (gene.class === 'receptor' && filter.target && filter.target !== cell)  { return; }
-
-            var v = _getExpression(gene, cell);
-            var min = Math.max($scope.options[gene.class+'Filter'],0);
-            if (v > min) {
-              edges.push(
-              {
-                gene: gene,
-                cell: cell,
-                value: v
-              });
-            };
-          });
+      $scope.hide = function(arr) {
+        if (!angular.isArray(arr)) { arr = [arr]; };
+        arr.forEach(function(d) {
+          if (d.type == 'gene' || d.type == 'sample') {
+            d.ticked = false;
+          }
         });
-
-        max = max || edges.length;
-        $log.debug('showing',max,'edges out of',edges.length,'matching edges');
-
-        edges.sort(function(a,b) { return b.value - a.value; }).slice(0, max || paths.length).forEach(function(d) {
-          d.gene.ticked = true;
-          d.cell.ticked = true;
-        });
-
-      }
-
-      $scope.test = function() {
-        var _cells = loadedData.cells.filter(_ticked);
-
-        _cells.forEach(function(c1) {
-          _cells.forEach(function(c2) {
-            $scope._showPaths({source: c1, target: c2}, 10);
-          });
-        });
-
       }
 
       /* function byId(arr) {
@@ -511,6 +517,7 @@
           showSelectionCheckbox: true,
           enableColumnResize: true,
           checkboxCellTemplate: '<div class="ngCellText"></div>',
+          //checkboxHeaderTemplate: '<icon class="ngCellText glyphicon glyphicon-ok" ng-click="toggleSelectAll(allSelected = !allSelected, true)" title="Select All">&nbsp;</icon>',
           beforeSelectionChange: function(row, e) {  // Without shift or ctrl deselect previous
             if (!angular.isArray(row) && !e.ctrlKey && !e.shiftKey) {
               row.selectionProvider.toggleSelectAll(false,true);
@@ -539,8 +546,7 @@
         data: 'data.cells',
         columnDefs: [
           {field:'name', displayName:'Sample Name'},
-          {field:'meta.Ontology', displayName:'Ontology'},
-          {field:'value', displayName:'Value'}
+          {field:'meta.Ontology', displayName:'Ontology'}
         ]
       });
 
