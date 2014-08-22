@@ -25,8 +25,8 @@
               <li><a class="pointer" role="menuitem" ng-click="showExpressionEdges({sample: clickedItem},10)">Top expressed genes</a></li>
               <li><a class="pointer" role="menuitem" ng-click="showExpressionEdges({sample: clickedItem, gene: { class: 'ligand' }},10)">Top expressed ligands</a></li>
               <li><a class="pointer" role="menuitem" ng-click="showExpressionEdges({sample: clickedItem, gene: { class: 'receptor' }},10)">Top expressed receptors</a></li>
-              <li><a class="pointer" role="menuitem" ng-click="showPaths({source: clickedItem, pair: { ticked:  true } }, 10)">Top pathways starting here</a></li>
-              <li><a class="pointer" role="menuitem" ng-click="showPaths({target: clickedItem, pair: { ticked:  true } }, 10)">Top pathways ending here</a></li>
+              <li><a class="pointer" role="menuitem" ng-click="showPaths({source: clickedItem }, 10)">Top pathways starting here</a></li>
+              <li><a class="pointer" role="menuitem" ng-click="showPaths({target: clickedItem }, 10)">Top pathways ending here</a></li>
             </ul>
           </li>
 
@@ -34,8 +34,8 @@
             <a class="pointer" role="menuitem">Show</a>
             <ul class="dropdown-menu">
               <li><a class="pointer" role="menuitem" ng-click="showExpressionEdges({gene: clickedItem},10)">Top top expressed samples</a></li>
-              <li><a class="pointer" role="menuitem" ng-click="showPaths({ligand:   clickedItem, pair: { ticked:  true } }, 10)" ng-show="clickedItem.class == 'ligand'">Top pathways</a></li>
-              <li><a class="pointer" role="menuitem" ng-click="showPaths({receptor: clickedItem, pair: { ticked:  true } }, 10 )" ng-show="clickedItem.class == 'receptor'">Top pathways</a></li>
+              <li><a class="pointer" role="menuitem" ng-click="showPaths({ligand:   clickedItem }, 10)" ng-show="clickedItem.class == 'ligand'">Top pathways</a></li>
+              <li><a class="pointer" role="menuitem" ng-click="showPaths({receptor: clickedItem }, 10 )" ng-show="clickedItem.class == 'receptor'">Top pathways</a></li>
             </ul>
           </li>
 
@@ -50,23 +50,22 @@
 
         <!-- clickedItem -->
 
-          <li ng-if="graphData.selectedItems.length > 0" class="dropdown-header">{{graphData.selectedItems.length}} selected items</li>
+          <li ng-if="graphData.selectedItems[0].fixed" class="dropdown-header">{{graphData.selectedItems.length}} selected items</li>
 
-          <li ng-if="graphData.selectedItems.length > 0">
+          <li ng-if="graphData.selectedItems[0].fixed">
             <a class="pointer" role="menuitem" ng-click="hide(graphData.selectedItems)">Hide</a>
           </li>
 
-          <li ng-show="graphData.selectedItems.length > 0" class="dropdown-submenu" >
+          <li ng-show="graphData.selectedItems[0].fixed" class="dropdown-submenu" >
             <a class="pointer" role="menuitem">Show</a>
             <ul class="dropdown-menu">
               <li><a class="pointer" ng-click="showPaths({
                 source: { ticked:  true, fixed: true },
-                target: { ticked:  true, fixed: true },
-                pair:   { ticked:  true } }, 10)">Top paths between selected samples</a></li>
+                target: { ticked:  true, fixed: true } }, 10)">Top paths between selected samples</a></li>
             </ul>
           </li>
 
-        <li class="divider" ng-show="graphData.selectedItems.length > 0"></li>
+        <li class="divider" ng-show="graphData.selectedItems[0].fixed"></li>
 
         <li><a class="pointer" ng-click="clearVis()">Clear visualization</a></li>
         <li><a class="pointer" ng-click="resetVis()">Default visualization</a></li>
@@ -80,37 +79,7 @@
 
 <div ng-controller="PanelCtrl as panels" ng-cloak>
 
-  <div class="pageslide pageslide-right" ng-show="panels.state.info" >
-    <div class="" ng-if="panels.state.info">
-      <div class="new-tip" ng-cloak ng-show="graphData.nodes.length > 0">
-        <ul class="list-unstyled" bindonce="data">
-          <li>Samples: {{selectedIds.cells.length}} / <span bo-text="data.cells.length"></span></li>
-          <li>Genes:   {{selectedIds.genes.length}} / <span bo-text="data.genes.length"></span></li>
-          <li>Pairs:   {{selectedIds.pairs.length}} / <span bo-text="data.pairs.length"></span></li>
-        </ul>
-        <ul class="list-unstyled" bindonce="graphData">
-          <li>Nodes: {{graphData._nodes.length}} / {{graphData.nodes.length}}</li>
-          <li>Edges: {{graphData._edges.length}} / {{graphData.edges.length}}</li>
-        </ul>
-      </div>
-
-      <div growl></div>
-
-      <div ng-repeat="item in graphData.selectedItems track by item.id" class="new-tip" ng-class="item.hover ? 'bg-warning' : 'bg-danger'" ng-if="item.type">
-        <button type="button" class="close" aria-hidden="true" ng-click="revoveSelectedItem($index)">&times;</button>
-        <div ng-include="'components/ui/item.html'">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="pageslide-toggle right">
-    <button type="button" ng-click="panelState.info = !panelState.info" class="navbar-toggle pull-right" title="Click to show options" style="display: inline-block;">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
+  <div ng-include="'components/ui/right-panel.html'">
   </div>
 
   <div class="pageslide pageslide-bottom" ng-show="panels.state.data" ng-include="'components/ui/bottom-panel.html'">

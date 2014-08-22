@@ -160,7 +160,15 @@
             // Get index for each gene in expression table
             var _genesIndecies = _expr.slice(1).map(_F(0));
             service.data.genes = service.data.genes.map(function(gene) {
-              gene.i = _genesIndecies.indexOf(gene.name);
+              var i = _genesIndecies.indexOf(gene.name);
+              gene.i = i;
+
+              if (i > -1) {
+                gene.median = d3.median(_expr[gene.i + 1].slice(1));
+              } else {
+                gene.median = 0;
+              }
+              
               return gene;
             });
 

@@ -6,6 +6,8 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [x] Create findExpressionValues and findPathways.
 - [x] findPathways calls findExpressionValues
 - [x] show* functions call find* functions.
+- [ ] Clean pears visibility toggle
+- [ ] Specificity
 
 ## Next 
 - [ ] Add find module. 

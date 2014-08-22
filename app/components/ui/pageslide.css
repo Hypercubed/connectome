@@ -21,21 +21,27 @@
 }
 
 .pageslide-toggle {
-  position: absolute;
-  top: 5px;
   z-index: 1010;
 }
 
 .pageslide-toggle.right {
-  right: 10px;
+  position: absolute;
+  left: -40px;
+  top: 5px;
+  width: 34px;
 }
 
-.pageslide-toggle.left {
-  left: 10px;
+.pageslide-toggle button {
+  opacity: 0.5;
+}
+
+.pageslide-toggle button:hover {
+  opacity: 1;
 }
 
 .pageslide-toggle.bottom {
-  top: 5px;
+  position: absolute;
+  top: 5px;  
   right: 5px;
 }
 
@@ -68,7 +74,7 @@
 }
 
 .pageslide.ng-hide > div, .pageslide.ng-hide-remove > div {
-  display: none;
+  /* display: none; */
 }
 
 .pageslide-bottom.ng-hide > div, .pageslide-bottom.ng-hide-remove > div {
@@ -76,8 +82,8 @@
 }
 
 .pageslide-right.ng-hide {
-  -webkit-transform: translateX(345px); /* Chrome, Safari, Opera */
-  transform: translateX(345px);
+  -webkit-transform: translateX(335px); /* Chrome, Safari, Opera */
+  transform: translateX(335px);
 }
 
 .pageslide-left.ng-hide {

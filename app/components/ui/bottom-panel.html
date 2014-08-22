@@ -22,6 +22,14 @@
   </div>
 </script>
 
+<script type="text/ng-template" id="cellPairTemplate">
+  <div class="ngCellText">
+    <input type="checkbox" class="glyphicon glyphicon-eye-close"
+      ng-model="row.entity.ticked"
+      ng-change="row.entity.receptor.ticked = row.entity.ticked; row.entity.ligand.ticked = row.entity.ticked;"></input>
+  </div>
+</script>
+
 <script type="text/ng-template" id="visibleHeaderCellTemplate">
   <div class="ngHeaderSortColumn {{col.headerClass}}"
     ng-style="{'cursor': col.cursor}"
@@ -44,8 +52,6 @@
     ng-click="col.gripClick($event)"
     ng-mousedown="col.gripOnMouseDown($event)"></div>
 </script>
-
-
 
 <tabset>
   <tab active="active1">

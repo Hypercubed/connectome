@@ -6,7 +6,7 @@
 
   var forceGraph = function() {
     var width = 500, height = 500;
-    var margin = { top: 10, right: 370, bottom: 240, left: 370};
+    var margin = { top: 10, right: 60, bottom: 240, left: 60};
     //var padding = { top: 60, right: 100, bottom: 60, left: 60};
 
     function chart(selection) {

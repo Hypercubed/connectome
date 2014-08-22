@@ -27,7 +27,8 @@
     "angular-bindonce": "~0.3.1",
     "ng-context-menu": "~0.1.4",
     "ng-grid": "~2.0.12",
-    "angular-marked": "~0.0.12"
+    "angular-marked": "~0.0.12",
+    "angular-ui-select2": "~0.0.5"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",
@@ -63,6 +64,6 @@
     }
   },
   "resolutions": {
-    "angular": "1.2.18"
+    "angular": ">=1.2.0"
   }
 }

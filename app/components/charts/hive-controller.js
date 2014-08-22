@@ -169,6 +169,7 @@
 
               var _edge = new graph.Edge(src,tgt);
               _edge.value = v;
+              _edge.specificity = Math.log(v+1)/Math.log(10)-Math.log(gene.median+1)/Math.log(10),
               _edge.i = gene.i; // remove
               _edge.id = gene.id;  // remove {target, source}.id
               _edge.type = 'expression';  // remove

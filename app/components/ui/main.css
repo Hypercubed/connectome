@@ -366,3 +366,8 @@ input[type=checkbox].glyphicon.glyphicon-eye-close:checked:before {
 input[type=checkbox].glyphicon{
   visibility: hidden;        
 }
+
+.dropdown, .modal-dialog {
+  z-index: 2000;
+}
+

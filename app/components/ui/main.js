@@ -82,7 +82,7 @@
 
       $scope.clearVis = function() {
         $scope.resetOptions();
-        $scope.selectedIds = angular.extend({}, {pairs:defaultIds.pairs,cells:[],genes:[]});
+        $scope.selectedIds = angular.extend({}, {pairs:[],cells:[],genes:[]});
         loadSelection();
       };
 
@@ -233,26 +233,269 @@
 
       $scope.data = loadedData;
 
+      function PathData() {
+        var expresionValues = null;
+        var pathways = null;
+
+        function _getExpressionValue(gene, cell) {
+          if (gene.type !== 'gene' || cell.type !== 'sample') {
+            $log.warn('Possible error in _getExpression');
+          }
+          return (gene.i > -1 && cell.i > -1) ? +loadedData.expr[gene.i + 1][cell.i + 1] : 0;
+        }
+
+        function _calcExpressionValues() {
+          var edges = [];
+
+          loadedData.genes.forEach(function(gene) {
+            loadedData.cells.forEach(function(cell) {
+              var v = _getExpressionValue(gene, cell);
+              var min = Math.max($scope.options[gene.class+'Filter'],0);
+              if (v > min) {
+                edges.push(
+                {
+                  gene: gene,
+                  cell: cell,
+                  value: v
+                });
+              };
+            });
+          });
+
+          expresionValues = edges.sort(function(a,b) { return b.value - a.value; });
+          $log.debug('found',expresionValues.length, 'expression values');
+        }
+
+        function _calcPathways() {
+          var paths = [];
+
+          $log.debug('Calculating pathways');
+
+          var ligandMin = $scope.options['ligandFilter'];
+          var receptorMin = $scope.options['receptorFilter'];
+
+          var len = loadedData.expr[0].length-1;
+
+          loadedData.pairs.forEach(function (pair,a) {
+
+            var ii = pair.ligand.i;
+            var jj = pair.receptor.i;
+
+            console.log(ii,jj);
+
+            if (ii < 0 || jj < 0) { return; }
+
+            for (var i = 0; i < len; i++) {
+              var l = +loadedData.expr[ii+1][i+1];
+              if (l <= ligandMin) { continue; }
+
+              for (var j = 0; j < len; j++) {
+                var r = +loadedData.expr[jj+1][j+1];
+                if (r <= receptorMin) { continue; }
+
+                var v = l*r;
+
+                if (v > 0) {
+
+                  paths.push({
+                    pair: pair,
+                    source: loadedData.cells[i],
+                    ligand: pair.ligand,
+                    receptor: pair.receptor,
+                    target: loadedData.cells[j],
+                    ligandExpression: l,
+                    receptorExpression: r,
+                    product: v
+                  });
+
+                }
+
+              };
+            };
+
+          });
+
+          $log.debug('sorting',paths.length,'paths');
+          pathways = paths.sort(function(a,b) { return b.product - a.product; });
+          $log.debug('found',pathways.length,'paths');
+        }
+
+        function _match(a,b) {
+          if (angular.equals(a,b)) { return true; }
+          for (var key in b) {
+            if (a[key] !== b[key]) {
+              return false;
+            }
+          }
+          return true;
+        }
+
+        function getExpressionValues(filter) {
+          filter = filter || {};
+
+          if (expresionValues == null) {
+            _calcExpressionValues();
+          }
+
+          return expresionValues.filter(function(expr) {
+            if (filter.gene && !_match(expr.gene,filter.gene)) { return false; }
+            if (filter.sample && !_match(expr.cell,filter.sample)) { return false; }
+            return true;
+          });
+
+        }
+
+        function getPathwaysCached(filter, max) {  // this version uses caching
+          max = max || 10;
+
+          if (pathways == null) {
+            _calcPathways();
+          }
+
+          if (filter == undefined) {
+            return pathways;
+          }
+
+          var _paths = [];
+
+          var count = 0;
+
+          for (var k in pathways) {
+            path = path[k];
+
+            if (filter.pair && filter.pair.id && filter.pair.id !== path.pair.id) { return false; }
+            if (filter.pair && filter.pair.ticked !== undefined && filter.pair.ticked !== path.pair.ticked) { return false; }
+
+            if (filter.ligand && filter.ligand.id !== path.pair.ligand.id) { return false; }
+            if (filter.receptor && filter.receptor.id !== path.pair.receptor.id) { return false; }
+
+            if (filter.source && !_match(path.source,filter.source)) { return false; }
+            if (filter.target && !_match(path.target,filter.target)) { return false; }
+
+            count++;
+
+            _paths.push(path);
+
+          }
+ 
+          $log.debug('found',max,'paths out of',count);
+          return _paths.slice(0,max);
+
+        }
+
+        function getPathways(filter, max) {  // this version does not use caching
+          max = max || 10;
+
+          var paths = [];
+
+          $log.debug('Calculating pathways');
+
+          var ligandMin = $scope.options['ligandFilter'];
+          var receptorMin = $scope.options['receptorFilter'];
+
+          var len = loadedData.expr[0].length-1;
+
+          var count = 0;
+
+          loadedData.pairs.forEach(function (pair,a) {
+
+            if (filter.pair && filter.pair.id && filter.pair.id !== pair.id) { return false; }
+            if (filter.pair && filter.pair.ticked !== undefined && pair.ticked !== path.pair.ticked) { return false; }
+
+            if (filter.ligand && filter.ligand.id !== pair.ligand.id) { return false; }
+            if (filter.receptor && filter.receptor.id !== pair.receptor.id) { return false; }
+
+            var ii = pair.ligand.i;
+            var jj = pair.receptor.i;
+
+            if (ii < 0 || jj < 0) { return; }
+
+            for (var i = 0; i < len; i++) {
+              var l = +loadedData.expr[ii+1][i+1];
+              if (l <= ligandMin) { continue; }
+
+              var source = loadedData.cells[i];
+
+              if (filter.source && !_match(source,filter.source)) { continue; }
+
+              for (var j = 0; j < len; j++) {
+                var r = +loadedData.expr[jj+1][j+1];
+                if (r <= receptorMin) { continue; }
+
+                var target = loadedData.cells[j];
+
+                if (filter.target && !_match(target,filter.target)) { continue; }
+
+                var v = l*r;
+
+                if (v > 0) {
+
+                  // todo: use sort push
+                  paths.push({
+                    pair: pair,
+                    source: source,
+                    ligand: pair.ligand,
+                    receptor: pair.receptor,
+                    target: target,
+                    ligandExpression: l,
+                    receptorExpression: r,
+                    product: v
+                  });
+
+                  if (paths.length > max) {  
+                    paths = paths.sort(function(a,b) { return b.product - a.product; }).slice(0,max);
+                  }
+
+                  count++;
+                  
+                }
+
+              };
+            };
+
+          });
+
+          //$log.debug('sorting',paths.length,'paths');
+          pathways = paths; //.sort(function(a,b) { return b.product - a.product; }).slice(0,max);
+          $log.debug('found',pathways.length,'paths out of',count);
+
+          return pathways;
+        }
+
+        return {
+          getExpressionValues: getExpressionValues,
+          getPathways: getPathways
+        }
+
+      }
+
+      var pathData = PathData();
+
+      //var start = new Date().getTime();
+
+      //var expresionValues = pathData.getExpressionValues();
+      //var pathways = pathData.getPathways();
+
+      //var time = (new Date().getTime()) - start;
+
+
+
+      //$log.debug('found',expresionValues.length, 'expression values');
+      //$log.debug('found',pathways.length,'paths');
+      //$log.debug('Execution time:', time/1000, 's');
+
+      //return;
 
       // TODO: move and use for constructing network
-      function _getExpression(gene, cell) {
+      /* function _getExpression(gene, cell) {
         if (gene.type !== 'gene' || cell.type !== 'sample') {
           $log.warn('Possible error in _getExpression');
         }
         return (gene.i > -1 && cell.i > -1) ? +loadedData.expr[gene.i + 1][cell.i + 1] : 0;
-      }
+      } */
 
-      function _match(a,b) {
-        if (angular.equals(a,b)) { return true; }
-        for (var key in b) {
-          if (a[key] !== b[key]) {
-            return false;
-          }
-        }
-        return true;
-      }
-
-      function _getExpressionEdges(filter) {
+      /* function _getExpressionEdges(filter) {
+        filter = filter || {};
         var edges = [];
 
         loadedData.genes.forEach(function(gene) {
@@ -283,25 +526,23 @@
         });
 
         return edges;
-      }
+      } */
 
       $scope.showExpressionEdges = function _showExpressionEdges(filter, max) {
-        var edges = _getExpressionEdges(filter);
+        var edges = pathData.getExpressionValues(filter);
 
         max = max || edges.length;
         $log.debug('showing',max,'edges out of',edges.length,'matching edges');
 
-        edges.sort(function(a,b) { return b.value - a.value; }).slice(0, max || paths.length).forEach(function(d) {
+        edges.slice(0, max || paths.length).forEach(function(d) {
           d.gene.ticked = true;
           d.cell.ticked = true;
         });
-
       }
 
-      function _getPathways(filter) {
+      /* function _getPathways(filter) {
+        filter = filter || {};
         var paths = [];
-
-        
 
         loadedData.pairs.forEach(function (pair,i) {
           
@@ -317,8 +558,8 @@
           var receptorExpressionEdges = _getExpressionEdges({ sample: filter.target, gene: pair.receptor });
           if (receptorExpressionEdges.length < 1) { return; }
 
-          $log.debug('found',ligandExpressionEdges.length, 'ligand expression values');
-          $log.debug('found',receptorExpressionEdges.length, 'receptor expression values');
+          //$log.debug('found',ligandExpressionEdges.length, 'ligand expression values');
+          //$log.debug('found',receptorExpressionEdges.length, 'receptor expression values');
 
           ligandExpressionEdges.forEach(function(ledge) {
 
@@ -348,20 +589,18 @@
         
 
         return paths;
-      }
+      } */
 
       $scope.showPaths = function _showPaths(filter, max) {
 
         cfpLoadingBar.start();
 
+        var start = new Date().getTime();
+
         $timeout(function() {
-          var paths = _getPathways(filter);
+          var paths = pathData.getPathways(filter, max);
 
-          max = max || paths.length;
-
-          $log.debug('showing',max,'paths out of',paths.length,'matching paths');
-
-          paths.sort(function(a,b) { return b.product - a.product; }).slice(0, max).forEach(function(d) {
+          paths.forEach(function(d) {
             d.pair.ticked = true;
             d.source.ticked = true;
             d.ligand.ticked = true;
@@ -369,12 +608,15 @@
             d.target.ticked = true;
           });
 
+          var time = (new Date().getTime()) - start;
+          $log.debug('Execution time:', time/1000, 's');
+
           cfpLoadingBar.complete();
         });
 
       }
 
-      $scope.showAllPaths = function(max) {
+      /* $scope.showAllPaths = function(max) {
         var _cells = loadedData.cells.filter(_ticked);
 
         var paths = [];
@@ -397,7 +639,7 @@
           d.target.ticked = true;
         });
 
-      }
+      } */
 
       $scope.hide = function(arr) {
         if (!angular.isArray(arr)) { arr = [arr]; };
@@ -406,6 +648,15 @@
             d.ticked = false;
           }
         });
+      }
+
+      $scope.pathFilter = {
+        source: {},
+        target: {}
+      };
+
+      $scope._showPaths = function(filter, max) {
+        console.log(filter);
       }
 
       /* function byId(arr) {
@@ -504,69 +755,66 @@
         }
       }
 
-      var GridOptions = function(options) {
-
-        var defaults = {
-          showFooter: true,
-          enableSorting: true,
-          multiSelect: true,
-          showFilter: true,
-          showGroupPanel: false,
-          enableCellSelection: false,
-          selectWithCheckboxOnly: false,
-          showSelectionCheckbox: true,
-          enableColumnResize: true,
-          checkboxCellTemplate: '<div class="ngCellText"></div>',
-          //checkboxHeaderTemplate: '<icon class="ngCellText glyphicon glyphicon-ok" ng-click="toggleSelectAll(allSelected = !allSelected, true)" title="Select All">&nbsp;</icon>',
-          beforeSelectionChange: function(row, e) {  // Without shift or ctrl deselect previous
-            if (!angular.isArray(row) && !e.ctrlKey && !e.shiftKey) {
-              row.selectionProvider.toggleSelectAll(false,true);
-            }
-            return true;
+      var defaults = {
+        showFooter: true,
+        enableSorting: true,
+        multiSelect: true,
+        showFilter: true,
+        showGroupPanel: false,
+        enableCellSelection: false,
+        selectWithCheckboxOnly: false,
+        showSelectionCheckbox: true,
+        enableColumnResize: true,
+        checkboxCellTemplate: '<div class="ngCellText"></div>',
+        //checkboxHeaderTemplate: '<icon class="ngCellText glyphicon glyphicon-ok" ng-click="toggleSelectAll(allSelected = !allSelected, true)" title="Select All">&nbsp;</icon>',
+        beforeSelectionChange: function(row, e) {  // Without shift or ctrl deselect previous
+          if (!angular.isArray(row) && !e.ctrlKey && !e.shiftKey) {
+            row.selectionProvider.toggleSelectAll(false,true);
+          }
+          return true;
+        },
+        columnDefs: [
+          {
+            field:'ticked',
+            displayName:'Visible',
+            width: 60,
+            cellTemplate: 'cellTemplate',
+            headerCellTemplate: 'visibleHeaderCellTemplate'
           },
-          columnDefs: [
-            {
-              field:'ticked',
-              displayName:'Visible',
-              width: 60,
-              cellTemplate: 'cellTemplate',
-              headerCellTemplate: 'visibleHeaderCellTemplate'
-            },
 
-          ]
-        };
-
-        options.columnDefs = defaults.columnDefs.concat(options.columnDefs);
-        angular.extend(this, defaults, options);
-      };
+        ]
+      };      
 
       $scope.gridOptions = {};
 
-      $scope.gridOptions.cells = new GridOptions({
+      $scope.gridOptions.cells = angular.extend({}, defaults, {
         data: 'data.cells',
         columnDefs: [
+          defaults.columnDefs[0],
           {field:'name', displayName:'Sample Name'},
           {field:'meta.Ontology', displayName:'Ontology'}
         ]
       });
 
-      $scope.gridOptions.genes = new GridOptions({
+      $scope.gridOptions.genes = angular.extend({}, defaults, {
         data: 'data.genes',
         columnDefs: [
+          defaults.columnDefs[0],
           {field:'name', displayName:'Gene Symbol'},
+          {field:'description', width: '25%', displayName:'Gene Name'},
           {field:'class', displayName:'Class'},
-          {field:'age', displayName:'Age',cellFilter:'number'},
+          //{field:'age', displayName:'Age',cellFilter:'number'},
           {field:'taxon', displayName:'Taxon'},
-          {field:'consensus', displayName:'Subcellular Localization'},
-          {field:'description', displayName:'Gene Name'},
+          //{field:'consensus', displayName:'Subcellular Localization'},
           {field:'hgncid', displayName:'HGNC ID'},
           {field:'uniprotid', displayName:'UniProt ID'}
         ]
       });
 
-      $scope.gridOptions.pairs = new GridOptions({
+      $scope.gridOptions.pairs = angular.extend({}, defaults, {
         data: 'data.pairs',
         columnDefs: [
+          {field:'ticked', displayName:'Visible', width: 60, cellTemplate: 'cellPairTemplate'},
           {field:'name', displayName:'Pair Name'},
           {field:'Ligand', displayName:'Ligand',cellTemplate: 'cellLigandTemplate'},
           {field:'Receptor', displayName:'Receptor',cellTemplate: 'cellReceptorTemplate'},

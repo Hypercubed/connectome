@@ -12,6 +12,7 @@
       'panels',
       'ngAnimate',
       'ui.router',
+      'ui.select2',
       'chieffancypants.loadingBar',
       'LocalStorageModule',
       'ui.bootstrap',
@@ -20,7 +21,8 @@
       'pasvaz.bindonce',
       'ng-context-menu',
       'ngGrid',
-      'hc.marked'
+      'hc.marked',
+      'multi-select',
     ]);
 
   app
