@@ -64,10 +64,9 @@
               <label class="col-sm-3 control-label">Cell</label>
               <div class="col-sm-9">
 
-                <select class="col-md-12" data-placeholder="Pick a source cell"
-                  ui-select2="{ allowClear: true }"
+                <select class="col-xs-12" multiple data-placeholder="Pick a cell or cells" 
+                  ui-select2="{'multiple': true }"
                   ng-model="exprFilter.cell.id">
-                  <option value="">Any</option>
                   <option ng-repeat="cell in data.cells" value="{{cell.id}}">{{cell.name}}</option>
                 </select>
 
@@ -78,11 +77,25 @@
               <label class="col-sm-3 control-label">Gene</label>
               <div class="col-sm-9">
 
-                <select ui-select2="{ allowClear: true }" class="col-md-12" ng-model="exprFilter.gene.id" data-placeholder="Pick a gene pair">
-                  <option value="">Any</option>
+                <select class="col-xs-12" multiple data-placeholder="Pick a gene or genes"
+                  ui-select2="{'multiple': true }"
+                  ng-model="exprFilter.gene.id">
                   <option ng-repeat="gene in data.genes" value="{{gene.id}}">{{gene.name}}</option>
                 </select>
 
+                <div class="pull-right">
+                  <input type="radio" name="class[]" value="ligand" ng-model="exprFilter.gene.class"> Ligands
+                  <input type="radio" name="class[]" value="receptor" ng-model="exprFilter.gene.class"> Receptors
+                </div>
+
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label"></label>
+              <div class="col-sm-9">
+                <input type="checkbox" ng-model="exprFilter.specificity">
+                <label class="control-label">Rank by specificity</label>
               </div>
             </div>
 
@@ -97,15 +110,18 @@
 
       </tab>
       <tab heading="Pathways">
+
         <div class="modal-body">
+
           <form class="form-horizontal" role="form">
 
             <div class="form-group">
               <label class="col-sm-3 control-label">Source cell</label>
               <div class="col-sm-9">
 
-                <select ui-select2 class="col-md-12" ng-model="pathFilter.source.id" data-placeholder="Pick a source cell">
-                  <option value="">Any</option>
+                <select class="col-xs-12" multiple data-placeholder="Pick a source cell"
+                  ui-select2="{'multiple': true }"
+                  ng-model="pathFilter.source.id" >
                   <option ng-repeat="cell in data.cells" value="{{cell.id}}">{{cell.name}}</option>
                 </select>
 
@@ -113,11 +129,12 @@
             </div>
 
             <div class="form-group">
-              <label class="col-sm-3 control-label">Ligand</label>
+              <label class="col-sm-3 control-label">Pair</label>
               <div class="col-sm-9">
 
-                <select ui-select2 class="col-md-12" ng-model="pathFilter.pair.id" data-placeholder="Pick a ligand receptor pair">
-                  <option value="">Any</option>
+                <select  class="col-xs-12" multiple data-placeholder="Pick a ligand receptor pair"
+                  ui-select2="{'multiple': true }"
+                  ng-model="pathFilter.pair.id">
                   <option ng-repeat="pair in data.pairs" value="{{pair.id}}">{{pair.name}}</option>
                 </select>
 
@@ -125,14 +142,24 @@
             </div>
 
             <div class="form-group">
-            <label class="col-sm-3 control-label">Target cell</label>
-            <div class="col-sm-9">
+              <label class="col-sm-3 control-label">Target cell</label>
+              <div class="col-sm-9">
 
-                <select ui-select2 class="col-md-12" ng-model="pathFilter.target.id" data-placeholder="Pick a target cell">
-                  <option value="">Any</option>
-                  <option ng-repeat="cell in data.cells" value="{{cell.id}}">{{cell.name}}</option>
-                </select>
+                  <select multiple class="col-xs-12" data-placeholder="Pick a target cell"
+                    ui-select2="{'multiple': true }"
+                    ng-model="pathFilter.target.id">
+                    <option ng-repeat="cell in data.cells" value="{{cell.id}}">{{cell.name}}</option>
+                  </select>
 
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label"></label>
+              <div class="col-sm-9">
+                <input type="checkbox" ng-model="pathFilter.specificity">
+                <label class="control-label">Rank by specificity</label>
+              </div>
             </div>
 
           </form>
@@ -147,7 +174,58 @@
 
       </tab>
       
+      <tab heading="Pathways 2">
+
+        <div class="modal-body">
+          <form class="form-horizontal" role="form">
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Cell</label>
+              <div class="col-sm-9">
+
+                <select class="col-xs-12" data-placeholder="Pick a cell" multiple
+                  ui-select2="{'multiple': true }"
+                  ng-model="pathFilter2.cell.id">
+                  <option ng-repeat="cell in data.cells" value="{{cell.id}}">{{cell.name}}</option>
+                </select>
+
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Ligand</label>
+              <div class="col-sm-9">
+
+                <select class="col-xs-12" data-placeholder="Pick a ligand receptor pair" multiple
+                  ui-select2="{'multiple': true }"
+                  ng-model="pathFilter2.pair.id">
+                  <option ng-repeat="pair in data.pairs" value="{{pair.id}}">{{pair.name}}</option>
+                </select>
+
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label"></label>
+              <div class="col-sm-9">
+                <input type="checkbox" ng-model="pathFilter2.specificity">
+                <label class="control-label">Rank by specificity</label>
+              </div>
+            </div>
+            
+          </form>
+
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" ng-click="pathFilter2 = {}">Clear form</button>
+            <button type="button" class="btn btn-default" ng-click="panels.search = false; clearVis(); showPaths(pathFilter2, 10);">Show only top pathways</button>
+            <button type="button" class="btn btn-primary" ng-click="panels.search = false; showPaths(pathFilter2, 10);">Add top pathways</button>
+        </div>
+
+      </tab>
+
     </tabset>
 
-  </div><!-- /.modal-content -->
+  </div>
 </div><!-- /.modal-dialog -->

@@ -321,6 +321,9 @@
         } */
 
         function _match(obj, text) {
+          if (text === '') { return true; }
+
+          // if both are objects check each key
           if (obj && text && typeof obj === 'object' && typeof text === 'object' ) {
             if (angular.equals(obj, text)) { return true; }
             for (var key in text) {
@@ -330,11 +333,19 @@
             }
             return true;          
           }
-          if (text === '') { return true; }
-          //var patt = new RegExp(''+text);
+          
+          // if array, check ao leats one match
+          if (angular.isArray(text)) {
+            if (text.length === 0) { return true; }
+            for (var key in text) {
+              if (_match(obj, text[key])) {
+                return true;
+              }
+            }
+            return false;
+          }
+
           return ''+obj === ''+text;
-          //text = (''+text).toLowerCase();
-          //return (''+obj).toLowerCase().indexOf(text) > -1;
         }
 
         /* function getExpressionValuesCached(filter) {  // todo: non-caching version
@@ -353,8 +364,9 @@
 
         } */
 
-        function getExpressionValues(filter, max) {  // todo: non-caching version
+        function getExpressionValues(filter, max, acc) {  // todo: non-caching version
           filter = filter || {};
+          acc = acc || _F('value');
 
           var edges = [];
 
@@ -375,16 +387,15 @@
                 {
                   gene: gene,
                   cell: cell,
-                  value: v
+                  value: v,
+                  specificity: (v+1)/(gene.median+1)
                 });
               };
 
             });
           });
 
-          console.log(edges);
-
-          return edges.sort(function(a,b) { return b.value - a.value; }).slice(0,max);
+          return edges.sort(function(a,b){ return acc(b) - acc(a); }).slice(0,max);
           $log.debug('found',expresionValues.length, 'expression values');
 
         }
@@ -427,8 +438,9 @@
 
         } */
 
-        function getPathways(filter, max) {  // this version does not use caching
+        function getPathways(filter, max, acc) {  // this version does not use caching
           max = max || 10;
+          acc = acc || _F('value');
 
           var paths = [];
 
@@ -455,20 +467,26 @@
             loadedData.cells.forEach(function(source)  {
 
               var l = +loadedData.expr[pair.ligand.i+1][source.i+1];
-              if (l < ligandMin) { return; }
+              var ls = (l+1)/(pair.ligand.median+1);
+
+              if (l <= ligandMin) { return; }
 
               if (filter.source && !_match(source,filter.source)) { return; }
 
               loadedData.cells.forEach(function(target)  {
 
                 var r = +loadedData.expr[pair.receptor.i+1][target.i+1];
-                if (r < receptorMin) { return; }
+                var rs = (l+1)/(pair.receptor.median+1);
+
+                if (r <= receptorMin) { return; }
 
                 if (filter.target && !_match(target,filter.target)) { return; }
 
-                var v = l*r;
+                if (filter.cell && !(_match(source,filter.cell) && _match(target,filter.cell))) { return; }
 
-                if (v > 0) {
+                //var v = l*r;
+
+                //if (v > 0) {
 
                   // todo: use insertion sort (fin position, if pos > max, don't push)
                   paths.push({
@@ -479,16 +497,17 @@
                     target: target,
                     ligandExpression: l,
                     receptorExpression: r,
-                    product: v
+                    value: l*r,
+                    specificity: ls*rs
                   });
 
                   if (paths.length > max) {  
-                    paths = paths.sort(function(a,b) { return b.product - a.product; }).slice(0,max);
+                    paths = paths.sort(function(a,b) { return acc(b) - acc(a); }).slice(0,max);
                   }
 
                   count++;
                   
-                }
+                //}
 
               });
             });
@@ -570,13 +589,18 @@
         return edges;
       } */
 
+      var _value = _F('value');
+      var _specificity = _F('specificity');
+
       $scope.showExpressionEdges = function _showExpressionEdges(filter, max) {
-        var edges = pathData.getExpressionValues(filter);
+        var acc = filter.specificity ? _specificity : _value;
+
+        var edges = pathData.getExpressionValues(filter, max, acc);
 
         max = max || edges.length;
         $log.debug('showing',max,'edges out of',edges.length,'matching edges');
 
-        edges.slice(0, max || paths.length).forEach(function(d) {
+        edges.forEach(function(d) {
           d.gene.ticked = true;
           d.cell.ticked = true;
         });
@@ -633,14 +657,16 @@
         return paths;
       } */
 
-      $scope.showPaths = function _showPaths(filter, max) {
+      $scope.showPaths = function _showPaths(filter, max, acc) {
+
+        var acc = filter.specificity ? _specificity : _value;
 
         cfpLoadingBar.start();
 
         var start = new Date().getTime();
 
         $timeout(function() {
-          var paths = pathData.getPathways(filter, max);
+          var paths = pathData.getPathways(filter, max, acc);
 
           paths.forEach(function(d) {
             d.pair.ticked = true;
@@ -833,7 +859,7 @@
         data: 'data.cells',
         columnDefs: [
           defaults.columnDefs[0],
-          {field:'name', displayName:'Sample Name'},
+          {field:'name', displayName:'Cell Type'},
           {field:'meta.Ontology', displayName:'Ontology'}
         ]
       });
@@ -846,10 +872,10 @@
           {field:'description', width: '25%', displayName:'Gene Name'},
           {field:'class', displayName:'Class'},
           //{field:'age', displayName:'Age',cellFilter:'number'},
-          {field:'taxon', displayName:'Taxon'},
           //{field:'consensus', displayName:'Subcellular Localization'},
-          {field:'hgncid', displayName:'HGNC ID'},
-          {field:'uniprotid', displayName:'UniProt ID'}
+          {field:'hgncid', displayName:'HGNC ID',cellTemplate:'cellHGNCTemplate'},
+          {field:'uniprotid', displayName:'UniProt ID', cellTemplate:'cellUniProtTemplate'},
+          {field:'taxon', displayName:'Taxon'}
         ]
       });
 
@@ -860,6 +886,7 @@
           {field:'name', displayName:'Pair Name'},
           {field:'Ligand', displayName:'Ligand',cellTemplate: 'cellLigandTemplate'},
           {field:'Receptor', displayName:'Receptor',cellTemplate: 'cellReceptorTemplate'},
+          {field:'source', displayName:'Source',cellTemplate: 'cellPubMedTemplate'}
         ]
       });
 

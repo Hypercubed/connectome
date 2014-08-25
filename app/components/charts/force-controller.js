@@ -154,6 +154,7 @@
               }
 
               //console.log(data.edgesIndex[src.id][tgt.id]);
+              var s = (v+1)/(gene.median+1);
 
               var _edge = new graph.Edge(graph.data.nodesIndex[src.id],graph.data.nodesIndex[tgt.id]);
               _edge.value = v;
@@ -161,6 +162,8 @@
               _edge.id = gene.id;  // remove {target, source}.id
               _edge.type = 'expression';  // remove
               _edge.class = gene.class;
+              _edge._specificity = s,
+              _edge.specificity = Math.log(s)/Math.log(10),
 
               graph.addEdge(_edge);
               //nodeExpr.push(_edge);
@@ -194,9 +197,18 @@
                   graph.data.edgesIndex[ligand.source.id][receptor.target.id] || 
                   new graph.Edge(ligand.source,receptor.target);
 
+                var s = ligand._specificity*receptor._specificity;
+
+                if (!_edge._specificity) {
+                  _edge._specificity = _edge.specificity = 0;
+                }
+
                 _edge.type = 'sample-sample';
                 _edge.name = ligand.source.name + ' -> ' + receptor.target.name;
                 _edge.value += value;
+                _edge._specificity += s;
+                _edge.specificity += Math.log(s)/Math.log(10);
+
                 graph.addEdge(_edge);
               }
               //delete ligandEdges[i];

@@ -33,11 +33,12 @@
           return {
             i: i,
             id: d.Ligand+'_'+d.Receptor,
-            name: d.Ligand+'_'+d.Receptor,
+            name: d.Ligand+'-'+d.Receptor,
             Ligand: d.Ligand,
             Receptor: d.Receptor,
             ligandId: d.Ligand+'.ligand',
             receptorId: d.Receptor+'.receptor',
+            source: d.Source
           }
         })
         .error(function(data, status, headers, config) {

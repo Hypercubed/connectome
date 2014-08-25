@@ -30,6 +30,31 @@
   </div>
 </script>
 
+<script type="text/ng-template" id="cellHGNCTemplate">
+<div class="ngCellText" ng-class="col.colIndex()">
+  <a href="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:{{COL_FIELD}}">
+    {{COL_FIELD}}
+  </a>
+</div>
+</script>
+
+<script type="text/ng-template" id="cellUniProtTemplate">
+<div class="ngCellText" ng-class="col.colIndex()">
+  <a href="http://www.uniprot.org/uniprot/{{COL_FIELD}}">
+    {{COL_FIELD}}
+  </a>
+</div>
+</script>
+
+<script type="text/ng-template" id="cellPubMedTemplate">
+<div class="ngCellText" ng-class="col.colIndex()">
+  <span ng-if="COL_FIELD == 'putative'">putative</span>
+  <a ng-if="COL_FIELD !== 'putative'" href="http://www.ncbi.nlm.nih.gov/pubmed/{{COL_FIELD}}">
+    {{COL_FIELD}}
+  </a>
+</div>
+</script>
+
 <script type="text/ng-template" id="visibleHeaderCellTemplate">
   <div class="ngHeaderSortColumn {{col.headerClass}}"
     ng-style="{'cursor': col.cursor}"

@@ -371,3 +371,10 @@ input[type=checkbox].glyphicon{
   z-index: 2000;
 }
 
+.modal-content button.close {
+padding: 10px;
+}
+
+.modal-content .nav-tabs > li {
+margin: 10px 0px -1px 10px;
+}

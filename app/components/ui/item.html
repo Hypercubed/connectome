@@ -60,6 +60,8 @@
 		<h5 bo-text="item.name"></h5>
 		<ul  class="list-unstyled">
 			<li>Expression product: <span ng-bind="item.value | number:2"></li>
+			<li>Specificity: <span ng-bind="item._specificity | number:2"></li>
+			<li>Specificity: <span ng-bind="item.specificity | number:2"></li>
 		</ul>
 	</div>
 
@@ -67,6 +69,7 @@
 		<h5 bo-text="item.name"></h5>
 	  <ul  class="list-unstyled">
 	    <li>Expression value: <span ng-bind="item.value | number:2"></li>
+	    <li>Specificity: <span ng-bind="item._specificity | number:2"></li>
 	    <li>Specificity: <span ng-bind="item.specificity | number:2"></li>
 	  </ul>
 	</div>
