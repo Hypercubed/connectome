@@ -55,7 +55,7 @@
 
 <tabset>
   <tab active="active1">
-    <tab-heading ng-click="panelState.data = true" bindonce="data">Samples ({{selectedIds.cells.length}}/<span bo-text="data.cells.length"></span>)</tab-heading>
+    <tab-heading ng-click="panelState.data = true" bindonce="data">Cell types ({{selectedIds.cells.length}}/<span bo-text="data.cells.length"></span>)</tab-heading>
     <div class="gridStyle" ng-grid="gridOptions.cells" ng-if="panelState.data && active1"></div>
   </tab>
   <tab active="active2">

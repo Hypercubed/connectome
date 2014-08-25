@@ -234,10 +234,10 @@
       $scope.data = loadedData;
 
       function PathData() {
-        var expresionValues = null;
-        var pathways = null;
+        //var expresionValues = null;
+        //var pathways = null;
 
-        function _getExpressionValue(gene, cell) {
+        /* function _getExpressionValue(gene, cell) {
           if (gene.type !== 'gene' || cell.type !== 'sample') {
             $log.warn('Possible error in _getExpression');
           }
@@ -318,19 +318,26 @@
           $log.debug('sorting',paths.length,'paths');
           pathways = paths.sort(function(a,b) { return b.product - a.product; });
           $log.debug('found',pathways.length,'paths');
-        }
+        } */
 
-        function _match(a,b) {
-          if (angular.equals(a,b)) { return true; }
-          for (var key in b) {
-            if (a[key] !== b[key]) {
-              return false;
+        function _match(obj, text) {
+          if (obj && text && typeof obj === 'object' && typeof text === 'object' ) {
+            if (angular.equals(obj, text)) { return true; }
+            for (var key in text) {
+              if (!hasOwnProperty.call(obj, key) || !_match(obj[key], text[key])) {
+                return false;
+              }
             }
+            return true;          
           }
-          return true;
+          if (text === '') { return true; }
+          //var patt = new RegExp(''+text);
+          return ''+obj === ''+text;
+          //text = (''+text).toLowerCase();
+          //return (''+obj).toLowerCase().indexOf(text) > -1;
         }
 
-        function getExpressionValues(filter) {
+        /* function getExpressionValuesCached(filter) {  // todo: non-caching version
           filter = filter || {};
 
           if (expresionValues == null) {
@@ -338,14 +345,51 @@
           }
 
           return expresionValues.filter(function(expr) {
+            console.log(expr);
             if (filter.gene && !_match(expr.gene,filter.gene)) { return false; }
-            if (filter.sample && !_match(expr.cell,filter.sample)) { return false; }
+            if (filter.cell && !_match(expr.cell,filter.cell)) { return false; }
             return true;
           });
 
+        } */
+
+        function getExpressionValues(filter, max) {  // todo: non-caching version
+          filter = filter || {};
+
+          var edges = [];
+
+          loadedData.genes.forEach(function(gene) {
+            if (gene.i < 0) { return; }
+            if (filter.gene && !_match(gene,filter.gene)) { return false; }
+
+            var min = Math.max($scope.options[gene.class+'Filter'],0);
+
+            loadedData.cells.forEach(function(cell) {
+              if (gene.i < 0) { return; }
+              if (filter.cell && !_match(cell,filter.cell)) { return false; }
+
+              var v = +loadedData.expr[gene.i+1][cell.i+1];
+
+              if (v > min) {  // todo: insertion sort
+                edges.push(
+                {
+                  gene: gene,
+                  cell: cell,
+                  value: v
+                });
+              };
+
+            });
+          });
+
+          console.log(edges);
+
+          return edges.sort(function(a,b) { return b.value - a.value; }).slice(0,max);
+          $log.debug('found',expresionValues.length, 'expression values');
+
         }
 
-        function getPathwaysCached(filter, max) {  // this version uses caching
+        /* function getPathwaysCached(filter, max) {  // this version uses caching
           max = max || 10;
 
           if (pathways == null) {
@@ -381,7 +425,7 @@
           $log.debug('found',max,'paths out of',count);
           return _paths.slice(0,max);
 
-        }
+        } */
 
         function getPathways(filter, max) {  // this version does not use caching
           max = max || 10;
@@ -389,6 +433,8 @@
           var paths = [];
 
           $log.debug('Calculating pathways');
+          
+          console.log(filter);
 
           var ligandMin = $scope.options['ligandFilter'];
           var receptorMin = $scope.options['receptorFilter'];
@@ -399,38 +445,32 @@
 
           loadedData.pairs.forEach(function (pair,a) {
 
-            if (filter.pair && filter.pair.id && filter.pair.id !== pair.id) { return false; }
-            if (filter.pair && filter.pair.ticked !== undefined && pair.ticked !== path.pair.ticked) { return false; }
+            if (pair.ligand.i < 0 || pair.receptor.i < 0) { return; }
 
-            if (filter.ligand && filter.ligand.id !== pair.ligand.id) { return false; }
-            if (filter.receptor && filter.receptor.id !== pair.receptor.id) { return false; }
+            if (filter.pair && !_match(pair,filter.pair)) { return; }
 
-            var ii = pair.ligand.i;
-            var jj = pair.receptor.i;
+            if (filter.ligand && !_match(pair.ligand,filter.ligand)) { return; }
+            if (filter.receptor && !_match(pair.receptor,filter.receptor)) { return; }
 
-            if (ii < 0 || jj < 0) { return; }
+            loadedData.cells.forEach(function(source)  {
 
-            for (var i = 0; i < len; i++) {
-              var l = +loadedData.expr[ii+1][i+1];
-              if (l <= ligandMin) { continue; }
+              var l = +loadedData.expr[pair.ligand.i+1][source.i+1];
+              if (l < ligandMin) { return; }
 
-              var source = loadedData.cells[i];
+              if (filter.source && !_match(source,filter.source)) { return; }
 
-              if (filter.source && !_match(source,filter.source)) { continue; }
+              loadedData.cells.forEach(function(target)  {
 
-              for (var j = 0; j < len; j++) {
-                var r = +loadedData.expr[jj+1][j+1];
-                if (r <= receptorMin) { continue; }
+                var r = +loadedData.expr[pair.receptor.i+1][target.i+1];
+                if (r < receptorMin) { return; }
 
-                var target = loadedData.cells[j];
-
-                if (filter.target && !_match(target,filter.target)) { continue; }
+                if (filter.target && !_match(target,filter.target)) { return; }
 
                 var v = l*r;
 
                 if (v > 0) {
 
-                  // todo: use sort push
+                  // todo: use insertion sort (fin position, if pos > max, don't push)
                   paths.push({
                     pair: pair,
                     source: source,
@@ -450,16 +490,18 @@
                   
                 }
 
-              };
-            };
+              });
+            });
 
           });
 
           //$log.debug('sorting',paths.length,'paths');
-          pathways = paths; //.sort(function(a,b) { return b.product - a.product; }).slice(0,max);
-          $log.debug('found',pathways.length,'paths out of',count);
+          //pathways = paths; //.sort(function(a,b) { return b.product - a.product; }).slice(0,max);
+          $log.debug('found',paths.length,'paths out of',count);
 
-          return pathways;
+          //console.log(paths);
+
+          return paths;
         }
 
         return {

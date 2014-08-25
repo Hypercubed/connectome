@@ -32,8 +32,8 @@
         return dsv.tsv.get(filename, {cache: cache}, function(d,i) {
           return {
             i: i,
-            id: i,
-            name: d.PairName,
+            id: d.Ligand+'_'+d.Receptor,
+            name: d.Ligand+'_'+d.Receptor,
             Ligand: d.Ligand,
             Receptor: d.Receptor,
             ligandId: d.Ligand+'.ligand',
@@ -127,7 +127,7 @@
 
               var _cell = {
                 name: d,
-                id: d,  // better name?
+                id: String(i),  // better name?
                 i:  i,
                 type: 'sample'
               };

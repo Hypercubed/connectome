@@ -16,7 +16,7 @@
         <span class="icon-bar"></span>
       </button>
 
-      <button class="btn navbar-toggle col-xs-12 glyphicon glyphicon-search" ng-click="test = !test">
+      <button class="btn navbar-toggle col-xs-12 glyphicon glyphicon-search" ng-click="panels.search = !panels.search">
       </button>
 
       <button class="btn navbar-toggle col-xs-12 glyphicon"
@@ -25,7 +25,7 @@
       </button>
     </div>
 
-    <div 
+    <div
       ng-if="panels.state.info">
       <div class="new-tip" ng-cloak ng-show="graphData.nodes.length > 0">
         <ul class="list-unstyled" bindonce="data">
@@ -51,68 +51,103 @@
   </div>
 <div>
 
-<div class="modal-dialog" ng-show="test">
+<div class="modal-dialog" ng-show="panels.search">
   <div class="modal-content">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="test = !test">&times;</button>
-      <h4 class="modal-title">Find Ligand-Receptor pathways</h4>
-    </div>
-    <div class="modal-body">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="panels.search = !panels.search">&times;</button>
+    <tabset>
+      <tab heading="Expression">
 
-      <form class="form-horizontal" role="form">
+        <div class="modal-body">
+          <form class="form-horizontal" role="form">
 
-        <div class="form-group">
-          <label class="col-sm-3 control-label">Source cell</label>
-          <div class="col-sm-9">
-            <select class="form-control" id="A" name="A"
-              ng-model="pathFilter.source"
-              ng-options="o.name for o in data.cells | orderBy : 'name'">
-              <option value="">Any</option>
-            </select>
-          </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Cell</label>
+              <div class="col-sm-9">
+
+                <select class="col-md-12" data-placeholder="Pick a source cell"
+                  ui-select2="{ allowClear: true }"
+                  ng-model="exprFilter.cell.id">
+                  <option value="">Any</option>
+                  <option ng-repeat="cell in data.cells" value="{{cell.id}}">{{cell.name}}</option>
+                </select>
+
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Gene</label>
+              <div class="col-sm-9">
+
+                <select ui-select2="{ allowClear: true }" class="col-md-12" ng-model="exprFilter.gene.id" data-placeholder="Pick a gene pair">
+                  <option value="">Any</option>
+                  <option ng-repeat="gene in data.genes" value="{{gene.id}}">{{gene.name}}</option>
+                </select>
+
+              </div>
+            </div>
+
+          </form>
         </div>
 
-        <div class="form-group">
-          <label class="col-sm-3 control-label">Ligand</label>
-          <div class="col-sm-9">
-          <select class="col-sm-10 form-control"
-            ng-model="pathFilter.ligand"
-            ng-options="o.name for o in data.genes | filter : { class: 'ligand' } | orderBy : 'name'">
-            <option value="">Any</option>
-          </select>
-          </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left" ng-click="exprFilter = {}">Clear form</button>
+          <button type="button" class="btn btn-default" ng-click="clearVis();  panels.search = false; showExpressionEdges(exprFilter, 10);">Show only top expression</button>
+          <button type="button" class="btn btn-primary" ng-click="panels.search = false; showExpressionEdges(exprFilter, 10);">Add top expression</button>
         </div>
 
-        <div class="form-group">
-        <label class="col-sm-3 control-label">Receptor</label>
-        <div class="col-sm-9">
-        <select class="col-sm-10 form-control"
-          ng-model="pathFilter.receptor"
-          ng-options="o.name for o in data.genes | filter : { class: 'receptor' } | orderBy : 'name'">
-          <option value="">Any</option>
-        </select>
+      </tab>
+      <tab heading="Pathways">
+        <div class="modal-body">
+          <form class="form-horizontal" role="form">
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Source cell</label>
+              <div class="col-sm-9">
+
+                <select ui-select2 class="col-md-12" ng-model="pathFilter.source.id" data-placeholder="Pick a source cell">
+                  <option value="">Any</option>
+                  <option ng-repeat="cell in data.cells" value="{{cell.id}}">{{cell.name}}</option>
+                </select>
+
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Ligand</label>
+              <div class="col-sm-9">
+
+                <select ui-select2 class="col-md-12" ng-model="pathFilter.pair.id" data-placeholder="Pick a ligand receptor pair">
+                  <option value="">Any</option>
+                  <option ng-repeat="pair in data.pairs" value="{{pair.id}}">{{pair.name}}</option>
+                </select>
+
+              </div>
+            </div>
+
+            <div class="form-group">
+            <label class="col-sm-3 control-label">Target cell</label>
+            <div class="col-sm-9">
+
+                <select ui-select2 class="col-md-12" ng-model="pathFilter.target.id" data-placeholder="Pick a target cell">
+                  <option value="">Any</option>
+                  <option ng-repeat="cell in data.cells" value="{{cell.id}}">{{cell.name}}</option>
+                </select>
+
+            </div>
+
+          </form>
+
         </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" ng-click="pathFilter = {}">Clear form</button>
+            <button type="button" class="btn btn-default" ng-click="panels.search = false; clearVis(); showPaths(pathFilter, 10);">Show only top pathways</button>
+            <button type="button" class="btn btn-primary" ng-click="panels.search = false; showPaths(pathFilter, 10);">Add top pathways</button>
         </div>
 
-        <div class="form-group">
-        <label class="col-sm-3 control-label">Target cell</label>
-        <div class="col-sm-9">
-        <select class="col-sm-10 form-control"
-          ng-model="pathFilter.target" 
-          ng-options="o.name for o in data.cells | orderBy : 'name'">
-          <option value="">Any</option>
-        </select>
-        </div>
+      </tab>
+      
+    </tabset>
 
-      </div>
-
-      </form>
-
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-default pull-left" ng-click="pathFilter = {}">Clear form</button>
-      <button type="button" class="btn btn-default" ng-click="clearVis(); showPaths(pathFilter, 10);">Show only top pathways</button>
-      <button type="button" class="btn btn-primary" ng-click="showPaths(pathFilter, 10);">Add top pathways</button>
-    </div>
   </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
