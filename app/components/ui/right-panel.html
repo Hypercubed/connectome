@@ -28,11 +28,6 @@
     <div
       ng-if="panels.state.info">
       <div class="new-tip" ng-cloak ng-show="graphData.nodes.length > 0">
-        <ul class="list-unstyled" bindonce="data">
-          <li>Samples: {{selectedIds.cells.length}} / <span bo-text="data.cells.length"></span></li>
-          <li>Genes:   {{selectedIds.genes.length}} / <span bo-text="data.genes.length"></span></li>
-          <li>Pairs:   {{selectedIds.pairs.length}} / <span bo-text="data.pairs.length"></span></li>
-        </ul>
         <ul class="list-unstyled" bindonce="graphData">
           <li>Nodes: {{graphData._nodes.length}} / {{graphData.nodes.length}}</li>
           <li>Edges: {{graphData._edges.length}} / {{graphData.edges.length}}</li>
@@ -64,7 +59,7 @@
               <label class="col-sm-3 control-label">Cell</label>
               <div class="col-sm-9">
 
-                <select class="col-xs-12" multiple data-placeholder="Pick a cell or cells" 
+                <select multiple data-placeholder="Pick a cell or cells" 
                   ui-select2="{'multiple': true }"
                   ng-model="exprFilter.cell.id">
                   <option ng-repeat="cell in data.cells" value="{{cell.id}}">{{cell.name}}</option>
@@ -73,29 +68,40 @@
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="col-sm-3 control-label">Gene</label>
+            <div class="form-group" ng-init="exprFilter.gene.class = 'each'">
+              <label class="col-sm-3 control-label">Genes</label>
               <div class="col-sm-9">
-
-                <select class="col-xs-12" multiple data-placeholder="Pick a gene or genes"
+                <input type="radio" name="class[]" ng-model="exprFilter.gene.class" value="each">
+                <label class="control-label"> Top ligands and top receptors</label>
+                <br><input type="radio" name="class[]" ng-model="exprFilter.gene.class" value="ligand" checked>
+                <label class="control-label"> Top ligands only</label>
+                <br><input type="radio" name="class[]" ng-model="exprFilter.gene.class" value="receptor">
+                <label class="control-label"> Top receptors only</label>
+                <br><input type="radio" name="class[]" ng-model="exprFilter.gene.class" value="">
+                <label class="control-label"> Specific genes</label>
+                <select class="col-md-10" multiple data-placeholder="Pick a gene or genes"
                   ui-select2="{'multiple': true }"
+                  ng-show="exprFilter.gene.class == ''"
                   ng-model="exprFilter.gene.id">
                   <option ng-repeat="gene in data.genes" value="{{gene.id}}">{{gene.name}}</option>
                 </select>
 
-                <div class="pull-right">
-                  <input type="radio" name="class[]" value="ligand" ng-model="exprFilter.gene.class"> Ligands
-                  <input type="radio" name="class[]" value="receptor" ng-model="exprFilter.gene.class"> Receptors
-                </div>
+              </div>
+            </div>
 
+            <div class="form-group" ng-init="exprFilter.rank = 'expression'">
+              <label class="col-sm-3 control-label">Rank by</label>
+              <div class="col-sm-9">
+                <input type="radio" name="rank[]" ng-model="exprFilter.rank" value="expression" checked>
+                <label class="control-label">expression</label>
+                <br><input type="radio" name="rank[]" ng-model="exprFilter.rank" value="specificity">
+                <label class="control-label">specificity</label>
               </div>
             </div>
 
             <div class="form-group">
-              <label class="col-sm-3 control-label"></label>
-              <div class="col-sm-9">
-                <input type="checkbox" ng-model="exprFilter.specificity">
-                <label class="control-label">Rank by specificity</label>
+              <div class="col-md-offset-3 col-sm-9">
+
               </div>
             </div>
 
@@ -103,9 +109,9 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" ng-click="exprFilter = {}">Clear form</button>
-          <button type="button" class="btn btn-default" ng-click="clearVis();  panels.search = false; showExpressionEdges(exprFilter, 10);">Show only top expression</button>
-          <button type="button" class="btn btn-primary" ng-click="panels.search = false; showExpressionEdges(exprFilter, 10);">Add top expression</button>
+          <button type="button" class="btn btn-default pull-left" ng-click="exprFilter = { rank: 'expression', gene: { class: 'each' }}">Clear form</button>
+          <!-- button type="button" class="btn btn-primary" ng-click="panels.search = false; showExpressionEdges(exprFilter, 10);">Add</button -->
+          <button type="button" class="btn btn-primary" ng-click="clearVis();  panels.search = false; showExpressionEdges(exprFilter, 10);">Show top</button>
         </div>
 
       </tab>
@@ -116,10 +122,10 @@
           <form class="form-horizontal" role="form">
 
             <div class="form-group">
-              <label class="col-sm-3 control-label">Source cell</label>
+              <label class="col-sm-3 control-label">Cell A</label>
               <div class="col-sm-9">
 
-                <select class="col-xs-12" multiple data-placeholder="Pick a source cell"
+                <select multiple data-placeholder="Pick a cell type"
                   ui-select2="{'multiple': true }"
                   ng-model="pathFilter.source.id" >
                   <option ng-repeat="cell in data.cells" value="{{cell.id}}">{{cell.name}}</option>
@@ -132,7 +138,7 @@
               <label class="col-sm-3 control-label">Pair</label>
               <div class="col-sm-9">
 
-                <select  class="col-xs-12" multiple data-placeholder="Pick a ligand receptor pair"
+                <select multiple data-placeholder="Pick a ligand receptor pair"
                   ui-select2="{'multiple': true }"
                   ng-model="pathFilter.pair.id">
                   <option ng-repeat="pair in data.pairs" value="{{pair.id}}">{{pair.name}}</option>
@@ -142,10 +148,10 @@
             </div>
 
             <div class="form-group">
-              <label class="col-sm-3 control-label">Target cell</label>
+              <label class="col-sm-3 control-label">Cell B</label>
               <div class="col-sm-9">
 
-                  <select multiple class="col-xs-12" data-placeholder="Pick a target cell"
+                  <select multiple data-placeholder="Pick a cell type"
                     ui-select2="{'multiple': true }"
                     ng-model="pathFilter.target.id">
                     <option ng-repeat="cell in data.cells" value="{{cell.id}}">{{cell.name}}</option>
@@ -154,11 +160,27 @@
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="col-sm-3 control-label"></label>
+            <div class="form-group" ng-init="pathFilter.direction = 'each'">
+              <label class="col-sm-3 control-label">Direction</label>
               <div class="col-sm-9">
-                <input type="checkbox" ng-model="pathFilter.specificity">
-                <label class="control-label">Rank by specificity</label>
+                <input type="radio" name="direction[]" ng-model="pathFilter.direction" value="AB">
+                <label class="control-label"> Directional (A->B)</label>
+                <!-- br>
+                <input type="radio" name="direction[]" ng-model="pathFilter.direction" value="BA">
+                <label class="control-label"> B -> A</label -->
+                <br>
+                <input type="radio" name="direction[]" ng-model="pathFilter.direction" value="each">
+                <label class="control-label"> Bi-directional (Top A->B and Top B->A)</label>
+              </div>
+            </div>
+
+            <div class="form-group" ng-init="pathFilter.rank = 'expression'">
+              <label class="col-sm-3 control-label">Rank by</label>
+              <div class="col-sm-9">
+                <input type="radio" name="rank[]" ng-model="pathFilter.rank" value="expression" checked>
+                <label class="control-label">expression product</label>
+                <br><input type="radio" name="rank[]" ng-model="pathFilter.rank" value="specificity">
+                <label class="control-label">specificity sum</label>
               </div>
             </div>
 
@@ -167,60 +189,9 @@
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-default pull-left" ng-click="pathFilter = {}">Clear form</button>
-            <button type="button" class="btn btn-default" ng-click="panels.search = false; clearVis(); showPaths(pathFilter, 10);">Show only top pathways</button>
-            <button type="button" class="btn btn-primary" ng-click="panels.search = false; showPaths(pathFilter, 10);">Add top pathways</button>
-        </div>
-
-      </tab>
-      
-      <tab heading="Pathways 2">
-
-        <div class="modal-body">
-          <form class="form-horizontal" role="form">
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label">Cell</label>
-              <div class="col-sm-9">
-
-                <select class="col-xs-12" data-placeholder="Pick a cell" multiple
-                  ui-select2="{'multiple': true }"
-                  ng-model="pathFilter2.cell.id">
-                  <option ng-repeat="cell in data.cells" value="{{cell.id}}">{{cell.name}}</option>
-                </select>
-
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label">Ligand</label>
-              <div class="col-sm-9">
-
-                <select class="col-xs-12" data-placeholder="Pick a ligand receptor pair" multiple
-                  ui-select2="{'multiple': true }"
-                  ng-model="pathFilter2.pair.id">
-                  <option ng-repeat="pair in data.pairs" value="{{pair.id}}">{{pair.name}}</option>
-                </select>
-
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label"></label>
-              <div class="col-sm-9">
-                <input type="checkbox" ng-model="pathFilter2.specificity">
-                <label class="control-label">Rank by specificity</label>
-              </div>
-            </div>
-            
-          </form>
-
-        </div>
-
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default pull-left" ng-click="pathFilter2 = {}">Clear form</button>
-            <button type="button" class="btn btn-default" ng-click="panels.search = false; clearVis(); showPaths(pathFilter2, 10);">Show only top pathways</button>
-            <button type="button" class="btn btn-primary" ng-click="panels.search = false; showPaths(pathFilter2, 10);">Add top pathways</button>
+            <button type="button" class="btn btn-default pull-left" ng-click="pathFilter = { rank: 'expression', direction: 'each' }">Clear form</button>
+            <button type="button" class="btn btn-primary" ng-click="panels.search = false; clearVis(); showPaths(pathFilter, 10);">Show top</button>
+            <!-- button type="button" class="btn btn-primary" ng-click="panels.search = false; showPaths(pathFilter, 10);">Add top pathways</button -->
         </div>
 
       </tab>

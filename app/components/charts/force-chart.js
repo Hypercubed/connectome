@@ -22,7 +22,11 @@
     var groups = ['gene.ligand','gene.receptor','sample'];
 
     // Scales
-    var ncolor = d3.scale.ordinal().domain(['ligand','both','receptor']).range(['#ed1940','yellow','#3349ff']); // ['#ed1940','#a650e2','#3349ff']
+    var ncolor = d3.scale.ordinal()
+      .domain(['ligand','both','receptor'])
+      .range(['#ed1940','yellow','#3349ff']);
+      //.range(['#ed1940','#a650e2','#9999ff']);
+      //.range(['#ed1940','#a650e2','#3349ff']);
     var slog = d3.scale.log().range([2,9]).clamp(true);     // Maps value to normalized edge width
     var eopac = d3.scale.linear().range([0.2,0.8]).clamp(true);
     var rsize = d3.scale.linear().range([3, 12]).clamp(true);  // Maps value to size

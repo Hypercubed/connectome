@@ -15,7 +15,7 @@
 	  			key="source"
 	  			array="graphData.nodesIndex"></span>
 	  		</li>
-      <li>Age: <span bo-text="item['age']"></span></li>
+      		<!-- li>Age: <span bo-text="item['age']"></span></li -->
 			<li>Taxon: <span bo-text="item['taxon']"></span></li>
 			<li>UniProtID: <span bo-text="item['uniprotid']"></span></li>
     </ul>
@@ -30,7 +30,7 @@
 			class="list-unstyled"
 			ng-init="ligands = (graphData._outEdgesIndex[item.id] | filter : { type: 'expression' }); receptors = (graphData._inEdgesIndex[item.id] | filter : { type: 'expression' })">
 	    <li>
-	    	<span bo-text="ligands > 0 ? 'Sum of ' : ''"></span>
+	    	<span bo-text="ligands.length > 0 ? 'Sum of ' : ''"></span>
 	    	Ligand expression:
 	    	<span ng-bind="item.values[0] | number:2"></span>
 	    </li>
@@ -41,7 +41,7 @@
 					array="graphData.nodesIndex"></span>
 	    </li>
 	    <li>
-	    	<span bo-text="receptors > 0 ? 'Sum of ' : ''"></span>
+	    	<span bo-text="receptors.length > 0 ? 'Sum of ' : ''"></span>
 	    	Receptor expression:
 	    	<span ng-bind="item.values[1] | number:2"></span>
 	    </li>
@@ -60,8 +60,8 @@
 		<h5 bo-text="item.name"></h5>
 		<ul  class="list-unstyled">
 			<li>Expression product: <span ng-bind="item.value | number:2"></li>
-			<li>Specificity: <span ng-bind="item._specificity | number:2"></li>
-			<li>Specificity: <span ng-bind="item.specificity | number:2"></li>
+			<!-- li>Specificity: <span ng-bind="item._specificity | number:2"></li -->
+			<li>Specificity sum: <span ng-bind="item.specificity | number:2"></li>
 		</ul>
 	</div>
 
@@ -69,7 +69,7 @@
 		<h5 bo-text="item.name"></h5>
 	  <ul  class="list-unstyled">
 	    <li>Expression value: <span ng-bind="item.value | number:2"></li>
-	    <li>Specificity: <span ng-bind="item._specificity | number:2"></li>
+	    <!-- li>Specificity: <span ng-bind="item._specificity | number:2"></li -->
 	    <li>Specificity: <span ng-bind="item.specificity | number:2"></li>
 	  </ul>
 	</div>

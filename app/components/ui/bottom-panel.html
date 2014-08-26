@@ -3,8 +3,15 @@
     <input type="checkbox" class="glyphicon glyphicon-eye-close"
       ng-change="itemClicked(row)"
       ng-model="row.entity.ticked" /></input>
+    <input type="checkbox" class="fa fa-unlock"
+      ng-change="itemClicked(row)"
+      ng-model="row.entity.locked" /></input>
   </div>
 </script>
+
+<!-- script type="text/ng-template" id="checkboxCellTemplate.html">
+  <div class="ngCellText"></div>
+</script -->
 
 <script type="text/ng-template" id="cellLigandTemplate">
   <div class="ngCellText">
@@ -26,13 +33,40 @@
   <div class="ngCellText">
     <input type="checkbox" class="glyphicon glyphicon-eye-close"
       ng-model="row.entity.ticked"
-      ng-change="row.entity.receptor.ticked = row.entity.ticked; row.entity.ligand.ticked = row.entity.ticked;"></input>
+      ng-change="itemClicked(row)"></input>
+    <input type="checkbox" class="fa fa-unlock"
+      ng-model="row.entity.locked"
+      ng-change="itemClicked(row)" />
+  </div>
+</script>
+
+<script type="text/ng-template" id="menuTemplate.html">
+    <div ng-show="showColumnMenu || showFilter" class="ngHeaderButton" ng-click="toggleShowMenu()">
+      {{i18n.ngSearchPlaceHolder}} <span class="glyphicon glyphicon-search"></span>
+    </div>
+    <div ng-show="showMenu" class="ngColMenu">
+      <div ng-show="showFilter">
+        <input placeholder="{{i18n.ngSearchPlaceHolder}}" type="text" ng-model="filterText"/>
+      </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="rowTemplate.html">
+  <div class="{{ row.entity.locked ? 'locked' : '' }}">
+    <div
+        ng-style="{ 'cursor': row.cursor }"
+        ng-repeat="col in renderedColumns"
+        ng-class="col.colIndex()"
+        class="ngCell {{col.cellClass}}">
+      <div class="ngVerticalBar"ng-style="{height: rowHeight}">&nbsp;</div>
+      <div ng-cell></div>
+    </div>
   </div>
 </script>
 
 <script type="text/ng-template" id="cellHGNCTemplate">
 <div class="ngCellText" ng-class="col.colIndex()">
-  <a href="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:{{COL_FIELD}}">
+  <a href="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:{{COL_FIELD}}" target="_blank">
     {{COL_FIELD}}
   </a>
 </div>
@@ -40,7 +74,7 @@
 
 <script type="text/ng-template" id="cellUniProtTemplate">
 <div class="ngCellText" ng-class="col.colIndex()">
-  <a href="http://www.uniprot.org/uniprot/{{COL_FIELD}}">
+  <a href="http://www.uniprot.org/uniprot/{{COL_FIELD}}" target="_blank">
     {{COL_FIELD}}
   </a>
 </div>
@@ -49,7 +83,7 @@
 <script type="text/ng-template" id="cellPubMedTemplate">
 <div class="ngCellText" ng-class="col.colIndex()">
   <span ng-if="COL_FIELD == 'putative'">putative</span>
-  <a ng-if="COL_FIELD !== 'putative'" href="http://www.ncbi.nlm.nih.gov/pubmed/{{COL_FIELD}}">
+  <a ng-if="COL_FIELD !== 'putative'" href="http://www.ncbi.nlm.nih.gov/pubmed/{{COL_FIELD}}" target="_blank">
     {{COL_FIELD}}
   </a>
 </div>
@@ -80,7 +114,9 @@
 
 <tabset>
   <tab active="active1">
-    <tab-heading ng-click="panelState.data = true" bindonce="data">Cell types ({{selectedIds.cells.length}}/<span bo-text="data.cells.length"></span>)</tab-heading>
+    <tab-heading ng-click="panelState.data = true" bindonce="data">
+      Cell types ({{selectedIds.cells.length}}/<span bo-text="data.cells.length"></span>)
+    </tab-heading>
     <div class="gridStyle" ng-grid="gridOptions.cells" ng-if="panelState.data && active1"></div>
   </tab>
   <tab active="active2">

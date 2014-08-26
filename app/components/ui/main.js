@@ -72,16 +72,25 @@
       //$scope.selected = {};
       $scope.resetOptions = function() {
         $scope.options = angular.extend({}, defaultOptions);
+        loadedData.pairs.forEach(function(d) {
+          d.locked = false;
+        });
+        loadedData.genes.forEach(function(d) {
+          d.locked = false;
+        });
+        loadedData.cells.forEach(function(d) {
+          d.locked = false;
+        });
       }
 
       $scope.resetVis = function() {
-        $scope.resetOptions();
+        $scope.options = angular.extend({}, defaultOptions);
         $scope.selectedIds = angular.extend({}, defaultIds);
         loadSelection();
       };
 
       $scope.clearVis = function() {
-        $scope.resetOptions();
+        //$scope.resetOptions();
         $scope.selectedIds = angular.extend({}, {pairs:[],cells:[],genes:[]});
         loadSelection();
       };
@@ -185,6 +194,7 @@
 
         function _ticked(arr) {
           return function(d) {
+            if (d.locked) { return false; };
             d.ticked = arr.indexOf(d.i) > -1;
             return d.ticked;
           };
@@ -345,6 +355,10 @@
             return false;
           }
 
+          if (typeof text === 'boolean') {
+            return obj === text;
+          }
+
           return ''+obj === ''+text;
         }
 
@@ -372,12 +386,15 @@
 
           loadedData.genes.forEach(function(gene) {
             if (gene.i < 0) { return; }
+            if (gene.locked) { return false; }
             if (filter.gene && !_match(gene,filter.gene)) { return false; }
+            
 
             var min = Math.max($scope.options[gene.class+'Filter'],0);
 
             loadedData.cells.forEach(function(cell) {
-              if (gene.i < 0) { return; }
+              if (cell.i < 0) { return; }
+              if (cell.locked) { return false; }
               if (filter.cell && !_match(cell,filter.cell)) { return false; }
 
               var v = +loadedData.expr[gene.i+1][cell.i+1];
@@ -455,16 +472,23 @@
 
           var count = 0;
 
-          loadedData.pairs.forEach(function (pair,a) {
+          loadedData.pairs.forEach(function (pair) {
+
+            if (pair.locked) { return false; }
 
             if (pair.ligand.i < 0 || pair.receptor.i < 0) { return; }
 
             if (filter.pair && !_match(pair,filter.pair)) { return; }
 
+            if (pair.ligand.locked) { return false; }
+            if (pair.receptor.locked) { return false; }
+
             if (filter.ligand && !_match(pair.ligand,filter.ligand)) { return; }
             if (filter.receptor && !_match(pair.receptor,filter.receptor)) { return; }
 
             loadedData.cells.forEach(function(source)  {
+
+              if (source.locked) { return false; }
 
               var l = +loadedData.expr[pair.ligand.i+1][source.i+1];
               var ls = (l+1)/(pair.ligand.median+1);
@@ -472,17 +496,19 @@
               if (l <= ligandMin) { return; }
 
               if (filter.source && !_match(source,filter.source)) { return; }
+              if (filter.cell && !_match(source,filter.cell)) { return; }
 
-              loadedData.cells.forEach(function(target)  {
+              loadedData.cells.forEach(function(target) {
+
+                if (target.locked) { return false; }
 
                 var r = +loadedData.expr[pair.receptor.i+1][target.i+1];
-                var rs = (l+1)/(pair.receptor.median+1);
+                var rs = (r+1)/(pair.receptor.median+1);
 
                 if (r <= receptorMin) { return; }
 
                 if (filter.target && !_match(target,filter.target)) { return; }
-
-                if (filter.cell && !(_match(source,filter.cell) && _match(target,filter.cell))) { return; }
+                if (filter.cell   && !_match(target,filter.cell)) { return; }
 
                 //var v = l*r;
 
@@ -593,7 +619,22 @@
       var _specificity = _F('specificity');
 
       $scope.showExpressionEdges = function _showExpressionEdges(filter, max) {
-        var acc = filter.specificity ? _specificity : _value;
+        var acc = (filter.rank == 'specificity') ? _specificity : _value;
+
+        if (filter.gene.class !== '') {
+          delete filter.gene.id;
+        }
+
+        if (filter.gene.class == 'each') {
+          var f = angular.copy(filter);
+          f.gene.class = 'ligand';
+          $scope.showExpressionEdges(f,max);
+          f.gene.class = 'receptor';
+          $scope.showExpressionEdges(f,max);
+          return;
+        }
+
+        console.log(filter);
 
         var edges = pathData.getExpressionValues(filter, max, acc);
 
@@ -659,7 +700,17 @@
 
       $scope.showPaths = function _showPaths(filter, max, acc) {
 
-        var acc = filter.specificity ? _specificity : _value;
+        var acc = (filter.rank == 'specificity') ? _specificity : _value;
+
+        if (filter.direction == 'each') {
+          var f = angular.copy(filter);
+          f.direction = 'AB';
+          $scope.showPaths(f,max);
+          f.source = filter.target;
+          f.target = filter.source;
+          $scope.showPaths(f,max);
+          return;
+        }
 
         cfpLoadingBar.start();
 
@@ -816,9 +867,25 @@
       $scope.gridOptions = {};
 
       $scope.itemClicked = function(row) {
+        if (row.entity.locked) {
+          row.entity.ticked = false;
+        }
+
+        if(row.entity.receptor && row.entity.ligand) {
+          row.entity.receptor.ticked = row.entity.ticked;
+          row.entity.ligand.ticked = row.entity.ticked;
+        }
+
         if (row.selected == true) {
           row.selectionProvider.selectedItems.forEach(function(d) {
             d.ticked = row.entity.ticked;
+            d.locked = row.entity.locked;
+
+            if(d.receptor && d.ligand) {
+              d.receptor.ticked = row.entity.ticked;
+              d.ligand.ticked = row.entity.ticked;
+            }
+
           });
         }
       }
@@ -828,12 +895,15 @@
         enableSorting: true,
         multiSelect: true,
         showFilter: true,
+        showColumnMenu: false,
         showGroupPanel: false,
         enableCellSelection: false,
         selectWithCheckboxOnly: false,
         showSelectionCheckbox: true,
         enableColumnResize: true,
-        checkboxCellTemplate: '<div class="ngCellText"></div>',
+        //rowTemplate: 'rowTemplate',
+        //menuTemplate: 'menuTemplate',
+        //checkboxCellTemplate: '<div class="ngCellText"></div>',
         //checkboxHeaderTemplate: '<icon class="ngCellText glyphicon glyphicon-ok" ng-click="toggleSelectAll(allSelected = !allSelected, true)" title="Select All">&nbsp;</icon>',
         beforeSelectionChange: function(row, e) {  // Without shift or ctrl deselect previous
           if (!angular.isArray(row) && !e.ctrlKey && !e.shiftKey) {
