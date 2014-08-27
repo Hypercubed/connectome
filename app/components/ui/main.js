@@ -43,7 +43,7 @@
       $rootScope.site = site;
 
       $rootScope.$on('$routeChangeError', function(event) {
-        console.log(event);
+        //console.log(event);
       });
 
       var _ticked = _F('ticked');
@@ -60,7 +60,7 @@
       };
 
       var defaultIds = {
-        pairs: loadedData.pairs.map(_i),
+        pairs: [1189],
         cells:[10,13,15,16,17,30,33,51,56,62,69,72,73,80,86,101,105,139],
         genes:[145,768]
       };
@@ -143,13 +143,13 @@
 
       $scope.saveJson = function() {  // TODO: a directive/service?
         var txt = graphService.graph.getJSON();
-        var blob = new Blob([txt], { type: 'data:text/json' });
+        var blob = new Blob([txt], { type: 'text/json' });
         saveAs(blob, 'lr-graph.json');
       };
 
       $scope.saveGml = function() {  // TODO: a directive/service?
         var txt = graphService.graph.getGML();
-        var blob = new Blob([txt], { type: 'data:text/gml' });
+        var blob = new Blob([txt], { type: 'text/gml' });
         saveAs(blob, 'lr-graph.gml');
       };
 
@@ -463,7 +463,7 @@
 
           $log.debug('Calculating pathways');
           
-          console.log(filter);
+          //console.log(filter);
 
           var ligandMin = $scope.options['ligandFilter'];
           var receptorMin = $scope.options['receptorFilter'];
@@ -634,7 +634,7 @@
           return;
         }
 
-        console.log(filter);
+        //console.log(filter);
 
         var edges = pathData.getExpressionValues(filter, max, acc);
 
@@ -906,7 +906,7 @@
         //rowTemplate: 'rowTemplate',
         //menuTemplate: 'menuTemplate',
         //checkboxCellTemplate: '<div class="ngCellText"></div>',
-        //checkboxHeaderTemplate: '<icon class="ngCellText glyphicon glyphicon-ok" ng-click="toggleSelectAll(allSelected = !allSelected, true)" title="Select All">&nbsp;</icon>',
+        checkboxHeaderTemplate: 'checkboxHeaderTemplate.html',
         beforeSelectionChange: function(row, e) {  // Without shift or ctrl deselect previous
           if (!angular.isArray(row) && !e.ctrlKey && !e.shiftKey) {
             row.selectionProvider.toggleSelectAll(false,true);

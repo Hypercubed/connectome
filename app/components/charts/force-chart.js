@@ -191,6 +191,11 @@
         .size([width, height])
         .on('tick', tick);
 
+      graph._nodes.forEach(function(d) {
+        delete d.x;
+        delete d.y;
+      });
+
       force
         .nodes(graph._nodes)
         .links(graph._edges)
@@ -506,9 +511,9 @@
       }
 
       var _l = [
-        { name: 'Ligand expressing sample', class: 'ligand', group: 'sample' },
-        { name: 'Receptor expressing sample', class: 'receptor', group: 'sample' },
-        { name: 'Ligand and receptor expressing sample', class: 'both', group: 'sample' }//,
+        { name: 'Ligand expressing cell', class: 'ligand', group: 'sample' },
+        { name: 'Receptor expressing cell', class: 'receptor', group: 'sample' },
+        { name: 'Ligand and receptor expressing cell', class: 'both', group: 'sample' }//,
         //{ name: 'Ligand gene', class: 'ligand', group: 'gene.ligand' },
         //{ name: 'Receptor gene', class: 'receptor', group: 'gene.receptor' }
       ];

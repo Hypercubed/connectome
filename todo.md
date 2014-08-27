@@ -3,18 +3,14 @@
 _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 
 ## Now
-- [x] Create findExpressionValues and findPathways.
-- [x] findPathways calls findExpressionValues
-- [x] show* functions call find* functions.
-- [ ] Clean pears visibility toggle
-- [ ] Specificity
+
 
 ## Next 
-- [ ] Add find module. 
-- [ ] Consider selection in context menu.  ie Hide selection, show top pathways between selection. 
-- [ ] Add context menus for all edges.
-- [ ] remove selectAll button from grids.
-- [ ] Context menu in grids
+- [x] Add find module.
+- [x] Consider selection in context menu.  ie Hide selection, show top pathways between selection. 
+- [-] Add context menus for all edges.
+- [-] remove selectAll button from grids.
+- [-] Context menu in grids
 
 ## Later
 - [ ] Add specificity values to expression edges. 
@@ -22,18 +18,17 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [ ] Fix internal naming (cells, samples, etc).
 
 ## Soon
-- [ ] Document use cases. 
-- [ ] Examine how to deploy publically.
+- [x] Document use cases. 
+- [x] Examine how to deploy publically.
+- [ ] Update downloadSvg (change mime type for mac)
+- [ ] Make sure all expression values have units (tpm)
 
 ## After
 - [ ] Redo graph controls.
-  - [ ] Calculate non-visible edges when needed.
-
+  - [x] Calculate non-visible edges when needed.
 
 - [ ] Add log scale to sliders?
 - [ ] dat.gui ish?
 - [ ] add limits to avoid lockup (again)
 - [ ] Remove redundant filters
-- [ ] combine hive and force controller?
-- [ ] make chart directives
-- [ ] Page title?
+- [ ] make chart controllers into directives

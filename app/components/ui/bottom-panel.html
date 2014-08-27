@@ -1,13 +1,12 @@
 <script type="text/ng-template" id="cellTemplate">
   <div class="ngCellText">
-
-    <button class="btn btn-sm btn-link btn-icon"
+    <button class="btn btn-sm btn-link btn-icon" title="Toggle element visibility"
         ng-click="row.entity.ticked = !row.entity.ticked; itemClicked(row);$event.stopPropagation();">
       <span class="glyphicon glyphicon-eye-close icon-check"
         ng-class="{ 'icon-checked': row.entity.ticked }">
         </span>
     </button>
-    <button class="btn btn-sm btn-link btn-icon"
+    <button class="btn btn-sm btn-link btn-icon" title="Lock element hidden"
         ng-click="row.entity.locked = !row.entity.locked; itemClicked(row);$event.stopPropagation();">
       <span class="fa fa-unlock icon-check"
         ng-class="{ 'icon-checked': row.entity.locked }">
@@ -20,9 +19,18 @@
   <div class="ngCellText"></div>
 </script>
 
+<script type="text/ng-template" id="checkboxHeaderTemplate.html">
+  <div>
+    <input class="ngSelectionHeader" type="checkbox" title="Select all"
+      ng-show="multiSelect"
+      ng-model="allSelected"
+      ng-change="toggleSelectAll(allSelected, true)"/>
+  </div>
+</script>
+
 <script type="text/ng-template" id="cellLigandTemplate">
   <div class="ngCellText">
-    <button class="btn btn-sm btn-link btn-icon"
+    <button class="btn btn-sm btn-link btn-icon" title="Toggle element visibility"
         ng-click="row.entity.ligand.ticked = !row.entity.ligand.ticked; $event.stopPropagation();">
       <span class="glyphicon glyphicon-eye-close icon-check"
         ng-class="{ 'icon-checked': row.entity.ligand.ticked }">
@@ -34,7 +42,7 @@
 
 <script type="text/ng-template" id="cellReceptorTemplate">
   <div class="ngCellText">
-    <button class="btn btn-sm btn-link btn-icon"
+    <button class="btn btn-sm btn-link btn-icon" title="Toggle element visibility"
         ng-click="row.entity.receptor.ticked = !row.entity.receptor.ticked; $event.stopPropagation();">
       <span class="glyphicon glyphicon-eye-close icon-check"
         ng-class="{ 'icon-checked': row.entity.receptor.ticked }">
@@ -44,7 +52,7 @@
   </div>
 </script>
 
-<script type="text/ng-template" id="cellPairTemplate">
+<!-- script type="text/ng-template" id="cellPairTemplate">
   <div class="ngCellText">
     <input type="checkbox" class="glyphicon glyphicon-eye-close"
       ng-model="row.entity.ticked"
@@ -53,7 +61,7 @@
       ng-model="row.entity.locked"
       ng-change="itemClicked(row)" />
   </div>
-</script>
+</script -->
 
 <script type="text/ng-template" id="menuTemplate.html">
     <div ng-show="showColumnMenu || showFilter" class="ngHeaderButton" ng-click="toggleShowMenu()">
@@ -150,10 +158,9 @@
         <form class="well">
           <ul class="list-unstyled">
             <li><span><input type="checkbox" ng-model="options.showLabels" /> Show node labels</span>
-            <li><span><input type="radio" ng-model="state.name" value="home.force-graph" /> force directed graph</span>
-            <li><span><input type="radio" ng-model="state.name" value="home.hive-graph" /> hive plot</span>
+            <!-- li><span><input type="radio" ng-model="state.name" value="home.force-graph" /> force directed graph</span>
+            <li><span><input type="radio" ng-model="state.name" value="home.hive-graph" /> hive plot</span -->
           </ul>
-
         </form>
 
         <div class="btn-vert-block">
@@ -222,18 +229,18 @@
       <p>A visual guide to FANTOM5 Ligand-Receptor interactions</p>
 
       <marked>
-* Entity selection panel
+* Entity and options panel
   * Use the toggle button on the bottom right to show and hide the entity and options panel.
-  * Switch between lists of nodes, genes, and ligand receptor pairs using the tabs.
-  * Turn on and off nodes, genes, and ligand receptors pairs using the toggle button on the left in each list.
+  * Switch between lists of cells, genes, and ligand receptor pairs using the tabs.
+  * Turn on and off cells, genes, and ligand receptors pairs using the toggle button on the left in each row.
   * Use ctrl-click and shift-click to select multiple nodes and change visibility as a group.
   * Use the "Search..." button on the upper right of the data list to filter each lists by substring search.
-  * Download the visualization or data in the options panel.
+  * Download the visualization or data shown in the options tab.
 * Information panel
   * Use the toggle button on the top right to show and hide the information panel.
   * This panel will display information about the current network as well as additional information on selected nodes and edges.
 * Search feature
-  * Use the search button (magnifying glass) in the upper right to search for top expression and/or top pathways.
+  * Use the search button (magnifying glass) in the upper right to search for top expression values and/or top cell-cell pathways.
 * Visualization style
   * Use the visualization toggle button in the upper right to switch between hive plot and force direct plot.
 * Visualization

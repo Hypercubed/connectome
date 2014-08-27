@@ -238,10 +238,10 @@ module.exports = function (grunt) {
     htmlmin: {
       dist: {
         options: {
-          collapseWhitespace: true,
+          collapseWhitespace: false,
           collapseBooleanAttributes: true,
           removeCommentsFromCDATA: true,
-          removeOptionalTags: true
+          removeOptionalTags: false
         },
         files: [{
           expand: true,
@@ -301,6 +301,11 @@ module.exports = function (grunt) {
           cwd: '<%= build.app %>/bower_components/chosen',
           dest: '<%= build.dist %>/styles',
           src: ['*.png']
+        }, {
+          expand: true,
+          cwd: '<%= build.app %>/bower_components/select2',
+          dest: '<%= build.dist %>/styles',
+          src: ['*.png','*.gif']
         }]
       },
       styles: {
@@ -312,6 +317,12 @@ module.exports = function (grunt) {
       fonts: {
         expand: true,
         cwd: '<%= build.app %>/bower_components/bootstrap/dist/',
+        dest: '<%= build.dist %>',
+        src: 'fonts/*.*'
+      },
+      'fonts-fa': {
+        expand: true,
+        cwd: '<%= build.app %>/bower_components/font-awesome/',
         dest: '<%= build.dist %>',
         src: 'fonts/*.*'
       }
@@ -328,6 +339,7 @@ module.exports = function (grunt) {
       dist: [
         'copy:styles',
         'copy:fonts',
+        'copy:fonts-fa',
         'imagemin',
         'svgmin'
       ]
