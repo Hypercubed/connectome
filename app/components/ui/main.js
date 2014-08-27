@@ -867,6 +867,8 @@
       $scope.gridOptions = {};
 
       $scope.itemClicked = function(row) {
+        console.log(row.selectionProvider.selectedItems);
+
         if (row.entity.locked) {
           row.entity.ticked = false;
         }
@@ -952,7 +954,8 @@
       $scope.gridOptions.pairs = angular.extend({}, defaults, {
         data: 'data.pairs',
         columnDefs: [
-          {field:'ticked', displayName:'Visible', width: 60, cellTemplate: 'cellPairTemplate'},
+          defaults.columnDefs[0],
+          //{field:'ticked', displayName:'Visible', width: 60, cellTemplate: 'cellPairTemplate'},
           {field:'name', displayName:'Pair Name'},
           {field:'Ligand', displayName:'Ligand',cellTemplate: 'cellLigandTemplate'},
           {field:'Receptor', displayName:'Receptor',cellTemplate: 'cellReceptorTemplate'},

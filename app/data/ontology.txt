@@ -9,31 +9,31 @@ Amniotic Membrane	epithelial
 Annulus Pulposus	other
 Astrocyte Cerebellum	nervous system
 Astrocyte Cerebral Cortex	nervous system
-Basophils	haematopoietic
+Basophils	hematopoietic
 Bronchial Epithelial	epithelial
 Cardiac Myocyte	mesenchymal
-CD133+ Haematopoietic stem cell	haematopoietic
-CD14-CD16+ Monocytes	haematopoietic
-CD14+ Monocyte derived Endothelial progenitor	haematopoietic
-CD14+ Monocytes	haematopoietic
-CD14+CD16- Monocytes	haematopoietic
-CD14+CD16+ Monocytes	haematopoietic
-CD19+ B cells	haematopoietic
-CD34+ Haematopoietic stem cell	haematopoietic
-CD34+ progenitor	haematopoietic
-CD4+ T cells	haematopoietic
-CD4+CD25-CD45RA- memory conventional T cells	haematopoietic
-CD4+CD25-CD45RA+ naive conventional T cells	haematopoietic
-CD4+CD25+CD45RA- memory regulatory T cells	haematopoietic
-CD4+CD25+CD45RA+ naive regulatory T cells	haematopoietic
-CD8+ T cells	haematopoietic
+CD133+ Haematopoietic stem cell	hematopoietic
+CD14-CD16+ Monocytes	hematopoietic
+CD14+ Monocyte derived Endothelial progenitor	hematopoietic
+CD14+ Monocytes	hematopoietic
+CD14+CD16- Monocytes	hematopoietic
+CD14+CD16+ Monocytes	hematopoietic
+CD19+ B cells	hematopoietic
+CD34+ Haematopoietic stem cell	hematopoietic
+CD34+ progenitor	hematopoietic
+CD4+ T cells	hematopoietic
+CD4+CD25-CD45RA- memory conventional T cells	hematopoietic
+CD4+CD25-CD45RA+ naive conventional T cells	hematopoietic
+CD4+CD25+CD45RA- memory regulatory T cells	hematopoietic
+CD4+CD25+CD45RA+ naive regulatory T cells	hematopoietic
+CD8+ T cells	hematopoietic
 Chondroblast	mesenchymal
 Chondrocyte	mesenchymal
 Chorionic Membrane	epithelial
 Ciliary Epithelial	epithelial
 Corneal Epithelial	epithelial
-Dendritic Monocyte Immature derived	haematopoietic
-Dendritic Plasmacytoid	haematopoietic
+Dendritic Monocyte Immature derived	hematopoietic
+Dendritic Plasmacytoid	hematopoietic
 ES cells	other
 Endothelial Aortic	endothelial
 Endothelial Artery	endothelial
@@ -42,7 +42,7 @@ Endothelial Microvascular	endothelial
 Endothelial Thoracic	endothelial
 Endothelial Umbilical Vein	endothelial
 Endothelial Vein	endothelial
-Eosinophils	haematopoietic
+Eosinophils	hematopoietic
 Esophageal Epithelial	epithelial
 Fibroblast Aortic Adventitial	mesenchymal
 Fibroblast Cardiac	mesenchymal
@@ -55,24 +55,24 @@ Fibroblast Periodontal Ligament	mesenchymal
 Fibroblast Pulmonary Artery	mesenchymal
 Fibroblast Skin Normal	mesenchymal
 Gingival Epithelial	epithelial
-Granulocyte Macrophage progenitor	haematopoietic
+Granulocyte Macrophage progenitor	hematopoietic
 Hair Follicle Dermal Papilla	epithelial
 Hair Follicle Outer Root Sheath	epithelial
 Hepatic Sinusoidal Endothelial	endothelial
 Hepatic Stellate	mesenchymal
 Hepatocyte	epithelial
-Immature Langerhans	haematopoietic
+Immature Langerhans	hematopoietic
 Intestinal Epithelial (polarized)	epithelial
 Iris Pigment Epithelial	epithelial
 Keratinocyte Epidermal	epithelial
 Keratinocyte Oral	epithelial
 Keratocytes	epithelial
 Lens Epithelial	epithelial
-Macrophage Monocyte derived	haematopoietic
+Macrophage Monocyte derived	hematopoietic
 Mallassez derived	epithelial
 Mammary Epithelial	epithelial
-Mast cells	haematopoietic
-Mast cells stimulated	haematopoietic
+Mast cells	hematopoietic
+Mast cells stimulated	hematopoietic
 Mature Adipocyte	mesenchymal
 Melanocyte	epithelial
 Meningeal	other
@@ -86,15 +86,15 @@ Mesenchymal stem cell Hepatic	mesenchymal
 Mesenchymal stem cell Umbilical	mesenchymal
 Mesenchymal stem cell Wharton's Jelly	mesenchymal
 Mesothelial	mesenchymal
-Migratory Langerhans	haematopoietic
-Multipot. Cord Blood Unrestrict. Somatic stem cell	haematopoietic
+Migratory Langerhans	hematopoietic
+Multipot. Cord Blood Unrestrict. Somatic stem cell	hematopoietic
 Myoblast	mesenchymal
 Myotube	mesenchymal
 Nasal Epithelial	epithelial
-NK cells	haematopoietic
+NK cells	hematopoietic
 Neural stem cell	nervous system
 Neurons	nervous system
-Neutrophils	haematopoietic
+Neutrophils	hematopoietic
 Nucleus Pulposus	mesenchymal
 Olfactory Epithelial	epithelial
 Osteoblast	mesenchymal
@@ -114,7 +114,7 @@ Renal Epithelial	epithelial
 Renal Glomerular Endothelial	endothelial
 Renal Mesangial	mesenchymal
 Renal Proximal Tubular Epithelial	epithelial
-Reticulocyte	haematopoietic
+Reticulocyte	hematopoietic
 Retinal Pigment Epithelial	epithelial
 Salivary Acinar	epithelial
 Sebocyte	epithelial

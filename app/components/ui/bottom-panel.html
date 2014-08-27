@@ -1,30 +1,45 @@
 <script type="text/ng-template" id="cellTemplate">
   <div class="ngCellText">
-    <input type="checkbox" class="glyphicon glyphicon-eye-close"
-      ng-change="itemClicked(row)"
-      ng-model="row.entity.ticked" /></input>
-    <input type="checkbox" class="fa fa-unlock"
-      ng-change="itemClicked(row)"
-      ng-model="row.entity.locked" /></input>
+
+    <button class="btn btn-sm btn-link btn-icon"
+        ng-click="row.entity.ticked = !row.entity.ticked; itemClicked(row);$event.stopPropagation();">
+      <span class="glyphicon glyphicon-eye-close icon-check"
+        ng-class="{ 'icon-checked': row.entity.ticked }">
+        </span>
+    </button>
+    <button class="btn btn-sm btn-link btn-icon"
+        ng-click="row.entity.locked = !row.entity.locked; itemClicked(row);$event.stopPropagation();">
+      <span class="fa fa-unlock icon-check"
+        ng-class="{ 'icon-checked': row.entity.locked }">
+        </span>
+    </button>
   </div>
 </script>
 
-<!-- script type="text/ng-template" id="checkboxCellTemplate.html">
+<script type="text/ng-template" id="checkboxCellTemplate.html">
   <div class="ngCellText"></div>
-</script -->
+</script>
 
 <script type="text/ng-template" id="cellLigandTemplate">
   <div class="ngCellText">
-    <input type="checkbox" class="glyphicon glyphicon-eye-close"
-      ng-model="row.entity.ligand.ticked"></input>
+    <button class="btn btn-sm btn-link btn-icon"
+        ng-click="row.entity.ligand.ticked = !row.entity.ligand.ticked; $event.stopPropagation();">
+      <span class="glyphicon glyphicon-eye-close icon-check"
+        ng-class="{ 'icon-checked': row.entity.ligand.ticked }">
+        </span>
+    </button>
     {{row.getProperty(col.field)}}
   </div>
 </script>
 
 <script type="text/ng-template" id="cellReceptorTemplate">
   <div class="ngCellText">
-    <input type="checkbox" class="glyphicon glyphicon-eye-close"
-      ng-model="row.entity.receptor.ticked"></input>
+    <button class="btn btn-sm btn-link btn-icon"
+        ng-click="row.entity.receptor.ticked = !row.entity.receptor.ticked; $event.stopPropagation();">
+      <span class="glyphicon glyphicon-eye-close icon-check"
+        ng-class="{ 'icon-checked': row.entity.receptor.ticked }">
+        </span>
+    </button>
     {{row.getProperty(col.field)}}
   </div>
 </script>
@@ -208,21 +223,23 @@
 
       <marked>
 * Entity selection panel
-  * Use the toggle button on the bottom right to show and hide the entity selection and options panel.
+  * Use the toggle button on the bottom right to show and hide the entity and options panel.
   * Switch between lists of nodes, genes, and ligand receptor pairs using the tabs.
   * Turn on and off nodes, genes, and ligand receptors pairs using the toggle button on the left in each list.
-  * Use the arrow on the upper right of the data list to filter each lists.
-  * Switch between hive and force directed graph in the options tab.
+  * Use ctrl-click and shift-click to select multiple nodes and change visibility as a group.
+  * Use the "Search..." button on the upper right of the data list to filter each lists by substring search.
   * Download the visualization or data in the options panel.
 * Information panel
-  * Use the toggle button on the bottom right to show and hide the information panel.
-  * This panel will display information about the current network as well as additional information no selected nodes.
-  * Add or remove genes by clicking on gene names in the information box.
+  * Use the toggle button on the top right to show and hide the information panel.
+  * This panel will display information about the current network as well as additional information on selected nodes and edges.
+* Search feature
+  * Use the search button (magnifying glass) in the upper right to search for top expression and/or top pathways.
+* Visualization style
+  * Use the visualization toggle button in the upper right to switch between hive plot and force direct plot.
 * Visualization
-  * Click to select a node.  Click again to deselect.
+  * Click to select a node.  Click again to deselect.  Node information will appear in the information panel.
   * Hold the Ctrl key to selected multiple nodes.  Shift-Click to select a node and neighbors.
-  * Right click on a node to use the context menu.
-  * Use the context menu to show top neighbors.
+  * Right click for additional options.
       </marked>
     </div>
   </tab>

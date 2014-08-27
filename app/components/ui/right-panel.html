@@ -89,13 +89,13 @@
               </div>
             </div>
 
-            <div class="form-group" ng-init="exprFilter.rank = 'expression'">
+            <div class="form-group" ng-init="exprFilter.rank = 'specificity'">
               <label class="col-sm-3 control-label">Rank by</label>
               <div class="col-sm-9">
-                <input type="radio" name="rank[]" ng-model="exprFilter.rank" value="expression" checked>
+                <input type="radio" name="rank[]" ng-model="exprFilter.rank" value="specificity">
+                <label class="control-label">specificity</label>              
+                <br><input type="radio" name="rank[]" ng-model="exprFilter.rank" value="expression" checked>
                 <label class="control-label">expression</label>
-                <br><input type="radio" name="rank[]" ng-model="exprFilter.rank" value="specificity">
-                <label class="control-label">specificity</label>
               </div>
             </div>
 
@@ -174,13 +174,13 @@
               </div>
             </div>
 
-            <div class="form-group" ng-init="pathFilter.rank = 'expression'">
+            <div class="form-group" ng-init="pathFilter.rank = 'specificity'">
               <label class="col-sm-3 control-label">Rank by</label>
               <div class="col-sm-9">
-                <input type="radio" name="rank[]" ng-model="pathFilter.rank" value="expression" checked>
+                <input type="radio" name="rank[]" ng-model="pathFilter.rank" value="specificity">
+                <label class="control-label">specificity sum</label>                
+                <br><input type="radio" name="rank[]" ng-model="pathFilter.rank" value="expression" checked>
                 <label class="control-label">expression product</label>
-                <br><input type="radio" name="rank[]" ng-model="pathFilter.rank" value="specificity">
-                <label class="control-label">specificity sum</label>
               </div>
             </div>
 
@@ -189,7 +189,7 @@
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-default pull-left" ng-click="pathFilter = { rank: 'expression', direction: 'each' }">Clear form</button>
+            <button type="button" class="btn btn-default pull-left" ng-click="pathFilter = { rank: 'specificity', direction: 'each' }">Clear form</button>
             <button type="button" class="btn btn-primary" ng-click="panels.search = false; clearVis(); showPaths(pathFilter, 10);">Show top</button>
             <!-- button type="button" class="btn btn-primary" ng-click="panels.search = false; showPaths(pathFilter, 10);">Add top pathways</button -->
         </div>

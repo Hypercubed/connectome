@@ -29,7 +29,8 @@
     "ng-grid": "~2.0.12",
     "angular-marked": "~0.0.12",
     "angular-ui-select2": "~0.0.5",
-    "font-awesome": "~4.1.0"
+    "font-awesome": "~4.1.0",
+    "Blob.js": "eligrey/Blob.js"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",
@@ -61,6 +62,11 @@
     "ng-context-menu": {
       "main": [
         "dist/ng-context-menu.js"
+      ]
+    },
+    "Blob.js": {
+      "main": [
+        "Blob.js"
       ]
     }
   },

@@ -355,20 +355,30 @@ height: auto;
   cursor: pointer;
 }
 
-input[type=checkbox].glyphicon:before, input[type=checkbox].fa:before {
+.btn-icon {
+  padding: 0;
+  background-color: none;
+  color: inherit;
+}
+
+.icon-check, input[type=checkbox].glyphicon:before, input[type=checkbox].fa:before {
   visibility: visible;
   opacity:0.5;
 }
-input[type=checkbox].glyphicon:checked:before, input[type=checkbox].fa:checked:before {
+
+.icon-check.icon-checked, input[type=checkbox].glyphicon:checked:before, input[type=checkbox].fa:checked:before {
   opacity:1;
 }
+
 input[type=checkbox].glyphicon,input[type=checkbox].fa{
   visibility: hidden; 
 }
-input[type=checkbox].glyphicon-eye-close:checked:before {
+
+.icon-checked.glyphicon-eye-close:before, input[type=checkbox].glyphicon-eye-close:checked:before {
   content: "\e105";
 }
-input[type=checkbox].fa-unlock:checked:before {
+
+.icon-checked.fa-unlock:before, input[type=checkbox].fa-unlock:checked:before {
   content: "\f023";
 }
 
