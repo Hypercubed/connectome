@@ -711,15 +711,19 @@
 
         if (filter.direction == 'each' && !angular.equals(filter.target, filter.source)) {
           $log.debug('Bi-directional search');
+
           var f = angular.copy(filter);
           f.direction = 'AB';
 
-          $log.debug('Searching', f.source.id, f.target.id);
+          //$log.debug('Searching', f.source, f.target);
           $scope.showPaths(f,max);
+
+          f = angular.copy(filter);
+          f.direction = 'AB';
           f.source = filter.target;
           f.target = filter.source;
 
-          $log.debug('Searching', f.source.id, f.target.id);
+          //$log.debug('Searching', f.source, f.target);
           $scope.showPaths(f,max);
           return;
         }
@@ -728,7 +732,8 @@
 
         var start = new Date().getTime();
 
-        //$timeout(function() {
+        $timeout(function() {
+          console.log(filter);
           var paths = pathData.getPathways(filter, max, acc);
 
           paths.forEach(function(d) {
@@ -743,7 +748,7 @@
           $log.debug('Execution time:', time/1000, 's');
 
           cfpLoadingBar.complete();
-        //});
+        });
 
       }
 
