@@ -31,8 +31,7 @@
 			ng-init="ligands = (graphData._outEdgesIndex[item.id] | filter : { type: 'expression' }); receptors = (graphData._inEdgesIndex[item.id] | filter : { type: 'expression' })">
 	    <li>
 	    	<span bo-text="ligands.length > 0 ? 'Sum of ' : ''"></span>
-	    	Ligand expression:
-	    	<span ng-bind="item.values[0] | number:2"></span>
+	    	Ligand expression: {{item.values[0] | number:2}} TPM
 	    </li>
 	    <li>Ligands:
 	    	<span
@@ -42,8 +41,7 @@
 	    </li>
 	    <li>
 	    	<span bo-text="receptors.length > 0 ? 'Sum of ' : ''"></span>
-	    	Receptor expression:
-	    	<span ng-bind="item.values[1] | number:2"></span>
+	    	Receptor expression: {{item.values[1] | number:2}} TPM
 	    </li>
 	    <li>
 	    	Receptors:
@@ -68,7 +66,7 @@
 	<div class="animate-switch" bo-switch-when="expression" bindonce="item">
 		<h5 bo-text="item.name"></h5>
 	  <ul  class="list-unstyled">
-	    <li>Expression value: <span ng-bind="item.value | number:2"></li>
+	    <li>Expression value: {{item.value | number:2}} TPM</li>
 	    <!-- li>Specificity: <span ng-bind="item._specificity | number:2"></li -->
 	    <li>Specificity: <span ng-bind="item.specificity | number:2"></li>
 	  </ul>

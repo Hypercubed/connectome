@@ -3,7 +3,7 @@
 _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 
 ## Now
-
+- [ ] JSHint
 
 ## Next 
 - [x] Add find module.
@@ -22,6 +22,8 @@ _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 - [x] Examine how to deploy publically.
 - [ ] Update downloadSvg (change mime type for mac)
 - [ ] Make sure all expression values have units (tpm)
+- [ ] More title text
+- [ ] Tests
 
 ## After
 - [ ] Redo graph controls.

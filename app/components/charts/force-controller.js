@@ -101,7 +101,7 @@
 
         //console.log(filtered.length);
 
-        graph.data._nodes = filtered;
+        graph.data._nodes = nodes; //filtered;
 
       }
 
@@ -305,6 +305,8 @@
         _makeNodes(_data.genes, _data.cells);
         _makeEdges(_data.cells, _data.genes, pairs, expr, options);
 
+        graph.data.edges = graph.data.edges.filter(_F('type').eq('sample-sample'));
+
         //console.log(data.nodes);
 
         $log.debug('Total nodes: ', graph.data.nodes.length);
@@ -331,9 +333,10 @@
           });
         });
 
+
         graph.data._edges = graph.data.edges
-          .filter(_ticked)
-          .filter(_F('type').eq('sample-sample'));
+          .filter(_ticked);
+          //.filter(_F('type').eq('sample-sample'));
 
         if (graph.data._edges.length > options.edgeRankFilter*graph.data._edges.length) {
 

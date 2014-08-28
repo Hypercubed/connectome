@@ -470,6 +470,8 @@
 
           var len = loadedData.expr[0].length-1;
 
+          console.log(filter.source, filter.target);
+
           var count = 0;
 
           loadedData.pairs.forEach(function (pair) {
@@ -645,6 +647,11 @@
           d.gene.ticked = true;
           d.cell.ticked = true;
         });
+
+        loadedData.pairs.forEach(function(pair) {
+          pair.ticked = !pair.locked && pair.ligand.ticked && pair.receptor.ticked;
+        });
+
       }
 
       /* function _getPathways(filter) {
@@ -702,12 +709,17 @@
 
         var acc = (filter.rank == 'specificity') ? _specificity : _value;
 
-        if (filter.direction == 'each') {
+        if (filter.direction == 'each' && !angular.equals(filter.target, filter.source)) {
+          $log.debug('Bi-directional search');
           var f = angular.copy(filter);
           f.direction = 'AB';
+
+          $log.debug('Searching', f.source.id, f.target.id);
           $scope.showPaths(f,max);
           f.source = filter.target;
           f.target = filter.source;
+
+          $log.debug('Searching', f.source.id, f.target.id);
           $scope.showPaths(f,max);
           return;
         }
@@ -716,7 +728,7 @@
 
         var start = new Date().getTime();
 
-        $timeout(function() {
+        //$timeout(function() {
           var paths = pathData.getPathways(filter, max, acc);
 
           paths.forEach(function(d) {
@@ -731,7 +743,7 @@
           $log.debug('Execution time:', time/1000, 's');
 
           cfpLoadingBar.complete();
-        });
+        //});
 
       }
 
@@ -873,20 +885,20 @@
           row.entity.ticked = false;
         }
 
-        if(row.entity.receptor && row.entity.ligand) {
-          row.entity.receptor.ticked = row.entity.ticked;
-          row.entity.ligand.ticked = row.entity.ticked;
-        }
+        //if(row.entity.receptor && row.entity.ligand) {
+        //  row.entity.receptor.ticked = row.entity.ticked;
+        //  row.entity.ligand.ticked = row.entity.ticked;
+        //}
 
         if (row.selected == true) {
           row.selectionProvider.selectedItems.forEach(function(d) {
             d.ticked = row.entity.ticked;
             d.locked = row.entity.locked;
 
-            if(d.receptor && d.ligand) {
-              d.receptor.ticked = row.entity.ticked;
-              d.ligand.ticked = row.entity.ticked;
-            }
+            //if(d.receptor && d.ligand) {
+            //  d.receptor.ticked = row.entity.ticked;
+            //  d.ligand.ticked = row.entity.ticked;
+            //}
 
           });
         }
