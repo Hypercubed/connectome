@@ -39,7 +39,7 @@
             ligandId: d.Ligand+'.ligand',
             receptorId: d.Receptor+'.receptor',
             source: d.Source
-          }
+          };
         })
         .error(function(data, status, headers, config) {
           $log.warn('Error',data, status, headers, config);
@@ -53,21 +53,21 @@
       }
 
       function _getExpression(filename) {
-          return dsv.tsv.getRows(filename, {cache: cache}, function(row, i) {
-            if (i == 0) { return row; }
-            return row.map(function(e,i) {
-              return i == 0 ? e : +e;
-            });
-          })
-          .error(function(data, status, headers, config) {
-            $log.warn('Error',data, status, headers, config);
-          })
-          .success(function(data) {
-            $log.debug('Expression rows:', data.length);
-          })
-          .then(function(res) {
-            return res.data;
+        return dsv.tsv.getRows(filename, {cache: cache}, function(row, i) {
+          if (i === 0) { return row; }
+          return row.map(function(e,i) {
+            return i === 0 ? e : +e;
           });
+        })
+        .error(function(data, status, headers, config) {
+          $log.warn('Error',data, status, headers, config);
+        })
+        .success(function(data) {
+          $log.debug('Expression rows:', data.length);
+        })
+        .then(function(res) {
+          return res.data;
+        });
       }
 
       function _getGenes(filename) {
@@ -169,7 +169,7 @@
               } else {
                 gene.median = 0;
               }
-              
+
               return gene;
             });
 
@@ -189,12 +189,12 @@
               };
             }); */
 
-            // corss reference pairs
+            // cross reference pairs
             service.data.pairs = service.data.pairs.filter(function(pair) {
 
               var _ligand, _receptor;
 
-              service.data.genes.forEach(function(gene, i) {
+              service.data.genes.forEach(function(gene) {
                 //if (i === 0) {
                 //  console.log(gene.id, pair.ligandId);
                 //};

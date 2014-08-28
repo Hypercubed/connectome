@@ -30,8 +30,8 @@
       var _valueFilter = _type.neq('sample').or(_value.gte(0));
       //var typeFilter = function(type) { return function(d) {return d.type === type;}; };
 
-      var _value0 = _F(function(d) { return d.values[0]; });
-      var _value1 = _F(function(d) { return d.values[1]; });
+      //var _value0 = _F(function(d) { return d.values[0]; });
+      //var _value1 = _F(function(d) { return d.values[1]; });
       //var gtZero = function(d) {return d>0;};
 
       // Events
@@ -171,7 +171,7 @@
 
               var _edge = new graph.Edge(src,tgt);
               _edge.value = v;
-              _edge.specificity = Math.log(v+1)/Math.log(10)-Math.log(gene.median+1)/Math.log(10),
+              _edge.specificity = Math.log(v+1)/Math.log(10)-Math.log(gene.median+1)/Math.log(10);
               //_edge.i = gene.i; // remove
               _edge.id = src.id+tgt.id;  // remove {target, source}.id
               _edge.type = 'expression';  // remove
@@ -312,7 +312,7 @@
           d[0].ticked = true;
           d[1].ticked = true;
         });
-        
+
       } */
 
       /* function _showPaths(filter, max) {
@@ -419,10 +419,10 @@
         }
 
         //$timeout(function() {
-          d3.select('#vis svg')
-            .classed('labels',options.showLabels)
-            .datum(graph.data)
-            .call(chart);
+        d3.select('#vis svg')
+          .classed('labels',options.showLabels)
+          .datum(graph.data)
+          .call(chart);
         //});
 
       }

@@ -42,7 +42,7 @@
     //var _type = _F('type');
     var _group = _F('group');
     var _value = _F('value');
-    var _name = _F('name');
+    //var _name = _F('name');
     var _id = _F('id');
     var _class = _F('class');
     var _fixed = _F('fixed');

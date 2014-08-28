@@ -43,7 +43,7 @@
       $rootScope.site = site;
 
       $rootScope.$on('$routeChangeError', function(event) {
-        //console.log(event);
+        $log.warn(event);
       });
 
       var _ticked = _F('ticked');
@@ -81,7 +81,7 @@
         loadedData.cells.forEach(function(d) {
           d.locked = false;
         });
-      }
+      };
 
       $scope.resetVis = function() {
         $scope.options = angular.extend({}, defaultOptions);
@@ -194,7 +194,7 @@
 
         function _ticked(arr) {
           return function(d) {
-            if (d.locked) { return false; };
+            if (d.locked) { return false; }
             d.ticked = arr.indexOf(d.i) > -1;
             return d.ticked;
           };
@@ -333,21 +333,23 @@
         function _match(obj, text) {
           if (text === '') { return true; }
 
+          var key;
+
           // if both are objects check each key
           if (obj && text && typeof obj === 'object' && typeof text === 'object' ) {
             if (angular.equals(obj, text)) { return true; }
-            for (var key in text) {
+            for (key in text) {
               if (!hasOwnProperty.call(obj, key) || !_match(obj[key], text[key])) {
                 return false;
               }
             }
-            return true;          
+            return true;
           }
-          
+
           // if array, check ao leats one match
           if (angular.isArray(text)) {
             if (text.length === 0) { return true; }
-            for (var key in text) {
+            for (key in text) {
               if (_match(obj, text[key])) {
                 return true;
               }
@@ -388,7 +390,7 @@
             if (gene.i < 0) { return; }
             if (gene.locked) { return false; }
             if (filter.gene && !_match(gene,filter.gene)) { return false; }
-            
+
 
             var min = Math.max($scope.options[gene.class+'Filter'],0);
 
@@ -407,13 +409,13 @@
                   value: v,
                   specificity: (v+1)/(gene.median+1)
                 });
-              };
+              }
 
             });
           });
 
+          $log.debug('found',edges.length, 'expression values');
           return edges.sort(function(a,b){ return acc(b) - acc(a); }).slice(0,max);
-          $log.debug('found',expresionValues.length, 'expression values');
 
         }
 
@@ -449,7 +451,7 @@
             _paths.push(path);
 
           }
- 
+
           $log.debug('found',max,'paths out of',count);
           return _paths.slice(0,max);
 
@@ -462,15 +464,15 @@
           var paths = [];
 
           $log.debug('Calculating pathways');
-          
+
           //console.log(filter);
 
-          var ligandMin = $scope.options['ligandFilter'];
-          var receptorMin = $scope.options['receptorFilter'];
+          var ligandMin = $scope.options.ligandFilter;
+          var receptorMin = $scope.options.receptorFilter;
 
-          var len = loadedData.expr[0].length-1;
+          //var len = loadedData.expr[0].length-1;
 
-          console.log(filter.source, filter.target);
+          //console.log(filter.source, filter.target);
 
           var count = 0;
 
@@ -517,24 +519,24 @@
                 //if (v > 0) {
 
                   // todo: use insertion sort (fin position, if pos > max, don't push)
-                  paths.push({
-                    pair: pair,
-                    source: source,
-                    ligand: pair.ligand,
-                    receptor: pair.receptor,
-                    target: target,
-                    ligandExpression: l,
-                    receptorExpression: r,
-                    value: l*r,
-                    specificity: ls*rs
-                  });
+                paths.push({
+                  pair: pair,
+                  source: source,
+                  ligand: pair.ligand,
+                  receptor: pair.receptor,
+                  target: target,
+                  ligandExpression: l,
+                  receptorExpression: r,
+                  value: l*r,
+                  specificity: ls*rs
+                });
 
-                  if (paths.length > max) {  
-                    paths = paths.sort(function(a,b) { return acc(b) - acc(a); }).slice(0,max);
-                  }
+                if (paths.length > max) {
+                  paths = paths.sort(function(a,b) { return acc(b) - acc(a); }).slice(0,max);
+                }
 
-                  count++;
-                  
+                count++;
+
                 //}
 
               });
@@ -554,11 +556,11 @@
         return {
           getExpressionValues: getExpressionValues,
           getPathways: getPathways
-        }
+        };
 
       }
 
-      var pathData = PathData();
+      var pathData = new PathData();
 
       //var start = new Date().getTime();
 
@@ -621,13 +623,13 @@
       var _specificity = _F('specificity');
 
       $scope.showExpressionEdges = function _showExpressionEdges(filter, max) {
-        var acc = (filter.rank == 'specificity') ? _specificity : _value;
+        var acc = (filter.rank === 'specificity') ? _specificity : _value;
 
         if (filter.gene.class !== '') {
           delete filter.gene.id;
         }
 
-        if (filter.gene.class == 'each') {
+        if (filter.gene.class === 'each') {
           var f = angular.copy(filter);
           f.gene.class = 'ligand';
           $scope.showExpressionEdges(f,max);
@@ -652,14 +654,14 @@
           pair.ticked = !pair.locked && pair.ligand.ticked && pair.receptor.ticked;
         });
 
-      }
+      };
 
       /* function _getPathways(filter) {
         filter = filter || {};
         var paths = [];
 
         loadedData.pairs.forEach(function (pair,i) {
-          
+
           if (filter.pair && filter.pair.id && filter.pair.id !== pair.id) { return; }
           if (filter.pair && filter.pair.ticked !== undefined && filter.pair.ticked !== pair.ticked) { return; }
 
@@ -678,9 +680,9 @@
           ligandExpressionEdges.forEach(function(ledge) {
 
             receptorExpressionEdges.forEach(function(redge) {
- 
+
               var v = ledge.value*redge.value;
-              
+
               if (v > 0) {
 
                 paths.push({
@@ -700,16 +702,16 @@
           });
         });
 
-        
+
 
         return paths;
       } */
 
-      $scope.showPaths = function _showPaths(filter, max, acc) {
+      $scope.showPaths = function _showPaths(filter, max) {
 
-        var acc = (filter.rank == 'specificity') ? _specificity : _value;
+        var acc = (filter.rank === 'specificity') ? _specificity : _value;
 
-        if (filter.direction == 'each' && !angular.equals(filter.target, filter.source)) {
+        if (filter.direction === 'each' && !angular.equals(filter.target, filter.source)) {
           $log.debug('Bi-directional search');
 
           var f = angular.copy(filter);
@@ -750,7 +752,7 @@
           cfpLoadingBar.complete();
         });
 
-      }
+      };
 
       /* $scope.showAllPaths = function(max) {
         var _cells = loadedData.cells.filter(_ticked);
@@ -778,22 +780,22 @@
       } */
 
       $scope.hide = function(arr) {
-        if (!angular.isArray(arr)) { arr = [arr]; };
+        if (!angular.isArray(arr)) { arr = [arr]; }
         arr.forEach(function(d) {
-          if (d.type == 'gene' || d.type == 'sample') {
+          if (d.type === 'gene' || d.type === 'sample') {
             d.ticked = false;
           }
         });
-      }
+      };
 
       $scope.pathFilter = {
         source: {},
         target: {}
       };
 
-      $scope._showPaths = function(filter, max) {
-        console.log(filter);
-      }
+      //$scope._showPaths = function(filter, max) {
+      //  console.log(filter);
+    //  };
 
       /* function byId(arr) {
         var r = {};
@@ -884,7 +886,7 @@
       $scope.gridOptions = {};
 
       $scope.itemClicked = function(row) {
-        console.log(row.selectionProvider.selectedItems);
+        //console.log(row.selectionProvider.selectedItems);
 
         if (row.entity.locked) {
           row.entity.ticked = false;
@@ -895,7 +897,7 @@
         //  row.entity.ligand.ticked = row.entity.ticked;
         //}
 
-        if (row.selected == true) {
+        if (row.selected === true) {
           row.selectionProvider.selectedItems.forEach(function(d) {
             d.ticked = row.entity.ticked;
             d.locked = row.entity.locked;
@@ -907,7 +909,7 @@
 
           });
         }
-      }
+      };
 
       var defaults = {
         showFooter: true,
@@ -940,7 +942,7 @@
           },
 
         ]
-      };      
+      };
 
       $scope.gridOptions = {};
 

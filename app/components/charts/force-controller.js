@@ -86,7 +86,7 @@
         graph.data.ligandExtent = d3.extent(rankedLigands);       // TODO: Already ranked, don't need extent
         graph.data.receptorExtent = d3.extent(rankedReceptors);
 
-        var filter0 = d3.quantile(rankedLigands, 1-options.ligandRankFilter);
+        /* var filter0 = d3.quantile(rankedLigands, 1-options.ligandRankFilter);
         var filter1 = d3.quantile(rankedReceptors, 1-options.receptorRankFilter);
 
         filter0 = Math.max(filter0, 0) || 0;
@@ -97,7 +97,7 @@
         var filtered = nodes.filter(function(d) {
           //console.log(d);
           return ( d.type !== 'sample' || d.values[0] >= filter0 || d.values[1] >= filter1 );
-        });
+        }); */
 
         //console.log(filtered.length);
 
@@ -110,8 +110,6 @@
       var StopIteration = new Error('Maximum number of edges exceeded');
 
       function _makeEdges(cells, genes, pairs, expr, options) { // TODO: better
-
-        //console.log(genes);
 
         try {
           return __makeEdges(cells, genes, pairs, expr, options);
@@ -162,8 +160,8 @@
               _edge.id = gene.id;  // remove {target, source}.id
               _edge.type = 'expression';  // remove
               _edge.class = gene.class;
-              _edge._specificity = s,
-              _edge.specificity = Math.log(s)/Math.log(10),
+              _edge._specificity = s;
+              _edge.specificity = Math.log(s)/Math.log(10);
 
               graph.addEdge(_edge);
               //nodeExpr.push(_edge);
@@ -193,8 +191,8 @@
                   //console.log(data.edgesIndex[ligand.source.id][receptor.target.id]);
                 //}
 
-                var _edge = 
-                  graph.data.edgesIndex[ligand.source.id][receptor.target.id] || 
+                var _edge =
+                  graph.data.edgesIndex[ligand.source.id][receptor.target.id] ||
                   new graph.Edge(ligand.source,receptor.target);
 
                 var s = ligand._specificity*receptor._specificity;
@@ -219,7 +217,7 @@
 
         });
 
-        
+
         graph.data.nodes.forEach(function(node) {  // todo: move
           if (!node.ticked) { return; }
 

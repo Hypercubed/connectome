@@ -45,7 +45,7 @@
     //var _type = _F('type');
     var _group = _F('group');
     var _value = _F('value');
-    var _name = _F('name');
+    //var _name = _F('name');
     var _id = _F('id');
     var _class = _F('class');
     var _fixed = _F('fixed');
@@ -60,8 +60,8 @@
     // Range accesors
     var _angle = _F('group', angle); //function(d) { return angle(d.type); };
     var _radius = function(d) {
-      if (!_y[_group(d)]) { return 0; };
-      
+      if (!_y[_group(d)]) { return 0; }
+
       return radius(_y[_group(d)](d._i));
     };
     var _ncolor = _F('class', ncolor); //function(d) {  return ncolor(d.class); };
@@ -130,18 +130,18 @@
         .append('defs')
         .selectAll('marker').data(graph._edges).enter()
         .append('svg:marker')
-          .attr({
-            class:           'Triangle',
-            viewBox:         '0 -5 10 10',
-            refY:            0,
-            refX:            20,
-            markerWidth:     5,
-            markerHeight:    5,
-            'stroke-width':  1,
-            markerUnits:     'strokeWidth',
-            orient:          'auto',
-            id:              function(d,i) { return 'arrow-'+i; }
-          });
+        .attr({
+          class:           'Triangle',
+          viewBox:         '0 -5 10 10',
+          refY:            0,
+          refX:            20,
+          markerWidth:     5,
+          markerHeight:    5,
+          'stroke-width':  1,
+          markerUnits:     'strokeWidth',
+          orient:          'auto',
+          id:              function(d,i) { return 'arrow-'+i; }
+        });
 
       markers.append('svg:path')
         .attr('d', 'M0,-5L10,0L0,5');
@@ -231,11 +231,11 @@
 
         d.hover = tgt.hover = src.hover = true;
 
-        if (tgt.type == 'gene') {
+        if (tgt.type === 'gene') {
           classNeighbors(tgt, 3, 'hover');
         }
 
-        if (src.type == 'gene') {
+        if (src.type === 'gene') {
           classNeighbors(src, -3, 'hover');
         }
 
@@ -375,13 +375,13 @@
 
       // Create
       var nodesEnter = nodes.enter().append('g')
-          .classed('node', true)
-          .style({
-            fill: '#ccc',
-            'fill-opacity': 1,
-            stroke: '#333',
-            'stroke-width': '1px'
-          })
+        .classed('node', true)
+        .style({
+          fill: '#ccc',
+          'fill-opacity': 1,
+          stroke: '#333',
+          'stroke-width': '1px'
+        })
           .on('click', nodeClick)
           .on('dblclick', function(d) {
             //if (d3.event.defaultPrevented) {return;}
@@ -429,25 +429,23 @@
           //.on('mouseout', tooltipHide)
           ;
 
-      nodesEnter
-        .append('rect')
+      nodesEnter.append('rect')
           //.on('dblclick', tooltip.toggle)
           //.on('mouseout', tooltip.hide)
           ;
 
-      nodesEnter
-        .append('text')
-          .style({
-            stroke:         'none',
-            fill:           '#333',
-            'stroke-width': '1px',
-            'font-size':    '10px'
-          })
-          .attr({
-            'text-anchor': 'start',
-            'dy':          3,
-            'dx':          15
-          });
+      nodesEnter.append('text')
+        .style({
+          stroke:         'none',
+          fill:           '#333',
+          'stroke-width': '1px',
+          'font-size':    '10px'
+        })
+        .attr({
+          'text-anchor': 'start',
+          'dy':          3,
+          'dx':          15
+        });
 
       nodes
         .attr('id', function(d) { return 'node-'+d._index; })
@@ -467,25 +465,23 @@
       function _2r(d) { return 2*_r(d); }
       function rx(d) { return (d.type === 'gene') ? 0 : _r(d); }
 
-      nodes
-        .select('rect')
-          .attr({
-            x:      __r,
-            y:      __r,
-            width:  _2r,
-            height: _2r,
-            rx:     rx,
-            ry:     rx,
-          })
-          .style('fill',_ncolor);
+      nodes.select('rect')
+        .attr({
+          x:      __r,
+          y:      __r,
+          width:  _2r,
+          height: _2r,
+          rx:     rx,
+          ry:     rx,
+        })
+        .style('fill',_ncolor);
 
-      nodes
-        .select('text')
-          .text(nodeName)
-          .attr({
-            dy: function(d) { return (d.type === 'gene') ? 0 : 3; },
-            dx: function(d) { return (d.type === 'gene') ? 10 : 15; }
-          });
+      nodes.select('text')
+        .text(nodeName)
+        .attr({
+          dy: function(d) { return (d.type === 'gene') ? 0 : 3; },
+          dx: function(d) { return (d.type === 'gene') ? 10 : 15; }
+        });
 
       nodes.exit().remove();
 
