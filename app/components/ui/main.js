@@ -735,7 +735,7 @@
         var start = new Date().getTime();
 
         $timeout(function() {
-          console.log(filter);
+          //console.log(filter);
           var paths = pathData.getPathways(filter, max, acc);
 
           paths.forEach(function(d) {
