@@ -245,7 +245,7 @@ width: 100% !important;
 height: auto;
 }
 
-.chosen-choices .search-field:first-child input[type="text"] {
+.chosen-choices .search-field:first-child, .chosen-choices .search-field:first-child input[type="text"] {
   width: 100% !important;
 }
 
