@@ -38,7 +38,7 @@
     });*/
 
   app
-    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, $timeout, filterFilter, cfpLoadingBar, debounce, site, localStorageService, loadedData, forceGraph, hiveGraph) {
+    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, $timeout, growl, filterFilter, cfpLoadingBar, debounce, site, localStorageService, loadedData, forceGraph, hiveGraph) {
 
       $rootScope.site = site;
 
@@ -642,17 +642,22 @@
 
         var edges = pathData.getExpressionValues(filter, max, acc);
 
-        max = max || edges.length;
-        $log.debug('showing',max,'edges out of',edges.length,'matching edges');
+        $log.debug('found',max,'expression edges');
 
-        edges.forEach(function(d) {
-          d.gene.ticked = true;
-          d.cell.ticked = true;
-        });
+        if (edges.length < 1) {
+          growl.addWarnMessage('No expression edges match search criteria and expression thresholds.');
+        } else {
+          //growl.addWarnMessage('Found '+edges.length+' expression edges');
 
-        loadedData.pairs.forEach(function(pair) {
-          pair.ticked = !pair.locked && pair.ligand.ticked && pair.receptor.ticked;
-        });
+          edges.forEach(function(d) {
+            d.gene.ticked = true;
+            d.cell.ticked = true;
+          });
+
+          loadedData.pairs.forEach(function(pair) {
+            pair.ticked = !pair.locked && pair.ligand.ticked && pair.receptor.ticked;
+          });
+        }
 
       };
 
@@ -738,13 +743,19 @@
           //console.log(filter);
           var paths = pathData.getPathways(filter, max, acc);
 
-          paths.forEach(function(d) {
-            d.pair.ticked = true;
-            d.source.ticked = true;
-            d.ligand.ticked = true;
-            d.receptor.ticked = true;
-            d.target.ticked = true;
-          });
+          if (paths.length < 1) {
+            growl.addWarnMessage('No pathways match search criteria and expression thresholds.');
+          } else {
+            paths.forEach(function(d) {
+              d.pair.ticked = true;
+              d.source.ticked = true;
+              d.ligand.ticked = true;
+              d.receptor.ticked = true;
+              d.target.ticked = true;
+            });
+          }
+
+
 
           var time = (new Date().getTime()) - start;
           $log.debug('Execution time:', time/1000, 's');

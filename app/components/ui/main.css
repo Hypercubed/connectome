@@ -202,11 +202,9 @@ height: auto;
 }
 
 .growl {
-  width: 100%;
-  position: relative;
-  top: auto;
   right: auto;
-  float: none;
+  left: 10px;
+  width: 400px;
 }
 
 .growl .alert {
@@ -371,7 +369,7 @@ height: auto;
 }
 
 input[type=checkbox].glyphicon,input[type=checkbox].fa{
-  visibility: hidden; 
+  visibility: hidden;
 }
 
 .icon-checked.glyphicon-eye-close:before, input[type=checkbox].glyphicon-eye-close:checked:before {

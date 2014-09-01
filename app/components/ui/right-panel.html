@@ -35,8 +35,6 @@
         </ul>
       </div>
 
-      <div growl></div>
-
       <div ng-repeat="item in graphData.selectedItems track by item.id" class="new-tip" ng-class="item.hover ? 'bg-warning' : 'bg-danger'" ng-if="item.type">
         <button type="button" class="close" aria-hidden="true" ng-click="revoveSelectedItem($index)">&times;</button>
         <div ng-include="'components/ui/item.html'">
@@ -60,7 +58,7 @@
               <label class="col-sm-3 control-label">Cell</label>
               <div class="col-sm-9">
 
-                <select multiple data-placeholder="Pick a cell or cells" 
+                <select multiple data-placeholder="Pick a cell or cells"
                   ui-select2="{'multiple': true }"
                   ng-model="exprFilter.cell.id">
                   <option ng-repeat="cell in data.cells" value="{{cell.id}}">{{cell.name}}</option>
@@ -94,7 +92,7 @@
               <label class="col-sm-3 control-label">Rank by</label>
               <div class="col-sm-9">
                 <input type="radio" name="rank[]" ng-model="exprFilter.rank" value="specificity">
-                <label class="control-label">specificity</label>              
+                <label class="control-label">specificity</label>
                 <br><input type="radio" name="rank[]" ng-model="exprFilter.rank" value="expression" checked>
                 <label class="control-label">expression</label>
               </div>
@@ -179,7 +177,7 @@
               <label class="col-sm-3 control-label">Rank by</label>
               <div class="col-sm-9">
                 <input type="radio" name="rank[]" ng-model="pathFilter.rank" value="specificity">
-                <label class="control-label">specificity sum</label>                
+                <label class="control-label">specificity sum</label>
                 <br><input type="radio" name="rank[]" ng-model="pathFilter.rank" value="expression" checked>
                 <label class="control-label">expression product</label>
               </div>
