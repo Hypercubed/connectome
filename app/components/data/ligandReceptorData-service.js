@@ -72,6 +72,7 @@
 
       function _getGenes(filename) {
         return dsv.tsv.get(filename, {cache: cache}, function(d) {
+          /*jshint camelcase: false */
           return {
             name: d.ApprovedSymbol,
             description: d.ApprovedName,
@@ -85,6 +86,7 @@
             uniprotid: d.UniProtID
           };
         })
+        /*jshint camelcase: true */
         .error(function(data, status, headers, config) {
           $log.warn('Error',data, status, headers, config);
         })

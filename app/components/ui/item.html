@@ -31,6 +31,7 @@
 				rowHeight: 15,
 				headerRowHeight: 15,
 				plugins: ngGridPlugins,
+				sortInfo: { fields: ['value'], directions: ['desc'] },
 				columnDefs: [{field:'cell.name', displayName:'Cell'},
 				             {field:'value', displayName:'Expression (TPM)', cellFilter: 'number:2'},
 										 {field:'specificity', displayName:'Specificity', cellFilter: 'number:2'}]
@@ -117,6 +118,7 @@
 			rowHeight: 15,
 			headerRowHeight: 15,
 			plugins: ngGridPlugins,
+			sortInfo: { fields: ['value'], directions: ['desc'] },
 			columnDefs: [{field:'gene.name', displayName:'Gene'},
 									{field:'value', displayName:'Expression (TPM)', cellFilter: 'number:2'},
 									{field:'specificity', displayName:'Specificity', cellFilter: 'number:2'}]
@@ -139,6 +141,7 @@
 			rowHeight: 15,
 			headerRowHeight: 15,
 			plugins: ngGridPlugins,
+			sortInfo: { fields: ['value'], directions: ['desc'] },
 			columnDefs: [{field:'pair.name', displayName:'Pair'},
 									{field:'value', displayName:'Expression product', cellFilter: 'number:2'},
 									{field:'specificity', displayName:'Specificity', cellFilter: 'number:2'}]

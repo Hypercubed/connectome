@@ -1,5 +1,3 @@
-/* global saveAs */
-/* global _F */
 
 (function() {
   'use strict';

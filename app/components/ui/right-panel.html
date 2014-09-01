@@ -41,7 +41,7 @@
       </div>
 
       <div ng-repeat="item in graphData.selectedItems track by item.id" class="new-tip" ng-class="item.hover ? 'bg-warning' : 'bg-danger'" ng-if="item.type">
-        <button type="button" class="close" aria-hidden="true" ng-click="revoveSelectedItem($index)">&times;</button>
+        <button type="button" class="close" aria-hidden="true" ng-click="revoveSelectedItem($index)" ng-show="item.fixed">&times;</button>
         <div ng-include="'components/ui/item.html'">
         </div>
       </div>

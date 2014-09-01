@@ -1,5 +1,7 @@
 /* global saveAs */
 /* global _F */
+/* global Base64 */
+/* global ngGridFlexibleHeightPlugin */
 
 (function() {
   'use strict';
@@ -38,7 +40,7 @@
     });*/
 
   app
-    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, $timeout, growl, filterFilter, cfpLoadingBar, debounce, site, localStorageService, loadedData, forceGraph, hiveGraph) {
+    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, $timeout, $window, growl, filterFilter, cfpLoadingBar, debounce, site, localStorageService, loadedData, forceGraph, hiveGraph) {
 
       $rootScope.site = site;
 
@@ -870,7 +872,7 @@
           ids: $scope.selectedIds,
           opts: $scope.options,
           ver: site.version
-        }
+        };
         var json = JSON.stringify(obj);
         return Base64.encode(json);
       }
@@ -890,11 +892,11 @@
       }
 
       $scope.loadSave = function() {
-        var ret = prompt("Copy this text to your clipboard to save the current state.  Replace this text to restore.", save());
+        var ret = $window.prompt('Copy this text to your clipboard to save the current state.  Replace this text to restore.', save());
         if (ret) {
           load(ret);
         }
-      }
+      };
 
       loadSelection();
       updateNetwork();
@@ -917,7 +919,9 @@
 
       //console.log($scope.data.pairs);
 
+      /*jshint -W055 */
       $scope.ngGridPlugins = [new ngGridFlexibleHeightPlugin()];
+      /*jshint +W055 */
 
     });
 
