@@ -195,6 +195,7 @@
         function _ticked(arr) {
           return function(d) {
             if (d.locked) { return false; }
+            d.fixed = false;
             d.ticked = arr.indexOf(d.i) > -1;
             return d.ticked;
           };
@@ -230,6 +231,7 @@
       var updateNetwork = debounce(function updateNetwork() {  // This should be handeled by the directive
         $log.debug('update network');
         //console.log('update network');
+
 
         //console.log($scope.selected.genes);
         //if (newVal === oldVal) {return;}
@@ -850,6 +852,37 @@
       });
       console.log(i); */
 
+      function save() {
+        var obj = {
+          ids: $scope.selectedIds,
+          opts: $scope.options,
+          ver: site.version
+        }
+        var json = JSON.stringify(obj);
+        return Base64.encode(json);
+      }
+
+      function load(bin) {
+        var json = Base64.decode(bin);
+        var obj = JSON.parse(json);
+
+        if (obj.version !== site.version) {
+          $log.warn('Possible version issue');
+        }
+
+        $scope.selectedIds = obj.ids;
+        $scope.options = obj.opts;
+        loadSelection();
+        updateNetwork();
+      }
+
+      $scope.loadSave = function() {
+        var ret = prompt("Copy this text to your clipboard to save the current state.  Replace this text to restore.", save());
+        if (ret) {
+          load(ret);
+        }
+      }
+
       loadSelection();
       updateNetwork();
 
@@ -859,6 +892,7 @@
           return arr.map(_ticked);
         };
         var callBack = function() {
+
           //console.log('dataChanged',key);
           $scope.selectedIds[key] = arr.filter(_ticked).map(_i);
           updateNetwork();
@@ -869,6 +903,8 @@
       $scope.$watchCollection('options', updateNetwork);
 
       //console.log($scope.data.pairs);
+
+      $scope.ngGridPlugins = [new ngGridFlexibleHeightPlugin()];
 
     });
 

@@ -215,14 +215,10 @@ height: auto;
 
 .new-tip {
   line-height: 1;
-  /* font-weight: bold; */
   padding: 12px;
   opacity: 0.7;
-  /* background: rgba(0, 0, 0, 0.8);
-  color: #fff;*/
   border-radius: 4px;
-  width: 100%;
-  margin-top: 5px;
+  margin: 5px;
 }
 
 .new-tip h5 {
@@ -371,7 +367,7 @@ height: auto;
 }
 
 input[type=checkbox].glyphicon,input[type=checkbox].fa{
-  visibility: hidden; 
+  visibility: hidden;
 }
 
 .icon-checked.glyphicon-eye-close:before, input[type=checkbox].glyphicon-eye-close:checked:before {
@@ -411,4 +407,20 @@ margin: 10px 0px -1px 10px;
 
 .select2-container {
   width: 100%;
+}
+
+.miniGrid {
+  border: 0;
+  background-color: none;
+  font-size: x-small;
+  height: 50px;
+  margin-top: 5px;
+}
+
+.miniGrid .ngRow.even, .miniGrid .ngRow {
+  background-color: inherit;
+}
+
+.miniGrid .hgCellText {
+  height: auto;
 }

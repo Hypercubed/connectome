@@ -1,4 +1,4 @@
-<span ng-repeat="edge in list | limitTo : limit track by $index" class="animate-fade">
+<span bindonce ng-repeat="edge in list | limitTo : limit track by $index" class="animate-fade">
 	<a
 		href title="{{edge.value | number:2}}"
 		ng-click="click(edge[key])"

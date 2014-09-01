@@ -41,12 +41,12 @@
 
 .pageslide-toggle.bottom {
   position: absolute;
-  top: 5px;  
+  top: 5px;
   right: 5px;
 }
 
 .pageslide-right {
-  right: 0px;
+  right: 10px;
 }
 
 .pageslide-left {

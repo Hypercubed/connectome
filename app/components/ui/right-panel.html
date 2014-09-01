@@ -24,6 +24,11 @@
         ng-class="{ true: 'glyphicon-repeat', false: 'glyphicon-refresh'}[state.name == 'home.hive-graph']"
         ng-click="state.name = (state.name == 'home.hive-graph') ? 'home.force-graph' : 'home.hive-graph'">
       </button>
+
+      <button class="btn navbar-toggle col-xs-12 glyphicon glyphicon-floppy-disk"
+        ng-click="loadSave()">
+
+      </button>
     </div>
 
     <div
@@ -60,7 +65,7 @@
               <label class="col-sm-3 control-label">Cell</label>
               <div class="col-sm-9">
 
-                <select multiple data-placeholder="Pick a cell or cells" 
+                <select multiple data-placeholder="Pick a cell or cells"
                   ui-select2="{'multiple': true }"
                   ng-model="exprFilter.cell.id">
                   <option ng-repeat="cell in data.cells" value="{{cell.id}}">{{cell.name}}</option>
@@ -94,7 +99,7 @@
               <label class="col-sm-3 control-label">Rank by</label>
               <div class="col-sm-9">
                 <input type="radio" name="rank[]" ng-model="exprFilter.rank" value="specificity">
-                <label class="control-label">specificity</label>              
+                <label class="control-label">specificity</label>
                 <br><input type="radio" name="rank[]" ng-model="exprFilter.rank" value="expression" checked>
                 <label class="control-label">expression</label>
               </div>
@@ -179,7 +184,7 @@
               <label class="col-sm-3 control-label">Rank by</label>
               <div class="col-sm-9">
                 <input type="radio" name="rank[]" ng-model="pathFilter.rank" value="specificity">
-                <label class="control-label">specificity sum</label>                
+                <label class="control-label">specificity sum</label>
                 <br><input type="radio" name="rank[]" ng-model="pathFilter.rank" value="expression" checked>
                 <label class="control-label">expression product</label>
               </div>

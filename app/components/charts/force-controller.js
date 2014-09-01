@@ -17,19 +17,24 @@
         //chart = force2Graph();  // TODO: look at options
 
         // Events
-        //var _hover = _F('hover');
+      var _fixed = _F('fixed');
+
       chart.on('hover', debounce(function(d) {
         graph.data.hoverEvent = true;
 
-        graph.data.selectedItems = graph.data.selectedItems.filter(function(d) { return d.fixed; });
+        graph.data.selectedItems = graph.data.selectedItems.filter(_fixed);
 
-        if (d && !d.fixed) {
+        if (d && graph.data.selectedItems.indexOf(d) < 0) {
           graph.data.selectedItems.unshift(d);
         }
+
       }));
 
       chart.on('selectionChanged', debounce(function() {
-        graph.data.selectedItems = graph.data.nodes.filter(function(d) { return d.fixed; });
+        //console.log(graph.data.selectedItems);
+        var nodes = graph.data.nodes.filter(_fixed);
+        var edges = graph.data.edges.filter(_fixed);
+        graph.data.selectedItems = nodes.concat(edges);
       }));
 
       // Accesors
@@ -155,9 +160,11 @@
               var s = (v+1)/(gene.median+1);
 
               var _edge = new graph.Edge(graph.data.nodesIndex[src.id],graph.data.nodesIndex[tgt.id]);
+              _edge.gene = gene;
+              _edge.cell = cell;
               _edge.value = v;
-              _edge.i = gene.i; // remove
-              _edge.id = gene.id;  // remove {target, source}.id
+              //_edge.i = gene.i; // remove
+              _edge.id = ''+src.id+tgt.id;  // remove {target, source}.id
               _edge.type = 'expression';  // remove
               _edge.class = gene.class;
               _edge._specificity = s;
@@ -190,22 +197,34 @@
                 //if (data.edgesIndex[ligand.source.id]) {
                   //console.log(data.edgesIndex[ligand.source.id][receptor.target.id]);
                 //}
+                var src = ligand.source;
+                var tgt = receptor.target;
 
                 var _edge =
-                  graph.data.edgesIndex[ligand.source.id][receptor.target.id] ||
-                  new graph.Edge(ligand.source,receptor.target);
+                  graph.data.edgesIndex[src.id][tgt.id] ||
+                  new graph.Edge(src,tgt);
 
-                var s = ligand._specificity*receptor._specificity;
+                var _s = ligand._specificity*receptor._specificity;
+                var s = Math.log(_s)/Math.log(10);
 
                 if (!_edge._specificity) {
                   _edge._specificity = _edge.specificity = 0;
                 }
 
                 _edge.type = 'sample-sample';
-                _edge.name = ligand.source.name + ' -> ' + receptor.target.name;
+                _edge.id =
+                _edge.name = src.name + ' -> ' + tgt.name;
+                _edge.id = ''+src.id+tgt.id;
                 _edge.value += value;
-                _edge._specificity += s;
-                _edge.specificity += Math.log(s)/Math.log(10);
+                _edge._specificity += _s;
+                _edge.specificity += s;
+
+                _edge.pairs = _edge.pairs || [];
+                _edge.pairs.push({
+                  pair: _pair,
+                  value: value,
+                  specificity: s
+                });
 
                 graph.addEdge(_edge);
               }

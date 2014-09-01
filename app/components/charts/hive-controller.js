@@ -170,6 +170,8 @@
               //console.log(src,tgt);
 
               var _edge = new graph.Edge(src,tgt);
+              _edge.gene = gene;
+              _edge.cell = cell;
               _edge.value = v;
               _edge.specificity = Math.log(v+1)/Math.log(10)-Math.log(gene.median+1)/Math.log(10);
               //_edge.i = gene.i; // remove

@@ -315,7 +315,7 @@
 
         links
           .classed('hover', _hover)
-          .classed('fixed', _edgeFixed)
+          .classed('fixed', _fixed)
           //.attr('marker-end', function(d,i) { return (d.source !== d.target) ? 'url("#arrow-'+i+'")' : ''; })
           ;
       }
@@ -329,6 +329,31 @@
 
         updateClasses();
         dispatch.hover(null);
+      }
+
+      function edgeClick(d) {
+        if (d3.event.defaultPrevented) {return;}
+        d3.event.stopPropagation();
+
+        var p = d.fixed;
+
+        if (d3.event.altKey) {                                // remove
+          d.ticked = p ? false : true;
+        } else if (d3.event.ctrlKey && !d3.event.shiftKey) {                        // add to selection
+          d.fixed = p ? false : true;
+        } else if (d3.event.shiftKey) {                       // add all to selection
+          graph.nodes.forEach(function(d) {
+            d.fixed = (d.hover) ? !p : (!d3.event.ctrlKey) ? false : d.fixed;
+          });
+        } else {                                              // change selection
+          graph.nodes.forEach(function(d) {
+            d.fixed = false;
+          });
+          d.fixed = (p) ? false : true;
+        }
+
+        updateClasses(); //function(d) { return d.source.fixed && d.target.fixed; });
+        dispatch.selectionChanged(d);
       }
 
       // LINKS
@@ -351,6 +376,7 @@
         .style('opacity', function(d) { return eopac(d.value); })
         .on('mouseover.highlight',mouseoverEdgeHighlight)
         .on('mouseout.highlight',mouseoutHighlight)
+        .on('click',edgeClick)
         //.on('mouseover', tooltipShow)
         //.on('mouseout', tooltipHide)
         .attr('marker-end', function(d) { return (d.source !== d.target) ? 'url("#arrow")' : ''; })
