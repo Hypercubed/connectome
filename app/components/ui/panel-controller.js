@@ -56,6 +56,7 @@
         selectWithCheckboxOnly: false,
         showSelectionCheckbox: true,
         enableColumnResize: true,
+        sortInfo: { fields: ['ticked'], directions: ['desc'] },
         //rowTemplate: 'rowTemplate',
         //menuTemplate: 'menuTemplate',
         //checkboxCellTemplate: '<div class="ngCellText"></div>',
