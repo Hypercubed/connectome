@@ -629,20 +629,22 @@
           delete filter.gene.id;
         }
 
+        var edges;
+
         if (filter.gene.class === 'each') {
           var f = angular.copy(filter);
           f.gene.class = 'ligand';
-          $scope.showExpressionEdges(f,max);
+          var edges1 = pathData.getExpressionValues(f, max, acc);
+
           f.gene.class = 'receptor';
-          $scope.showExpressionEdges(f,max);
-          return;
+          var edges2 = pathData.getExpressionValues(f, max, acc);
+
+          edges = edges1.concat(edges2);
+        } else {
+          edges = pathData.getExpressionValues(filter, max, acc);
         }
 
-        //console.log(filter);
-
-        var edges = pathData.getExpressionValues(filter, max, acc);
-
-        $log.debug('found',max,'expression edges');
+        $log.debug('found',edges.length,'expression edges');
 
         if (edges.length < 1) {
           growl.addWarnMessage('No expression edges match search criteria and expression thresholds.');
@@ -716,32 +718,34 @@
 
         var acc = (filter.rank === 'specificity') ? _specificity : _value;
 
-        if (filter.direction === 'each' && !angular.equals(filter.target, filter.source)) {
-          $log.debug('Bi-directional search');
-
-          var f = angular.copy(filter);
-          f.direction = 'AB';
-
-          //$log.debug('Searching', f.source, f.target);
-          $scope.showPaths(f,max);
-
-          f = angular.copy(filter);
-          f.direction = 'AB';
-          f.source = filter.target;
-          f.target = filter.source;
-
-          //$log.debug('Searching', f.source, f.target);
-          $scope.showPaths(f,max);
-          return;
-        }
-
         cfpLoadingBar.start();
-
         var start = new Date().getTime();
 
         $timeout(function() {
-          //console.log(filter);
-          var paths = pathData.getPathways(filter, max, acc);
+
+          var paths;
+
+          if (filter.direction === 'each' && !angular.equals(filter.target, filter.source)) {
+            $log.debug('Bi-directional search');
+
+            var f = angular.copy(filter);
+            f.direction = 'AB';
+
+            var paths1 = pathData.getPathways(f, max, acc);
+
+            f = angular.copy(filter);
+            f.direction = 'BA';
+            f.source = filter.target;
+            f.target = filter.source;
+
+            var paths2 = pathData.getPathways(f, max, acc);
+
+            paths = paths1.concat(paths2);
+          } else {
+            paths = pathData.getPathways(filter, max, acc);
+          }
+
+          $log.debug('found',paths.length,'expression edges');
 
           if (paths.length < 1) {
             growl.addWarnMessage('No pathways match search criteria and expression thresholds.');
@@ -754,8 +758,6 @@
               d.target.ticked = true;
             });
           }
-
-
 
           var time = (new Date().getTime()) - start;
           $log.debug('Execution time:', time/1000, 's');
