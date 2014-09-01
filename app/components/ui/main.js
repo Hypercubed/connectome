@@ -38,7 +38,7 @@
     });*/
 
   app
-    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, $timeout, filterFilter, cfpLoadingBar, debounce, site, localStorageService, loadedData, forceGraph, hiveGraph) {
+    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, $timeout, growl, filterFilter, cfpLoadingBar, debounce, site, localStorageService, loadedData, forceGraph, hiveGraph) {
 
       $rootScope.site = site;
 
@@ -631,30 +631,37 @@
           delete filter.gene.id;
         }
 
+        var edges;
+
         if (filter.gene.class === 'each') {
           var f = angular.copy(filter);
           f.gene.class = 'ligand';
-          $scope.showExpressionEdges(f,max);
+          var edges1 = pathData.getExpressionValues(f, max, acc);
+
           f.gene.class = 'receptor';
-          $scope.showExpressionEdges(f,max);
-          return;
+          var edges2 = pathData.getExpressionValues(f, max, acc);
+
+          edges = edges1.concat(edges2);
+        } else {
+          edges = pathData.getExpressionValues(filter, max, acc);
         }
 
-        //console.log(filter);
+        $log.debug('found',edges.length,'expression edges');
 
-        var edges = pathData.getExpressionValues(filter, max, acc);
+        if (edges.length < 1) {
+          growl.addWarnMessage('No expression edges match search criteria and expression thresholds.');
+        } else {
+          //growl.addSuccessMessage('Found '+edges.length+' expression edges');
 
-        max = max || edges.length;
-        $log.debug('showing',max,'edges out of',edges.length,'matching edges');
+          edges.forEach(function(d) {
+            d.gene.ticked = true;
+            d.cell.ticked = true;
+          });
 
-        edges.forEach(function(d) {
-          d.gene.ticked = true;
-          d.cell.ticked = true;
-        });
-
-        loadedData.pairs.forEach(function(pair) {
-          pair.ticked = !pair.locked && pair.ligand.ticked && pair.receptor.ticked;
-        });
+          loadedData.pairs.forEach(function(pair) {
+            pair.ticked = !pair.locked && pair.ligand.ticked && pair.receptor.ticked;
+          });
+        }
 
       };
 
@@ -713,40 +720,46 @@
 
         var acc = (filter.rank === 'specificity') ? _specificity : _value;
 
-        if (filter.direction === 'each' && !angular.equals(filter.target, filter.source)) {
-          $log.debug('Bi-directional search');
-
-          var f = angular.copy(filter);
-          f.direction = 'AB';
-
-          //$log.debug('Searching', f.source, f.target);
-          $scope.showPaths(f,max);
-
-          f = angular.copy(filter);
-          f.direction = 'AB';
-          f.source = filter.target;
-          f.target = filter.source;
-
-          //$log.debug('Searching', f.source, f.target);
-          $scope.showPaths(f,max);
-          return;
-        }
-
         cfpLoadingBar.start();
-
         var start = new Date().getTime();
 
         $timeout(function() {
-          //console.log(filter);
-          var paths = pathData.getPathways(filter, max, acc);
 
-          paths.forEach(function(d) {
-            d.pair.ticked = true;
-            d.source.ticked = true;
-            d.ligand.ticked = true;
-            d.receptor.ticked = true;
-            d.target.ticked = true;
-          });
+          var paths;
+
+          if (filter.direction === 'each' && !angular.equals(filter.target, filter.source)) {
+            $log.debug('Bi-directional search');
+
+            var f = angular.copy(filter);
+            f.direction = 'AB';
+
+            var paths1 = pathData.getPathways(f, max, acc);
+
+            f = angular.copy(filter);
+            f.direction = 'BA';
+            f.source = filter.target;
+            f.target = filter.source;
+
+            var paths2 = pathData.getPathways(f, max, acc);
+
+            paths = paths1.concat(paths2);
+          } else {
+            paths = pathData.getPathways(filter, max, acc);
+          }
+
+          $log.debug('found',paths.length,'expression edges');
+
+          if (paths.length < 1) {
+            growl.addWarnMessage('No pathways match search criteria and expression thresholds.');
+          } else {
+            paths.forEach(function(d) {
+              d.pair.ticked = true;
+              d.source.ticked = true;
+              d.ligand.ticked = true;
+              d.receptor.ticked = true;
+              d.target.ticked = true;
+            });
+          }
 
           var time = (new Date().getTime()) - start;
           $log.debug('Execution time:', time/1000, 's');

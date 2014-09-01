@@ -31,7 +31,8 @@
     "angular-ui-select2": "~0.0.5",
     "font-awesome": "~4.1.0",
     "Blob.js": "eligrey/Blob.js",
-    "js-base64": "~2.1.5"
+    "js-base64": "~2.1.5",
+    "angular-chosen-localytics": "~1.0.6"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",
@@ -63,6 +64,12 @@
     "ng-context-menu": {
       "main": [
         "dist/ng-context-menu.js"
+      ]
+    },
+    "chosen": {
+      "main": [
+        "chosen.jquery.js",
+        "chosen.css"
       ]
     },
     "Blob.js": {
