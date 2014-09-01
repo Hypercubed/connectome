@@ -647,7 +647,7 @@
         if (edges.length < 1) {
           growl.addWarnMessage('No expression edges match search criteria and expression thresholds.');
         } else {
-          //growl.addWarnMessage('Found '+edges.length+' expression edges');
+          //growl.addSuccessMessage('Found '+edges.length+' expression edges');
 
           edges.forEach(function(d) {
             d.gene.ticked = true;
