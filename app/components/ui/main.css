@@ -123,13 +123,7 @@ body {
   display: inline-block;
 }
 
-.chosen-container-multi {
-width: 100% !important;
-}
 
-.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
-height: auto;
-}
 
 .snap-content {
   background-color: white;
@@ -241,6 +235,18 @@ height: auto;
 
 .animate-fade {
 
+}
+
+.chosen-container-multi {
+width: 100% !important;
+}
+
+.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+height: auto;
+}
+
+.chosen-choices .search-field:first-child input[type="text"] {
+  width: 100% !important;
 }
 
 .animate-fade.ng-hide-add, .animate-fade.ng-hide-remove,

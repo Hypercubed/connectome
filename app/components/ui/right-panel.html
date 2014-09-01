@@ -52,16 +52,17 @@
       <tab heading="Expression" active="active1">
         <div class="modal-body">
 
-          <form class="form-horizontal" role="form" ng-if="panels.search && active1" class="animate-fade">
+          <form class="form-horizontal" role="form" class="animate-fade">
 
             <div class="form-group">
               <label class="col-sm-3 control-label">Cell</label>
               <div class="col-sm-9">
 
-                <select multiple data-placeholder="Pick a cell or cells" style="height: 26px"
-                  ui-select2="{'multiple': true }"
-                  ng-model="exprFilter.cell.id">
-                  <option bindonce ng-repeat="cell in data.cells track by cell.id" bo-value="cell.id" bo-text="cell.name"></option>
+                <select multiple data-placeholder="Pick a cell or cells"
+                  chosen
+                  width="'100%'"
+                  ng-model="exprFilter.cell.id"
+                  ng-options="cell.id as cell.name for cell in data.cells">
                 </select>
 
               </div>
@@ -78,14 +79,13 @@
                 <label class="control-label"> Top receptors only</label>
                 <br><input type="radio" name="class[]" ng-model="exprFilter.gene.class" value="">
                 <label class="control-label"> Specific genes</label>
-                <select class="col-md-10" multiple data-placeholder="Pick a gene or genes"
-                  style="height: 26px"
-                  ng-if="exprFilter.gene.class == ''"
-                  class="animate-fade"
-                  ui-select2="{'multiple': true }"
-                  ng-model="exprFilter.gene.id">
-                  <option bindonce ng-repeat="gene in data.genes track by gene.id" bo-value="gene.id" bo-text="gene.name"></option>
-                </select>
+                <div class="animate-fade" ng-if="exprFilter.gene.class == ''">
+                  <select class="col-md-10" multiple data-placeholder="Pick a gene or genes"
+                    chosen
+                    ng-model="exprFilter.gene.id"
+                    ng-options="gene.id as gene.name for gene in data.genes">
+                  </select>
+                </div>
 
               </div>
             </div>
@@ -120,21 +120,20 @@
 
         <div class="modal-body">
 
-          <form class="form-horizontal" role="form" ng-if="panels.search && active2" class="animate-fade">
+          <form class="form-horizontal" role="form" class="animate-fade">
 
             <div class="form-group">
               <label class="col-sm-3 control-label">Cell A</label>
               <div class="col-sm-9">
 
-                <select multiple data-placeholder="Pick a cell type" style="height: 26px"
-                  class="animate-fade"
-                  ui-select2="{'multiple': true }"
-                  ng-model="pathFilter.source.id" >
-                  <option
-                    bindonce
+                <select multiple data-placeholder="Pick a cell type"
+                  chosen
+                  ng-model="pathFilter.source.id"
+                  ng-options="cell.id as cell.name for cell in data.cells">
+                  <!-- option bindonce
                     ng-repeat="cell in data.cells track by cell.id"
                     bo-value="cell.id"
-                    bo-text="cell.name"></option>
+                    bo-text="cell.name"></option -->
                 </select>
 
               </div>
@@ -144,15 +143,14 @@
               <label class="col-sm-3 control-label">Pair</label>
               <div class="col-sm-9">
 
-                <select multiple data-placeholder="Pick a ligand receptor pair" style="height: 26px"
-                  class="animate-fade"
-                  ui-select2="{'multiple': true }"
-                  ng-model="pathFilter.pair.id">
-                  <option
-                    bindonce
+                <select multiple data-placeholder="Pick a ligand receptor pair"
+                  chosen
+                  ng-model="pathFilter.pair.id"
+                  ng-options="pair.id as pair.name for pair in data.pairs">
+                  <!-- option bindonce
                     ng-repeat="pair in data.pairs track by pair.id"
                     bo-value="pair.id"
-                    bo-text="pair.name"></option>
+                    bo-text="pair.name"></option -->
                 </select>
 
               </div>
@@ -162,14 +160,14 @@
               <label class="col-sm-3 control-label">Cell B</label>
               <div class="col-sm-9">
 
-                  <select multiple data-placeholder="Pick a cell type" style="height: 26px"
-                    class="animate-fade"
-                    ui-select2="{'multiple': true }"
-                    ng-model="pathFilter.target.id">
-                    <option bindonce
+                  <select multiple data-placeholder="Pick a cell type"
+                    chosen
+                    ng-model="pathFilter.target.id"
+                    ng-options="cell.id as cell.name for cell in data.cells">
+                    <!-- option bindonce
                       ng-repeat="cell in data.cells track by cell.id"
                       bo-value="cell.id"
-                      bo-text="cell.name"></option>
+                      bo-text="cell.name"></option -->
                   </select>
 
               </div>

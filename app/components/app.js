@@ -13,6 +13,7 @@
       'ngAnimate',
       'ui.router',
       'ui.select2',
+      'localytics.directives',
       'chieffancypants.loadingBar',
       'LocalStorageModule',
       'ui.bootstrap',
