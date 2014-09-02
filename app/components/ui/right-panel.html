@@ -26,8 +26,7 @@
       </button>
 
       <button class="btn navbar-toggle col-xs-12 glyphicon glyphicon-floppy-disk"
-        ng-click="panels.save = true">
-
+        ng-click="panels.save = !panels.save">
       </button>
     </div>
 
@@ -52,15 +51,31 @@
 
 <div class="modal-dialog" ng-show="panels.save">
   <div class="modal-content">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="panels.save = !panels.save">&times;</button>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="panels.save = false">&times;</button>
     <div class="modal-header">
       <h3 class="modal-title">Save this view</h3>
     </div>
     <div class="modal-body">
+
       <div class="row">
 
         <div class="col-md-12">
-          <label for="exampleInputPassword1">Bookmark or copy this url to save this view</label>
+          <label>Save an image</label>
+          <div class="btn-vert-block">
+            <button class="btn btn-primary" svg-download="#vis" filename="lr-graph"  title="Vector graphic in SVG format">Vector graphic (svg)</button>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <label>Save graph data</label>
+          <div class="btn-vert-block">
+            <button class="btn btn-default" ng-click="saveJson()" filename="lr-graph" title="Download data in Cytoscape compatable JSON">Graph data (JSON)</button>
+            <button class="btn btn-default" ng-click="saveGml()" filename="lr-graph" title="Download data in GML format">Graph data (GML)</button>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <label>Bookmark or copy this url to save this view</label>
           <div class="input-group">
             <input class="form-control" ng-value="getSaveUrl()" type="text" readonly="readonly" />
             <span class="input-group-btn">
