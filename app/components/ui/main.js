@@ -40,7 +40,7 @@
     });*/
 
   app
-    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, $timeout, $window, growl, filterFilter, cfpLoadingBar, debounce, site, localStorageService, loadedData, forceGraph, hiveGraph) {
+    .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, $timeout, $window, $location, growl, filterFilter, cfpLoadingBar, debounce, site, localStorageService, loadedData, forceGraph, hiveGraph) {
 
       $rootScope.site = site;
 
@@ -869,9 +869,9 @@
 
       function save() {
         var obj = {
-          ids: $scope.selectedIds,
-          opts: $scope.options,
-          ver: site.version
+          i: $scope.selectedIds,
+          o: $scope.options,
+          v: site.apiVersion
         };
         var json = JSON.stringify(obj);
         return Base64.encode(json);
@@ -881,25 +881,33 @@
         var json = Base64.decode(bin);
         var obj = JSON.parse(json);
 
-        if (obj.version !== site.version) {
+        if (obj.v !== site.apiVersion) {
           $log.warn('Possible version issue');
-        }
+        };
 
-        $scope.selectedIds = obj.ids;
-        $scope.options = obj.opts;
+        $scope.selectedIds = obj.i;
+        $scope.options = obj.o;
+
         loadSelection();
         updateNetwork();
       }
 
       $scope.loadSave = function() {
-        var ret = $window.prompt('Copy this text to your clipboard to save the current state.  Replace this text to restore.', save());
-        if (ret) {
-          load(ret);
-        }
+        var ret = $window.prompt('Copy this url to your clipboard to save the current state.', $scope.getSaveUrl());
       };
 
-      loadSelection();
-      updateNetwork();
+      $scope.getSaveUrl = function() {
+        return $location.absUrl()+'?save='+save();
+      };
+
+      if ($location.search().save) {
+        var b = $location.search().save;
+        load(b);
+        $location.search('save',null);
+      } else {
+        loadSelection();
+        updateNetwork();
+      }
 
       ['cells','pairs','genes'].forEach(function setSelectionWatch(key) {
         var arr = $scope.data[key];

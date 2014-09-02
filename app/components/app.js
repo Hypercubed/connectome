@@ -24,17 +24,19 @@
       'ngGrid',
       'hc.marked',
       'multi-select',
+      'ngClipboard'
     ]);
 
   app
     .constant('site', {
       name: 'ligand-receptor-connectome',
-      version: '0.0.6b'
+      version: '0.0.6b',
+      apiVersion: 'lr-1'
     });
 
   app
     .config(function(localStorageServiceProvider, site){
-      localStorageServiceProvider.setPrefix(site.name+'-'+site.version);
+      localStorageServiceProvider.setPrefix(site.apiVersion);
     });
 
   app
