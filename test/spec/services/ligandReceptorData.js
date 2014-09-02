@@ -50,6 +50,8 @@ describe('Service: ligandReceptorData', function () {
       expect(data.cells.length).toEqual(2);
       expect(data.pairs.length).toEqual(2);
       expect(data.genes.length).toEqual(4);
+
+      console.log(data.genes.map(_F('median')));
     });
 
     $httpBackend.flush();
