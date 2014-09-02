@@ -55,6 +55,7 @@
 
       function _getExpression(filename) {
         return dsv.tsv.getRows(filename, {cache: cache}, function(row, i) {
+
           if (i === 0) { return row; }
           return row.map(function(e,i) {
             return i === 0 ? e : +e;
@@ -125,6 +126,8 @@
             var _expr = service.data.expr = data[1];
             var _ontology = data[2];
             service.data.genes = data[3];
+
+            //console.log(data);
 
             // get samples from expression table
             service.data.cells = _expr[0].slice(1).map(function(d,i) {
@@ -339,8 +342,8 @@
 
         $log.debug('Calculating pathways');
 
-        var ligandMin = filter.ligandMin || 10;
-        var receptorMin = filter.receptorMin || 10;
+        var ligandMin = (filter.ligandMin !== undefined) ? filter.ligandMin : 10;
+        var receptorMin = (filter.receptorMin !== undefined) ? filter.receptorMin : 10;
 
         var count = 0;
 
@@ -358,6 +361,8 @@
           if (filter.ligand && !_match(pair.ligand,filter.ligand)) { return; }
           if (filter.receptor && !_match(pair.receptor,filter.receptor)) { return; }
 
+          //console.log(pair.name);
+
           service.data.cells.forEach(function(source)  {
 
             if (source.locked) { return false; }
@@ -370,6 +375,8 @@
             if (filter.source && !_match(source,filter.source)) { return; }
             if (filter.cell && !_match(source,filter.cell)) { return; }
 
+            //console.log(source.name);
+
             service.data.cells.forEach(function(target) {
 
               if (target.locked) { return false; }
@@ -381,6 +388,8 @@
 
               if (filter.target && !_match(target,filter.target)) { return; }
               if (filter.cell   && !_match(target,filter.cell)) { return; }
+
+              //console.log(target.name);
 
               // todo: use insertion sort (fin position, if pos > max, don't push)
               paths.push({
@@ -407,6 +416,7 @@
         });
 
         $log.debug('found',paths.length,'paths out of',count);
+        //console.log('found',paths.length,'paths out of',count);
 
         return paths;
       };

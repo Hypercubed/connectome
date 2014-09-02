@@ -12,11 +12,16 @@ describe('Controller: MainCtrl', function () {
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
     MainCtrl = $controller('MainCtrl', {
-      $scope: scope
+      $scope: scope,
+      loadedData: {
+        pairs: [1,2,3],
+        cells: [],
+        genes: []
+      }
     });
   }));
 
-  it('should attach a list of awesomeThings to the scope', function () {
-    expect(scope.awesomeThings.length).toBe(3);
+  it('should attach loaded data', function () {
+    expect(scope.data.pairs.length).toBe(3);
   });
 });

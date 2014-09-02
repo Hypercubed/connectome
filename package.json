@@ -1,7 +1,8 @@
 {
   "name": "lrspa",
   "version": "0.0.4",
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-autoprefixer": "~0.4.0",
@@ -30,7 +31,11 @@
     "grunt-karma": "^0.8.2",
     "karma": "^0.12.6",
     "karma-ng-html2js-preprocessor": "^0.1.0",
-    "grunt-rsync": "^0.5.0"
+    "grunt-rsync": "^0.5.0",
+    "karma-jasmine": "^0.1.5",
+    "karma-mocha-reporter": "^0.3.1",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "phantomjs": "^1.9.7-15"
   },
   "engines": {
     "node": ">=0.10.0"
