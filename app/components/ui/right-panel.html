@@ -28,6 +28,15 @@
       <button class="btn navbar-toggle col-xs-12 glyphicon glyphicon-floppy-disk"
         ng-click="panels.save = !panels.save">
       </button>
+
+      <button class="btn navbar-toggle col-xs-12 fa fa-reply"
+        ng-click="undo()" ng-disabled="undoIndex <= 0">
+      </button>
+
+      <button class="btn navbar-toggle col-xs-12 fa fa-share"
+        ng-click="redo()" ng-disabled="undoIndex >= undoStack.length-1">
+      </button>
+
     </div>
 
     <div
@@ -79,7 +88,7 @@
           <div class="input-group">
             <input class="form-control" ng-value="getSaveUrl()" type="text" readonly="readonly" />
             <span class="input-group-btn">
-              <a class="btn btn-default" href="{{getSaveUrl()}}" title="Right click to bookmark"><i class="fa fa-link"></i></a>
+              <a class="btn btn-default" href="{{getSaveUrl()}}" title="Right click to bookmark"><i class="glyphicon glyphicon-link"></i></a>
               <a class="btn btn-default" href="" clip-copy="getSaveUrl()" title="Copy to clipboard"><i class="fa fa-clipboard"></i></a>
             </span>
           </div>

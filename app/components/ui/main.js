@@ -241,6 +241,7 @@
         if (graphService) {
           graphService.makeNetwork($scope.data, $scope.options);
           graphService.draw($scope.options);
+          saveUndo();
         }
 
       });
@@ -867,6 +868,29 @@
       });
       console.log(i); */
 
+      $scope.undoStack = [];
+      $scope.undoIndex = -1;
+
+      function saveUndo() {
+        var b = save();
+        if ($scope.undoStack[$scope.undoIndex] !== b) {
+          $scope.undoStack.push(b);
+          $scope.undoIndex = $scope.undoStack.length-1;
+        }
+      }
+
+      $scope.undo = function() {
+        $scope.undoIndex--;
+        var b = $scope.undoStack[$scope.undoIndex];
+        load(b);
+      };
+
+      $scope.redo = function() {
+        $scope.undoIndex++;
+        var b = $scope.undoStack[$scope.undoIndex];
+        load(b);
+      };
+
       function save() {
         var obj = {
           i: $scope.selectedIds,
@@ -883,7 +907,9 @@
 
         if (obj.v !== site.apiVersion) {
           $log.warn('Possible version issue');
-        };
+        }
+
+        $log.debug('load',obj);
 
         $scope.selectedIds = obj.i;
         $scope.options = obj.o;
@@ -917,6 +943,7 @@
         var callBack = function() {
 
           //console.log('dataChanged',key);
+
           $scope.selectedIds[key] = arr.filter(_ticked).map(_i);
           updateNetwork();
         };
