@@ -29,7 +29,7 @@
         ontology: []
       };
 
-      function _getPairs(filename) {
+      function _loadPairs(filename) {
         return dsv.tsv.get(filename, {cache: cache}, function(d,i) {
           return {
             i: i,
@@ -53,7 +53,7 @@
         });
       }
 
-      function _getExpression(filename) {
+      function _loadExpression(filename) {
         return dsv.tsv.getRows(filename, {cache: cache}, function(row, i) {
 
           if (i === 0) { return row; }
@@ -72,7 +72,7 @@
         });
       }
 
-      function _getGenes(filename) {
+      function _loadGenes(filename) {
         return dsv.tsv.get(filename, {cache: cache}, function(d) {
           /*jshint camelcase: false */
           return {
@@ -100,7 +100,7 @@
         });
       }
 
-      function _getOntology(filename) {
+      function _loadOntology(filename) {
         return dsv.tsv.get(filename, {cache: cache})
           .error(function(data, status, headers, config) {
             $log.warn('Error',data, status, headers, config);
@@ -119,7 +119,7 @@
 
       service.load = function load() {
 
-        return $q.all([_getPairs(files.pairs), _getExpression(files.expression), _getOntology(files.ontology), _getGenes(files.genes)])
+        return $q.all([_loadPairs(files.pairs), _loadExpression(files.expression), _loadOntology(files.ontology), _loadGenes(files.genes)])
           .then(function(data) {
 
             service.data.pairs = data[0];
@@ -292,6 +292,20 @@
         return ''+obj === ''+text;
       }
 
+      service.getGenes = function _getGenes(geneFilter) {
+        if (!geneFilter) { return service.data.genes; }
+        return service.data.genes.filter(function(gene) {
+          return _match(gene,geneFilter);
+        });
+      }
+
+      service.getCells = function _getCells(cellFilter) {
+        if (!cellFilter) { return service.data.cells; }
+        return service.data.cells.filter(function(cell) {
+          return _match(cell,cellFilter);
+        });
+      }
+
       service.getExpressionValues = function (filter, max, acc) {
         filter = filter || {};
         acc = acc || _F('value');
@@ -301,38 +315,60 @@
 
         var edges = [];
 
-        service.data.genes.forEach(function(gene) {
-          if (gene.i < 0) { return; }
-          if (gene.locked) { return false; }
-          if (filter.gene && !_match(gene,filter.gene)) { return false; }
+        var matchedCells = service.getCells(filter.cell);
+        var matchedGenes = service.getGenes(filter.gene);
+        //console.log(matchedCells);
 
+        var count = 0;
+
+        matchedGenes.forEach(function(gene) {
+          if (gene.i < 0) { return; }
+          if (gene.locked) { return false; }  // TODO: don't do this here
+          //if (filter.gene && !_match(gene,filter.gene)) { return false; }
 
           var min = Math.max(gene.class === 'ligand' ? ligandMin : receptorMin,0);
 
-          service.data.cells.forEach(function(cell) {
+          matchedCells.forEach(function(cell) {
+
+
             if (cell.i < 0) { return; }
             if (cell.locked) { return false; }
-            if (filter.cell && !_match(cell,filter.cell)) { return false; }
+            //if (filter.cell && !_match(cell,filter.cell)) { return false; }
 
             var v = +service.data.expr[gene.i+1][cell.i+1];
 
             if (v > min) {  // todo: insertion sort
-              edges.push(
+
+              count++;
+
+              edges.push(  // TODO: sorted push
               {
                 gene: gene,
                 cell: cell,
                 value: v,
                 specificity: (v+1)/(gene.median+1)
               });
+
+              if (edges.length > max) {
+                edges = edges.sort(function(a,b){ return acc(b) - acc(a); }).slice(0,max);
+              }
+
             }
 
           });
         });
 
-        $log.debug('found',edges.length, 'expression values');
-        return edges.sort(function(a,b){ return acc(b) - acc(a); }).slice(0,max);
+        //$log.debug('found',edges.length, 'expression values', count);
+        return edges;
 
       };
+
+      service.getPairs = function _getPairs(pairFilter) {
+        if (!pairFilter) { return service.data.pairs; }
+        return service.data.pairs.filter(function(pair) {
+          return _match(pair,pairFilter);
+        });
+      }
 
       service.getPathways = function getPathways(filter, max, acc) {
         max = max || 10;
@@ -347,37 +383,52 @@
 
         var count = 0;
 
-        service.data.pairs.forEach(function (pair) {
+        var matchedSourceCells = service.getCells(filter.source);
+        var matchedTargetCells = service.getCells(filter.target);
+        var matchedPairs = service.getPairs(filter.pair);
+
+        //console.log(matchedPairs);
+
+        matchedPairs.forEach(function (pair) {
 
           if (pair.locked) { return false; }
 
           if (pair.ligand.i < 0 || pair.receptor.i < 0) { return; }
 
-          if (filter.pair && !_match(pair,filter.pair)) { return; }
+          //if (filter.pair && !_match(pair,filter.pair)) { return; }
 
           if (pair.ligand.locked) { return false; }
           if (pair.receptor.locked) { return false; }
 
-          if (filter.ligand && !_match(pair.ligand,filter.ligand)) { return; }
+          if (filter.ligand && !_match(pair.ligand,filter.ligand)) { return; }  // TOD: are these needed?
           if (filter.receptor && !_match(pair.receptor,filter.receptor)) { return; }
 
           //console.log(pair.name);
 
-          service.data.cells.forEach(function(source)  {
+          //var ligandEdges = service.getExpressionValues({ cell: filter.source, gene: pair.ligand });
+          //var receptorEdges = service.getExpressionValues({ cell: filter.target, gene: pair.receptor });
 
-            if (source.locked) { return false; }
+          //console.log(ligandEdges, receptorEdges);
+
+          matchedSourceCells.forEach(function(source)  {
+          //ligandEdges.forEach(function(ligandEdge) {
+            //var source = ligandEdge.cell;
+
+            if (source.locked) { return false; } // Move these out
 
             var l = +service.data.expr[pair.ligand.i+1][source.i+1];
             var ls = (l+1)/(pair.ligand.median+1);
 
             if (l <= ligandMin) { return; }
 
-            if (filter.source && !_match(source,filter.source)) { return; }
-            if (filter.cell && !_match(source,filter.cell)) { return; }
+            //if (filter.source && !_match(source,filter.source)) { return; }
+            //if (filter.cell && !_match(source,filter.cell)) { return; }
 
             //console.log(source.name);
 
-            service.data.cells.forEach(function(target) {
+            matchedTargetCells.forEach(function(target) {
+            //receptorEdges.forEach(function(receptorEdge) {
+              //var target = receptorEdge.cell;
 
               if (target.locked) { return false; }
 
@@ -386,8 +437,8 @@
 
               if (r <= receptorMin) { return; }
 
-              if (filter.target && !_match(target,filter.target)) { return; }
-              if (filter.cell   && !_match(target,filter.cell)) { return; }
+              //if (filter.target && !_match(target,filter.target)) { return; }
+              //if (filter.cell   && !_match(target,filter.cell)) { return; }
 
               //console.log(target.name);
 

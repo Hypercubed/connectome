@@ -167,9 +167,11 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" ng-click="exprFilter = { rank: 'expression', gene: { class: 'each' }}">Clear form</button>
+          <button type="button" class="btn btn-default pull-left" ng-click="exprFilter = { rank: 'specificity', gene: { class: 'each' }}">Clear form</button>
           <!-- button type="button" class="btn btn-primary" ng-click="panels.search = false; showExpressionEdges(exprFilter, 10);">Add</button -->
-          <button type="button" class="btn btn-primary" ng-click="clearVis();  panels.search = false; showExpressionEdges(exprFilter, 10);">Show top</button>
+          Show top
+          <button type="button" class="btn btn-primary" ng-click="clearVis();  panels.search = false; showExpressionEdges(exprFilter, 100);">100</button>
+          <button type="button" class="btn btn-primary" ng-click="clearVis();  panels.search = false; showExpressionEdges(exprFilter, 10);">10</button>
         </div>
 
       </tab>
@@ -252,15 +254,15 @@
 
         <div class="modal-footer">
             <button type="button" class="btn btn-default pull-left" ng-click="pathFilter = { rank: 'specificity', direction: 'each' }">Clear form</button>
-            <button type="button" class="btn btn-primary" ng-click="panels.search = false; clearVis(); showPaths(pathFilter, 10);">Show top</button>
+            Show top
+            <button type="button" class="btn btn-primary" ng-click="panels.search = false; clearVis(); showPaths(pathFilter, 100);">100</button>
+            <button type="button" class="btn btn-primary" ng-click="panels.search = false; clearVis(); showPaths(pathFilter, 10);">10</button>
             <!-- button type="button" class="btn btn-primary" ng-click="panels.search = false; showPaths(pathFilter, 10);">Add top pathways</button -->
         </div>
 
       </tab>
 
     </tabset>
-
-    {{active1}} {{active2}}
 
   </div>
 </div><!-- /.modal-dialog -->

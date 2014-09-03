@@ -163,6 +163,8 @@
         filter.ligandMin = $scope.options.ligandFilter;
         filter.receptorMin = $scope.options.receptorFilter;
 
+        var start = new Date().getTime();
+
         var edges;
 
         if (filter.gene.class === 'each') {
@@ -194,6 +196,9 @@
             pair.ticked = !pair.locked && pair.ligand.ticked && pair.receptor.ticked;
           });
         }
+
+        var time = (new Date().getTime()) - start;
+        $log.debug('Execution time:', time/1000, 's');
 
       };
 
