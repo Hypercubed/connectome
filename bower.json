@@ -2,15 +2,14 @@
   "name": "lrspa",
   "version": "0.0.4",
   "dependencies": {
-    "angular": "1.2.15",
-    "json3": "~3.2.6",
-    "es5-shim": "~2.1.0",
+    "angular": "1.2.23",
+    "json3": "~3.3.2",
+    "es5-shim": "~4.0.3",
     "jquery": "~1.11.0",
-    "bootstrap": "~3.1.1",
+    "bootstrap": "~3.2.0",
     "d3": "~3.4.5",
-    "angular-loading-bar": "~0.3.0",
-    "d3-tip": "~0.6.4",
-    "angular-bootstrap": "~0.10.0",
+    "angular-loading-bar": "~0.5.0",
+    "angular-bootstrap": "~0.11.0",
     "angular-ui-router": "~0.2.10",
     "ng-debounce": "~0.1.1",
     "d3-plugins": "*",
@@ -21,15 +20,13 @@
     "angular-local-storage": "https://github.com/grevory/angular-local-storage.git#master",
     "_F": "Hypercubed/_F#~0.0.2",
     "lodash": "~2.4.1",
-    "isteven-angular-multiselect": "1.2.0",
     "angular-dsv": "~0.0.4",
     "angular-sanitize": "~1.2.18",
     "angular-bindonce": "~0.3.1",
     "ng-context-menu": "~0.1.4",
     "ng-grid": "~2.0.12",
     "angular-marked": "~0.0.12",
-    "angular-ui-select2": "~0.0.5",
-    "font-awesome": "~4.1.0",
+    "font-awesome": "~4.2.0",
     "Blob.js": "eligrey/Blob.js",
     "js-base64": "~2.1.5",
     "angular-chosen-localytics": "~1.0.6",
@@ -40,12 +37,6 @@
     "angular-scenario": "1.2.15"
   },
   "overrides": {
-    "isteven-angular-multiselect": {
-      "main": [
-        "angular-multi-select.js",
-        "angular-multi-select.css"
-      ]
-    },
     "d3-plugins": {
       "main": [
         "hive/hive.js"

@@ -12,7 +12,7 @@
       'panels',
       'ngAnimate',
       'ui.router',
-      'ui.select2',
+      //'ui.select2',
       'localytics.directives',
       'chieffancypants.loadingBar',
       'LocalStorageModule',
@@ -23,7 +23,7 @@
       'ng-context-menu',
       'ngGrid',
       'hc.marked',
-      'multi-select',
+      //'multi-select',
       'ngClipboard'
     ]);
 
