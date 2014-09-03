@@ -236,7 +236,7 @@
           if (filter.direction === 'each' && !angular.equals(filter.target, filter.source)) {
             $log.debug('Bi-directional search');
 
-            var f = angular.copy(filter);
+            var f = angular.copy(filter);  // do I need this, already a copy?
             f.direction = 'AB';
 
             var paths1 = ligandReceptorData.getPathways(f, max, acc);

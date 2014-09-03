@@ -3,27 +3,23 @@
 _\( managed using [todo-md](https://github.com/Hypercubed/todo-md) \)_
 
 ## Now
-- [ ] JSHint
+- [x] JSHint
 
-## Next 
-- [x] Add find module.
-- [x] Consider selection in context menu.  ie Hide selection, show top pathways between selection. 
+## Next
 - [-] Add context menus for all edges.
-- [-] remove selectAll button from grids.
-- [-] Context menu in grids
+- [ ] De confuse selectAll button in grids.
+- [ ] Context menu in grids?
+- [ ] Combine ticked and locked.
 
 ## Later
-- [ ] Add specificity values to expression edges. 
-- [ ] Combine search into graphservices.
-- [ ] Fix internal naming (cells, samples, etc).
+- [x] Add specificity values to expression edges.
+- [ ] Check internal naming (cells->samples, etc).
 
 ## Soon
-- [x] Document use cases. 
-- [x] Examine how to deploy publically.
 - [ ] Update downloadSvg (change mime type for mac)
 - [ ] Make sure all expression values have units (tpm)
-- [ ] More title text
-- [ ] Tests
+- [ ] More title/popover text
+- [ ] Tests!!
 
 ## After
 - [ ] Redo graph controls.
