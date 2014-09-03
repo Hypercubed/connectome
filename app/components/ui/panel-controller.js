@@ -55,6 +55,8 @@
         showSelectionCheckbox: true,
         enableColumnResize: true,
         sortInfo: { fields: ['ticked'], directions: ['desc'] },
+        //groups: ['locked'],
+        //groupsCollapsedByDefault: true,
         //rowTemplate: 'rowTemplate',
         //menuTemplate: 'menuTemplate',
         //checkboxCellTemplate: '<div class="ngCellText"></div>',
@@ -72,8 +74,7 @@
             width: 60,
             cellTemplate: 'cellTemplate',
             headerCellTemplate: 'visibleHeaderCellTemplate'
-          },
-
+          }
         ]
       };
 

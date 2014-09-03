@@ -29,95 +29,95 @@
         ontology: []
       };
 
-      function _loadPairs(filename) {
-        return dsv.tsv.get(filename, {cache: cache}, function(d,i) {
-          return {
-            i: i,
-            id: d.Ligand+'_'+d.Receptor,
-            name: d.Ligand+'-'+d.Receptor,
-            Ligand: d.Ligand,
-            Receptor: d.Receptor,
-            ligandId: d.Ligand+'.ligand',
-            receptorId: d.Receptor+'.receptor',
-            source: d.Source
-          };
-        })
-        .error(function(data, status, headers, config) {
-          $log.warn('Error',data, status, headers, config);
-        })
-        .success(function(data) {
-          $log.debug('Pairs loaded:',data.length);
-        })
-        .then(function(res) {
-          return res.data;
-        });
-      }
+      service.load = function load() {
 
-      function _loadExpression(filename) {
-        return dsv.tsv.getRows(filename, {cache: cache}, function(row, i) {
-
-          if (i === 0) { return row; }
-          return row.map(function(e,i) {
-            return i === 0 ? e : +e;
-          });
-        })
-        .error(function(data, status, headers, config) {
-          $log.warn('Error',data, status, headers, config);
-        })
-        .success(function(data) {
-          $log.debug('Expression rows:', data.length);
-        })
-        .then(function(res) {
-          return res.data;
-        });
-      }
-
-      function _loadGenes(filename) {
-        return dsv.tsv.get(filename, {cache: cache}, function(d) {
-          /*jshint camelcase: false */
-          return {
-            name: d.ApprovedSymbol,
-            description: d.ApprovedName,
-            class: d.Class.toLowerCase(),
-            id: d.ApprovedSymbol+'.'+d.Class.toLowerCase(),
-            age: d.Age,
-            taxon: d.Taxon,
-            consensus: d.Consensus_Call,
-            type: 'gene',
-            hgncid: d.HGNCID,
-            uniprotid: d.UniProtID
-          };
-        })
-        /*jshint camelcase: true */
-        .error(function(data, status, headers, config) {
-          $log.warn('Error',data, status, headers, config);
-        })
-        .success(function(data) {
-          $log.debug('Genes loaded:', data.length);
-        })
-        .then(function(res) {
-          return res.data;
-        });
-      }
-
-      function _loadOntology(filename) {
-        return dsv.tsv.get(filename, {cache: cache})
+        function _loadPairs(filename) {
+          return dsv.tsv.get(filename, {cache: cache}, function(d,i) {
+            return {
+              i: i,
+              id: d.Ligand+'_'+d.Receptor,
+              name: d.Ligand+'-'+d.Receptor,
+              Ligand: d.Ligand,
+              Receptor: d.Receptor,
+              ligandId: d.Ligand+'.ligand',
+              receptorId: d.Receptor+'.receptor',
+              source: d.Source
+            };
+          })
           .error(function(data, status, headers, config) {
             $log.warn('Error',data, status, headers, config);
           })
+          .success(function(data) {
+            $log.debug('Pairs loaded:',data.length);
+          })
           .then(function(res) {
-
-            var _ontology = {};
-
-            res.data.forEach(function(_item) {
-              _ontology[_item.Cell] = _item.Ontology;
-            });
-
-            return _ontology;
+            return res.data;
           });
-      }
+        }
 
-      service.load = function load() {
+        function _loadExpression(filename) {
+          return dsv.tsv.getRows(filename, {cache: cache}, function(row, i) {
+
+            if (i === 0) { return row; }
+            return row.map(function(e,i) {
+              return i === 0 ? e : +e;
+            });
+          })
+          .error(function(data, status, headers, config) {
+            $log.warn('Error',data, status, headers, config);
+          })
+          .success(function(data) {
+            $log.debug('Expression rows:', data.length);
+          })
+          .then(function(res) {
+            return res.data;
+          });
+        }
+
+        function _loadGenes(filename) {
+          return dsv.tsv.get(filename, {cache: cache}, function(d) {
+            /*jshint camelcase: false */
+            return {
+              name: d.ApprovedSymbol,
+              description: d.ApprovedName,
+              class: d.Class.toLowerCase(),
+              id: d.ApprovedSymbol+'.'+d.Class.toLowerCase(),
+              age: d.Age,
+              taxon: d.Taxon,
+              consensus: d.Consensus_Call,
+              type: 'gene',
+              hgncid: d.HGNCID,
+              uniprotid: d.UniProtID
+            };
+          })
+          /*jshint camelcase: true */
+          .error(function(data, status, headers, config) {
+            $log.warn('Error',data, status, headers, config);
+          })
+          .success(function(data) {
+            $log.debug('Genes loaded:', data.length);
+          })
+          .then(function(res) {
+            return res.data;
+          });
+        }
+
+        function _loadOntology(filename) {
+          return dsv.tsv.get(filename, {cache: cache})
+            .error(function(data, status, headers, config) {
+              $log.warn('Error',data, status, headers, config);
+            })
+            .then(function(res) {
+
+              var _ontology = {};
+
+              res.data.forEach(function(_item) {
+                _ontology[_item.Cell] = _item.Ontology;
+              });
+
+              return _ontology;
+            });
+        }
 
         return $q.all([_loadPairs(files.pairs), _loadExpression(files.expression), _loadOntology(files.ontology), _loadGenes(files.genes)])
           .then(function(data) {
@@ -274,7 +274,7 @@
           return true;
         }
 
-        // if array, check ao leats one match
+        // if array, check at least one match
         if (angular.isArray(text)) {
           if (text.length === 0) { return true; }
           for (key in text) {
@@ -294,17 +294,19 @@
 
       service.getGenes = function _getGenes(geneFilter) {
         if (!geneFilter) { return service.data.genes; }
+
         return service.data.genes.filter(function(gene) {
+          //console.log(geneFilter , gene);
           return _match(gene,geneFilter);
         });
-      }
+      };
 
       service.getCells = function _getCells(cellFilter) {
         if (!cellFilter) { return service.data.cells; }
         return service.data.cells.filter(function(cell) {
           return _match(cell,cellFilter);
         });
-      }
+      };
 
       service.getExpressionValues = function (filter, max, acc) {
         filter = filter || {};
@@ -323,16 +325,15 @@
 
         matchedGenes.forEach(function(gene) {
           if (gene.i < 0) { return; }
-          if (gene.locked) { return false; }  // TODO: don't do this here
+          //if (gene.locked) { return false; }  // TODO: don't do this here
           //if (filter.gene && !_match(gene,filter.gene)) { return false; }
 
           var min = Math.max(gene.class === 'ligand' ? ligandMin : receptorMin,0);
 
           matchedCells.forEach(function(cell) {
 
-
             if (cell.i < 0) { return; }
-            if (cell.locked) { return false; }
+            //if (cell.locked) { return false; }
             //if (filter.cell && !_match(cell,filter.cell)) { return false; }
 
             var v = +service.data.expr[gene.i+1][cell.i+1];
@@ -368,7 +369,7 @@
         return service.data.pairs.filter(function(pair) {
           return _match(pair,pairFilter);
         });
-      }
+      };
 
       service.getPathways = function getPathways(filter, max, acc) {
         max = max || 10;
@@ -383,22 +384,25 @@
 
         var count = 0;
 
-        var matchedSourceCells = service.getCells(filter.source);
-        var matchedTargetCells = service.getCells(filter.target);
         var matchedPairs = service.getPairs(filter.pair);
+        if (matchedPairs.length < 1) { return []; }
 
-        //console.log(matchedPairs);
+        var matchedSourceCells = service.getCells(filter.source);
+        if (matchedSourceCells.length < 1) { return []; }
+
+        var matchedTargetCells = service.getCells(filter.target);
+        if (matchedTargetCells.length < 1) { return []; }
 
         matchedPairs.forEach(function (pair) {
 
-          if (pair.locked) { return false; }
+          //if (pair.locked) { return false; }
 
           if (pair.ligand.i < 0 || pair.receptor.i < 0) { return; }
 
           //if (filter.pair && !_match(pair,filter.pair)) { return; }
 
-          if (pair.ligand.locked) { return false; }
-          if (pair.receptor.locked) { return false; }
+          //if (pair.ligand.locked) { return false; }
+          //if (pair.receptor.locked) { return false; }
 
           if (filter.ligand && !_match(pair.ligand,filter.ligand)) { return; }  // TOD: are these needed?
           if (filter.receptor && !_match(pair.receptor,filter.receptor)) { return; }
@@ -414,7 +418,7 @@
           //ligandEdges.forEach(function(ligandEdge) {
             //var source = ligandEdge.cell;
 
-            if (source.locked) { return false; } // Move these out
+            //if (source.locked) { return false; } // Move these out
 
             var l = +service.data.expr[pair.ligand.i+1][source.i+1];
             var ls = (l+1)/(pair.ligand.median+1);
@@ -430,7 +434,7 @@
             //receptorEdges.forEach(function(receptorEdge) {
               //var target = receptorEdge.cell;
 
-              if (target.locked) { return false; }
+              //if (target.locked) { return false; }
 
               var r = +service.data.expr[pair.receptor.i+1][target.i+1];
               var rs = (r+1)/(pair.receptor.median+1);

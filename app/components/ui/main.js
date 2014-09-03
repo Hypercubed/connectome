@@ -54,6 +54,10 @@
       //$scope.selected = {};
       $scope.resetOptions = function() {
         $scope.options = angular.extend({}, defaultOptions);
+        clearlocks();
+      };
+
+      function clearlocks() {
         loadedData.pairs.forEach(function(d) {
           d.locked = false;
         });
@@ -63,7 +67,7 @@
         loadedData.cells.forEach(function(d) {
           d.locked = false;
         });
-      };
+      }
 
       $scope.resetVis = function() {
         $scope.options = angular.extend({}, defaultOptions);
@@ -153,12 +157,18 @@
 
 
       // TODO: move these to findModelCtrl
-      $scope.showExpressionEdges = function _showExpressionEdges(filter, max) {
+      $scope.showExpressionEdges = function _showExpressionEdges(_filter, max) {
+        var filter = angular.copy(_filter);
         var acc = (filter.rank === 'specificity') ? _specificity : _value;
 
         if (filter.gene.class !== '') {
           delete filter.gene.id;
         }
+
+        filter.gene = angular.extend({}, filter.gene, {locked: false});
+        filter.cell = angular.extend({}, filter.cell, {locked: false});
+
+        //console.log(filter);
 
         filter.ligandMin = $scope.options.ligandFilter;
         filter.receptorMin = $scope.options.receptorFilter;
@@ -202,9 +212,16 @@
 
       };
 
-      $scope.showPaths = function _showPaths(filter, max) {
+      $scope.showPaths = function _showPaths(_filter, max) {
+        var filter = angular.copy(_filter);
 
         var acc = (filter.rank === 'specificity') ? _specificity : _value;
+
+        filter.pair = angular.extend({}, filter.pair, {locked: false});
+        filter.pair.ligand = angular.extend({}, filter.pair.ligand, {locked: false});
+        filter.pair.receptor = angular.extend({}, filter.pair.receptor, {locked: false});
+        filter.source =  angular.extend({}, filter.source, {locked: false});
+        filter.target = angular.extend({}, filter.target, {locked: false});
 
         cfpLoadingBar.start();
         var start = new Date().getTime();
@@ -323,15 +340,16 @@
         updateNetwork();
       }
 
-      $scope.loadSave = function() {// TODO: check if still needed
-        var ret = $window.prompt('Copy this url to your clipboard to save the current state.', $scope.getSaveUrl());
-      };
+      //$scope.loadSave = function() {// TODO: check if still needed
+      //  var ret = $window.prompt('Copy this url to your clipboard to save the current state.', $scope.getSaveUrl());
+      //};
 
       $scope.getSaveUrl = function() {
         return $location.absUrl()+'?save='+save();
       };
 
       // Start here
+      clearlocks();
 
       if ($location.search().save) {
         var b = $location.search().save;
