@@ -137,17 +137,17 @@
 
 <tabset>
   <tab active="active1">
-    <tab-heading ng-click="panelState.data = true" bindonce="data">
-      Cell types ({{selectedIds.cells.length}}/<span bo-text="data.cells.length"></span>)
+    <tab-heading ng-click="panelState.data = true">
+      Cell types ({{selectedIds.cells.length}}/{{ (data.cells | filter : { locked: false }).length}})
     </tab-heading>
     <div class="gridStyle" ng-grid="gridOptions.cells" ng-if="panelState.data && active1"></div>
   </tab>
   <tab active="active2">
-    <tab-heading ng-click="panelState.data = true" bindonce="data">Genes ({{selectedIds.genes.length}}/<span bo-text="data.genes.length"></span>)</tab-heading>
+    <tab-heading ng-click="panelState.data = true" bindonce="data">Genes ({{selectedIds.genes.length}}/{{(data.genes | filter : { locked: false }).length}})</tab-heading>
     <div class="gridStyle" ng-grid="gridOptions.genes" ng-if="panelState.data && active2"></div>
   </tab>
   <tab active="active3">
-    <tab-heading ng-click="panelState.data = true" bindonce="data">Pairs ({{selectedIds.pairs.length}}/<span bo-text="data.pairs.length"></span>)</tab-heading>
+    <tab-heading ng-click="panelState.data = true" bindonce="data">Pairs ({{selectedIds.pairs.length}}/{{(data.pairs | filter : { locked: false }).length}})</tab-heading>
     <div class="gridStyle" ng-grid="gridOptions.pairs" ng-if="panelState.data && active3"></div>
   </tab>
   <tab active="active4">
