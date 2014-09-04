@@ -428,3 +428,7 @@ margin: 10px 0px -1px 10px;
 .miniGrid .hgCellText {
   height: auto;
 }
+
+.ngHeaderContainer {
+  position: static;
+}

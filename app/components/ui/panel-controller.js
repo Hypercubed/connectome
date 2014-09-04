@@ -54,7 +54,7 @@
         selectWithCheckboxOnly: false,
         showSelectionCheckbox: true,
         enableColumnResize: true,
-        sortInfo: { fields: ['ticked'], directions: ['desc'] },
+        sortInfo: { fields: ['2*locked + !ticked'], directions: ['asc'] },
         //groups: ['locked'],
         //groupsCollapsedByDefault: true,
         //rowTemplate: 'rowTemplate',
@@ -69,7 +69,8 @@
         },
         columnDefs: [
           {
-            field:'ticked',
+            //field:'ticked',
+            field: '2*locked + !ticked',
             displayName:'Visible',
             width: 60,
             cellTemplate: 'cellTemplate',

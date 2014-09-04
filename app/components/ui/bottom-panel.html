@@ -20,12 +20,17 @@
 </script>
 
 <script type="text/ng-template" id="checkboxHeaderTemplate.html">
-  <div>
-    <input class="ngSelectionHeader" type="checkbox" title="Select all"
-      ng-show="multiSelect"
-      ng-model="allSelected"
-      ng-change="toggleSelectAll(allSelected, true)"/>
-  </div>
+    <div class="ngCellText btn-group" dropdown is-open="isopen" style="overflow: inherit">
+      <a class="btn btn-sm btn-link btn-icon dropdown-toggle">
+        <i class="glyphicon glyphicon-chevron-down"></i>
+      </a>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="#" ng-click="toggleSelectAll(true, true)">Select All</a></li>
+        <li><a href="#" ng-click="toggleSelectAll(false, true)">Select None</a></li>
+      </ul>
+    </div>
+    <!-- button ng-click="toggleSelectAll(true, true)">B</button  -->
+
 </script>
 
 <script type="text/ng-template" id="cellLigandTemplate">
