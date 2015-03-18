@@ -8,6 +8,79 @@
     return radians / Math.PI * 180-90;
   }
 
+  var hiveSymbol = function() {
+    var type = d3.functor('circle'), size = 64;
+
+    /* jshint -W014 */
+    function symbolCircle(size) {
+      var r = Math.sqrt(size / 3.14159);
+      return 'M0,' + r
+      + 'A' + r + ',' + r + ' 0 1,1 0,' + (-r)
+      + 'A' + r + ',' + r + ' 0 1,1 0,' + r
+      + 'Z';
+    }
+
+    function symbolSquare(size) {
+      var r = Math.sqrt(size) / 2;
+      return 'M' + -r + ',' + -r
+      + 'L' + r + ',' + -r
+      + ' ' + r + ',' + r
+      + ' ' + -r + ',' + r
+      + 'Z';
+    }
+
+    function symbolV(size) {
+      var r = Math.sqrt(size) / 2;
+      return 'M' + -r + ',' + -r
+      + 'L' + 0 + ',' + 0
+      + ' ' + r + ',' + -r
+      + ' ' + r + ',' + r
+      + ' ' + -r + ',' + r
+      + 'Z';
+    }
+
+    function symbolA(size) {
+      var r = Math.sqrt(size) / 2;
+      return 'M' + -r + ',' + -r
+      + 'L' + r + ',' + -r
+      + ' ' + r + ',' + 0
+      + ' ' + 0 + ',' + r
+      + ' ' + -r + ',' + 0
+      + 'Z';
+    }
+    /* jshint +W014 */
+
+    var symbols = d3.map({
+      'circle': symbolCircle,
+      'square': symbolSquare,
+      'A': symbolA,
+      'V': symbolV
+    });
+
+    /* jshint -W040 */
+    function symbol(d, i) {
+      return (symbols.get(type.call(this, d, i))
+        || symbolCircle)
+      (size.call(this, d, i));
+    }
+    /* jshint +W040 */
+
+    symbol.type = function(x) {
+      if (!arguments.length) {return type;}
+      type = d3.functor(x);
+      return symbol;
+    };
+
+    // size of symbol in square pixels
+    symbol.size = function(x) {
+      if (!arguments.length) {return size;}
+      size = d3.functor(x);
+      return symbol;
+    };
+
+    return symbol;
+  };
+
   var hiveGraph = function() {
     var width = 500, height = 500;
     var margin = { top: 10, right: 60, bottom: 240, left: 60};
@@ -126,7 +199,7 @@
 
       container.selectAll('defs').remove();
 
-      var markers = container
+      /* var markers = container
         .append('defs')
         .selectAll('marker').data(graph._edges).enter()
         .append('svg:marker')
@@ -144,7 +217,7 @@
         });
 
       markers.append('svg:path')
-        .attr('d', 'M0,-5L10,0L0,5');
+        .attr('d', 'M0,-5L10,0L0,5'); */
 
       var g = container.selectAll('.hiveGraph').data([1]);
 
@@ -308,7 +381,7 @@
         .attr({
           id:           function(d) { return 'link-'+d._index; },
           d:            hiveLink,
-          'marker-end': function(d,i) { return d.type === 'pair' ? 'url(#arrow-'+i+')' : ''; }
+          //'marker-end': function(d,i) { return d.type === 'pair' ? 'url(#arrow-'+i+')' : ''; }
         })
         .style({
           'stroke-width': _slog,
@@ -318,7 +391,7 @@
 
       links.exit().remove();
 
-      links.each(function(d, i) {
+      /* links.each(function(d, i) {
         if (d.type !== 'pair') {return;}
 
         var def = d3.select(markers[0][i]);
@@ -332,7 +405,7 @@
 
         def
           .attr('orient', degrees(a-Math.PI/2));
-      });
+      }); */
 
       //console.log(graph.edges);
 
@@ -429,10 +502,28 @@
           //.on('mouseout', tooltipHide)
           ;
 
-      nodesEnter.append('rect')
+      //nodesEnter.append('rect')
           //.on('dblclick', tooltip.toggle)
           //.on('mouseout', tooltip.hide)
-          ;
+          //;
+
+      function _t(d) {
+        if (d.group === 'gene.ligand') { return 'A'; }
+        if (d.group === 'gene.receptor') { return 'V'; }
+        return 'circle';
+      }
+
+      function _r(d) { return (d.type === 'gene') ? 90 : rsize(d.value)*15; }
+      //function __r(d) { return -_r(d); }
+      //function _2r(d) { return 2*_r(d); }
+      //function rx(d) { return (d.type === 'gene') ? 0 : _r(d); }
+
+      //var sym = d3.svg.symbol().type('circle').size(_r);
+
+      var sym = hiveSymbol().type(_t).size(_r);
+
+      nodesEnter.append("path")
+        .attr("d", sym);
 
       nodesEnter.append('text')
         .style({
@@ -445,13 +536,17 @@
           'text-anchor': 'start',
           'dy':          3,
           'dx':          15
+        })
+        .attr('transform', function(d) {
+          return 'rotate( '+degrees(_labelAngle(d))+' )';
         });
 
       nodes
         .attr('id', function(d) { return 'node-'+d._index; })
         .classed('fixed', _fixed)
         .attr('transform', function(d) {
-          return 'rotate( '+degrees(_angle(d))+' ) translate(' + _radius(d) + ') rotate( '+degrees(_labelAngle(d))+' )';
+          return 'rotate( '+degrees(_angle(d))+' ) translate(' + _radius(d) + ')';
+          //return 'rotate( '+degrees(_angle(d))+' ) translate(' + _radius(d) + ') rotate( '+degrees(_labelAngle(d))+' )';
         });
 
       nodes.each(function(d) {  // Store the x-y position for output
@@ -460,20 +555,15 @@
         d.y = b.top;
       });
 
-      function _r(d) { return (d.type === 'gene') ? 5 : rsize(d.value); }
-      function __r(d) { return -_r(d); }
-      function _2r(d) { return 2*_r(d); }
-      function rx(d) { return (d.type === 'gene') ? 0 : _r(d); }
-
-      nodes.select('rect')
-        .attr({
+      nodes.select('path')
+        /* .attr({
           x:      __r,
           y:      __r,
           width:  _2r,
           height: _2r,
           rx:     rx,
           ry:     rx,
-        })
+        }) */
         .style('fill',_ncolor);
 
       nodes.select('text')
@@ -534,5 +624,6 @@
   };
 
   root.charts.hiveGraph = hiveGraph;
+  root.models.hiveSymbol = hiveSymbol;
 
 })(window.lrd3);
