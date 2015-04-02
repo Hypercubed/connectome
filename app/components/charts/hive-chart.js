@@ -100,6 +100,7 @@
     var groups = ['gene.ligand','gene.receptor','sample'];
     var ncolor = d3.scale.ordinal()
       .domain(['ligand','both','receptor'])
+      //.range(['#8c564b','yellow','#1f77b4']);
       .range(['#ed1940','yellow','#3349ff']);
       //.range(['#ed1940','#a650e2','#9999ff']);
       //.range(['#ed1940','#a650e2','#3349ff']);
@@ -522,8 +523,8 @@
 
       var sym = hiveSymbol().type(_t).size(_r);
 
-      nodesEnter.append("path")
-        .attr("d", sym);
+      nodesEnter.append('path')
+        .attr('d', sym);
 
       nodesEnter.append('text')
         .style({

@@ -5,9 +5,8 @@
 (function() {
   'use strict';
 
-  var app = angular.module('lrSpaApp');
+  angular.module('lrSpaApp')
 
-  app
     .service('forceGraph', function($log, $window, $rootScope, $timeout, Graph, debounce, growl, cfpLoadingBar) {  // TODO: should be a directive
 
       var chart = new lrd3.charts.forceGraph();
@@ -72,7 +71,7 @@
 
       }
 
-      function _sortAndFilterNodes(options) {  //TODO: DRY this!!!
+      function _sortAndFilterNodes() {  //TODO: DRY this!!!
 
         graph.data.nodeCount = graph.data.nodes.length;  // do I need this?
 
@@ -110,7 +109,7 @@
 
       }
 
-      var MAXEDGES = 1000;
+      //var MAXEDGES = 1000;
 
       var StopIteration = new Error('Maximum number of edges exceeded');
 
@@ -236,23 +235,27 @@
 
         });
 
+        var _type = _F('type');
+        var _typeIsExpression = _type.eq('expression');
+        var _valueDesc = function(a,b) { return b.value - a.value; };
+
 
         graph.data.nodes.forEach(function(node) {  // todo: move
           if (!node.ticked) { return; }
 
-          var a = function(a,b) { return b.value - a.value; };
+          //var a = function(a,b) { return b.value - a.value; };
 
           //console.log(data.edgesIndex[node.id]);
 
           //data.edgesIndex[node.id] = data.edgesIndex[node.id].sort(a);
-          graph.data.outEdgesIndex[node.id] = graph.data.outEdgesIndex[node.id].sort(a);
-          graph.data.inEdgesIndex[node.id] = graph.data.inEdgesIndex[node.id].sort(a);
+          graph.data.outEdgesIndex[node.id] = graph.data.outEdgesIndex[node.id].sort(_valueDesc);
+          graph.data.inEdgesIndex[node.id] = graph.data.inEdgesIndex[node.id].sort(_valueDesc);
 
-          graph.data._outEdgesIndex[node.id] = graph.data._outEdgesIndex[node.id].sort(a);
-          graph.data._inEdgesIndex[node.id] = graph.data._inEdgesIndex[node.id].sort(a);
+          graph.data._outEdgesIndex[node.id] = graph.data._outEdgesIndex[node.id].sort(_valueDesc);
+          graph.data._inEdgesIndex[node.id] = graph.data._inEdgesIndex[node.id].sort(_valueDesc);
 
-          node.values[0] = d3.sum(graph.data._outEdgesIndex[node.id].filter(_F('type').eq('expression')),_value);
-          node.values[1] = d3.sum(graph.data._inEdgesIndex[node.id].filter(_F('type').eq('expression')),_value);
+          node.values[0] = d3.sum(graph.data._outEdgesIndex[node.id].filter(_typeIsExpression),_value);
+          node.values[1] = d3.sum(graph.data._inEdgesIndex[node.id].filter(_typeIsExpression),_value);
           node.value = d3.sum(node.values);
           //console.log(node.id);
         });

@@ -6,6 +6,8 @@
 
   var chartLegend = function() {
 
+    var _name = _F('name');
+
     var colorScale;
 
     var dispatch = d3.dispatch('mouseover','mouseout');
@@ -53,7 +55,7 @@
         .style({'stroke': 'none','fill': '#333','stroke-width': '1px','font-size': '10px'})
         .attr('x', 20)
         .attr('dy', '0.4em')
-        .text(_F('name'));
+        .text(_name);
 
     };
 

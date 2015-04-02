@@ -2,28 +2,14 @@
 (function() {
   'use strict';
 
-  var app = angular.module('lrSpaApp');
+  angular.module('lrSpaApp')
 
-  /* app
-    .directive('graph', function() {
-      return {
-        scope: {
-          graphService: '=graphServce',
-          data: '=',
-          graphData: '='
-        },
-        template: '<svg></svg>'
-      };
-    }); */
-
-  app
   .filter('percentage', ['$filter', function($filter) {
       return function(input, decimals) {
           return $filter('number')(input*100, decimals)+'%';
         };
-    }]);
+    }])
 
-  app
   .filter('min', function() {
     return function(input) {
       var out;
@@ -36,25 +22,22 @@
       }
       return out;
     };
-  });
+  })
 
-  app
   .filter('max', function() {
-      return function(input) {
-        var out;
-        if (input) {
-          for (var i in input) {
-            if (input[i] > out || out === undefined || out === null) {
-              out = input[i];
-            }
+    return function(input) {
+      var out;
+      if (input) {
+        for (var i in input) {
+          if (input[i] > out || out === undefined || out === null) {
+            out = input[i];
           }
         }
-        return out;
-      };
-    }
-  );
+      }
+      return out;
+    };
+  })
 
-  app
   .directive('graphItem', function() {
     return {
       scope: {
@@ -64,9 +47,8 @@
       },
       templateUrl: 'components/ui/item.html'
     };
-  });
+  })
 
-  app
   .directive('neighborsList', function() {
     return {
       scope: {
@@ -96,9 +78,8 @@
 
       }
     };
-  });
+  })
 
-  app
   .directive('expressionList', function() {
     return {
       scope: {

@@ -26,14 +26,17 @@
       </button>
 
       <button class="btn navbar-toggle col-xs-12 glyphicon glyphicon-floppy-disk"
+        title="Save this view"
         ng-click="panels.save = !panels.save">
       </button>
 
       <button class="btn navbar-toggle col-xs-12 fa fa-reply"
+        title="Undo"
         ng-click="undo()" ng-disabled="undoIndex <= 0">
       </button>
 
       <button class="btn navbar-toggle col-xs-12 fa fa-share"
+        title="Redo"
         ng-click="redo()" ng-disabled="undoIndex >= undoStack.length-1">
       </button>
 

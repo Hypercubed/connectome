@@ -5,9 +5,8 @@
 (function() {
   'use strict';
 
-  var app = angular.module('lrSpaApp');
+  angular.module('lrSpaApp')
 
-  app
     .service('hiveGraph', function($log, $window, $rootScope, $timeout, Graph, debounce, growl, cfpLoadingBar) {  // TODO: should be a directive
 
       var data = null;
@@ -86,7 +85,7 @@
 
       }
 
-      function _sortAndFilterNodes(options) {  //TODO: DRY this!!!
+      function _sortAndFilterNodes() {  //TODO: DRY this!!!
 
         graph.data.nodeCount = graph.data.nodes.length;  // do I need this?
 

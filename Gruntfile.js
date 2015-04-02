@@ -383,7 +383,8 @@ module.exports = function (grunt) {
     rsync: {
       options: {
         args: ['--verbose','--delete'],
-        recursive: true
+        recursive: true,
+        exclude: ['.git*']
       },
       prod: {
         options: {
@@ -411,11 +412,6 @@ module.exports = function (grunt) {
     ]);
   });
 
-  grunt.registerTask('server', function (target) {
-    grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-    grunt.task.run(['serve:' + target]);
-  });
-
   grunt.registerTask('test', [
     'clean:server',
     'concurrent:test',
@@ -433,7 +429,7 @@ module.exports = function (grunt) {
     'concat',
     'ngmin',
     'copy:dist',
-    'cdnify',
+    //'cdnify',
     'cssmin',
     'uglify',
     'rev',

@@ -3,9 +3,8 @@
 (function() {
   'use strict';
 
-  var app = angular.module('lrSpaApp');
-
-  app
+  angular.module('lrSpaApp')
+  
     .service('Graph', function($log, site) {
 
       var defaultSettings = {};

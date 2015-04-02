@@ -2,9 +2,8 @@
 (function() {
   'use strict';
 
-  var app = angular.module('lrSpaApp');
-
-  app
+  angular.module('lrSpaApp')
+  
     .controller('PanelCtrl', function ($scope, localStorageService) {
 
       this.state = {
@@ -113,7 +112,8 @@
           {field:'name', displayName:'Pair Name'},
           {field:'Ligand', displayName:'Ligand',cellTemplate: 'cellLigandTemplate'},
           {field:'Receptor', displayName:'Receptor',cellTemplate: 'cellReceptorTemplate'},
-          {field:'source', displayName:'Source',cellTemplate: 'cellPubMedTemplate'}
+          {field:'Source', cellTemplate: 'cellSourceTemplate' /*, displayName:'Source'  , */ },
+          {field:'Evidence', cellTemplate: 'cellPubMedTemplate' /*, displayName:'Evidence' */}
         ]
       });
 

@@ -11,22 +11,19 @@
   var _ticked = _F('ticked');
   var _i = _F('i');
 
-  var app = angular.module('lrSpaApp');
+  angular.module('lrSpaApp')
 
-  app
     .controller('ResetCtrl', function ($state,localStorageService) {
       localStorageService.clearAll();
       $state.go('home.hive-graph');
-    });
+    })
 
-  app
     .controller('MainCtrl', function ($scope, $rootScope, $log, $state, $filter, $templateCache, $timeout, $window, $location, growl, filterFilter, cfpLoadingBar, debounce, site, localStorageService, loadedData, ligandReceptorData, forceGraph, hiveGraph) {
 
       $rootScope.$on('$routeChangeError', function(event) {
         $log.warn(event);
       });
 
-      $rootScope.site = site;
       $scope.data = loadedData;
 
       $scope.max = Math.max;  // TODO: check if still needed
@@ -41,15 +38,14 @@
         edgeRankFilter: 1,
       };
 
-      var defaultIds = {
-        pairs: [1189],
-        cells:[10,13,15,16,17,30,33,51,56,62,69,72,73,80,86,101,105,139],
-        genes:[145,768]
-      };
+      var defaultIds = {pairs:[569],cells:[13,15,16,17,33,62,69,72,73],genes:[145,768]};
+
+      $scope.options = angular.copy(defaultOptions);
+      $scope.selectedIds = angular.copy(defaultIds);
 
       // Options
-      localStorageService.bind($scope, 'options', angular.extend({}, defaultOptions));
-      localStorageService.bind($scope, 'selectedIds', angular.extend({}, defaultIds));
+      //localStorageService.bind($scope, 'options', angular.extend({}, defaultOptions));
+      //localStorageService.bind($scope, 'selectedIds', angular.extend({}, defaultIds));
 
       //$scope.selected = {};
       $scope.resetOptions = function() {
@@ -70,18 +66,20 @@
       }
 
       $scope.resetVis = function() {
-        $scope.options = angular.extend({}, defaultOptions);
-        $scope.selectedIds = angular.extend({}, defaultIds);
+        $scope.options = angular.copy(defaultOptions);
+        $scope.selectedIds = angular.copy(defaultIds);
         loadSelection();
       };
 
       $scope.clearVis = function() {
-        $scope.selectedIds = angular.extend({}, {pairs:[],cells:[],genes:[]});
+        $scope.selectedIds = {pairs:[],cells:[],genes:[]};
         loadSelection();
       };
 
+      var _fixed = _F('fixed');
+
       $scope.updateSelection = function() {
-        graphService.data.selectedItems = graphService.data.nodes.filter(_F('fixed'));
+        graphService.data.selectedItems = graphService.data.nodes.filter(_fixed);
       };
 
       $scope.rightClick = function(e) {  // TODO: check if still needed
@@ -97,7 +95,7 @@
 
       $scope.state = $state.current;
 
-      $scope.$watch('state.name', function(name) {
+      $scope.$watch('state.name', function(name) {  // git rid of watchers
         $state.go(name);
         if (graphService) {graphService.clear();}
         graphService = (name === 'home.hive-graph') ? hiveGraph : forceGraph;
@@ -119,22 +117,22 @@
         saveAs(blob, 'lr-graph.gml');
       };
 
-      function loadSelection() {
+      function _ticked2(arr) {  // must be
+        return function(d) {
+          if (d.locked) { return false; }
+          d.fixed = false;
+          d.ticked = arr.indexOf(d.i) > -1;
+          return d.ticked;
+        };
+      }
 
-        function _ticked(arr) {
-          return function(d) {
-            if (d.locked) { return false; }
-            d.fixed = false;
-            d.ticked = arr.indexOf(d.i) > -1;
-            return d.ticked;
-          };
-        }
+      function loadSelection() {
 
         $log.debug('load from local storage');
 
-        $scope.data.pairs.filter(_ticked($scope.selectedIds.pairs));
-        $scope.data.cells.filter(_ticked($scope.selectedIds.cells));
-        $scope.data.genes.filter(_ticked($scope.selectedIds.genes));
+        $scope.data.pairs.filter(_ticked2($scope.selectedIds.pairs));
+        $scope.data.cells.filter(_ticked2($scope.selectedIds.cells));
+        $scope.data.genes.filter(_ticked2($scope.selectedIds.genes));
 
       }
 
@@ -224,7 +222,7 @@
         filter.target = angular.extend({}, filter.target, {locked: false});
 
         cfpLoadingBar.start();
-        var start = new Date().getTime();
+        var start = Date.now();
 
         $timeout(function() {
 
@@ -267,7 +265,7 @@
             });
           }
 
-          var time = (new Date().getTime()) - start;
+          var time = Date.now() - start;
           $log.debug('Execution time:', time/1000, 's');
 
           cfpLoadingBar.complete();
@@ -289,7 +287,7 @@
         target: {}
       };
 
-      // TODO: create a state service
+      // TODO: create a state undo service
       $scope.undoStack = [];
       $scope.undoIndex = -1;
 
@@ -372,10 +370,10 @@
           $scope.selectedIds[key] = arr.filter(_ticked).map(_i);
           updateNetwork();
         };
-        $scope.$watch(watchFn, callBack,true);
+        $scope.$watch(watchFn, callBack,true);  // git rid of watchers
       });
 
-      $scope.$watchCollection('options', updateNetwork);
+      $scope.$watchCollection('options', updateNetwork);  // git rid of watchers
 
       /*jshint -W055 */
       $scope.ngGridPlugins = [new ngGridFlexibleHeightPlugin()];

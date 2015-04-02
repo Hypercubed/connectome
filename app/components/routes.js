@@ -1,9 +1,9 @@
 (function() {
   'use strict';
 
-  var app = angular.module('lrSpaApp');
+  angular.module('lrSpaApp')
 
-  app.config(function($stateProvider, $urlRouterProvider) {
+  .config(function($stateProvider, $urlRouterProvider) {
 
     $urlRouterProvider.otherwise('/hive');
 

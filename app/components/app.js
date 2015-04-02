@@ -3,7 +3,7 @@
 (function() {
   'use strict';
 
-  var app = angular
+  angular
     .module('lrSpaApp', [
       'ngSanitize',
       'hc.slider',
@@ -12,7 +12,6 @@
       'panels',
       'ngAnimate',
       'ui.router',
-      //'ui.select2',
       'localytics.directives',
       'chieffancypants.loadingBar',
       'LocalStorageModule',
@@ -23,50 +22,56 @@
       'ng-context-menu',
       'ngGrid',
       'hc.marked',
-      //'multi-select',
       'ngClipboard'
-    ]);
+    ])
 
-  app
     .constant('site', {
       name: 'ligand-receptor-connectome',
-      version: '0.0.6b',
-      apiVersion: 'lr-1'
-    });
+      version: '0.0.7',
+      apiVersion: 'lr-1',
+      debug: false
+    })
 
-  app
+    .run(function($rootScope, site) {
+      $rootScope.site = site;
+    })
+
+    .run(function($window, site) {
+      if (site.debug) {
+        $window.watchCount = function () {
+          var i, data, scope,
+          count = 0,
+          all = document.all,
+          len = all.length,
+          test = {};
+
+          for (i=0; i < len; i++) {
+            data = angular.element(all[i]).data();
+            if (data && data.hasOwnProperty('$scope') && data.$scope.$$watchers) {
+              scope = data.$scope;
+              if ( ! test[ scope.$id ] ) {
+                test[ scope.$id ] = true;
+                count += scope.$$watchers.length;
+              }
+            }
+          }
+          return count;
+        };
+      }
+    })
+
     .config(function(localStorageServiceProvider, site){
       localStorageServiceProvider.setPrefix(site.apiVersion);
-    });
+    })
 
-  app
-    .config(function($logProvider) {
-      $logProvider.debugEnabled(true);
-    });
+    .config(function($logProvider, site) {
+      $logProvider.debugEnabled(site.debug);
+    })
 
-  app
     .config(['growlProvider', function(growlProvider) {
       growlProvider.globalTimeToLive(5000);
     }]);
 
-  window.watchCount = function () {
-    var i, data, scope,
-      count = 0,
-      all = document.all,
-      len = all.length,
-      test = {};
 
-    for (i=0; i < len; i++) {
-      data = angular.element(all[i]).data();
-      if (data.hasOwnProperty('$scope') && data.$scope.$$watchers) {
-        scope = data.$scope;
-        if ( ! test[ scope.$id ] ) {
-          test[ scope.$id ] = true;
-          count += scope.$$watchers.length;
-        }
-      }
-    }
-    return count;
-  };
 
 })();

@@ -64,6 +64,7 @@
 
 .pageslide-bottom .tab-pane {
   overflow-y: auto;
+  overflow-x: hidden;
   height: 350px;
 }
 
@@ -96,4 +97,10 @@
   /* width: 0px; */
   -webkit-transform: translateY(360px); /* Chrome, Safari, Opera */
   transform: translateY(360px);
+}
+
+.ngViewport {
+  overflow-y: auto;
+  min-height: 20px;
+  overflow-x: hidden;
 }

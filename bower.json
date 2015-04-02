@@ -1,6 +1,6 @@
 {
   "name": "lrspa",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "dependencies": {
     "angular": "1.2.23",
     "json3": "~3.3.2",
@@ -24,7 +24,7 @@
     "angular-sanitize": "~1.2.18",
     "angular-bindonce": "~0.3.1",
     "ng-context-menu": "~0.1.4",
-    "ng-grid": "~2.0.12",
+    "ng-grid": "~2.0.14",
     "angular-marked": "~0.0.12",
     "font-awesome": "~4.2.0",
     "Blob.js": "eligrey/Blob.js",

@@ -4,17 +4,18 @@
 (function() {
   'use strict';
 
-  var app = angular.module('lrSpaApp');
+  var _value = _F('value');
+  var _i0 = _F(0);
 
-  app
+  angular.module('lrSpaApp')
+
     .constant('files', {
       expression: 'data/LR.expr.txt',
       pairs: 'data/LR.pairs.txt',
       genes: 'data/LR.genes.txt',
       ontology: 'data/ontology.txt'
-    });
+    })
 
-  app
     .service('ligandReceptorData', function($q, $log,$http,$timeout,dsv,files) {
 
       var service = {};
@@ -41,7 +42,10 @@
               Receptor: d.Receptor,
               ligandId: d.Ligand+'.ligand',
               receptorId: d.Receptor+'.receptor',
-              source: d.Source
+              Source: d.Source,
+              Evidence: d.Evidence,
+              PMIDs: d.PMIDs,
+              Databases: d.Databases.split(',').join(', ')
             };
           })
           .error(function(data, status, headers, config) {
@@ -165,7 +169,7 @@
             } */
 
             // Get index for each gene in expression table
-            var _genesIndecies = _expr.slice(1).map(_F(0));
+            var _genesIndecies = _expr.slice(1).map(_i0);
             service.data.genes = service.data.genes.map(function(gene) {
               var i = _genesIndecies.indexOf(gene.name);
               gene.i = i;
@@ -212,7 +216,7 @@
               });
 
               if (!_ligand || !_receptor) {
-                $log.warn('Ligand or receptor missing from expression table');
+                $log.warn('Ligand or receptor missing from expression table', pair.ligandId, pair.receptorId);
                 pair.index = [-1,-1];
                 return false;
               }
@@ -310,7 +314,7 @@
 
       service.getExpressionValues = function (filter, max, acc) {
         filter = filter || {};
-        acc = acc || _F('value');
+        acc = acc || _value;
 
         var ligandMin = filter.ligandMin || 0;
         var receptorMin = filter.receptorMin || 0;
@@ -373,7 +377,7 @@
 
       service.getPathways = function getPathways(filter, max, acc) {
         max = max || 10;
-        acc = acc || _F('value');
+        acc = acc || _value;
 
         var paths = [];
 

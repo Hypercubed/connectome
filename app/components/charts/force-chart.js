@@ -46,7 +46,7 @@
     var _id = _F('id');
     var _class = _F('class');
     var _fixed = _F('fixed');
-    var _edgeFixed = _F('source',_fixed).and(_F('target',_fixed));
+    //var _edgeFixed = _F('source',_fixed).and(_F('target',_fixed));
     var _hover = _F('hover');
 
     var linkName = function(d) { return [d.source.name, d.name, d.target.name].join(':'); };
