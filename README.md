@@ -10,8 +10,6 @@ We developed the online connectome visualization application using various open 
 
 The visualization interface takes the the expression files generated in this study along with other metadata in tabular format [Ramilowski_et_al_2015](http://fantom.gsc.riken.jp/5/suppl/Ramilowski_et_al_2015/) to generate the network/hive visualization as shown in figure 5 in the paper.
 
-An online version of the resource is located here: [Ramilowski_et_al_2014/vis/](http://fantom.gsc.riken.jp/5/suppl/Ramilowski_et_al_2014/vis/).  The source code is under MIT license and is available here: [Hypercubed/connectome](https://github.com/Hypercubed/connectome).
-
 # For Developers
 
 ## Background
