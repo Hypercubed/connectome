@@ -4,19 +4,19 @@ Web tool for exploring cell-cell ligand-receptor mediated communication networks
 
 ## Introduction
 
-In Ramilowski et al. ‘A draft network of ligand-receptor mediated multicellular signaling in human’[reference] we present the first large-scale map of cell-to-cell communication between 144 human primary cell types using 2,422 putative and literature supported ligand-receptor pairs. With up to hundreds of potential interactions between any two of these 144 primary cell types, there are millions of possible cell-cell communication paths across the entire network. Static visualization of such complex networks not only can be obscure and impractical but also difficult. With that, and to benefit the research community, we provide an online resource that visualizes, on demand, our cell-cell communication network for any given subset of the ligand-receptor pairs and profiled primary cells. The interface is available at: http://fantom.gsc.riken.jp/5/suppl/Ramilowski_et_al_2014/.
+In Ramilowski et al. ‘A draft network of ligand-receptor mediated multicellular signaling in human’ 2015 [reference pending publication] we present the first large-scale map of cell-to-cell communication between 144 human primary cell types using 2,422 putative and literature supported ligand-receptor pairs. With up to hundreds of potential interactions between any two of these 144 primary cell types, there are millions of possible cell-cell communication paths across the entire network. Static visualization of such complex networks not only can be obscure and impractical but also difficult. With that, and to benefit the research community, we provide an online resource that visualizes, on demand, our cell-cell communication network for any given subset of the ligand-receptor pairs and profiled primary cells. An online version of the resource is located at: [Ramilowski_et_al_2015](http://fantom.gsc.riken.jp/5/suppl/Ramilowski_et_al_2015/vis/) and mirrored at [forrest-lab.github.io/connectome](http://forrest-lab.github.io/connectome).
 
 We developed the online connectome visualization application using various open source and custom tools.  The vector graphic visualization is generated using the [D3.js visualization library][d3].  The application interface was developed using the [AngularJS web application framework][angular] and the [twitter bootstrap front-end framework][twbs].
 
-The visualization interface takes the the expression files generated in this study along with other metadata in tabular format [http://fantom.gsc.riken.jp/5/suppl/Ramilowski_et_al_2014/](http://fantom.gsc.riken.jp/5/suppl/Ramilowski_et_al_2014/) to generate the network/hive visualization as shown in figure 5 in the paper.
+The visualization interface takes the the expression files generated in this study along with other metadata in tabular format [Ramilowski_et_al_2015](http://fantom.gsc.riken.jp/5/suppl/Ramilowski_et_al_2015/) to generate the network/hive visualization as shown in figure 5 in the paper.
 
-An online version of the resource is located here: [http://fantom.gsc.riken.jp/5/suppl/Ramilowski_et_al_2014/vis/](http://fantom.gsc.riken.jp/5/suppl/Ramilowski_et_al_2014/vis/).  The source code is under MIT license and is available here: [https://github.com/Hypercubed/connectome](https://github.com/Hypercubed/connectome).
+An online version of the resource is located here: [Ramilowski_et_al_2014/vis/](http://fantom.gsc.riken.jp/5/suppl/Ramilowski_et_al_2014/vis/).  The source code is under MIT license and is available here: [Hypercubed/connectome](https://github.com/Hypercubed/connectome).
 
 # For Developers
 
 ## Background
 
-To install a copy of this application you will need [node.js](http://nodejs.org/), npm, Grunt, and Bower. If you are not familiar it would be worthwhile to read up on [node and npm](http://www.joyent.com/blog/installing-node-and-npm/), [Grunt](https://github.com/gruntjs/grunt/wiki/Getting-started) and [bower](http://bower.io/).
+To install a copy of this application you will need [node and npm](http://nodejs.org/), Grunt, and Bower. If you are not familiar it would be worthwhile to read up on [node and npm](http://www.joyent.com/blog/installing-node-and-npm/), [Grunt](https://github.com/gruntjs/grunt/wiki/Getting-started) and [bower](http://bower.io/).
 
 ## Download and Install
 
@@ -33,9 +33,6 @@ bower install
       bower_components/    --> AngularJS and 3rd party JavaScript libraries installed using bower
       components/          --> Application components
       data/                --> data files
-    lib/                --> TET express application
-      controllers/        --> Express server controllers
-      server.js           --> Express server
     test/               --> test source files and libraries
     package.json        --> npm's config file
     bower.json          --> bower's config file
@@ -44,7 +41,7 @@ bower install
 
 ## Adding data
 
-This git repository doesn't include the data files. You will need to download the ligand-receptor data files from the FANTOM server or add your own into the app/data/ folder. All data files should be Tab-Seperated-Value (TSV) files.
+This git repository include the data files that acompany the above referenced paper. You add your own into the app/data/ folder. All data files should be Tab-Seperated-Value (TSV) files.
 
 ## Grunt
 
@@ -56,6 +53,7 @@ Summary of Grunt tasks:
               test  Run all tests
              build  Prepare project for deployment.
              serve  Run a test server
+             deploy Build and deploy to github
 
 ## Running the app during development
 
@@ -77,7 +75,7 @@ TBR
 
 [MIT License](http://en.wikipedia.org/wiki/MIT_License)
 
-Copyright (c) 2014 RIKEN, Japan.
+Copyright (c) 2015 RIKEN, Japan.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

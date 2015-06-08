@@ -392,6 +392,13 @@ module.exports = function (grunt) {
           dest: '<%= build.prod %>'
         }
       }
+    },
+
+    'gh-pages': {
+      options: {
+        base: 'dist'
+      },
+      src: ['**']
     }
 
   });
@@ -439,7 +446,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('deploy', [
     'build',
-    'rsync:prod'
+    'gh-pages'
   ]);
 
   grunt.registerTask('default', [

@@ -21,7 +21,7 @@
     "_F": "Hypercubed/_F#~0.0.2",
     "lodash": "~2.4.1",
     "angular-dsv": "~0.0.4",
-    "angular-sanitize": "~1.2.18",
+    "angular-sanitize": "~1.4.0",
     "angular-bindonce": "~0.3.1",
     "ng-context-menu": "~0.1.4",
     "ng-grid": "~2.0.14",
@@ -71,6 +71,7 @@
     }
   },
   "resolutions": {
-    "angular": "~1.2.0"
+    "angular": "1.2.23",
+    "angular-sanitize": "~1.2.18"
   }
 }
