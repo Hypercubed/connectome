@@ -4,6 +4,9 @@
 
 describe('Service: ligandReceptorData', function () {
 
+  var _name = _F('name');
+  var _median = _F('median');
+
   // load the service's module
   beforeEach(module('lrSpaApp'));
 
@@ -54,10 +57,11 @@ describe('Service: ligandReceptorData', function () {
       //expect(data.pairs.length).toEqual(2);
       //expect(data.genes.length).toEqual(4);
 
-      expect(data.cells.map(_F('name'))).toEqual(['c1','c2','c3']);
-      expect(data.genes.map(_F('name'))).toEqual(['l1','r1','l2','r2']);
-      expect(data.pairs.map(_F('name'))).toEqual(['l1-r1','l2-r2']);
-      expect(data.genes.map(_F('median'))).toEqual([11, 0, 0, 5]);
+
+      expect(data.cells.map(_name)).toEqual(['c1','c2','c3']);
+      expect(data.genes.map(_name)).toEqual(['l1','r1','l2','r2']);
+      expect(data.pairs.map(_name)).toEqual(['l1-r1','l2-r2']);
+      expect(data.genes.map(_median)).toEqual([11, 0, 0, 5]);
     });
 
     $httpBackend.flush();
