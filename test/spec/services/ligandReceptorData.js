@@ -17,9 +17,9 @@ describe('Service: ligandReceptorData', function () {
       $httpBackend = _$httpBackend_;
       ligandReceptorData = _ligandReceptorData_;
 
-      var pairs = ['Ligand','Receptor','Source'].join('\t')+'\n';
-      pairs += ['l1','r1','source1'].join('\t')+'\n';
-      pairs += ['l2','r2','source2'].join('\t');
+      var pairs = ['Ligand','Receptor','Source','Databases'].join('\t')+'\n';
+      pairs += ['l1','r1','source1','none'].join('\t')+'\n';
+      pairs += ['l2','r2','source2','none'].join('\t');
 
       var expr = ['gene','c1','c2','c3'].join('\t')+'\n';
       expr += ['l1','0','100','11'].join('\t')+'\n';
