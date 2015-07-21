@@ -1,0 +1,142 @@
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="panels.search = !panels.search">&times;</button>
+<tabset>
+  <tab heading="Expression" active="active1">
+    <div class="modal-body">
+
+      <form class="form-horizontal" role="form" class="animate-fade">
+
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Cell</label>
+          <div class="col-sm-9">
+
+            <select multiple data-placeholder="Pick a cell or cells" chosen="" width="'100%'" ng-model="exprFilter.cell.id" ng-options="cell.id as cell.name for cell in data.cells">
+            </select>
+
+          </div>
+        </div>
+
+        <div class="form-group" ng-init="exprFilter.gene.class = 'each'">
+          <label class="col-sm-3 control-label">Genes</label>
+          <div class="col-sm-9">
+            <input type="radio" name="class[]" ng-model="exprFilter.gene.class" value="each">
+            <label class="control-label"> Top ligands and top receptors</label>
+            <br><input type="radio" name="class[]" ng-model="exprFilter.gene.class" value="ligand" checked>
+            <label class="control-label"> Top ligands only</label>
+            <br><input type="radio" name="class[]" ng-model="exprFilter.gene.class" value="receptor">
+            <label class="control-label"> Top receptors only</label>
+            <br><input type="radio" name="class[]" ng-model="exprFilter.gene.class" value="">
+            <label class="control-label"> Specific genes</label>
+            <div class="animate-fade" ng-if="exprFilter.gene.class == ''">
+              <select class="col-md-10" multiple data-placeholder="Pick a gene or genes" chosen="" ng-model="exprFilter.gene.id" ng-options="gene.id as gene.name for gene in data.genes">
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="form-group" ng-init="exprFilter.rank = 'specificity'">
+          <label class="col-sm-3 control-label">Rank by</label>
+          <div class="col-sm-9">
+            <input type="radio" name="rank[]" ng-model="exprFilter.rank" value="specificity">
+            <label class="control-label">specificity</label>
+            <br><input type="radio" name="rank[]" ng-model="exprFilter.rank" value="expression" checked>
+            <label class="control-label">expression</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-offset-3 col-sm-9">
+
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default pull-left" ng-click="exprFilter = { rank: 'specificity', gene: { class: 'each' }}">Clear form</button>
+      <!-- button type="button" class="btn btn-primary" ng-click="panels.search = false; showExpressionEdges(exprFilter, 10);">Add</button -->
+      Show top
+      <button type="button" class="btn btn-primary" ng-click="clearVis();  panels.search = false; showExpressionEdges(exprFilter, 100);">100</button>
+      <button type="button" class="btn btn-primary" ng-click="clearVis();  panels.search = false; showExpressionEdges(exprFilter, 10);">10</button>
+    </div>
+
+  </tab>
+  <tab heading="Paths" active="active2">
+
+    <div class="modal-body">
+
+      <form class="form-horizontal" role="form" class="animate-fade">
+
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Cell A</label>
+          <div class="col-sm-9">
+
+            <select multiple data-placeholder="Pick a cell type" chosen="" ng-model="pathFilter.source.id" ng-options="cell.id as cell.name for cell in data.cells">
+              <!-- option bindonce
+                ng-repeat="cell in data.cells track by cell.id"
+                bo-value="cell.id"
+                bo-text="cell.name"></option -->
+            </select>
+
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Pair</label>
+          <div class="col-sm-9">
+
+            <select multiple data-placeholder="Pick a ligand receptor pair" chosen="" ng-model="pathFilter.pair.id" ng-options="pair.id as pair.name for pair in data.pairs">
+            </select>
+
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Cell B</label>
+          <div class="col-sm-9">
+
+              <select multiple data-placeholder="Pick a cell type" chosen="" ng-model="pathFilter.target.id" ng-options="cell.id as cell.name for cell in data.cells">
+              </select>
+
+          </div>
+        </div>
+
+        <div class="form-group" ng-init="pathFilter.direction = 'each'">
+          <label class="col-sm-3 control-label">Direction</label>
+          <div class="col-sm-9">
+            <input type="radio" name="direction[]" ng-model="pathFilter.direction" value="AB">
+            <label class="control-label"> Directional (A->B)</label>
+            <!-- br>
+            <input type="radio" name="direction[]" ng-model="pathFilter.direction" value="BA">
+            <label class="control-label"> B -> A</label -->
+            <br>
+            <input type="radio" name="direction[]" ng-model="pathFilter.direction" value="each">
+            <label class="control-label"> Bi-directional (Top A->B and Top B->A)</label>
+          </div>
+        </div>
+
+        <div class="form-group" ng-init="pathFilter.rank = 'specificity'">
+          <label class="col-sm-3 control-label">Rank by</label>
+          <div class="col-sm-9">
+            <input type="radio" name="rank[]" ng-model="pathFilter.rank" value="specificity">
+            <label class="control-label">specificity sum</label>
+            <br><input type="radio" name="rank[]" ng-model="pathFilter.rank" value="expression" checked>
+            <label class="control-label">expression product</label>
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" ng-click="pathFilter = { rank: 'specificity', direction: 'each' }">Clear form</button>
+        Show top
+        <button type="button" class="btn btn-primary" ng-click="panels.search = false; clearVis(); showPaths(pathFilter, 100);">100</button>
+        <button type="button" class="btn btn-primary" ng-click="panels.search = false; clearVis(); showPaths(pathFilter, 10);">10</button>
+    </div>
+
+  </tab>
+
+</tabset>

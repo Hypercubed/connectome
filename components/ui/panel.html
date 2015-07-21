@@ -1,0 +1,10 @@
+<div ng-click="toggleOpen()">
+  <a href="">
+  	<span ng-bind="heading"></span>
+  	<b class="caret collapsed" ng-class="{'collapsed': !isOpen}"></b>
+  </a>
+  <div class="pull-right small" ng-bind="label" ng-cloak="">
+  </div>
+</div>
+<div class="animate-fade" ng-if="ngIf" ng-transclude="">
+</div>

@@ -1,0 +1,145 @@
+Cell	Ontology
+Adipocyte Breast	mesenchymal
+Adipocyte Omental	mesenchymal
+Adipocyte Perirenal	mesenchymal
+Adipocyte Subcutaneous	mesenchymal
+Alveolar Epithelial	epithelial
+Amniotic Epithelial	epithelial
+Amniotic Membrane	epithelial
+Annulus Pulposus	other
+Astrocyte Cerebellum	nervous system
+Astrocyte Cerebral Cortex	nervous system
+Basophils	hematopoietic
+Bronchial Epithelial	epithelial
+Cardiac Myocyte	mesenchymal
+CD133+ Haematopoietic stem cell	hematopoietic
+CD14-CD16+ Monocytes	hematopoietic
+CD14+ Monocyte derived Endothelial progenitor	hematopoietic
+CD14+ Monocytes	hematopoietic
+CD14+CD16- Monocytes	hematopoietic
+CD14+CD16+ Monocytes	hematopoietic
+CD19+ B cells	hematopoietic
+CD34+ Haematopoietic stem cell	hematopoietic
+CD34+ progenitor	hematopoietic
+CD4+ T cells	hematopoietic
+CD4+CD25-CD45RA- memory conventional T cells	hematopoietic
+CD4+CD25-CD45RA+ naive conventional T cells	hematopoietic
+CD4+CD25+CD45RA- memory regulatory T cells	hematopoietic
+CD4+CD25+CD45RA+ naive regulatory T cells	hematopoietic
+CD8+ T cells	hematopoietic
+Chondroblast	mesenchymal
+Chondrocyte	mesenchymal
+Chorionic Membrane	epithelial
+Ciliary Epithelial	epithelial
+Corneal Epithelial	epithelial
+Dendritic Monocyte Immature derived	hematopoietic
+Dendritic Plasmacytoid	hematopoietic
+ES cells	other
+Endothelial Aortic	endothelial
+Endothelial Artery	endothelial
+Endothelial Lymphatic	endothelial
+Endothelial Microvascular	endothelial
+Endothelial Thoracic	endothelial
+Endothelial Umbilical Vein	endothelial
+Endothelial Vein	endothelial
+Eosinophils	hematopoietic
+Esophageal Epithelial	epithelial
+Fibroblast Aortic Adventitial	mesenchymal
+Fibroblast Cardiac	mesenchymal
+Fibroblast Choroid Plexus	mesenchymal
+Fibroblast Conjunctival	mesenchymal
+Fibroblast Dermal	mesenchymal
+Fibroblast Gingival	mesenchymal
+Fibroblast Lymphatic	mesenchymal
+Fibroblast Periodontal Ligament	mesenchymal
+Fibroblast Pulmonary Artery	mesenchymal
+Fibroblast Skin Normal	mesenchymal
+Gingival Epithelial	epithelial
+Granulocyte Macrophage progenitor	hematopoietic
+Hair Follicle Dermal Papilla	epithelial
+Hair Follicle Outer Root Sheath	epithelial
+Hepatic Sinusoidal Endothelial	endothelial
+Hepatic Stellate	mesenchymal
+Hepatocyte	epithelial
+Immature Langerhans	hematopoietic
+Intestinal Epithelial (polarized)	epithelial
+Iris Pigment Epithelial	epithelial
+Keratinocyte Epidermal	epithelial
+Keratinocyte Oral	epithelial
+Keratocytes	epithelial
+Lens Epithelial	epithelial
+Macrophage Monocyte derived	hematopoietic
+Mallassez derived	epithelial
+Mammary Epithelial	epithelial
+Mast cells	hematopoietic
+Mast cells stimulated	hematopoietic
+Mature Adipocyte	mesenchymal
+Melanocyte	epithelial
+Meningeal	other
+Mesenchymal precursor Adipose	mesenchymal
+Mesenchymal precursor Bone Marrow	mesenchymal
+Mesenchymal precursor Cardiac	mesenchymal
+Mesenchymal stem cell Adipose	mesenchymal
+Mesenchymal stem cell Amniotic Membrane	mesenchymal
+Mesenchymal stem cell Bone Marrow	mesenchymal
+Mesenchymal stem cell Hepatic	mesenchymal
+Mesenchymal stem cell Umbilical	mesenchymal
+Mesenchymal stem cell Wharton's Jelly	mesenchymal
+Mesothelial	mesenchymal
+Migratory Langerhans	hematopoietic
+Multipot. Cord Blood Unrestrict. Somatic stem cell	hematopoietic
+Myoblast	mesenchymal
+Myotube	mesenchymal
+Nasal Epithelial	epithelial
+NK cells	hematopoietic
+Neural stem cell	nervous system
+Neurons	nervous system
+Neutrophils	hematopoietic
+Nucleus Pulposus	mesenchymal
+Olfactory Epithelial	epithelial
+Osteoblast	mesenchymal
+Osteocyte	mesenchymal
+Pancreatic Stromal	mesenchymal
+Pericytes	mesenchymal
+Placental Epithelial	epithelial
+Preadipocyte Breast	mesenchymal
+Preadipocyte Omental	mesenchymal
+Preadipocyte Perirenal	mesenchymal
+Preadipocyte Subcutaneous	mesenchymal
+Preadipocyte Visceral	mesenchymal
+Prostate Epithelial	epithelial
+Prostate Stromal	mesenchymal
+Renal Cortical Epithelial	epithelial
+Renal Epithelial	epithelial
+Renal Glomerular Endothelial	endothelial
+Renal Mesangial	mesenchymal
+Renal Proximal Tubular Epithelial	epithelial
+Reticulocyte	hematopoietic
+Retinal Pigment Epithelial	epithelial
+Salivary Acinar	epithelial
+Sebocyte	epithelial
+Sertoli	other
+Skeletal Muscle	mesenchymal
+Skeletal Muscle Satellite	mesenchymal
+Small Airway Epithelial	epithelial
+Smooth Muscle Aortic	mesenchymal
+Smooth Muscle Brachiocephalic	mesenchymal
+Smooth Muscle Brain Vascular	mesenchymal
+Smooth Muscle Bronchial	mesenchymal
+Smooth Muscle Carotid	mesenchymal
+Smooth Muscle Colonic	mesenchymal
+Smooth Muscle Coronary Artery	mesenchymal
+Smooth Muscle Esophageal	mesenchymal
+Smooth Muscle Internal Thoracic Artery	mesenchymal
+Smooth Muscle Prostate	mesenchymal
+Smooth Muscle Pulmonary Artery	mesenchymal
+Smooth Muscle Subclavian Artery	mesenchymal
+Smooth Muscle Tracheal	mesenchymal
+Smooth Muscle Umbilical Artery	mesenchymal
+Smooth Muscle Umbilical Vein	mesenchymal
+Smooth Muscle Uterine	mesenchymal
+Synoviocyte	mesenchymal
+Tenocyte	mesenchymal
+Trabecular Meshwork	other
+Tracheal Epithelial	epithelial
+Urothelial	epithelial

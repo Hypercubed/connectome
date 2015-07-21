@@ -1,0 +1,8 @@
+<span bindonce="" ng-repeat="edge in list | limitTo : limit track by $index" class="animate-fade">
+	<a href="" title="{{edge.value | number:2}}" ng-click="click(edge[key])" ng-mouseover="hover(edge[key], true)" ng-mouseout="hover(edge[key], false)" ng-style="{'font-weight': edge[key].ticked ? 'bold' : ''}" bo-text="edge[key].name">
+	</a>
+	<span>{{$last ? '' : ','}}</span>
+</span>
+<a class="button btn-link" ng-if="list.length > limit" ng-click="expand()">
+(+ {{list.length - limit}} more)
+</a>

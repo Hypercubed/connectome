@@ -1,0 +1,274 @@
+<script type="text/ng-template" id="cellTemplate">
+  <div class="ngCellText">
+    <button class="btn btn-sm btn-link btn-icon" title="Toggle element visibility"
+        ng-click="row.entity.ticked = !row.entity.ticked; itemClicked(row);$event.stopPropagation();">
+      <span class="glyphicon glyphicon-eye-close icon-check"
+        ng-class="{ 'icon-checked': row.entity.ticked }">
+        </span>
+    </button>
+    <button class="btn btn-sm btn-link btn-icon" title="Lock element hidden"
+        ng-click="row.entity.locked = !row.entity.locked; itemClicked(row);$event.stopPropagation();">
+      <span class="fa fa-unlock icon-check"
+        ng-class="{ 'icon-checked': row.entity.locked }">
+        </span>
+    </button>
+  </div>
+</script>
+
+<script type="text/ng-template" id="checkboxCellTemplate.html">
+  <div class="ngCellText"></div>
+</script>
+
+<script type="text/ng-template" id="checkboxHeaderTemplate.html">
+    <div class="ngCellText btn-group" dropdown is-open="isopen" style="overflow: inherit">
+      <a class="btn btn-sm btn-link btn-icon dropdown-toggle">
+        <i class="glyphicon glyphicon-chevron-down"></i>
+      </a>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="#" ng-click="toggleSelectAll(true, true)">Select All</a></li>
+        <li><a href="#" ng-click="toggleSelectAll(false, true)">Select None</a></li>
+      </ul>
+    </div>
+    <!-- button ng-click="toggleSelectAll(true, true)">B</button</script>
+
+<script type="text/ng-template" id="cellLigandTemplate">
+  <div class="ngCellText">
+    <button class="btn btn-sm btn-link btn-icon" title="Toggle element visibility"
+        ng-click="row.entity.ligand.ticked = !row.entity.ligand.ticked; $event.stopPropagation();">
+      <span class="glyphicon glyphicon-eye-close icon-check"
+        ng-class="{ 'icon-checked': row.entity.ligand.ticked }">
+        </span>
+    </button>
+    {{row.getProperty(col.field)}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="cellReceptorTemplate">
+  <div class="ngCellText">
+    <button class="btn btn-sm btn-link btn-icon" title="Toggle element visibility"
+        ng-click="row.entity.receptor.ticked = !row.entity.receptor.ticked; $event.stopPropagation();">
+      <span class="glyphicon glyphicon-eye-close icon-check"
+        ng-class="{ 'icon-checked': row.entity.receptor.ticked }">
+        </span>
+    </button>
+    {{row.getProperty(col.field)}}
+  </div>
+</script>
+
+<!-- script type="text/ng-template" id="cellPairTemplate">
+  <div class="ngCellText">
+    <input type="checkbox" class="glyphicon glyphicon-eye-close"
+      ng-model="row.entity.ticked"
+      ng-change="itemClicked(row)"></input>
+    <input type="checkbox" class="fa fa-unlock"
+      ng-model="row.entity.locked"
+      ng-change="itemClicked(row)" />
+  </div>
+</script -->
+
+<script type="text/ng-template" id="menuTemplate.html">
+    <div ng-show="showColumnMenu || showFilter" class="ngHeaderButton" ng-click="toggleShowMenu()">
+      {{i18n.ngSearchPlaceHolder}} <span class="glyphicon glyphicon-search"></span>
+    </div>
+    <div ng-show="showMenu" class="ngColMenu">
+      <div ng-show="showFilter">
+        <input placeholder="{{i18n.ngSearchPlaceHolder}}" type="text" ng-model="filterText"/>
+      </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="rowTemplate.html">
+  <div class="{{ row.entity.locked ? 'locked' : '' }}">
+    <div
+        ng-style="{ 'cursor': row.cursor }"
+        ng-repeat="col in renderedColumns"
+        ng-class="col.colIndex()"
+        class="ngCell {{col.cellClass}}">
+      <div class="ngVerticalBar"ng-style="{height: rowHeight}">&nbsp;</div>
+      <div ng-cell></div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="cellHGNCTemplate">
+<div class="ngCellText" ng-class="col.colIndex()">
+  <a href="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:{{COL_FIELD}}" target="_blank">
+    {{COL_FIELD}}
+  </a>
+</div>
+</script>
+
+<script type="text/ng-template" id="cellUniProtTemplate">
+<div class="ngCellText" ng-class="col.colIndex()">
+  <a href="http://www.uniprot.org/uniprot/{{COL_FIELD}}" target="_blank">
+    {{COL_FIELD}}
+  </a>
+</div>
+</script>
+
+<script type="text/ng-template" id="cellPubMedTemplate">
+<div class="ngCellText" ng-class="col.colIndex()" ng-switch="row.entity.PMIDs || 'null'">
+    <span  ng-switch-when="null">{{COL_FIELD}}</span>
+    <a ng-switch-default ng-attr-href="http://www.ncbi.nlm.nih.gov/pubmed/{{row.entity.PMIDs}}" target="_blank">{{COL_FIELD}}</a>
+</div>
+</script>
+
+<script type="text/ng-template" id="cellSourceTemplate">
+<div class="ngCellText" ng-class="col.colIndex()">
+  <abbr title="{{row.entity.Databases}}">{{COL_FIELD}}</abbr>
+</div>
+</script>
+
+<script type="text/ng-template" id="visibleHeaderCellTemplate">
+  <div class="ngHeaderSortColumn {{col.headerClass}}"
+    ng-style="{'cursor': col.cursor}"
+    ng-class="{ 'ngSorted': !noSortVisible }">
+    <div ng-class="'colt' + col.index" class="ngHeaderText">
+      <!-- input
+        type="checkbox"
+        class="glyphicon glyphicon-eye-close"
+        ng-model="allSelected"
+        ng-change="toggleSelectAll(allSelected)"></input -->
+      <span ng-click="col.sort($event)">{{col.displayName}}</span>
+    </div>
+    <div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>
+    <div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>
+    <div class="ngSortPriority">{{col.sortPriority}}</div>
+  </div>
+  <div
+    ng-show="col.resizable"
+    class="ngHeaderGrip"
+    ng-click="col.gripClick($event)"
+    ng-mousedown="col.gripOnMouseDown($event)"></div>
+</script>
+
+<tabset>
+  <tab active="active1">
+    <tab-heading ng-click="panelState.data = true" title="Show cell types">
+      Cell types ({{selectedIds.cells.length}}/{{ (data.cells | filter : { locked: false }).length}})
+    </tab-heading>
+    <div class="gridStyle" ng-grid="gridOptions.cells" ng-if="panelState.data && active1"></div>
+  </tab>
+  <tab active="active2">
+    <tab-heading ng-click="panelState.data = true" bindonce="data" title="Show ligand/receptor genes">Genes ({{selectedIds.genes.length}}/{{(data.genes | filter : { locked: false }).length}})</tab-heading>
+    <div class="gridStyle" ng-grid="gridOptions.genes" ng-if="panelState.data && active2"></div>
+  </tab>
+  <tab active="active3">
+    <tab-heading ng-click="panelState.data = true" bindonce="data" title="Show ligand-receptor pairs">Pairs ({{selectedIds.pairs.length}}/{{(data.pairs | filter : { locked: false }).length}})</tab-heading>
+    <div class="gridStyle" ng-grid="gridOptions.pairs" ng-if="panelState.data && active3"></div>
+  </tab>
+  <tab active="active4">
+    <tab-heading ng-click="panelState.data = true" title="Miscellaneous visualization options">Options</tab-heading>
+    <div ng-if="active4">
+      <div class="col-md-3">
+        <h4>Graph</h4>
+        <form class="well">
+          <ul class="list-unstyled">
+            <li><span><input type="checkbox" ng-model="options.showLabels"> Show node labels</span>
+            <!-- li><span><input type="radio" ng-model="state.name" value="home.force-graph" /> force directed graph</span>
+            <li><span><input type="radio" ng-model="state.name" value="home.hive-graph" /> hive plot</span -->
+          </li></ul>
+        </form>
+
+      </div>
+      <div class="col-md-3">
+        <h4>Edges</h4>
+        <form class="well">
+
+          <div>
+            <span>Ligand TPM</span>
+            <div class="pull-right small ng-binding">&gt; {{options.ligandFilter | number:0}} tpm</div>
+          </div>
+
+          <div hc-slider="" ng-model="options.ligandFilter" max="[graphData.ligandExtent[1], 10] | max" min="0" step="1">
+          </div>
+
+          <p>
+          <div>
+            <span>Receptor TPM</span>
+            <div class="pull-right small ng-binding">&gt; {{options.receptorFilter | number:0}} tpm</div>
+          </div>
+
+          <div hc-slider="" ng-model="options.receptorFilter" max="[graphData.receptorExtent[1],10] | max" min="0" step="1">
+          </div>
+
+          <p>
+          <div>
+            <span>Expression edge cutoff</span>
+            <div class="pull-right small ng-binding">top {{options.edgeRankFilter | percentage}}</div>
+          </div>
+
+          <div hc-slider="" ng-model="options.edgeRankFilter" max="1" min="0" step="0.01">
+          </div>
+
+        </form>
+      </div>
+      <div class="col-md-12">
+        <div class="pull-right">
+          <a class="btn btn-default" ng-click="resetOptions()">Reset options</a>
+        </div>
+      </div>
+    </div>
+  </tab>
+  <tab active="active5">
+    <tab-heading class="tab-help" ng-click="panelState.data = true" title="Ligand-Receptor Connectome Help">Help</tab-heading>
+    <div class="col-md-12" style="overflow: auto">
+      <h3 class="title">Ligand Receptor Connectome <small>{{site.version}}</small></h3>
+      <blockquote>
+      <h4>A visual guide to FANTOM5 Ligand-Receptor interactions as described in Ramilowski et al. ‘A draft network of ligand-receptor mediated multicellular signaling in human’ 2015.
+      <br>Site source code at <a href="https://github.com/Hypercubed/connectome">Hypercubed/connectome</a>.</h4>
+      </blockquote>
+
+      <p>
+        <u>Entity and options panel</u> - <i class="fa fa-bars"></i> (bottom right)
+        <br>Displays entities and options panel
+      </p>
+      <ul>
+        <li><strong>Tabs</strong>: switch between lists of cells, genes, and ligand receptor pairs</li>
+        <li><strong>Visibility Toggle buttons</strong>: (<i class="glyphicon glyphicon-eye-open"></i> left in each row) turn on/off cells and genes (ligand/receptors)</li>
+        <li><strong>ctrl-click</strong> and <strong>shift-click</strong>: select multiple nodes and change visibility as a group</li>
+        <li><strong>Search... <i class="glyphicon glyphicon-search"></i></strong> button:  (upper right of the data list) filters each lists by substring search</li>
+      </ul>
+
+      <p>
+        <u>Information panel</u> - <i class="fa fa-bars"></i> (top right)
+        <br>Displays information on current network and on selected nodes/edges
+      </p>
+
+      <p>
+        <u>Search feature</u> - <i class="glyphicon glyphicon-search"></i>
+        <br>Search for top expression values and/or top cell-to-cell communication paths
+      </p>
+
+      <p>
+        <u>Visualization style</u> - <i class="glyphicon glyphicon-repeat"></i>
+        <br>Switch between hive/force-direct plots
+      </p>
+
+      <p>
+        <u>Save feature</u> - <i class="glyphicon glyphicon-floppy-disk"></i>
+        <br>Save current view as SVG, download data in JSON or GML format, bookmark this view for later
+      </p>
+
+      <p>
+        <u>Visualization</u>
+      </p>
+      <ul>
+        <li><strong>Click</strong>: select/deselect a node (information appears in the information panel)</li>
+        <li><strong>Ctrl-click</strong>: select multiple nodes</li>
+        <li><strong>Shift-Click</strong>: select a node and neighbors</li>
+        <li><strong>Right click</strong>: additional options</li>
+      </ul>
+
+    </div>
+  </tab>
+</tabset>
+
+<div class="pageslide-toggle bottom">
+  <button type="button" ng-click="panelState.data = !panelState.data; active5=true;" class="navbar-toggle pull-right" title="Click to show options" style="display: inline-block">
+    <span class="sr-only">Toggle navigation</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
+</div>

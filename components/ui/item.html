@@ -1,0 +1,158 @@
+<div class="animate-switch-container" ng-switch="item.type">
+	<div class="animate-switch" ng-switch-when="gene">
+	  <h5>{{item.name}} {{item.class}}</h5>
+
+	  <ul class="list-unstyled">
+	  	<!-- li ng-if="item.class == 'ligand'">
+	  		Paired receptors:
+	  		<span neighbors-list="graphData._outEdgesIndex[item.id]"
+	  			key="target"
+	  			array="graphData.nodesIndex"></span>
+	  	</li -->
+	  	<!-- li ng-if="item.class == 'receptor'">
+	  		Paired ligands:
+	  		<span neighbors-list="graphData._inEdgesIndex[item.id]"
+	  			key="source"
+	  			array="graphData.nodesIndex"></span>
+	  		</li -->
+      	<!-- li>Age: <span ng-bind="item['age']"></span></li -->
+			<li>Taxon: <span ng-bind="item.taxon"></span></li>
+			<li>UniProtID: <span ng-bind="item.uniprotid"></span></li>
+		</ul>
+
+		<div ng-init="
+		  cellsIn = (graphData._inEdgesIndex[item.id] | filter : { type: 'expression' });
+			cellsOut = (graphData._outEdgesIndex[item.id] | filter : { type: 'expression' });
+			cells = cellsIn.concat(cellsOut)">
+
+			<div class="miniGrid" ng-grid="{
+				data: 'cells',
+				rowHeight: 15,
+				headerRowHeight: 15,
+				plugins: ngGridPlugins,
+				sortInfo: { fields: ['value'], directions: ['desc'] },
+				columnDefs: [{field:'cell.name', displayName:'Cell'},
+				             {field:'value', displayName:'Expression (TPM)', cellFilter: 'number:2'},
+										 {field:'specificity', displayName:'Specificity', cellFilter: 'number:2'}]
+				}">
+	    </div>
+
+	  </div>
+
+			<!-- li>
+				<div>
+					<table style="font-size: small; margin-top: 5px; width: 100%">
+						<tr>
+							<th><u>Cell</u></th>
+							<td>Expression</td>
+							<td>Specificity</td>
+						</tr>
+						<tr class="animate-fade"
+								ng-if="item.class == 'ligand'"
+						    ng-repeat="edge in graphData._inEdgesIndex[item.id]">
+							<td>
+								<a href
+									ng-click="edge.source.ticked = !edge.source.ticked"
+									ng-mouseover="edge.source.hover = true"
+									ng-mouseout="edge.source.hover = false">
+									{{edge.source.name}}
+								</a>
+						  </td>
+							<td>{{edge.value | number:2}}</td>
+							<td>{{edge.specificity | number:2}}</td>
+						</tr>
+						<tr class="animate-fade"
+								ng-if="item.class == 'receptor'"
+						    ng-repeat="edge in graphData._outEdgesIndex[item.id]">
+							<td>
+								<a href
+									ng-click="edge.target.ticked = !edge.target.ticked"
+									ng-mouseover="edge.target.hover = true"
+									ng-mouseout="edge.target.hover = false">
+									{{edge.target.name}}
+								</a>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</li -->
+
+	</div>
+
+	<div class="animate-switch" ng-switch-when="sample">
+	  <h5><span ng-bind="item.name"></span></h5>
+	  <ul class="list-unstyled" ng-init="
+				ligands = (graphData._outEdgesIndex[item.id] | filter : { type: 'expression' });
+				receptors = (graphData._inEdgesIndex[item.id] | filter : { type: 'expression' });
+				genes = ligands.concat(receptors)">
+	    <!-- li>
+	    	<span ng-bind="ligands.length > 0 ? 'Sum of ' : ''"></span>
+	    	Ligand expression: {{item.values[0] | number:2}} TPM
+	    </li>
+	    <li>Ligands:
+	    	<span
+					neighbors-list="ligands"
+					key="target"
+					array="graphData.nodesIndex"></span>
+	    </li>
+	    <li>
+	    	<span ng-bind="receptors.length > 0 ? 'Sum of ' : ''"></span>
+	    	Receptor expression: {{item.values[1] | number:2}} TPM
+	    </li>
+	    <li>
+	    	Receptors:
+	    	<span neighbors-list="receptors"
+					key="source"
+					array="graphData.nodesIndex"></span>
+	    </li -->
+	    <li ng-repeat="(k,v) in item.meta" ng-bind="k + ': ' + v"></li>
+	  </ul>
+
+		<div class="miniGrid" ng-if="genes.length > 0" ng-grid="{
+			data: 'genes',
+			rowHeight: 15,
+			headerRowHeight: 15,
+			plugins: ngGridPlugins,
+			sortInfo: { fields: ['value'], directions: ['desc'] },
+			columnDefs: [{field:'gene.name', displayName:'Gene'},
+									{field:'value', displayName:'Expression (TPM)', cellFilter: 'number:2'},
+									{field:'specificity', displayName:'Specificity', cellFilter: 'number:2'}]
+			}">
+		</div>
+
+	</div>
+
+	<div class="animate-switch" ng-switch-when="sample-sample">
+		<h5 ng-bind="item.name"></h5>
+		<!-- ul  class="list-unstyled">
+			<li>Expression product: <span ng-bind="item.value | number:2"></li>
+			<li>Specificity sum: <span ng-bind="item.specificity | number:2"></li>
+		</ul  -->
+
+		<div class="miniGrid" ng-if="item.pairs.length > 0" ng-grid="{
+			data: 'item.pairs',
+			rowHeight: 15,
+			headerRowHeight: 15,
+			plugins: ngGridPlugins,
+			sortInfo: { fields: ['value'], directions: ['desc'] },
+			columnDefs: [{field:'pair.name', displayName:'Pair'},
+									{field:'value', displayName:'Expression product', cellFilter: 'number:2'},
+									{field:'specificity', displayName:'Specificity', cellFilter: 'number:2'}]
+			}">
+		</div>
+	</div>
+
+	<div class="animate-switch" ng-switch-when="expression">
+		<h5 ng-bind="item.name"></h5>
+	  <ul class="list-unstyled">
+	    <li>Expression value: {{item.value | number:2}} TPM</li>
+	    <!-- li>Specificity: <span ng-bind="item._specificity | number:2"></li -->
+	    <li>Specificity: <span ng-bind="item.specificity | number:2"></span></li>
+	  </ul>
+	</div>
+
+	<div class="animate-switch" ng-switch-when="pair">
+		<h5 ng-bind="item.name"></h5>
+	</div>
+
+</div>

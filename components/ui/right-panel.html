@@ -1,0 +1,58 @@
+<div>
+  <div class="row pageslide pageslide-right" ng-show="panels.state.info">
+
+    <div class="pageslide-toggle right btn-vert-block">
+
+      <button type="button" ng-click="panelState.info = !panelState.info" class="btn navbar-toggle col-xs-12" title="Click to show information" style="display: inline-block">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <button class="btn navbar-toggle col-xs-12 glyphicon glyphicon-search" title="Search" ng-click="panels.search = !panels.search">
+      </button>
+
+      <button class="btn navbar-toggle col-xs-12 glyphicon" title="Switch visualization mode" ng-class="{ true: 'glyphicon-repeat', false: 'glyphicon-refresh'}[state.name == 'home.hive-graph']" ng-click="state.name = (state.name == 'home.hive-graph') ? 'home.force-graph' : 'home.hive-graph'">
+      </button>
+
+      <button class="btn navbar-toggle col-xs-12 glyphicon glyphicon-floppy-disk" title="Save this view" ng-click="panels.save = !panels.save">
+      </button>
+
+      <button class="btn navbar-toggle col-xs-12 fa fa-reply" title="Undo" ng-click="undo()" ng-disabled="undoIndex <= 0">
+      </button>
+
+      <button class="btn navbar-toggle col-xs-12 fa fa-share" title="Redo" ng-click="redo()" ng-disabled="undoIndex >= undoStack.length-1">
+      </button>
+
+    </div>
+
+    <div ng-if="panels.state.info">
+      <div class="new-tip" ng-cloak="" ng-show="graphData.nodes.length > 0">
+        <ul class="list-unstyled" bindonce="graphData">
+          <li>Nodes: {{graphData._nodes.length}} / {{graphData.nodes.length}}</li>
+          <li>Edges: {{graphData._edges.length}} / {{graphData.edges.length}}</li>
+        </ul>
+      </div>
+
+      <div ng-repeat="item in graphData.selectedItems track by item.id" class="new-tip" ng-class="item.hover ? 'bg-warning' : 'bg-danger'" ng-if="item.type">
+        <button type="button" class="close" aria-hidden="true" ng-click="revoveSelectedItem($index)" ng-show="item.fixed">&times;</button>
+        <div ng-include="'components/ui/item.html'">
+        </div>
+      </div>
+    </div>
+
+  </div>
+<div>
+
+<div class="modal-dialog" ng-show="panels.save">
+  <div class="modal-content" ng-include="'components/ui/saveModalContent.html'">
+
+  </div>
+</div>
+
+<div class="modal-dialog" ng-show="panels.search">
+  <div class="modal-content" ng-include="'components/ui/searchModalContent.html'">
+
+  </div>
+</div></div></div>

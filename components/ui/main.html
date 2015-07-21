@@ -1,0 +1,53 @@
+<div id="content">
+
+  <noscript>Missing javascript</noscript>
+
+  <div id="vis" context-menu="rightClick($event)" style="" data-target="myMenu" ng-class="{ 'highlight': panels.state.highlight, 'expanded': panels.state.contextmenu }">
+    <svg></svg>
+
+    <div class="dropdown position-fixed" id="myMenu">
+
+      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
+        <!-- clickedItem -->
+
+          <li ng-if="clickedItem" ng-click="clickedItem.fixed = true; updateSelection()" class="dropdown-header">{{clickedItem.name}}</li>
+
+          <li ng-if="clickedItem.type == 'sample' || clickedItem.type == 'gene'">
+            <a class="pointer" role="menuitem" ng-click="hide(clickedItem)">Hide</a>
+          </li>
+
+
+          <li class="divider" ng-show="clickedItem"></li>
+
+        <!-- clickedItem -->
+
+          <li ng-if="graphData.selectedItems[0].fixed" class="dropdown-header">{{graphData.selectedItems.length}} selected items</li>
+
+          <li ng-if="graphData.selectedItems[0].fixed">
+            <a class="pointer" role="menuitem" ng-click="hide(graphData.selectedItems)">Hide</a>
+          </li>
+
+
+        <li class="divider" ng-show="graphData.selectedItems[0].fixed"></li>
+
+        <li><a class="pointer" ng-click="clearVis()">Clear visualization</a></li>
+        <li><a class="pointer" ng-click="resetVis()">Default visualization</a></li>
+
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div growl=""></div>
+
+<div ng-controller="PanelCtrl as panels" ng-cloak="">
+
+  <div ng-include="'components/ui/right-panel.html'">
+  </div>
+
+  <div class="pageslide pageslide-bottom" ng-show="panels.state.data" ng-include="'components/ui/bottom-panel.html'">
+  </div>
+
+</div>

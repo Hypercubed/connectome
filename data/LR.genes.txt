@@ -1,0 +1,1348 @@
+ApprovedSymbol	ApprovedName	Class	UniProtID	HGNCID	Taxon
+A2M	alpha-2-macroglobulin	ligand	P01023	7	Euteleostomi
+AANAT	aralkylamine N-acetyltransferase	ligand	Q16613	19	Euteleostomi
+ACE	angiotensin I converting enzyme	ligand	P12821	2707	Bilateria
+ADAM10	ADAM metallopeptidase domain 10	ligand	O14672	188	Bilateria
+ADAM12	ADAM metallopeptidase domain 12	ligand	O43184	190	Bilateria
+ADAM15	ADAM metallopeptidase domain 15	ligand	Q13444	193	Theria
+ADAM17	ADAM metallopeptidase domain 17	ligand	P78536	195	Bilateria
+ADAM2	ADAM metallopeptidase domain 2	ligand	Q99965	198	Mammalia
+ADAM23	ADAM metallopeptidase domain 23	ligand	O75077	202	Euteleostomi
+ADAM28	ADAM metallopeptidase domain 28	ligand	Q9UKQ2	206	Amniota
+ADAM9	ADAM metallopeptidase domain 9	ligand	Q13443	216	Euteleostomi
+ADCYAP1	adenylate cyclase activating polypeptide 1 (pituitary)	ligand	P18509	241	Euteleostomi
+ADIPOQ	adiponectin, C1Q and collagen domain containing	ligand	Q15848	13633	Tetrapoda
+ADM	adrenomedullin	ligand	P35318	259	Euteleostomi
+ADM2	adrenomedullin 2	ligand	Q7Z4H4	28898	Theria
+AGRN	agrin	ligand	O00468	329	Deuterostomia
+AGRP	agouti related protein homolog (mouse)	ligand	O00253	330	Amniota
+AGT	angiotensinogen (serpin peptidase inhibitor, clade A, member 8)	ligand	P01019	333	Euteleostomi
+AHSG	alpha-2-HS-glycoprotein	ligand	P02765	349	Euteleostomi
+ALB	albumin	ligand	P02768	399	Tetrapoda
+AMELX	amelogenin, X-linked	ligand	Q99217	461	Theria
+AMELY	amelogenin, Y-linked	ligand	Q99218	462	Theria
+AMH	anti-Mullerian hormone	ligand	P03971	464	Amniota
+ANGPT1	angiopoietin 1	ligand	Q15389	484	Euteleostomi
+ANGPT2	angiopoietin 2	ligand	O15123	485	Chordata
+ANGPT4	angiopoietin 4	ligand	Q9Y264	487	Theria
+ANGPTL1	angiopoietin-like 1	ligand	O95841	489	Amniota
+ANGPTL2	angiopoietin-like 2	ligand	Q9UKU9	490	Euteleostomi
+ANGPTL3	angiopoietin-like 3	ligand	Q9Y5C1	491	Euteleostomi
+ANGPTL4	angiopoietin-like 4	ligand	Q9BY76	16039	Euteleostomi
+ANXA1	annexin A1	ligand	P04083	533	Euteleostomi
+APLN	apelin	ligand	Q9ULZ1	16665	Theria
+APOB	apolipoprotein B	ligand	P04114	603	Euteleostomi
+APOC3	apolipoprotein C-III	ligand	P02656	610	Theria
+APOD	apolipoprotein D	ligand	P05090	612	Deuterostomia
+APOE	apolipoprotein E	ligand	P02649	613	Euteleostomi
+APP	amyloid beta (A4) precursor protein	ligand	P05067	620	Euteleostomi
+AREG	amphiregulin	ligand	P15514	651	Amniota
+AREGB	amphiregulin B	ligand	P15514	34509	Amniota
+ARF1	ADP-ribosylation factor 1	ligand	P84077	652	Eukaryota
+ARTN	artemin	ligand	Q5T4W7	727	Euarchontoglires
+ASIP	agouti signaling protein	ligand	P42127	745	Theria
+AVP	arginine vasopressin	ligand	P01185	894	Euteleostomi
+AZGP1	alpha-2-glycoprotein 1, zinc-binding	ligand	P25311	910	Theria
+B2M	beta-2-microglobulin	ligand	P61769	914	Amniota
+BCAN	brevican	ligand	Q96GW7	23059	Euteleostomi
+BDNF	brain-derived neurotrophic factor	ligand	P23560	1033	Euteleostomi
+BGN	biglycan	ligand	P21810	1044	Euteleostomi
+BMP10	bone morphogenetic protein 10	ligand	O95393	20869	Euteleostomi
+BMP15	bone morphogenetic protein 15	ligand	O95972	1068	Euteleostomi
+BMP2	bone morphogenetic protein 2	ligand	P12643	1069	Bilateria
+BMP3	bone morphogenetic protein 3	ligand	P12645	1070	Euteleostomi
+BMP4	bone morphogenetic protein 4	ligand	P12644	1071	Euteleostomi
+BMP5	bone morphogenetic protein 5	ligand	P22003	1072	Bilateria
+BMP6	bone morphogenetic protein 6	ligand	P22004	1073	Euarchontoglires
+BMP7	bone morphogenetic protein 7	ligand	P18075	1074	Bilateria
+BMP8B	bone morphogenetic protein 8b	ligand	P34820	1075	Euteleostomi
+BST1	bone marrow stromal cell antigen 1	ligand	Q10588	1118	Amniota
+BTC	betacellulin	ligand	P35070	1121	Euteleostomi
+BTLA	B and T lymphocyte associated	ligand	Q7Z6A9	21087	Eutheria
+C1QA	complement component 1, q subcomponent, A chain	ligand	P02745	1241	Human
+C1QB	complement component 1, q subcomponent, B chain	ligand	P02746	1242	Tetrapoda
+C1QTNF1	C1q and tumor necrosis factor related protein 1	ligand	Q9BXJ1	14324	Tetrapoda
+C1QTNF5	C1q and tumor necrosis factor related protein 5	ligand	Q9BXJ0	14344	NA
+C1orf112	chromosome 1 open reading frame 112	ligand	Q9NSG2	25565	Deuterostomia
+C1orf194	chromosome 1 open reading frame 194	ligand	Q5T5A4	32331	Mammalia
+C1orf200	chromosome 1 open reading frame 200	ligand	Q5SR53	32346	Catarrhini
+C3	complement component 3	ligand	P01024	1318	Deuterostomia
+C4A	complement component 4A (Rodgers blood group)	ligand	P0C0L4	1323	NA
+C4B	complement component 4B (Chido blood group)	ligand	P0C0L5	1324	NA
+C4BPA	complement component 4 binding protein, alpha	ligand	P04003	1325	Tetrapoda
+C5	complement component 5	ligand	P01031	1331	Deuterostomia
+C5orf55	chromosome 5 open reading frame 55	ligand	Q8N2X6	25175	NA
+C6orf15	chromosome 6 open reading frame 15	ligand	Q6UXA7	13927	Theria
+CALCA	calcitonin-related polypeptide alpha	ligand	P01258	1437	Tetrapoda
+CALCB	calcitonin-related polypeptide beta	ligand	P10092	1438	Eutheria
+CALR	calreticulin	ligand	P27797	1455	Eukaryota
+CAMP	cathelicidin antimicrobial peptide	ligand	P49913	1472	Amniota
+CCK	cholecystokinin	ligand	P06307	1569	Euteleostomi
+CCL1	chemokine (C-C motif) ligand 1	ligand	P22362	10609	Eutheria
+CCL11	chemokine (C-C motif) ligand 11	ligand	P51671	10610	Euarchontoglires
+CCL13	chemokine (C-C motif) ligand 13	ligand	Q99616	10611	Theria
+CCL14	chemokine (C-C motif) ligand 14	ligand	Q16627	10612	Homininae
+CCL15	chemokine (C-C motif) ligand 15	ligand	Q16663	10613	Homininae
+CCL16	chemokine (C-C motif) ligand 16	ligand	O15467	10614	Human
+CCL17	chemokine (C-C motif) ligand 17	ligand	Q92583	10615	Amniota
+CCL18	chemokine (C-C motif) ligand 18 (pulmonary and activation-regulated)	ligand	P55774	10616	Catarrhini
+CCL19	chemokine (C-C motif) ligand 19	ligand	Q99731	10617	Amniota
+CCL2	chemokine (C-C motif) ligand 2	ligand	P13500	10618	Eutheria
+CCL20	chemokine (C-C motif) ligand 20	ligand	P78556	10619	Amniota
+CCL21	chemokine (C-C motif) ligand 21	ligand	O00585	10620	Theria
+CCL22	chemokine (C-C motif) ligand 22	ligand	O00626	10621	Mammalia
+CCL23	chemokine (C-C motif) ligand 23	ligand	P55773	10622	Euarchontoglires
+CCL24	chemokine (C-C motif) ligand 24	ligand	O00175	10623	Theria
+CCL25	chemokine (C-C motif) ligand 25	ligand	O15444	10624	Eutheria
+CCL26	chemokine (C-C motif) ligand 26	ligand	Q9Y258	10625	Theria
+CCL27	chemokine (C-C motif) ligand 27	ligand	Q9Y4X3	10626	Eutheria
+CCL28	chemokine (C-C motif) ligand 28	ligand	Q9NRJ3	17700	Eutheria
+CCL3	chemokine (C-C motif) ligand 3	ligand	P10147	10627	Amniota
+CCL3L1	chemokine (C-C motif) ligand 3-like 1	ligand	P16619	10628	Eutheria
+CCL3L3	chemokine (C-C motif) ligand 3-like 3	ligand	P16619	30554	NA
+CCL4	chemokine (C-C motif) ligand 4	ligand	P13236	10630	Amniota
+CCL5	chemokine (C-C motif) ligand 5	ligand	P13501	10632	Theria
+CCL7	chemokine (C-C motif) ligand 7	ligand	P80098	10634	Euarchontoglires
+CCL8	chemokine (C-C motif) ligand 8	ligand	P80075	10635	Theria
+CD14	CD14 molecule	ligand	P08571	1628	Amniota
+CD24	CD24 molecule	ligand	P25063	1645	NA
+CD34	CD34 molecule	ligand	P28906	1662	Amniota
+CD40LG	CD40 ligand	ligand	P29965	11935	Tetrapoda
+CD55	CD55 molecule, decay accelerating factor for complement (Cromer blood group)	ligand	P08174	2665	Theria
+CD5L	CD5 molecule-like	ligand	O43866	1690	Theria
+CD70	CD70 molecule	ligand	P32970	11937	Theria
+CDH1	cadherin 1, type 1, E-cadherin (epithelial)	ligand	P12830	1748	Chordata
+CEL	carboxyl ester lipase	ligand	P19835	1848	Euteleostomi
+CELA3B	chymotrypsin-like elastase family, member 3B	ligand	P08861	15945	Theria
+CFH	complement factor H	ligand	P08603	4883	Tetrapoda
+CGA	glycoprotein hormones, alpha polypeptide	ligand	P01215	1885	Euteleostomi
+CGB	chorionic gonadotropin, beta polypeptide	ligand	P01233	1886	Human
+CGB8	chorionic gonadotropin, beta polypeptide 8	ligand	P01233	16453	NA
+CGN	cingulin	ligand	Q9P2M7	17429	Euteleostomi
+CHAD	chondroadherin	ligand	O15335	1909	Euteleostomi
+CLCF1	cardiotrophin-like cytokine factor 1	ligand	Q9UBD9	17412	Euarchontoglires
+CLEC11A	C-type lectin domain family 11, member A	ligand	Q9Y240	10576	Mammalia
+CLEC3A	C-type lectin domain family 3, member A	ligand	O75596	2052	Euteleostomi
+CNTF	ciliary neurotrophic factor	ligand	P26441	2169	NA
+CNTN2	contactin 2 (axonal)	ligand	Q02246	2172	Bilateria
+CNTN4	contactin 4	ligand	Q8IWV2	2174	Bilateria
+COL11A1	collagen, type XI, alpha 1	ligand	P12107	2186	Deuterostomia
+COL14A1	collagen, type XIV, alpha 1	ligand	Q05707	2191	Euteleostomi
+COL18A1	collagen, type XVIII, alpha 1	ligand	P39060	2195	Chordata
+COL1A1	collagen, type I, alpha 1	ligand	P02452	2197	Deuterostomia
+COL1A2	collagen, type I, alpha 2	ligand	P08123	2198	Deuterostomia
+COL2A1	collagen, type II, alpha 1	ligand	P02458	2200	Deuterostomia
+COL3A1	collagen, type III, alpha 1	ligand	P02461	2201	Homininae
+COL4A1	collagen, type IV, alpha 1	ligand	P02462	2202	Bilateria
+COL4A2	collagen, type IV, alpha 2	ligand	P08572	2203	Bilateria
+COL4A3	collagen, type IV, alpha 3 (Goodpasture antigen)	ligand	Q01955	2204	Bilateria
+COL4A4	collagen, type IV, alpha 4	ligand	P53420	2206	Human
+COL4A5	collagen, type IV, alpha 5	ligand	P29400	2207	Amniota
+COL4A6	collagen, type IV, alpha 6	ligand	Q14031	2208	Bilateria
+COL5A1	collagen, type V, alpha 1	ligand	P20908	2209	Deuterostomia
+COL5A2	collagen, type V, alpha 2	ligand	P05997	2210	Deuterostomia
+COL5A3	collagen, type V, alpha 3	ligand	P25940	14864	Deuterostomia
+COL6A1	collagen, type VI, alpha 1	ligand	P12109	2211	Tetrapoda
+COL6A2	collagen, type VI, alpha 2	ligand	P12110	2212	Euteleostomi
+COL6A3	collagen, type VI, alpha 3	ligand	P12111	2213	Tetrapoda
+COL7A1	collagen, type VII, alpha 1	ligand	Q02388	2214	Amniota
+COL8A1	collagen, type VIII, alpha 1	ligand	P27658	2215	Tetrapoda
+COL9A1	collagen, type IX, alpha 1	ligand	P20849	2217	Euteleostomi
+COL9A2	collagen, type IX, alpha 2	ligand	Q14055	2218	Human
+COL9A3	collagen, type IX, alpha 3	ligand	Q14050	2219	Euteleostomi
+COLQ	collagen-like tail subunit (single strand of homotrimer) of asymmetric acetylcholinesterase	ligand	Q9Y215	2226	Amniota
+CORT	cortistatin	ligand	O00230	2257	NA
+CP	ceruloplasmin (ferroxidase)	ligand	P00450	2295	Deuterostomia
+CPAMD8	C3 and PZP-like, alpha-2-macroglobulin domain containing 8	ligand	Q8IZJ3	23228	Mammalia
+CRH	corticotropin releasing hormone	ligand	P06850	2355	Amniota
+CRP	C-reactive protein, pentraxin-related	ligand	P02741	2367	Euteleostomi
+CSF1	colony stimulating factor 1 (macrophage)	ligand	P09603	2432	Mammalia
+CSF2	colony stimulating factor 2 (granulocyte-macrophage)	ligand	P04141	2434	Eutheria
+CSF3	colony stimulating factor 3 (granulocyte)	ligand	P09919	2438	Tetrapoda
+CSH1	chorionic somatomammotropin hormone 1 (placental lactogen)	ligand	P01243	2440	Homininae
+CSH2	chorionic somatomammotropin hormone 2	ligand	P01243	2441	NA
+CSHL1	chorionic somatomammotropin hormone-like 1	ligand	Q14406	2442	Human
+CTF1	cardiotrophin 1	ligand	Q16619	2499	Mammalia
+CTGF	connective tissue growth factor	ligand	P29279	2500	Chordata
+CTHRC1	collagen triple helix repeat containing 1	ligand	Q96CG8	18831	Deuterostomia
+CUBN	cubilin (intrinsic factor-cobalamin receptor)	ligand	O60494	2548	Bilateria
+CX3CL1	chemokine (C-X3-C motif) ligand 1	ligand	P78423	10647	Mammalia
+CXCL1	chemokine (C-X-C motif) ligand 1 (melanoma growth stimulating activity, alpha)	ligand	P09341	4602	Mammalia
+CXCL10	chemokine (C-X-C motif) ligand 10	ligand	P02778	10637	Mammalia
+CXCL11	chemokine (C-X-C motif) ligand 11	ligand	O14625	10638	Euarchontoglires
+CXCL12	chemokine (C-X-C motif) ligand 12	ligand	P48061	10672	Euteleostomi
+CXCL13	chemokine (C-X-C motif) ligand 13	ligand	O43927	10639	Eutheria
+CXCL16	chemokine (C-X-C motif) ligand 16	ligand	Q9H2A7	16642	Eutheria
+CXCL2	chemokine (C-X-C motif) ligand 2	ligand	P19875	4603	Mammalia
+CXCL3	chemokine (C-X-C motif) ligand 3	ligand	P19876	4604	Homininae
+CXCL5	chemokine (C-X-C motif) ligand 5	ligand	P42830	10642	Theria
+CXCL6	chemokine (C-X-C motif) ligand 6	ligand	P80162	10643	Theria
+CXCL9	chemokine (C-X-C motif) ligand 9	ligand	Q07325	7098	Theria
+CYR61	cysteine-rich, angiogenic inducer, 61	ligand	O00622	2654	Chordata
+DCN	decorin	ligand	P07585	2705	Euteleostomi
+DEFB1	defensin, beta 1	ligand	P60022	2766	Eutheria
+DEFB103A	defensin, beta 103A	ligand	P81534	15967	Eutheria
+DEFB103B	defensin, beta 103B	ligand	P81534	31702	Eutheria
+DEFB4A	defensin, beta 4A	ligand	O15263	2767	Euarchontoglires
+DEFB4B	defensin, beta 4B	ligand	O15263	30193	Euarchontoglires
+DHH	desert hedgehog	ligand	O43323	2865	Bilateria
+DKK1	dickkopf WNT signaling pathway inhibitor 1	ligand	O94907	2891	Euteleostomi
+DKK2	dickkopf WNT signaling pathway inhibitor 2	ligand	Q9UBU2	2892	Tetrapoda
+DLK1	delta-like 1 homolog (Drosophila)	ligand	P80370	2907	Amniota
+DLK2	delta-like 2 homolog (Drosophila)	ligand	Q6UY11	21113	Tetrapoda
+DLL1	delta-like 1 (Drosophila)	ligand	O00548	2908	Deuterostomia
+DLL3	delta-like 3 (Drosophila)	ligand	Q9NYJ7	2909	Theria
+DLL4	delta-like 4 (Drosophila)	ligand	Q9NR61	2910	Deuterostomia
+DSCAM	Down syndrome cell adhesion molecule	ligand	O60469	3039	Euteleostomi
+EBI3	Epstein-Barr virus induced 3	ligand	Q14213	3129	Theria
+ECM1	extracellular matrix protein 1	ligand	Q16610	3153	Theria
+EDA	ectodysplasin A	ligand	Q92838	3157	Theria
+EDIL3	EGF-like repeats and discoidin I-like domains 3	ligand	O43854	3173	Euteleostomi
+EDN1	endothelin 1	ligand	P05305	3176	Tetrapoda
+EDN2	endothelin 2	ligand	P20800	3177	Theria
+EDN3	endothelin 3	ligand	P14138	3178	Human
+EFEMP1	EGF containing fibulin-like extracellular matrix protein 1	ligand	Q12805	3218	Euteleostomi
+EFEMP2	EGF containing fibulin-like extracellular matrix protein 2	ligand	O95967	3219	Euteleostomi
+EFNA1	ephrin-A1	ligand	P20827	3221	Euteleostomi
+EFNA2	ephrin-A2	ligand	O43921	3222	Euteleostomi
+EFNA3	ephrin-A3	ligand	P52797	3223	Theria
+EFNA4	ephrin-A4	ligand	P52798	3224	NA
+EFNA5	ephrin-A5	ligand	P52803	3225	Chordata
+EFNB1	ephrin-B1	ligand	P98172	3226	Bilateria
+EFNB2	ephrin-B2	ligand	P52799	3227	Euteleostomi
+EFNB3	ephrin-B3	ligand	Q15768	3228	Theria
+EGF	epidermal growth factor	ligand	P01133	3229	Euteleostomi
+EGFL8	EGF-like-domain, multiple 8	ligand	Q99944	13944	NA
+EPGN	epithelial mitogen	ligand	Q6UW88	17470	Amniota
+EPO	erythropoietin	ligand	P01588	3415	Theria
+EREG	epiregulin	ligand	O14944	3443	Tetrapoda
+F10	coagulation factor X	ligand	P00742	3528	Tetrapoda
+F11	coagulation factor XI	ligand	P03951	3529	Tetrapoda
+F12	coagulation factor XII (Hageman factor)	ligand	P00748	3530	Mammalia
+F13A1	coagulation factor XIII, A1 polypeptide	ligand	P00488	3531	Theria
+F2	coagulation factor II (thrombin)	ligand	P00734	3535	Euteleostomi
+F7	coagulation factor VII (serum prothrombin conversion accelerator)	ligand	P08709	3544	Euteleostomi
+F8	coagulation factor VIII, procoagulant component	ligand	P00451	3546	Amniota
+F9	coagulation factor IX	ligand	P00740	3551	Euteleostomi
+FARP2	FERM, RhoGEF and pleckstrin domain protein 2	ligand	O94887	16460	Bilateria
+FASLG	Fas ligand (TNF superfamily, member 6)	ligand	P48023	11936	Euteleostomi
+FAT4	FAT atypical cadherin 4	ligand	Q6V0I7	23109	Bilateria
+FBLN1	fibulin 1	ligand	P23142	3600	Euteleostomi
+FBLN2	fibulin 2	ligand	P98095	3601	Chordata
+FBN1	fibrillin 1	ligand	P35555	3603	Deuterostomia
+FCN2	ficolin (collagen/fibrinogen domain containing lectin) 2	ligand	Q15485	3624	Tetrapoda
+FGA	fibrinogen alpha chain	ligand	P02671	3661	Euteleostomi
+FGB	fibrinogen beta chain	ligand	P02675	3662	Euteleostomi
+FGF1	fibroblast growth factor 1 (acidic)	ligand	P05230	3665	Tetrapoda
+FGF10	fibroblast growth factor 10	ligand	O15520	3666	Euteleostomi
+FGF11	fibroblast growth factor 11	ligand	Q92914	3667	Theria
+FGF12	fibroblast growth factor 12	ligand	P61328	3668	Tetrapoda
+FGF13	fibroblast growth factor 13	ligand	Q92913	3670	Chordata
+FGF14	fibroblast growth factor 14	ligand	Q92915	3671	Euteleostomi
+FGF16	fibroblast growth factor 16	ligand	O43320	3672	Bilateria
+FGF17	fibroblast growth factor 17	ligand	O60258	3673	Mammalia
+FGF18	fibroblast growth factor 18	ligand	O76093	3674	Chordata
+FGF19	fibroblast growth factor 19	ligand	O95750	3675	Euteleostomi
+FGF2	fibroblast growth factor 2 (basic)	ligand	P09038	3676	Tetrapoda
+FGF20	fibroblast growth factor 20	ligand	Q9NP95	3677	Euteleostomi
+FGF21	fibroblast growth factor 21	ligand	Q9NSA1	3678	Eutheria
+FGF22	fibroblast growth factor 22	ligand	Q9HCT0	3679	Mammalia
+FGF23	fibroblast growth factor 23	ligand	Q9GZV9	3680	Euteleostomi
+FGF3	fibroblast growth factor 3	ligand	P11487	3681	Euteleostomi
+FGF4	fibroblast growth factor 4	ligand	P08620	3682	Euteleostomi
+FGF5	fibroblast growth factor 5	ligand	P12034	3683	Chordata
+FGF6	fibroblast growth factor 6	ligand	P10767	3684	Euteleostomi
+FGF7	fibroblast growth factor 7	ligand	P21781	3685	Euteleostomi
+FGF8	fibroblast growth factor 8 (androgen-induced)	ligand	P55075	3686	Euteleostomi
+FGF9	fibroblast growth factor 9	ligand	P31371	3687	Tetrapoda
+FGG	fibrinogen gamma chain	ligand	P02679	3694	Chordata
+FGL1	fibrinogen-like 1	ligand	Q08830	3695	Euteleostomi
+FIGF	c-fos induced growth factor (vascular endothelial growth factor D)	ligand	O43915	3708	Euteleostomi
+FLT3LG	fms-related tyrosine kinase 3 ligand	ligand	P49771	3766	Eutheria
+FN1	fibronectin 1	ligand	P02751	3778	Euteleostomi
+FSHB	follicle stimulating hormone, beta polypeptide	ligand	P01225	3964	Tetrapoda
+FST	follistatin	ligand	P19883	3971	Euteleostomi
+GAL	galanin/GMAP prepropeptide	ligand	P22466	4114	Tetrapoda
+GALP	galanin-like peptide	ligand	Q9UBC7	24840	Euarchontoglires
+GAS6	growth arrest-specific 6	ligand	Q14393	4168	Euteleostomi
+GAST	gastrin	ligand	P01350	4164	Tetrapoda
+GCG	glucagon	ligand	P01275	4191	Euteleostomi
+GDF10	growth differentiation factor 10	ligand	P55107	4215	Tetrapoda
+GDF11	growth differentiation factor 11	ligand	O95390	4216	Euteleostomi
+GDF2	growth differentiation factor 2	ligand	Q9UK05	4217	Tetrapoda
+GDF5	growth differentiation factor 5	ligand	P43026	4220	Tetrapoda
+GDF6	growth differentiation factor 6	ligand	Q6KF10	4221	Euteleostomi
+GDF7	growth differentiation factor 7	ligand	Q7Z4P5	4222	Euarchontoglires
+GDF9	growth differentiation factor 9	ligand	O60383	4224	Euteleostomi
+GDNF	glial cell derived neurotrophic factor	ligand	P39905	4232	Euteleostomi
+GH1	growth hormone 1	ligand	P01241	4261	NA
+GH2	growth hormone 2	ligand	P01242	4262	Homininae
+GHRH	growth hormone releasing hormone	ligand	P01286	4265	Eutheria
+GHRL	ghrelin/obestatin prepropeptide	ligand	Q9UBU3	18129	Theria
+GIP	gastric inhibitory polypeptide	ligand	P09681	4270	Eutheria
+GNAI2	guanine nucleotide binding protein (G protein), alpha inhibiting activity polypeptide 2	ligand	P04899	4385	Bilateria
+GNAS	GNAS complex locus	ligand	O95467	4392	Bilateria
+GNB3	guanine nucleotide binding protein (G protein), beta polypeptide 3	ligand	P16520	4400	Opisthokonta
+GNRH1	gonadotropin-releasing hormone 1 (luteinizing-releasing hormone)	ligand	P01148	4419	Tetrapoda
+GNRH2	gonadotropin-releasing hormone 2	ligand	O43555	4420	Catarrhini
+GPC3	glypican 3	ligand	P51654	4451	Chordata
+GPHA2	glycoprotein hormone alpha 2	ligand	Q96T91	18054	Theria
+GPI	glucose-6-phosphate isomerase	ligand	P06744	4458	Cell.Organisms
+GREM1	gremlin 1, DAN family BMP antagonist	ligand	O60565	2001	Chordata
+GRP	gastrin-releasing peptide	ligand	P07492	4605	Tetrapoda
+GSTP1	glutathione S-transferase pi 1	ligand	P09211	4638	Mammalia
+GUCA2A	guanylate cyclase activator 2A (guanylin)	ligand	Q02747	4682	Human
+GUCA2B	guanylate cyclase activator 2B (uroguanylin)	ligand	Q16661	4683	Theria
+GZMB	granzyme B (granzyme 2, cytotoxic T-lymphocyte-associated serine esterase 1)	ligand	P10144	4709	Euteleostomi
+HAS2	hyaluronan synthase 2	ligand	Q92819	4819	Euteleostomi
+HBEGF	heparin-binding EGF-like growth factor	ligand	Q99075	3059	Amniota
+HCRT	hypocretin (orexin) neuropeptide precursor	ligand	O43612	4847	Theria
+HEBP1	heme binding protein 1	ligand	Q9NRV9	17176	Tetrapoda
+HGF	hepatocyte growth factor (hepapoietin A; scatter factor)	ligand	P14210	4893	Euteleostomi
+HHIPL2	HHIP-like 2	ligand	Q6UWX4	25842	Deuterostomia
+HHLA3	HERV-H LTR-associating 3	ligand	Q9XRX5	4906	Homininae
+HLA-A	major histocompatibility complex, class I, A	ligand	P01891	4931	Euteleostomi
+HLA-B	major histocompatibility complex, class I, B	ligand	P01889	4932	Euteleostomi
+HLA-C	major histocompatibility complex, class I, C	ligand	P04222	4933	NA
+HLA-E	major histocompatibility complex, class I, E	ligand	P13747	4962	Homininae
+HLA-G	major histocompatibility complex, class I, G	ligand	P17693	4964	Homininae
+HMGB1	high mobility group box 1	ligand	P09429	4983	Eukaryota
+HP	haptoglobin	ligand	P00738	5141	NA
+HRAS	Harvey rat sarcoma viral oncogene homolog	ligand	P01112	5173	Euteleostomi
+HRG	histidine-rich glycoprotein	ligand	P04196	5181	Amniota
+HSP90AA1	heat shock protein 90kDa alpha (cytosolic), class A member 1	ligand	P07900	5253	Eukaryota
+HSPG2	heparan sulfate proteoglycan 2	ligand	P98160	5273	Bilateria
+IAPP	islet amyloid polypeptide	ligand	P10997	5329	Amniota
+IBSP	integrin-binding sialoprotein	ligand	P21815	5341	Mammalia
+ICAM1	intercellular adhesion molecule 1	ligand	P05362	5344	Euarchontoglires
+ICAM2	intercellular adhesion molecule 2	ligand	P13598	5345	Theria
+ICAM3	intercellular adhesion molecule 3	ligand	P32942	5346	Catarrhini
+ICAM4	intercellular adhesion molecule 4 (Landsteiner-Wiener blood group)	ligand	Q14773	5347	Eutheria
+ICAM5	intercellular adhesion molecule 5, telencephalin	ligand	Q9UMF0	5348	Amniota
+IFNA1	interferon, alpha 1	ligand	P01562	5417	Catarrhini
+IFNA10	interferon, alpha 10	ligand	P01566	5418	Human
+IFNA13	interferon, alpha 13	ligand	P01562	5419	NA
+IFNA14	interferon, alpha 14	ligand	P01570	5420	NA
+IFNA16	interferon, alpha 16	ligand	P05015	5421	Eutheria
+IFNA17	interferon, alpha 17	ligand	P01571	5422	NA
+IFNA2	interferon, alpha 2	ligand	P01563	5423	Catarrhini
+IFNA21	interferon, alpha 21	ligand	P01568	5424	Catarrhini
+IFNA4	interferon, alpha 4	ligand	P05014	5425	NA
+IFNA5	interferon, alpha 5	ligand	P01569	5426	Eutheria
+IFNA6	interferon, alpha 6	ligand	P05013	5427	Homininae
+IFNA7	interferon, alpha 7	ligand	P01567	5428	Eutheria
+IFNA8	interferon, alpha 8	ligand	P32881	5429	Catarrhini
+IFNB1	interferon, beta 1, fibroblast	ligand	P01574	5434	Mammalia
+IFNG	interferon, gamma	ligand	P01579	5438	Amniota
+IFNL1	interferon, lambda 1	ligand	Q8IU54	18363	Human
+IFNL2	interferon, lambda 2	ligand	Q8IZJ0	18364	Theria
+IFNL3	interferon, lambda 3	ligand	Q8IZI9	18365	Theria
+IFNW1	interferon, omega 1	ligand	P05000	5448	Theria
+IGF1	insulin-like growth factor 1 (somatomedin C)	ligand	P05019	5464	Chordata
+IGF2	insulin-like growth factor 2 (somatomedin A)	ligand	P01344	5466	Eutheria
+IGFBP4	insulin-like growth factor binding protein 4	ligand	P22692	5473	Tetrapoda
+IGFL1	IGF-like family member 1	ligand	Q6UW32	24093	Human
+IGFL2	IGF-like family member 2	ligand	Q6UWQ7	32929	Human
+IGFL3	IGF-like family member 3	ligand	Q6UXB1	32930	Catarrhini
+IHH	indian hedgehog	ligand	Q14623	5956	Bilateria
+IL10	interleukin 10	ligand	P22301	5962	Euteleostomi
+IL11	interleukin 11	ligand	P20809	5966	Homininae
+IL12A	interleukin 12A (natural killer cell stimulatory factor 1, cytotoxic lymphocyte maturation factor 1, p35)	ligand	P29459	5969	Amniota
+IL12B	interleukin 12B (natural killer cell stimulatory factor 2, cytotoxic lymphocyte maturation factor 2, p40)	ligand	P29460	5970	Amniota
+IL13	interleukin 13	ligand	P35225	5973	Eutheria
+IL15	interleukin 15	ligand	P40933	5977	Amniota
+IL16	interleukin 16	ligand	Q14005	5980	Amniota
+IL17A	interleukin 17A	ligand	Q16552	5981	Tetrapoda
+IL17B	interleukin 17B	ligand	Q9UHF5	5982	Tetrapoda
+IL17F	interleukin 17F	ligand	Q96PD4	16404	Tetrapoda
+IL18	interleukin 18 (interferon-gamma-inducing factor)	ligand	Q14116	5986	Amniota
+IL19	interleukin 19	ligand	Q9UHD0	5990	Theria
+IL1A	interleukin 1, alpha	ligand	P01583	5991	Theria
+IL1B	interleukin 1, beta	ligand	P01584	5992	Euteleostomi
+IL1F10	interleukin 1 family, member 10 (theta)	ligand	Q8WWZ1	15552	Mammalia
+IL1RN	interleukin 1 receptor antagonist	ligand	P18510	6000	Mammalia
+IL2	interleukin 2	ligand	P60568	6001	Eutheria
+IL20	interleukin 20	ligand	Q9NYY1	6002	Amniota
+IL21	interleukin 21	ligand	Q9HBE4	6005	Theria
+IL22	interleukin 22	ligand	Q9GZX6	14900	Amniota
+IL23A	interleukin 23, alpha subunit p19	ligand	Q9NPF7	15488	Eutheria
+IL24	interleukin 24	ligand	Q13007	11346	Eutheria
+IL25	interleukin 25	ligand	Q9H293	13765	Theria
+IL26	interleukin 26	ligand	Q9NPH9	17119	Catarrhini
+IL27	interleukin 27	ligand	Q8NEV9	19157	Theria
+IL3	interleukin 3 (colony-stimulating factor, multiple)	ligand	P08700	6011	Catarrhini
+IL31	interleukin 31	ligand	Q6EBC2	19372	Euarchontoglires
+IL34	interleukin 34	ligand	Q6ZMJ4	28529	Mammalia
+IL4	interleukin 4	ligand	P05112	6014	Eutheria
+IL5	interleukin 5 (colony-stimulating factor, eosinophil)	ligand	P05113	6016	Theria
+IL6	interleukin 6 (interferon, beta 2)	ligand	P05231	6018	Tetrapoda
+IL7	interleukin 7	ligand	P13232	6023	Eutheria
+IL8	interleukin 8	ligand	P10145	6025	Euteleostomi
+IL9	interleukin 9	ligand	P15248	6029	Euarchontoglires
+INHA	inhibin, alpha	ligand	P05111	6065	Tetrapoda
+INHBA	inhibin, beta A	ligand	P08476	6066	Amniota
+INHBB	inhibin, beta B	ligand	P09529	6067	Euteleostomi
+INHBC	inhibin, beta C	ligand	P55103	6068	Theria
+INHBE	inhibin, beta E	ligand	P58166	24029	Eutheria
+INS	insulin	ligand	P01308	6081	NA
+INSL3	insulin-like 3 (Leydig cell)	ligand	P51460	6086	NA
+INSL5	insulin-like 5	ligand	Q9Y5Q6	6088	Catarrhini
+ITGB3BP	integrin beta 3 binding protein (beta3-endonexin)	ligand	Q13352	6157	Amniota
+ITIH2	inter-alpha-trypsin inhibitor heavy chain 2	ligand	P19823	6167	Deuterostomia
+JAG1	jagged 1	ligand	P78504	6188	Euteleostomi
+JAG2	jagged 2	ligand	Q9Y219	6189	Euteleostomi
+KAL1	Kallmann syndrome 1 sequence	ligand	P23352	6211	Bilateria
+KISS1	KiSS-1 metastasis-suppressor	ligand	Q15726	6341	Mammalia
+KITLG	KIT ligand	ligand	P21583	6343	Tetrapoda
+KLK3	kallikrein-related peptidase 3	ligand	P07288	6364	Eutheria
+KNG1	kininogen 1	ligand	P01042	6383	Euteleostomi
+KRTAP4-12	keratin associated protein 4-12	ligand	Q9BQ66	16776	Human
+L1CAM	L1 cell adhesion molecule	ligand	P32004	6470	Bilateria
+LACRT	lacritin	ligand	Q9GZZ8	16430	Catarrhini
+LAMA1	laminin, alpha 1	ligand	P25391	6481	Bilateria
+LAMA2	laminin, alpha 2	ligand	P24043	6482	Bilateria
+LAMA3	laminin, alpha 3	ligand	Q16787	6483	Bilateria
+LAMA4	laminin, alpha 4	ligand	Q16363	6484	Bilateria
+LAMA5	laminin, alpha 5	ligand	O15230	6485	Bilateria
+LAMB1	laminin, beta 1	ligand	P07942	6486	Bilateria
+LAMB2	laminin, beta 2 (laminin S)	ligand	P55268	6487	Bilateria
+LAMB3	laminin, beta 3	ligand	Q13751	6490	Tetrapoda
+LAMC1	laminin, gamma 1 (formerly LAMB2)	ligand	P11047	6492	Bilateria
+LAMC2	laminin, gamma 2	ligand	Q13753	6493	Bilateria
+LAMC3	laminin, gamma 3	ligand	Q9Y6N6	6494	Bilateria
+LCN1	lipocalin 1	ligand	P31025	6525	Mammalia
+LCN2	lipocalin 2	ligand	P80188	6526	Theria
+LEFTY2	left-right determination factor 2	ligand	O00292	3122	Deuterostomia
+LEP	leptin	ligand	P41159	6553	Mammalia
+LGALS3BP	lectin, galactoside-binding, soluble, 3 binding protein	ligand	Q08380	6564	Eutheria
+LHB	luteinizing hormone beta polypeptide	ligand	P01229	6584	Theria
+LIF	leukemia inhibitory factor	ligand	P15018	6596	Tetrapoda
+LIN7C	lin-7 homolog C (C. elegans)	ligand	Q9NUP9	17789	Bilateria
+LIPC	lipase, hepatic	ligand	P11150	6619	Theria
+LIPH	lipase, member H	ligand	Q8WWY8	18483	Euteleostomi
+LPA	lipoprotein, Lp(a)	ligand	P08519	6667	Amniota
+LPL	lipoprotein lipase	ligand	P06858	6677	Euteleostomi
+LRP1B	low density lipoprotein receptor-related protein 1B	ligand	Q9NZR2	6693	Bilateria
+LRPAP1	low density lipoprotein receptor-related protein associated protein 1	ligand	P30533	6701	Bilateria
+LTA	lymphotoxin alpha	ligand	P01374	6709	NA
+LTB	lymphotoxin beta (TNF superfamily, member 3)	ligand	Q06643	6711	Mammalia
+LTBP1	latent transforming growth factor beta binding protein 1	ligand	Q14766	6714	Euteleostomi
+LTBP3	latent transforming growth factor beta binding protein 3	ligand	Q9NS15	6716	Euteleostomi
+LTF	lactotransferrin	ligand	P02788	6720	Euteleostomi
+LY6G5C	lymphocyte antigen 6 complex, locus G5C	ligand	Q5SRR4	13932	Eutheria
+LY86	lymphocyte antigen 86	ligand	O95711	16837	Theria
+LYPD3	LY6/PLAUR domain containing 3	ligand	O95274	24880	Eutheria
+LYZ	lysozyme	ligand	P61626	6740	Tetrapoda
+MADCAM1	mucosal vascular addressin cell adhesion molecule 1	ligand	Q13477	6765	Theria
+MATN1	matrilin 1, cartilage matrix protein	ligand	P21941	6907	Chordata
+MBL2	mannose-binding lectin (protein C) 2, soluble	ligand	P11226	6922	Amniota
+MDK	midkine (neurite growth-promoting factor 2)	ligand	P21741	6972	Euarchontoglires
+MEPE	matrix extracellular phosphoglycoprotein	ligand	Q9NQ76	13361	Theria
+MFAP2	microfibrillar-associated protein 2	ligand	P55001	7033	Euteleostomi
+MFAP5	microfibrillar associated protein 5	ligand	Q13361	29673	Theria
+MFGE8	milk fat globule-EGF factor 8 protein	ligand	Q08431	7036	Homininae
+MFI2	antigen p97 (melanoma associated) identified by monoclonal antibodies 133.2 and 96.5	ligand	P08582	7037	Deuterostomia
+MFNG	MFNG O-fucosylpeptide 3-beta-N-acetylglucosaminyltransferase	ligand	O00587	7038	Amniota
+MIA	melanoma inhibitory activity	ligand	Q16674	7076	NA
+MLLT4	myeloid/lymphoid or mixed-lineage leukemia (trithorax homolog, Drosophila); translocated to, 4	ligand	P55196	7137	Bilateria
+MLN	motilin	ligand	P12872	7141	Amniota
+MMP1	matrix metallopeptidase 1 (interstitial collagenase)	ligand	P03956	7155	Amniota
+MMP12	matrix metallopeptidase 12 (macrophage elastase)	ligand	P39900	7158	Theria
+MMP13	matrix metallopeptidase 13 (collagenase 3)	ligand	P45452	7159	Euteleostomi
+MMP2	matrix metallopeptidase 2 (gelatinase A, 72kDa gelatinase, 72kDa type IV collagenase)	ligand	P08253	7166	Chordata
+MMP7	matrix metallopeptidase 7 (matrilysin, uterine)	ligand	P09237	7174	Amniota
+MMP9	matrix metallopeptidase 9 (gelatinase B, 92kDa gelatinase, 92kDa type IV collagenase)	ligand	P14780	7176	Chordata
+MST1	macrophage stimulating 1 (hepatocyte growth factor-like)	ligand	P26927	7380	Euteleostomi
+MSTN	myostatin	ligand	O14793	4223	Euteleostomi
+MUC2	mucin 2, oligomeric mucus/gel-forming	ligand	Q02817	7512	Chordata
+MUC7	mucin 7, secreted	ligand	Q8TAX7	7518	Catarrhini
+MYOC	myocilin, trabecular meshwork inducible glucocorticoid response	ligand	Q99972	7610	Euteleostomi
+NAMPT	nicotinamide phosphoribosyltransferase	ligand	P43490	30092	Euteleostomi
+NCAM1	neural cell adhesion molecule 1	ligand	P13591	7656	Deuterostomia
+NCAN	neurocan	ligand	O14594	2465	Euteleostomi
+NDP	Norrie disease (pseudoglioma)	ligand	Q00604	7678	Amniota
+NGF	nerve growth factor (beta polypeptide)	ligand	P01138	7808	Euteleostomi
+NID1	nidogen 1	ligand	P14543	7821	Bilateria
+NID2	nidogen 2 (osteonidogen)	ligand	Q14112	13389	Bilateria
+NLGN1	neuroligin 1	ligand	Q8N2Q7	14291	Bilateria
+NLGN2	neuroligin 2	ligand	Q8NFZ4	14290	Bilateria
+NLGN3	neuroligin 3	ligand	Q9NZ94	14289	Bilateria
+NMB	neuromedin B	ligand	P08949	7842	Theria
+NMS	neuromedin S	ligand	Q5H8A3	32203	Eutheria
+NMU	neuromedin U	ligand	P48645	7859	Tetrapoda
+NODAL	nodal growth differentiation factor	ligand	Q96S42	7865	Theria
+NOV	nephroblastoma overexpressed	ligand	P48745	7885	Tetrapoda
+NPB	neuropeptide B	ligand	Q8NG41	30099	Theria
+NPFF	neuropeptide FF-amide peptide precursor	ligand	O15130	7901	Euarchontoglires
+NPNT	nephronectin	ligand	Q6UXI9	27405	Euteleostomi
+NPPA	natriuretic peptide A	ligand	P01160	7939	Amniota
+NPPB	natriuretic peptide B	ligand	P16860	7940	Catarrhini
+NPPC	natriuretic peptide C	ligand	P23582	7941	Euteleostomi
+NPS	neuropeptide S	ligand	P0C0P6	33940	Catarrhini
+NPVF	neuropeptide VF precursor	ligand	Q9HCQ7	13782	Theria
+NPW	neuropeptide W	ligand	Q8N729	30509	Euarchontoglires
+NPY	neuropeptide Y	ligand	P01303	7955	Euteleostomi
+NRG1	neuregulin 1	ligand	Q02297	7997	Tetrapoda
+NRG2	neuregulin 2	ligand	O14511	7998	Mammalia
+NRG3	neuregulin 3	ligand	P56975	7999	Tetrapoda
+NRG4	neuregulin 4	ligand	Q8WWG1	29862	Euarchontoglires
+NRTN	neurturin	ligand	Q99748	8007	Amniota
+NTF3	neurotrophin 3	ligand	P20783	8023	Tetrapoda
+NTF4	neurotrophin 4	ligand	P34130	8024	Theria
+NTN1	netrin 1	ligand	O95631	8029	Bilateria
+NTN3	netrin 3	ligand	O00634	8030	Bilateria
+NTN4	netrin 4	ligand	Q9HB63	13658	Chordata
+NTNG1	netrin G1	ligand	Q9Y2I2	23319	Euteleostomi
+NTNG2	netrin G2	ligand	Q96CW9	14288	Euteleostomi
+NTS	neurotensin	ligand	P30990	8038	Tetrapoda
+NXPH1	neurexophilin 1	ligand	P58417	20693	Euteleostomi
+NXPH2	neurexophilin 2	ligand	O95156	8076	Euteleostomi
+NXPH3	neurexophilin 3	ligand	O95157	8077	Human
+OBP2A	odorant binding protein 2A	ligand	Q9NY56	23380	Homininae
+OLAH	oleoyl-ACP hydrolase	ligand	Q9NV23	25625	Euteleostomi
+OLFM2	olfactomedin 2	ligand	O95897	17189	Deuterostomia
+OMG	oligodendrocyte myelin glycoprotein	ligand	P23515	8135	Euteleostomi
+ORM1	orosomucoid 1	ligand	P02763	8498	NA
+OSM	oncostatin M	ligand	P13725	8506	Eutheria
+OSTN	osteocrin	ligand	P61366	29961	Tetrapoda
+OXT	oxytocin/neurophysin I prepropeptide	ligand	P01178	8528	Theria
+P4HB	prolyl 4-hydroxylase, beta polypeptide	ligand	P07237	8548	Bilateria
+PAPLN	papilin, proteoglycan-like sulfated glycoprotein	ligand	O95428	19262	Tetrapoda
+PCSK9	proprotein convertase subtilisin/kexin type 9	ligand	Q8NBP7	20001	Mammalia
+PDAP1	PDGFA associated protein 1	ligand	Q13442	14634	Deuterostomia
+PDGFA	platelet-derived growth factor alpha polypeptide	ligand	P04085	8799	Euteleostomi
+PDGFB	platelet-derived growth factor beta polypeptide	ligand	P01127	8800	Euteleostomi
+PDGFC	platelet derived growth factor C	ligand	Q9NRA1	8801	Tetrapoda
+PDGFD	platelet derived growth factor D	ligand	Q9GZP0	30620	Tetrapoda
+PDYN	prodynorphin	ligand	P01213	8820	Theria
+PENK	proenkephalin	ligand	P01210	8831	Euteleostomi
+PF4	platelet factor 4	ligand	P02776	8861	Euarchontoglires
+PGF	placental growth factor	ligand	P49763	8893	Mammalia
+PI3	peptidase inhibitor 3, skin-derived	ligand	P19957	8947	Catarrhini
+PIGF	phosphatidylinositol glycan anchor biosynthesis, class F	ligand	Q07326	8962	Deuterostomia
+PIP	prolactin-induced protein	ligand	P12273	8993	Eutheria
+PKM	pyruvate kinase, muscle	ligand	P14618	9021	Cell.Organisms
+PLA2G10	phospholipase A2, group X	ligand	O15496	9029	Tetrapoda
+PLAT	plasminogen activator, tissue	ligand	P00750	9051	Euteleostomi
+PLAU	plasminogen activator, urokinase	ligand	P00749	9052	Amniota
+PLG	plasminogen	ligand	P00747	9071	Amniota
+PLTP	phospholipid transfer protein	ligand	P55058	9093	Euteleostomi
+PMCH	pro-melanin-concentrating hormone	ligand	P20382	9109	Amniota
+PNOC	prepronociceptin	ligand	Q13519	9163	Euteleostomi
+PODXL	podocalyxin-like	ligand	O00592	9171	Eutheria
+PODXL2	podocalyxin-like 2	ligand	Q9NZ53	17936	Amniota
+POMC	proopiomelanocortin	ligand	P01189	9201	Euteleostomi
+PON2	paraoxonase 2	ligand	Q15165	9205	Euteleostomi
+PPBP	pro-platelet basic protein (chemokine (C-X-C motif) ligand 7)	ligand	P02775	9240	Eutheria
+PPY	pancreatic polypeptide	ligand	P01298	9327	Theria
+PRL	prolactin	ligand	P01236	9445	Euteleostomi
+PRLH	prolactin releasing hormone	ligand	P81277	17945	Eutheria
+PRND	prion protein 2 (dublet)	ligand	Q9UKY0	15748	Theria
+PROC	protein C (inactivator of coagulation factors Va and VIIIa)	ligand	P04070	9451	Euteleostomi
+PROK1	prokineticin 1	ligand	P58294	18454	Amniota
+PROK2	prokineticin 2	ligand	Q9HC23	18455	Human
+PROS1	protein S (alpha)	ligand	P07225	9456	Chordata
+PRSS23	protease, serine, 23	ligand	O95084	14370	Euteleostomi
+PSAP	prosaposin	ligand	P07602	9498	Deuterostomia
+PSEN1	presenilin 1	ligand	P49768	9508	Eukaryota
+PSPN	persephin	ligand	O60542	9579	Eutheria
+PTDSS1	phosphatidylserine synthase 1	ligand	P48651	9587	Bilateria
+PTGS2	prostaglandin-endoperoxide synthase 2 (prostaglandin G/H synthase and cyclooxygenase)	ligand	P35354	9605	Chordata
+PTH	parathyroid hormone	ligand	P01270	9606	Theria
+PTH2	parathyroid hormone 2	ligand	Q96A98	30828	Eutheria
+PTHLH	parathyroid hormone-like hormone	ligand	P12272	9607	Euteleostomi
+PTMA	prothymosin, alpha	ligand	P06454	9623	Amniota
+PTN	pleiotrophin	ligand	P21246	9630	Amniota
+PYY	peptide YY	ligand	P10082	9748	Theria
+QDPR	quinoid dihydropteridine reductase	ligand	P09417	9752	Bilateria
+QRFP	pyroglutamylated RFamide peptide	ligand	P83859	29982	Tetrapoda
+RAET1E	retinoic acid early transcript 1E	ligand	Q8TD07	16793	Eutheria
+RARRES2	retinoic acid receptor responder (tazarotene induced) 2	ligand	Q99969	9868	Theria
+RBP3	retinol binding protein 3, interstitial	ligand	P10745	9921	Euteleostomi
+RBP4	retinol binding protein 4, plasma	ligand	P02753	9922	Euteleostomi
+RELN	reelin	ligand	P78509	9957	Deuterostomia
+REN	renin	ligand	P00797	9958	Euteleostomi
+RGMA	repulsive guidance molecule family member a	ligand	Q96B86	30308	Deuterostomia
+RGMB	repulsive guidance molecule family member b	ligand	Q6NW40	26896	Euteleostomi
+RIMS1	regulating synaptic membrane exocytosis 1	ligand	Q86UR5	17282	Bilateria
+RIMS2	regulating synaptic membrane exocytosis 2	ligand	Q9UQ26	17283	Bilateria
+RLN1	relaxin 1	ligand	P04808	10026	Homininae
+RLN2	relaxin 2	ligand	P04090	10027	Homininae
+RLN3	relaxin 3	ligand	Q8WXF3	17135	Euteleostomi
+RNASE2	ribonuclease, RNase A family, 2 (liver, eosinophil-derived neurotoxin)	ligand	P10153	10045	Euarchontoglires
+RPH3A	rabphilin 3A homolog (mouse)	ligand	Q9Y2J0	17056	Euteleostomi
+RPS19	ribosomal protein S19	ligand	P39019	10402	Cell.Organisms
+RSPO1	R-spondin 1	ligand	Q2MKA7	21679	Amniota
+RSPO2	R-spondin 2	ligand	Q6UXX9	28583	Tetrapoda
+RSPO3	R-spondin 3	ligand	Q9BXY4	20866	Deuterostomia
+RSPO4	R-spondin 4	ligand	Q2I0M5	16175	Theria
+RTN4	reticulon 4	ligand	Q9NQC3	14085	Chordata
+S100A8	S100 calcium binding protein A8	ligand	P05109	10498	Mammalia
+S100A9	S100 calcium binding protein A9	ligand	P06702	10499	Theria
+SAA1	serum amyloid A1	ligand	P0DJI8	10513	Mammalia
+SCGB1A1	secretoglobin, family 1A, member 1 (uteroglobin)	ligand	P11684	12523	Eutheria
+SCGB3A1	secretoglobin, family 3A, member 1	ligand	Q96QR1	18384	Euarchontoglires
+SCGB3A2	secretoglobin, family 3A, member 2	ligand	Q96PL1	18391	Mammalia
+SCT	secretin	ligand	P09683	10607	Homininae
+SELPLG	selectin P ligand	ligand	Q14242	10722	Euarchontoglires
+SEMA3A	sema domain, immunoglobulin domain (Ig), short basic domain, secreted, (semaphorin) 3A	ligand	Q14563	10723	Euteleostomi
+SEMA3B	sema domain, immunoglobulin domain (Ig), short basic domain, secreted, (semaphorin) 3B	ligand	Q13214	10724	Euteleostomi
+SEMA3C	sema domain, immunoglobulin domain (Ig), short basic domain, secreted, (semaphorin) 3C	ligand	Q99985	10725	Euteleostomi
+SEMA3D	sema domain, immunoglobulin domain (Ig), short basic domain, secreted, (semaphorin) 3D	ligand	O95025	10726	Euteleostomi
+SEMA3E	sema domain, immunoglobulin domain (Ig), short basic domain, secreted, (semaphorin) 3E	ligand	O15041	10727	Euteleostomi
+SEMA3F	sema domain, immunoglobulin domain (Ig), short basic domain, secreted, (semaphorin) 3F	ligand	Q13275	10728	Euteleostomi
+SEMA3G	sema domain, immunoglobulin domain (Ig), short basic domain, secreted, (semaphorin) 3G	ligand	Q9NS98	30400	Euteleostomi
+SEMA4A	sema domain, immunoglobulin domain (Ig), transmembrane domain (TM) and short cytoplasmic domain, (semaphorin) 4A	ligand	Q9H3S1	10729	Mammalia
+SEMA4B	sema domain, immunoglobulin domain (Ig), transmembrane domain (TM) and short cytoplasmic domain, (semaphorin) 4B	ligand	Q9NPR2	10730	Tetrapoda
+SEMA4C	sema domain, immunoglobulin domain (Ig), transmembrane domain (TM) and short cytoplasmic domain, (semaphorin) 4C	ligand	Q9C0C4	10731	Mammalia
+SEMA4D	sema domain, immunoglobulin domain (Ig), transmembrane domain (TM) and short cytoplasmic domain, (semaphorin) 4D	ligand	Q92854	10732	Chordata
+SEMA4F	sema domain, immunoglobulin domain (Ig), transmembrane domain (TM) and short cytoplasmic domain, (semaphorin) 4F	ligand	O95754	10734	Theria
+SEMA4G	sema domain, immunoglobulin domain (Ig), transmembrane domain (TM) and short cytoplasmic domain, (semaphorin) 4G	ligand	Q9NTN9	10735	Tetrapoda
+SEMA5A	sema domain, seven thrombospondin repeats (type 1 and type 1-like), transmembrane domain (TM) and short cytoplasmic domain, (semaphorin) 5A	ligand	Q13591	10736	Euteleostomi
+SEMA6A	sema domain, transmembrane domain (TM), and cytoplasmic domain, (semaphorin) 6A	ligand	Q9H2E6	10738	Bilateria
+SEMA6D	sema domain, transmembrane domain (TM), and cytoplasmic domain, (semaphorin) 6D	ligand	Q8NFY4	16770	Bilateria
+SEMA7A	semaphorin 7A, GPI membrane anchor (John Milton Hagen blood group)	ligand	O75326	10741	Amniota
+SERPINA1	serpin peptidase inhibitor, clade A (alpha-1 antiproteinase, antitrypsin), member 1	ligand	P01009	8941	Euteleostomi
+SERPINA7	serpin peptidase inhibitor, clade A (alpha-1 antiproteinase, antitrypsin), member 7	ligand	P05543	11583	Mammalia
+SERPINC1	serpin peptidase inhibitor, clade C (antithrombin), member 1	ligand	P01008	775	Euteleostomi
+SERPINE1	serpin peptidase inhibitor, clade E (nexin, plasminogen activator inhibitor type 1), member 1	ligand	P05121	8583	Euteleostomi
+SERPINE2	serpin peptidase inhibitor, clade E (nexin, plasminogen activator inhibitor type 1), member 2	ligand	P07093	8951	Tetrapoda
+SERPING1	serpin peptidase inhibitor, clade G (C1 inhibitor), member 1	ligand	P05155	1228	Mammalia
+SFRP1	secreted frizzled-related protein 1	ligand	Q8N474	10776	Euteleostomi
+SFTPA1	surfactant protein A1	ligand	Q8IWL2	10798	Tetrapoda
+SFTPA2	surfactant protein A2	ligand	Q8IWL1	10799	Tetrapoda
+SFTPD	surfactant protein D	ligand	P35247	10803	Mammalia
+SHANK1	SH3 and multiple ankyrin repeat domains 1	ligand	Q9Y566	15474	Bilateria
+SHBG	sex hormone-binding globulin	ligand	P04278	10839	Mammalia
+SHH	sonic hedgehog	ligand	Q15465	10848	Bilateria
+SLIT1	slit homolog 1 (Drosophila)	ligand	O75093	11085	Bilateria
+SLIT2	slit homolog 2 (Drosophila)	ligand	O94813	11086	Bilateria
+SLIT3	slit homolog 3 (Drosophila)	ligand	O75094	11087	Bilateria
+SLPI	secretory leukocyte peptidase inhibitor	ligand	P03973	11092	Euarchontoglires
+SORBS1	sorbin and SH3 domain containing 1	ligand	Q9BX66	14565	Chordata
+SOST	sclerostin	ligand	Q9BQB4	13771	Human
+SPINK1	serine peptidase inhibitor, Kazal type 1	ligand	P00995	11244	Mammalia
+SPINT1	serine peptidase inhibitor, Kunitz type 1	ligand	O43278	11246	Euteleostomi
+SPON2	spondin 2, extracellular matrix protein	ligand	Q9BUD6	11253	Euteleostomi
+SPP1	secreted phosphoprotein 1	ligand	P10451	11255	Amniota
+SST	somatostatin	ligand	P61278	11329	Euteleostomi
+SYTL3	synaptotagmin-like 3	ligand	Q4VX76	15587	Bilateria
+TAC1	tachykinin, precursor 1	ligand	P20366	11517	Euteleostomi
+TAC3	tachykinin 3	ligand	Q9UHF0	11521	Mammalia
+TAC4	tachykinin 4 (hemokinin)	ligand	Q86UU9	16641	Euarchontoglires
+TCN2	transcobalamin II	ligand	P20062	11653	Euteleostomi
+TCTN1	tectonic family member 1	ligand	Q2MV58	26113	Tetrapoda
+TDGF1	teratocarcinoma-derived growth factor 1	ligand	P13385	11701	NA
+TF	transferrin	ligand	P02787	11740	Euteleostomi
+TFPI	tissue factor pathway inhibitor (lipoprotein-associated coagulation inhibitor)	ligand	P10646	11760	Chordata
+TG	thyroglobulin	ligand	P01266	11764	Euteleostomi
+TGFA	transforming growth factor, alpha	ligand	P01135	11765	Euteleostomi
+TGFB1	transforming growth factor, beta 1	ligand	P01137	11766	Theria
+TGFB2	transforming growth factor, beta 2	ligand	P61812	11768	Deuterostomia
+TGFB3	transforming growth factor, beta 3	ligand	P10600	11769	Amniota
+TGM2	transglutaminase 2	ligand	P21980	11778	Euteleostomi
+THBS1	thrombospondin 1	ligand	P07996	11785	Deuterostomia
+THBS2	thrombospondin 2	ligand	P35442	11786	Deuterostomia
+THPO	thrombopoietin	ligand	P40225	11795	Theria
+TIMP1	TIMP metallopeptidase inhibitor 1	ligand	P01033	11820	Mammalia
+TIMP2	TIMP metallopeptidase inhibitor 2	ligand	P16035	11821	Euteleostomi
+TIMP3	TIMP metallopeptidase inhibitor 3	ligand	P35625	11822	Euteleostomi
+TNC	tenascin C	ligand	P24821	5318	Bilateria
+TNF	tumor necrosis factor	ligand	P01375	11892	Theria
+TNFSF10	tumor necrosis factor (ligand) superfamily, member 10	ligand	P50591	11925	Amniota
+TNFSF11	tumor necrosis factor (ligand) superfamily, member 11	ligand	O14788	11926	Tetrapoda
+TNFSF12	tumor necrosis factor (ligand) superfamily, member 12	ligand	O43508	11927	NA
+TNFSF13	tumor necrosis factor (ligand) superfamily, member 13	ligand	O75888	11928	Mammalia
+TNFSF13B	tumor necrosis factor (ligand) superfamily, member 13b	ligand	Q9Y275	11929	Amniota
+TNFSF14	tumor necrosis factor (ligand) superfamily, member 14	ligand	O43557	11930	Mammalia
+TNFSF15	tumor necrosis factor (ligand) superfamily, member 15	ligand	O95150	11931	Tetrapoda
+TNFSF18	tumor necrosis factor (ligand) superfamily, member 18	ligand	Q9UNG2	11932	Eutheria
+TNFSF4	tumor necrosis factor (ligand) superfamily, member 4	ligand	P23510	11934	Amniota
+TNFSF8	tumor necrosis factor (ligand) superfamily, member 8	ligand	P32971	11938	Amniota
+TNFSF9	tumor necrosis factor (ligand) superfamily, member 9	ligand	P41273	11939	Mammalia
+TRH	thyrotropin-releasing hormone	ligand	P20396	12298	Euteleostomi
+TSHB	thyroid stimulating hormone, beta	ligand	P01222	12372	Euteleostomi
+TSLP	thymic stromal lymphopoietin	ligand	Q969D9	30743	Euarchontoglires
+UCN	urocortin	ligand	P55089	12516	Theria
+UCN2	urocortin 2	ligand	Q96RP3	18414	Eutheria
+UCN3	urocortin 3	ligand	Q969E3	17781	Tetrapoda
+ULBP2	UL16 binding protein 2	ligand	Q9BZM5	14894	Eutheria
+UTS2	urotensin 2	ligand	O95399	12636	Amniota
+UTS2B	urotensin 2B	ligand	Q765I0	30894	Euarchontoglires
+VASP	vasodilator-stimulated phosphoprotein	ligand	P50552	12652	Homininae
+VCAM1	vascular cell adhesion molecule 1	ligand	P19320	12663	Euteleostomi
+VCAN	versican	ligand	P13611	2464	Euteleostomi
+VEGFA	vascular endothelial growth factor A	ligand	P15692	12680	Euteleostomi
+VEGFB	vascular endothelial growth factor B	ligand	P49765	12681	Mammalia
+VEGFC	vascular endothelial growth factor C	ligand	P49767	12682	Chordata
+VIM	vimentin	ligand	P08670	12692	Chordata
+VIP	vasoactive intestinal peptide	ligand	P01282	12693	Tetrapoda
+VTN	vitronectin	ligand	P04004	12724	NA
+VWF	von Willebrand factor	ligand	P04275	12726	Chordata
+WNT1	wingless-type MMTV integration site family, member 1	ligand	P04628	12774	Theria
+WNT11	wingless-type MMTV integration site family, member 11	ligand	O96014	12776	Euteleostomi
+WNT16	wingless-type MMTV integration site family, member 16	ligand	Q9UBV4	16267	Euteleostomi
+WNT2	wingless-type MMTV integration site family member 2	ligand	P09544	12780	Amniota
+WNT3	wingless-type MMTV integration site family, member 3	ligand	P56703	12782	Euteleostomi
+WNT3A	wingless-type MMTV integration site family, member 3A	ligand	P56704	15983	Euteleostomi
+WNT4	wingless-type MMTV integration site family, member 4	ligand	P56705	12783	Human
+WNT5A	wingless-type MMTV integration site family, member 5A	ligand	P41221	12784	Deuterostomia
+WNT7A	wingless-type MMTV integration site family, member 7A	ligand	O00755	12786	Amniota
+WNT7B	wingless-type MMTV integration site family, member 7B	ligand	P56706	12787	Euteleostomi
+XCL1	chemokine (C motif) ligand 1	ligand	P47992	10645	Amniota
+XCL2	chemokine (C motif) ligand 2	ligand	Q9UBD3	10646	Amniota
+YARS	tyrosyl-tRNA synthetase	ligand	P54577	12840	Cell.Organisms
+ZG16B	zymogen granule protein 16B	ligand	Q96DA0	30456	Catarrhini
+ZP3	zona pellucida glycoprotein 3 (sperm receptor)	ligand	P21754	13189	Euteleostomi
+ABCA1	ATP-binding cassette, sub-family A (ABC1), member 1	receptor	O95477	29	Cell.Organisms
+ACKR2	atypical chemokine receptor 2	receptor	O00590	1565	Eutheria
+ACKR3	atypical chemokine receptor 3	receptor	P25106	23692	Euteleostomi
+ACKR4	atypical chemokine receptor 4	receptor	Q9NPB9	1611	Mammalia
+ACVR1	activin A receptor, type I	receptor	Q04771	171	Bilateria
+ACVR1B	activin A receptor, type IB	receptor	P36896	172	Bilateria
+ACVR1C	activin A receptor, type IC	receptor	Q8NER5	18123	Bilateria
+ACVR2A	activin A receptor, type IIA	receptor	P27037	173	Bilateria
+ACVR2B	activin A receptor, type IIB	receptor	Q13705	174	Bilateria
+ACVRL1	activin A receptor type II-like 1	receptor	P37023	175	Eutheria
+ADCY1	adenylate cyclase 1 (brain)	receptor	Q08828	232	Bilateria
+ADCY7	adenylate cyclase 7	receptor	P51828	238	Bilateria
+ADCY8	adenylate cyclase 8 (brain)	receptor	P40145	239	Bilateria
+ADCY9	adenylate cyclase 9	receptor	O60503	240	Bilateria
+ADCYAP1R1	adenylate cyclase activating polypeptide 1 (pituitary) receptor type I	receptor	P41586	242	Euteleostomi
+ADIPOR1	adiponectin receptor 1	receptor	Q96A54	24040	Euteleostomi
+ADIPOR2	adiponectin receptor 2	receptor	Q86V24	24041	Eukaryota
+ADORA1	adenosine A1 receptor	receptor	P30542	262	Euteleostomi
+ADORA2B	adenosine A2b receptor	receptor	P29275	264	Tetrapoda
+ADRA2A	adrenoceptor alpha 2A	receptor	P08913	281	Bilateria
+ADRA2B	adrenoceptor alpha 2B	receptor	P18089	282	NA
+ADRB2	adrenoceptor beta 2, surface	receptor	P07550	286	Deuterostomia
+ADRB3	adrenoceptor beta 3	receptor	P13945	288	Theria
+AGR2	anterior gradient 2	receptor	O95994	328	Tetrapoda
+AGTR1	angiotensin II receptor, type 1	receptor	P30556	336	Euteleostomi
+AGTR2	angiotensin II receptor, type 2	receptor	P50052	338	Euteleostomi
+ALK	anaplastic lymphoma receptor tyrosine kinase	receptor	Q9UM73	427	Euteleostomi
+AMFR	autocrine motility factor receptor, E3 ubiquitin protein ligase	receptor	Q9UKV5	463	Bilateria
+AMHR2	anti-Mullerian hormone receptor, type II	receptor	Q16671	465	Eutheria
+APCDD1	adenomatosis polyposis coli down-regulated 1	receptor	Q8J025	15718	Deuterostomia
+APLNR	apelin receptor	receptor	P35414	339	Euteleostomi
+APLP2	amyloid beta (A4) precursor-like protein 2	receptor	Q06481	598	Euteleostomi
+AQP1	aquaporin 1 (Colton blood group)	receptor	P29972	633	NA
+ART1	ADP-ribosyltransferase 1	receptor	P52961	723	Tetrapoda
+ASGR1	asialoglycoprotein receptor 1	receptor	P07306	742	Eutheria
+ASGR2	asialoglycoprotein receptor 2	receptor	P07307	743	Theria
+ASIC3	acid-sensing (proton-gated) ion channel 3	receptor	Q9UHC3	101	Bilateria
+ATP1A3	ATPase, Na+/K+ transporting, alpha 3 polypeptide	receptor	P13637	801	Eukaryota
+ATP6AP2	ATPase, H+ transporting, lysosomal accessory protein 2	receptor	O75787	18305	Bilateria
+ATRN	attractin	receptor	O75882	885	Bilateria
+AVPR1A	arginine vasopressin receptor 1A	receptor	P37288	895	Bilateria
+AVPR1B	arginine vasopressin receptor 1B	receptor	P47901	896	Tetrapoda
+AVPR2	arginine vasopressin receptor 2	receptor	P30518	897	Euteleostomi
+AXL	AXL receptor tyrosine kinase	receptor	P30530	905	Chordata
+BAI2	brain-specific angiogenesis inhibitor 2	receptor	O60241	944	Euteleostomi
+BAMBI	BMP and activin membrane-bound inhibitor	receptor	Q13145	30251	Euteleostomi
+BCAM	basal cell adhesion molecule (Lutheran blood group)	receptor	P50895	6722	Eutheria
+BDKRB1	bradykinin receptor B1	receptor	P46663	1029	Amniota
+BDKRB2	bradykinin receptor B2	receptor	P30411	1030	Euteleostomi
+BMPR1A	bone morphogenetic protein receptor, type IA	receptor	P36894	1076	Bilateria
+BMPR1B	bone morphogenetic protein receptor, type IB	receptor	O00238	1077	Bilateria
+BMPR2	bone morphogenetic protein receptor, type II (serine/threonine kinase)	receptor	Q13873	1078	Euteleostomi
+BOC	BOC cell adhesion associated, oncogene regulated	receptor	Q9BWV1	17173	Tetrapoda
+BRS3	bombesin-like receptor 3	receptor	P32247	1113	Tetrapoda
+C14orf1	chromosome 14 open reading frame 1	receptor	Q9UKR5	1187	Euteleostomi
+C3AR1	complement component 3a receptor 1	receptor	Q16581	1319	Eutheria
+C5AR1	complement component 5a receptor 1	receptor	P21730	1338	Tetrapoda
+C5AR2	complement component 5a receptor 2	receptor	Q9P296	4527	Theria
+CACHD1	cache domain containing 1	receptor	Q5VU97	29314	Deuterostomia
+CACNA1C	calcium channel, voltage-dependent, L type, alpha 1C subunit	receptor	Q13936	1390	Bilateria
+CALCR	calcitonin receptor	receptor	P30988	1440	Theria
+CALCRL	calcitonin receptor-like	receptor	Q16602	16709	Euteleostomi
+CANX	calnexin	receptor	P27824	1473	Opisthokonta
+CATSPER1	cation channel, sperm associated 1	receptor	Q8NEC5	17116	Eutheria
+CAV1	caveolin 1, caveolae protein, 22kDa	receptor	Q03135	1527	Deuterostomia
+CCKAR	cholecystokinin A receptor	receptor	P32238	1570	Bilateria
+CCKBR	cholecystokinin B receptor	receptor	P32239	1571	Tetrapoda
+CCR1	chemokine (C-C motif) receptor 1	receptor	P32246	1602	Eutheria
+CCR10	chemokine (C-C motif) receptor 10	receptor	P46092	4474	Theria
+CCR2	chemokine (C-C motif) receptor 2	receptor	P41597	1603	Tetrapoda
+CCR3	chemokine (C-C motif) receptor 3	receptor	P51677	1604	Mammalia
+CCR4	chemokine (C-C motif) receptor 4	receptor	P51679	1605	Amniota
+CCR5	chemokine (C-C motif) receptor 5 (gene/pseudogene)	receptor	P51681	1606	Tetrapoda
+CCR6	chemokine (C-C motif) receptor 6	receptor	P51684	1607	Theria
+CCR7	chemokine (C-C motif) receptor 7	receptor	P32248	1608	Euteleostomi
+CCR8	chemokine (C-C motif) receptor 8	receptor	P51685	1609	Theria
+CCR9	chemokine (C-C motif) receptor 9	receptor	P51686	1610	Theria
+CCRL2	chemokine (C-C motif) receptor-like 2	receptor	O00421	1612	Mammalia
+CD109	CD109 molecule	receptor	Q6YHK3	21685	Bilateria
+CD151	CD151 molecule (Raph blood group)	receptor	P48509	1630	Euteleostomi
+CD177	CD177 molecule	receptor	Q8N6Q3	30072	Eutheria
+CD180	CD180 molecule	receptor	Q99467	6726	Theria
+CD19	CD19 molecule	receptor	P15391	1633	Theria
+CD1A	CD1a molecule	receptor	P06126	1634	Catarrhini
+CD1B	CD1b molecule	receptor	P29016	1635	Homininae
+CD247	CD247 molecule	receptor	P20963	1677	Theria
+CD27	CD27 molecule	receptor	P26842	11922	Theria
+CD28	CD28 molecule	receptor	P10747	1653	Amniota
+CD36	CD36 molecule (thrombospondin receptor)	receptor	P16671	1663	Euteleostomi
+CD3D	CD3d molecule, delta (CD3-TCR complex)	receptor	P04234	1673	Theria
+CD3G	CD3g molecule, gamma (CD3-TCR complex)	receptor	P09693	1675	Mammalia
+CD4	CD4 molecule	receptor	P01730	1678	Amniota
+CD40	CD40 molecule, TNF receptor superfamily member 5	receptor	P25942	11919	Theria
+CD44	CD44 molecule (Indian blood group)	receptor	P16070	1681	Tetrapoda
+CD46	CD46 molecule, complement regulatory protein	receptor	P15529	6953	Eutheria
+CD47	CD47 molecule	receptor	Q08722	1682	Amniota
+CD48	CD48 molecule	receptor	P09326	1683	Eutheria
+CD5	CD5 molecule	receptor	P06127	1685	Amniota
+CD53	CD53 molecule	receptor	P19397	1686	Euteleostomi
+CD63	CD63 molecule	receptor	P08962	1692	Bilateria
+CD72	CD72 molecule	receptor	P21854	1696	Amniota
+CD74	CD74 molecule, major histocompatibility complex, class II invariant chain	receptor	P04233	1697	Euteleostomi
+CD79A	CD79a molecule, immunoglobulin-associated alpha	receptor	P11912	1698	Eutheria
+CD81	CD81 molecule	receptor	P60033	1701	Euarchontoglires
+CD82	CD82 molecule	receptor	P27701	6210	Euteleostomi
+CD9	CD9 molecule	receptor	P21926	1709	Chordata
+CD93	CD93 molecule	receptor	Q9NPY3	15855	Amniota
+CD97	CD97 molecule	receptor	P48960	1711	Mammalia
+CDH10	cadherin 10, type 2 (T2-cadherin)	receptor	Q9Y6N8	1749	Chordata
+CDH19	cadherin 19, type 2	receptor	Q9H159	1758	Chordata
+CDH2	cadherin 2, type 1, N-cadherin (neuronal)	receptor	P19022	1759	Chordata
+CDH5	cadherin 5, type 2 (vascular endothelium)	receptor	P33151	1764	Euteleostomi
+CDH6	cadherin 6, type 2, K-cadherin (fetal kidney)	receptor	P55285	1765	Chordata
+CDH7	cadherin 7, type 2	receptor	Q9ULB5	1766	Chordata
+CDON	cell adhesion associated, oncogene regulated	receptor	Q4KMG0	17104	Euteleostomi
+CELSR1	cadherin, EGF LAG seven-pass G-type receptor 1	receptor	Q9NYQ6	1850	Eukaryota
+CFTR	cystic fibrosis transmembrane conductance regulator (ATP-binding cassette sub-family C, member 7)	receptor	P13569	1884	Eukaryota
+CHRM1	cholinergic receptor, muscarinic 1	receptor	P11229	1950	Theria
+CHRM3	cholinergic receptor, muscarinic 3	receptor	P20309	1952	Bilateria
+CHRNA4	cholinergic receptor, nicotinic, alpha 4 (neuronal)	receptor	P43681	1958	Euteleostomi
+CLDN2	claudin 2	receptor	P57739	2041	Tetrapoda
+CLDN4	claudin 4	receptor	O14493	2046	Euteleostomi
+CLEC10A	C-type lectin domain family 10, member A	receptor	Q8IUN9	16916	Eutheria
+CLEC2B	C-type lectin domain family 2, member B	receptor	Q92478	2053	Tetrapoda
+CLEC4M	C-type lectin domain family 4, member M	receptor	Q9H2X3	13523	Euarchontoglires
+CMKLR1	chemokine-like receptor 1	receptor	Q99788	2121	Human
+CNR1	cannabinoid receptor 1 (brain)	receptor	P21554	2159	Chordata
+CNTFR	ciliary neurotrophic factor receptor	receptor	P26992	2170	Tetrapoda
+CNTN1	contactin 1	receptor	Q12860	2171	Bilateria
+CNTNAP1	contactin associated protein 1	receptor	P78357	8011	Bilateria
+CNTNAP2	contactin associated protein-like 2	receptor	Q9UHC6	13830	Bilateria
+COL13A1	collagen, type XIII, alpha 1	receptor	Q5TAT6	2190	Tetrapoda
+COL17A1	collagen, type XVII, alpha 1	receptor	Q9UMD9	2194	Amniota
+CR1	complement component (3b/4b) receptor 1 (Knops blood group)	receptor	P17927	2334	Amniota
+CRHR1	corticotropin releasing hormone receptor 1	receptor	P34998	2357	Euteleostomi
+CRHR2	corticotropin releasing hormone receptor 2	receptor	Q13324	2358	Euteleostomi
+CRLF1	cytokine receptor-like factor 1	receptor	O75462	2364	Euteleostomi
+CSF1R	colony stimulating factor 1 receptor	receptor	P07333	2433	Euteleostomi
+CSF2RA	colony stimulating factor 2 receptor, alpha, low-affinity (granulocyte-macrophage)	receptor	P15509	2435	Amniota
+CSF2RB	colony stimulating factor 2 receptor, beta, low-affinity (granulocyte-macrophage)	receptor	P32927	2436	Tetrapoda
+CSF3R	colony stimulating factor 3 receptor (granulocyte)	receptor	Q99062	2439	Euteleostomi
+CSPG4	chondroitin sulfate proteoglycan 4	receptor	Q6UVK1	2466	Bilateria
+CX3CR1	chemokine (C-X3-C motif) receptor 1	receptor	P49238	2558	Amniota
+CXCR1	chemokine (C-X-C motif) receptor 1	receptor	P25024	6026	Amniota
+CXCR2	chemokine (C-X-C motif) receptor 2	receptor	P25025	6027	Amniota
+CXCR3	chemokine (C-X-C motif) receptor 3	receptor	P49682	4540	Eutheria
+CXCR4	chemokine (C-X-C motif) receptor 4	receptor	P61073	2561	Chordata
+CXCR5	chemokine (C-X-C motif) receptor 5	receptor	P32302	1060	Euteleostomi
+CXCR6	chemokine (C-X-C motif) receptor 6	receptor	O00574	16647	Mammalia
+DARC	Duffy blood group, atypical chemokine receptor	receptor	Q16570	4035	Theria
+DCBLD2	discoidin, CUB and LCCL domain containing 2	receptor	Q96PD2	24627	Euteleostomi
+DCC	deleted in colorectal carcinoma	receptor	P43146	2701	Euteleostomi
+DCHS1	dachsous cadherin-related 1	receptor	Q96JQ0	13681	Bilateria
+DDR1	discoidin domain receptor tyrosine kinase 1	receptor	Q08345	2730	Deuterostomia
+DDR2	discoidin domain receptor tyrosine kinase 2	receptor	Q16832	2731	Deuterostomia
+DPP4	dipeptidyl-peptidase 4	receptor	P27487	3009	Opisthokonta
+DRD2	dopamine receptor D2	receptor	P14416	3023	Euteleostomi
+DRD4	dopamine receptor D4	receptor	P21917	3025	Human
+DYSF	dysferlin	receptor	O75923	3097	Bilateria
+EDA2R	ectodysplasin A2 receptor	receptor	Q9HAV5	17756	Euarchontoglires
+EDAR	ectodysplasin A receptor	receptor	Q9UNE0	2895	Chordata
+EDNRA	endothelin receptor type A	receptor	P25101	3179	Human
+EDNRB	endothelin receptor type B	receptor	P24530	3180	Euteleostomi
+EGFR	epidermal growth factor receptor	receptor	P00533	3236	Bilateria
+ELTD1	EGF, latrophilin and seven transmembrane domain containing 1	receptor	Q9HBW9	20822	Human
+EMR2	egf-like module containing, mucin-like, hormone receptor-like 2	receptor	Q9UHX3	3337	Mammalia
+ENG	endoglin	receptor	P17813	3349	Theria
+EPHA1	EPH receptor A1	receptor	P21709	3385	Bilateria
+EPHA2	EPH receptor A2	receptor	P29317	3386	Bilateria
+EPHA3	EPH receptor A3	receptor	P29320	3387	Bilateria
+EPHA4	EPH receptor A4	receptor	P54764	3388	Bilateria
+EPHA5	EPH receptor A5	receptor	P54756	3389	Bilateria
+EPHA6	EPH receptor A6	receptor	Q9UF33	19296	Bilateria
+EPHA7	EPH receptor A7	receptor	Q15375	3390	Bilateria
+EPHA8	EPH receptor A8	receptor	P29322	3391	Bilateria
+EPHB1	EPH receptor B1	receptor	P54762	3392	Bilateria
+EPHB2	EPH receptor B2	receptor	P29323	3393	Bilateria
+EPHB3	EPH receptor B3	receptor	P54753	3394	Bilateria
+EPHB4	EPH receptor B4	receptor	P54760	3395	Bilateria
+EPHB6	EPH receptor B6	receptor	O15197	3396	Bilateria
+EPOR	erythropoietin receptor	receptor	P19235	3416	Euteleostomi
+ERBB2	v-erb-b2 avian erythroblastic leukemia viral oncogene homolog 2	receptor	P04626	3430	Bilateria
+ERBB3	v-erb-b2 avian erythroblastic leukemia viral oncogene homolog 3	receptor	P21860	3431	Bilateria
+ERBB4	v-erb-b2 avian erythroblastic leukemia viral oncogene homolog 4	receptor	Q15303	3432	Bilateria
+ESAM	endothelial cell adhesion molecule	receptor	Q96AP7	17474	Amniota
+F11R	F11 receptor	receptor	Q9Y624	14685	Euteleostomi
+F2R	coagulation factor II (thrombin) receptor	receptor	P25116	3537	Human
+F2RL1	coagulation factor II (thrombin) receptor-like 1	receptor	P55085	3538	Euteleostomi
+F2RL2	coagulation factor II (thrombin) receptor-like 2	receptor	O00254	3539	Tetrapoda
+F2RL3	coagulation factor II (thrombin) receptor-like 3	receptor	Q96RI0	3540	Tetrapoda
+F3	coagulation factor III (thromboplastin, tissue factor)	receptor	P13726	3541	Amniota
+FAP	fibroblast activation protein, alpha	receptor	Q12884	3590	Opisthokonta
+FAS	Fas cell surface death receptor	receptor	P25445	11920	Amniota
+FCER1A	Fc fragment of IgE, high affinity I, receptor for; alpha polypeptide	receptor	P12319	3609	Theria
+FCGR1A	Fc fragment of IgG, high affinity Ia, receptor (CD64)	receptor	P12314	3613	Euteleostomi
+FGFR1	fibroblast growth factor receptor 1	receptor	P11362	3688	Bilateria
+FGFR2	fibroblast growth factor receptor 2	receptor	P21802	3689	Bilateria
+FGFR3	fibroblast growth factor receptor 3	receptor	P22607	3690	Bilateria
+FGFR4	fibroblast growth factor receptor 4	receptor	P22455	3691	Bilateria
+FGFRL1	fibroblast growth factor receptor-like 1	receptor	Q8N441	3693	Deuterostomia
+FLT1	fms-related tyrosine kinase 1	receptor	P17948	3763	Deuterostomia
+FLT3	fms-related tyrosine kinase 3	receptor	P36888	3765	Mammalia
+FLT4	fms-related tyrosine kinase 4	receptor	P35916	3767	Deuterostomia
+FPR1	formyl peptide receptor 1	receptor	P21462	3826	Mammalia
+FPR2	formyl peptide receptor 2	receptor	P25090	3827	Theria
+FPR3	formyl peptide receptor 3	receptor	P25089	3828	Theria
+FSHR	follicle stimulating hormone receptor	receptor	P23945	3969	Bilateria
+FXYD6	FXYD domain containing ion transport regulator 6	receptor	Q9H0Q3	4030	Amniota
+FZD1	frizzled class receptor 1	receptor	Q9UP38	4038	Bilateria
+FZD10	frizzled class receptor 10	receptor	Q9ULW2	4039	Deuterostomia
+FZD2	frizzled class receptor 2	receptor	Q14332	4040	Bilateria
+FZD3	frizzled class receptor 3	receptor	Q9NPG1	4041	Chordata
+FZD4	frizzled class receptor 4	receptor	Q9ULV1	4042	Tetrapoda
+FZD5	frizzled class receptor 5	receptor	Q13467	4043	Bilateria
+FZD6	frizzled class receptor 6	receptor	O60353	4044	Chordata
+FZD7	frizzled class receptor 7	receptor	O75084	4045	Bilateria
+FZD8	frizzled class receptor 8	receptor	Q9H461	4046	Bilateria
+FZD9	frizzled class receptor 9	receptor	O00144	4047	Deuterostomia
+GABBR2	gamma-aminobutyric acid (GABA) B receptor, 2	receptor	O75899	4507	Bilateria
+GALR1	galanin receptor 1	receptor	P47211	4132	Deuterostomia
+GALR2	galanin receptor 2	receptor	O43603	4133	Euteleostomi
+GALR3	galanin receptor 3	receptor	O60755	4134	Tetrapoda
+GCGR	glucagon receptor	receptor	P47871	4192	Euteleostomi
+GFRA1	GDNF family receptor alpha 1	receptor	P56159	4243	Euteleostomi
+GFRA2	GDNF family receptor alpha 2	receptor	O00451	4244	Euteleostomi
+GFRA3	GDNF family receptor alpha 3	receptor	O60609	4245	Theria
+GFRA4	GDNF family receptor alpha 4	receptor	Q9GZZ7	13821	Eutheria
+GHR	growth hormone receptor	receptor	P10912	4263	Euteleostomi
+GHRHR	growth hormone releasing hormone receptor	receptor	Q02643	4266	Theria
+GHSR	growth hormone secretagogue receptor	receptor	Q92847	4267	Chordata
+GIPR	gastric inhibitory polypeptide receptor	receptor	P48546	4271	Theria
+GJB2	gap junction protein, beta 2, 26kDa	receptor	P29033	4284	Mammalia
+GLP1R	glucagon-like peptide 1 receptor	receptor	P43220	4324	Tetrapoda
+GLP2R	glucagon-like peptide 2 receptor	receptor	O95838	4325	Tetrapoda
+GNRHR	gonadotropin-releasing hormone receptor	receptor	P30968	4421	Bilateria
+GP1BA	glycoprotein Ib (platelet), alpha polypeptide	receptor	P07359	4439	Tetrapoda
+GP1BB	glycoprotein Ib (platelet), beta polypeptide	receptor	P13224	4440	Homininae
+GP9	glycoprotein IX (platelet)	receptor	P14770	4444	Amniota
+GPC1	glypican 1	receptor	P35052	4449	Euteleostomi
+GPC2	glypican 2	receptor	Q8N158	4450	Mammalia
+GPC4	glypican 4	receptor	O75487	4452	Bilateria
+GPC5	glypican 5	receptor	P78333	4453	Euteleostomi
+GPIHBP1	glycosylphosphatidylinositol anchored high density lipoprotein binding protein 1	receptor	Q8IV16	24945	Euarchontoglires
+GPR1	G protein-coupled receptor 1	receptor	P46091	4463	Amniota
+GPR135	G protein-coupled receptor 135	receptor	Q8IZ08	19991	Human
+GPR151	G protein-coupled receptor 151	receptor	Q8TDV0	23624	Mammalia
+GPR162	G protein-coupled receptor 162	receptor	Q16538	16693	NA
+GPR182	G protein-coupled receptor 182	receptor	O15218	13708	Theria
+GPR37	G protein-coupled receptor 37 (endothelin receptor type B-like)	receptor	O15354	4494	Chordata
+GPR37L1	G protein-coupled receptor 37 like 1	receptor	O60883	14923	Amniota
+GPR39	G protein-coupled receptor 39	receptor	O43194	4496	Euteleostomi
+GPR56	G protein-coupled receptor 56	receptor	Q9Y653	4512	Tetrapoda
+GPR75	G protein-coupled receptor 75	receptor	O95800	4526	Theria
+GRIN2C	glutamate receptor, ionotropic, N-methyl D-aspartate 2C	receptor	Q14957	4587	Euteleostomi
+GRIN2D	glutamate receptor, ionotropic, N-methyl D-aspartate 2D	receptor	O15399	4588	Euteleostomi
+GRM1	glutamate receptor, metabotropic 1	receptor	Q13255	4593	Bilateria
+GRM5	glutamate receptor, metabotropic 5	receptor	P41594	4597	Bilateria
+GRPR	gastrin-releasing peptide receptor	receptor	P30550	4609	Amniota
+GUCY2C	guanylate cyclase 2C (heat stable enterotoxin receptor)	receptor	P25092	4688	Euteleostomi
+GUCY2D	guanylate cyclase 2D, membrane (retina-specific)	receptor	Q02846	4689	Euteleostomi
+GYPE	glycophorin E (MNS blood group)	receptor	P15421	4705	Homininae
+HCRTR1	hypocretin (orexin) receptor 1	receptor	O43613	4848	Eutheria
+HCRTR2	hypocretin (orexin) receptor 2	receptor	O43614	4849	Deuterostomia
+HFE	hemochromatosis	receptor	Q30201	4886	Theria
+HFE2	hemochromatosis type 2 (juvenile)	receptor	Q6ZVN8	4887	Human
+HHIP	hedgehog interacting protein	receptor	Q96QV1	14866	Euteleostomi
+HLA-F	major histocompatibility complex, class I, F	receptor	P30511	4963	Catarrhini
+HMMR	hyaluronan-mediated motility receptor (RHAMM)	receptor	O75330	5012	Chordata
+HRH4	histamine receptor H4	receptor	Q9H3N8	17383	Theria
+HTR2A	5-hydroxytryptamine (serotonin) receptor 2A, G protein-coupled	receptor	P28223	5293	Amniota
+HTR2C	5-hydroxytryptamine (serotonin) receptor 2C, G protein-coupled	receptor	P28335	5295	Chordata
+HTR6	5-hydroxytryptamine (serotonin) receptor 6, G protein-coupled	receptor	P50406	5301	Theria
+IFITM1	interferon induced transmembrane protein 1	receptor	P13164	5412	Eutheria
+IFNAR1	interferon (alpha, beta and omega) receptor 1	receptor	P17181	5432	Amniota
+IFNAR2	interferon (alpha, beta and omega) receptor 2	receptor	P48551	5433	Amniota
+IFNGR1	interferon gamma receptor 1	receptor	P15260	5439	Amniota
+IFNGR2	interferon gamma receptor 2 (interferon gamma transducer 1)	receptor	P38484	5440	Euteleostomi
+IFNLR1	interferon, lambda receptor 1	receptor	Q8IU57	18584	Amniota
+IGF1R	insulin-like growth factor 1 receptor	receptor	P08069	5465	Bilateria
+IGF2R	insulin-like growth factor 2 receptor	receptor	P11717	5467	Deuterostomia
+IGFLR1	IGF-like family receptor 1	receptor	Q9H665	23620	Theria
+IL10RA	interleukin 10 receptor, alpha	receptor	Q13651	5964	Amniota
+IL10RB	interleukin 10 receptor, beta	receptor	Q08334	5965	NA
+IL11RA	interleukin 11 receptor, alpha	receptor	Q14626	5967	Euteleostomi
+IL12RB1	interleukin 12 receptor, beta 1	receptor	P42701	5971	Amniota
+IL12RB2	interleukin 12 receptor, beta 2	receptor	Q99665	5972	Euteleostomi
+IL13RA1	interleukin 13 receptor, alpha 1	receptor	P78552	5974	Human
+IL13RA2	interleukin 13 receptor, alpha 2	receptor	Q14627	5975	Euteleostomi
+IL15RA	interleukin 15 receptor, alpha	receptor	Q13261	5978	Theria
+IL17RA	interleukin 17 receptor A	receptor	Q96F46	5985	Amniota
+IL17RB	interleukin 17 receptor B	receptor	Q9NRM6	18015	Theria
+IL17RC	interleukin 17 receptor C	receptor	Q8NAC3	18358	Amniota
+IL18R1	interleukin 18 receptor 1	receptor	Q13478	5988	Amniota
+IL18RAP	interleukin 18 receptor accessory protein	receptor	O95256	5989	Amniota
+IL1R1	interleukin 1 receptor, type I	receptor	P14778	5993	Amniota
+IL1R2	interleukin 1 receptor, type II	receptor	P27930	5994	Tetrapoda
+IL1RAP	interleukin 1 receptor accessory protein	receptor	Q9NPH3	5995	Tetrapoda
+IL1RAPL1	interleukin 1 receptor accessory protein-like 1	receptor	Q9NZN1	5996	Euteleostomi
+IL1RL2	interleukin 1 receptor-like 2	receptor	Q9HB29	5999	Theria
+IL20RA	interleukin 20 receptor, alpha	receptor	Q9UHF4	6003	Chordata
+IL20RB	interleukin 20 receptor beta	receptor	Q6UXL0	6004	Amniota
+IL21R	interleukin 21 receptor	receptor	Q9HBE5	6006	Euteleostomi
+IL22RA1	interleukin 22 receptor, alpha 1	receptor	Q8N6P7	13700	Amniota
+IL22RA2	interleukin 22 receptor, alpha 2	receptor	Q969J5	14901	Amniota
+IL23R	interleukin 23 receptor	receptor	Q5VWK5	19100	Amniota
+IL27RA	interleukin 27 receptor, alpha	receptor	Q6UWB1	17290	Eutheria
+IL2RA	interleukin 2 receptor, alpha	receptor	P01589	6008	Amniota
+IL2RB	interleukin 2 receptor, beta	receptor	P14784	6009	Mammalia
+IL2RG	interleukin 2 receptor, gamma	receptor	P31785	6010	Theria
+IL31RA	interleukin 31 receptor A	receptor	Q8NI17	18969	Theria
+IL3RA	interleukin 3 receptor, alpha (low affinity)	receptor	P26951	6012	Homininae
+IL4R	interleukin 4 receptor	receptor	P24394	6015	Amniota
+IL5RA	interleukin 5 receptor, alpha	receptor	Q01344	6017	Amniota
+IL6R	interleukin 6 receptor	receptor	P08887	6019	Theria
+IL6ST	interleukin 6 signal transducer (gp130, oncostatin M receptor)	receptor	P40189	6021	Euteleostomi
+IL7R	interleukin 7 receptor	receptor	P16871	6024	Amniota
+IL9R	interleukin 9 receptor	receptor	Q01113	6030	Eutheria
+INSR	insulin receptor	receptor	P06213	6091	Bilateria
+ITGA1	integrin, alpha 1	receptor	P56199	6134	Chordata
+ITGA10	integrin, alpha 10	receptor	O75578	6135	Chordata
+ITGA11	integrin, alpha 11	receptor	Q9UKX5	6136	Chordata
+ITGA2	integrin, alpha 2 (CD49B, alpha 2 subunit of VLA-2 receptor)	receptor	P17301	6137	Chordata
+ITGA2B	integrin, alpha 2b (platelet glycoprotein IIb of IIb/IIIa complex, antigen CD41)	receptor	P08514	6138	Bilateria
+ITGA3	integrin, alpha 3 (antigen CD49C, alpha 3 subunit of VLA-3 receptor)	receptor	P26006	6139	Bilateria
+ITGA4	integrin, alpha 4 (antigen CD49D, alpha 4 subunit of VLA-4 receptor)	receptor	P13612	6140	Euteleostomi
+ITGA5	integrin, alpha 5 (fibronectin receptor, alpha polypeptide)	receptor	P08648	6141	Bilateria
+ITGA6	integrin, alpha 6	receptor	P23229	6142	Bilateria
+ITGA7	integrin, alpha 7	receptor	Q13683	6143	Bilateria
+ITGA8	integrin, alpha 8	receptor	P53708	6144	Bilateria
+ITGA9	integrin, alpha 9	receptor	Q13797	6145	Euteleostomi
+ITGAD	integrin, alpha D	receptor	Q13349	6146	Mammalia
+ITGAE	integrin, alpha E (antigen CD103, human mucosal lymphocyte antigen 1; alpha polypeptide)	receptor	P38570	6147	Mammalia
+ITGAL	integrin, alpha L (antigen CD11A (p180), lymphocyte function-associated antigen 1; alpha polypeptide)	receptor	P20701	6148	Mammalia
+ITGAM	integrin, alpha M (complement component 3 receptor 3 subunit)	receptor	P11215	6149	Mammalia
+ITGAV	integrin, alpha V	receptor	P06756	6150	Bilateria
+ITGAX	integrin, alpha X (complement component 3 receptor 4 subunit)	receptor	P20702	6152	Mammalia
+ITGB1	integrin, beta 1 (fibronectin receptor, beta polypeptide, antigen CD29 includes MDF2, MSK12)	receptor	P05556	6153	Bilateria
+ITGB2	integrin, beta 2 (complement component 3 receptor 3 and 4 subunit)	receptor	P05107	6155	Bilateria
+ITGB3	integrin, beta 3 (platelet glycoprotein IIIa, antigen CD61)	receptor	P05106	6156	NA
+ITGB4	integrin, beta 4	receptor	P16144	6158	Chordata
+ITGB5	integrin, beta 5	receptor	P18084	6160	Bilateria
+ITGB6	integrin, beta 6	receptor	P18564	6161	Bilateria
+ITGB7	integrin, beta 7	receptor	P26010	6162	Bilateria
+ITGB8	integrin, beta 8	receptor	P26012	6163	Tetrapoda
+JMJD6	jumonji domain containing 6	receptor	Q6NYC1	19355	Eukaryota
+KCNA3	potassium voltage-gated channel, shaker-related subfamily, member 3	receptor	P22001	6221	Bilateria
+KCND1	potassium voltage-gated channel, Shal-related subfamily, member 1	receptor	Q9NSA2	6237	Bilateria
+KCND2	potassium voltage-gated channel, Shal-related subfamily, member 2	receptor	Q9NZV8	6238	Bilateria
+KCNJ10	potassium inwardly-rectifying channel, subfamily J, member 10	receptor	P78508	6256	Theria
+KCNJ15	potassium inwardly-rectifying channel, subfamily J, member 15	receptor	Q99712	6261	Euteleostomi
+KCNJ4	potassium inwardly-rectifying channel, subfamily J, member 4	receptor	P48050	6265	Tetrapoda
+KDR	kinase insert domain receptor (a type III receptor tyrosine kinase)	receptor	P35968	6307	Deuterostomia
+KEL	Kell blood group, metallo-endopeptidase	receptor	P23276	6308	Theria
+KIDINS220	kinase D-interacting substrate, 220kDa	receptor	Q9ULH0	29508	Bilateria
+KIR2DL1	killer cell immunoglobulin-like receptor, two domains, long cytoplasmic tail, 1	receptor	P43626	6329	Human
+KIR2DL3	killer cell immunoglobulin-like receptor, two domains, long cytoplasmic tail, 3	receptor	P43628	6331	NA
+KIR2DL4	killer cell immunoglobulin-like receptor, two domains, long cytoplasmic tail, 4	receptor	Q99706	6332	Catarrhini
+KIR2DS4	killer cell immunoglobulin-like receptor, two domains, short cytoplasmic tail, 4	receptor	P43632	6336	NA
+KIR3DL1	killer cell immunoglobulin-like receptor, three domains, long cytoplasmic tail, 1	receptor	P43629	6338	Theria
+KIR3DL2	killer cell immunoglobulin-like receptor, three domains, long cytoplasmic tail, 2	receptor	P43630	6339	NA
+KISS1R	KISS1 receptor	receptor	Q969F8	4510	Euteleostomi
+KIT	v-kit Hardy-Zuckerman 4 feline sarcoma viral oncogene homolog	receptor	P10721	6342	Euteleostomi
+KLB	klotho beta	receptor	Q86Z14	15527	Bilateria
+KLRC1	killer cell lectin-like receptor subfamily C, member 1	receptor	P26715	6374	Mammalia
+KLRC2	killer cell lectin-like receptor subfamily C, member 2	receptor	P26717	6375	Catarrhini
+KLRD1	killer cell lectin-like receptor subfamily D, member 1	receptor	Q13241	6378	Mammalia
+KLRG1	killer cell lectin-like receptor subfamily G, member 1	receptor	Q96E93	6380	Euarchontoglires
+KLRK1	killer cell lectin-like receptor subfamily K, member 1	receptor	P26718	18788	Mammalia
+KREMEN1	kringle containing transmembrane protein 1	receptor	Q96MU8	17550	Euteleostomi
+KREMEN2	kringle containing transmembrane protein 2	receptor	Q8NCW0	18797	Mammalia
+LAMP1	lysosomal-associated membrane protein 1	receptor	P11279	6499	Deuterostomia
+LDLR	low density lipoprotein receptor	receptor	P01130	6547	Euteleostomi
+LEPR	leptin receptor	receptor	P48357	6554	Euteleostomi
+LGR4	leucine-rich repeat containing G protein-coupled receptor 4	receptor	Q9BXB1	13299	Amniota
+LGR5	leucine-rich repeat containing G protein-coupled receptor 5	receptor	O75473	4504	Amniota
+LGR6	leucine-rich repeat containing G protein-coupled receptor 6	receptor	Q9HBX8	19719	Amniota
+LHCGR	luteinizing hormone/choriogonadotropin receptor	receptor	P22888	6585	Bilateria
+LIFR	leukemia inhibitory factor receptor alpha	receptor	P42702	6597	Euteleostomi
+LILRA3	leukocyte immunoglobulin-like receptor, subfamily A (without TM domain), member 3	receptor	Q8N6C8	6604	Theria
+LILRB1	leukocyte immunoglobulin-like receptor, subfamily B (with TM and ITIM domains), member 1	receptor	Q8NHL6	6605	Theria
+LILRB2	leukocyte immunoglobulin-like receptor, subfamily B (with TM and ITIM domains), member 2	receptor	Q8N423	6606	Theria
+LINGO1	leucine rich repeat and Ig domain containing 1	receptor	Q96FE5	21205	Euteleostomi
+LMBR1L	limb development membrane protein 1-like	receptor	Q6UX01	18268	Bilateria
+LPAR1	lysophosphatidic acid receptor 1	receptor	Q92633	3166	Chordata
+LPAR2	lysophosphatidic acid receptor 2	receptor	Q9HBW0	3168	Euteleostomi
+LPAR3	lysophosphatidic acid receptor 3	receptor	Q9UBY5	14298	Euteleostomi
+LPAR4	lysophosphatidic acid receptor 4	receptor	Q99677	4478	Tetrapoda
+LPHN1	latrophilin 1	receptor	O94910	20973	Chordata
+LPHN2	latrophilin 2	receptor	O95490	18582	Chordata
+LRP1	low density lipoprotein receptor-related protein 1	receptor	Q07954	6692	Bilateria
+LRP11	low density lipoprotein receptor-related protein 11	receptor	Q86VZ4	16936	Euteleostomi
+LRP2	low density lipoprotein receptor-related protein 2	receptor	P98164	6694	Bilateria
+LRP4	low density lipoprotein receptor-related protein 4	receptor	O75096	6696	Bilateria
+LRP5	low density lipoprotein receptor-related protein 5	receptor	O75197	6697	Bilateria
+LRP6	low density lipoprotein receptor-related protein 6	receptor	O75581	6698	Bilateria
+LRP8	low density lipoprotein receptor-related protein 8, apolipoprotein e receptor	receptor	Q14114	6700	Euteleostomi
+LRRC4	leucine rich repeat containing 4	receptor	Q9HBW1	15586	Euteleostomi
+LRRC4C	leucine rich repeat containing 4C	receptor	Q9HCJ2	29317	Euteleostomi
+LSR	lipolysis stimulated lipoprotein receptor	receptor	Q86X29	29572	Theria
+LTBR	lymphotoxin beta receptor (TNFR superfamily, member 3)	receptor	P36941	6718	Theria
+LY6G6C	lymphocyte antigen 6 complex, locus G6C	receptor	O95867	13936	Theria
+LY96	lymphocyte antigen 96	receptor	Q9Y6Y9	17156	Theria
+LYVE1	lymphatic vessel endothelial hyaluronan receptor 1	receptor	Q9Y5Y7	14687	Tetrapoda
+MAG	myelin associated glycoprotein	receptor	P20916	6783	Theria
+MAGED1	melanoma antigen family D, 1	receptor	Q9Y5V3	6813	Euarchontoglires
+MARCO	macrophage receptor with collagenous structure	receptor	Q9UEW3	6895	Theria
+MAS1	MAS1 oncogene	receptor	P04201	6899	Tetrapoda
+MC1R	melanocortin 1 receptor (alpha melanocyte stimulating hormone receptor)	receptor	Q01726	6929	NA
+MC2R	melanocortin 2 receptor (adrenocorticotropic hormone)	receptor	Q01718	6930	Amniota
+MC3R	melanocortin 3 receptor	receptor	P41968	6931	Mammalia
+MC4R	melanocortin 4 receptor	receptor	P32245	6932	Euteleostomi
+MC5R	melanocortin 5 receptor	receptor	P33032	6933	Euteleostomi
+MCAM	melanoma cell adhesion molecule	receptor	P43121	6934	Euteleostomi
+MCHR1	melanin-concentrating hormone receptor 1	receptor	Q99705	4479	Euteleostomi
+MCHR2	melanin-concentrating hormone receptor 2	receptor	Q969V1	20867	Mammalia
+MERTK	c-mer proto-oncogene tyrosine kinase	receptor	Q12866	7027	Chordata
+MET	met proto-oncogene	receptor	P08581	7029	Deuterostomia
+MFRP	membrane frizzled-related protein	receptor	Q9BY79	18121	NA
+MLNR	motilin receptor	receptor	O43193	4495	Euteleostomi
+MMP24	matrix metallopeptidase 24 (membrane-inserted)	receptor	Q9Y5R2	7172	Bilateria
+MOG	myelin oligodendrocyte glycoprotein	receptor	Q16653	7197	Amniota
+MPL	myeloproliferative leukemia virus oncogene	receptor	P40238	7217	Euteleostomi
+MRC2	mannose receptor, C type 2	receptor	Q9UBG0	16875	Deuterostomia
+MRGPRX1	MAS-related GPR, member X1	receptor	Q96LB2	17962	Euarchontoglires
+MRGPRX2	MAS-related GPR, member X2	receptor	Q96LB1	17983	Theria
+MST1R	macrophage stimulating 1 receptor (c-met-related tyrosine kinase)	receptor	Q04912	7381	Deuterostomia
+MTNR1A	melatonin receptor 1A	receptor	P48039	7463	Euteleostomi
+MTNR1B	melatonin receptor 1B	receptor	P49286	7464	Deuterostomia
+MUSK	muscle, skeletal, receptor tyrosine kinase	receptor	O15146	7525	Deuterostomia
+NCR3	natural cytotoxicity triggering receptor 3	receptor	O14931	19077	Eutheria
+NCSTN	nicastrin	receptor	Q92542	17091	Bilateria
+NEO1	neogenin 1	receptor	Q92859	7754	Euteleostomi
+NGFR	nerve growth factor receptor	receptor	P08138	7809	Deuterostomia
+NGFRAP1	nerve growth factor receptor (TNFRSF16) associated protein 1	receptor	Q00994	13388	Eutheria
+NMBR	neuromedin B receptor	receptor	P28336	7843	Euteleostomi
+NMUR1	neuromedin U receptor 1	receptor	Q9HB89	4518	Amniota
+NMUR2	neuromedin U receptor 2	receptor	Q9GZQ4	16454	Bilateria
+NOTCH1	notch 1	receptor	P46531	7881	Bilateria
+NOTCH2	notch 2	receptor	Q04721	7882	Bilateria
+NOTCH3	notch 3	receptor	Q9UM47	7883	Bilateria
+NOTCH4	notch 4	receptor	Q99466	7884	Bilateria
+NPBWR1	neuropeptides B/W receptor 1	receptor	P48145	4522	Euteleostomi
+NPBWR2	neuropeptides B/W receptor 2	receptor	P48146	4530	Euteleostomi
+NPFFR1	neuropeptide FF receptor 1	receptor	Q9GZQ6	17425	Euteleostomi
+NPFFR2	neuropeptide FF receptor 2	receptor	Q9Y5X5	4525	Euteleostomi
+NPR1	natriuretic peptide receptor 1	receptor	P16066	7943	Bilateria
+NPR2	natriuretic peptide receptor 2	receptor	P20594	7944	Bilateria
+NPR3	natriuretic peptide receptor 3	receptor	P17342	7945	Chordata
+NPSR1	neuropeptide S receptor 1	receptor	Q6W5P4	23631	Amniota
+NPTN	neuroplastin	receptor	Q9Y639	17867	Euteleostomi
+NPY1R	neuropeptide Y receptor Y1	receptor	P25929	7956	Chordata
+NPY2R	neuropeptide Y receptor Y2	receptor	P49146	7957	Euteleostomi
+NPY4R	neuropeptide Y receptor Y4	receptor	P50391	9329	Amniota
+NPY5R	neuropeptide Y receptor Y5	receptor	Q15761	7958	Tetrapoda
+NRCAM	neuronal cell adhesion molecule	receptor	Q92823	7994	Bilateria
+NRP1	neuropilin 1	receptor	O14786	8004	Euteleostomi
+NRP2	neuropilin 2	receptor	O60462	8005	Euteleostomi
+NRSN1	neurensin 1	receptor	Q8IZ57	17881	Euteleostomi
+NRXN1	neurexin 1	receptor	P58400	8008	Bilateria
+NRXN2	neurexin 2	receptor	P58401	8009	Bilateria
+NRXN3	neurexin 3	receptor	Q9HDB5	8010	Bilateria
+NT5E	5'-nucleotidase, ecto (CD73)	receptor	P21589	8021	Euteleostomi
+NTRK1	neurotrophic tyrosine kinase, receptor, type 1	receptor	P04629	8031	Euteleostomi
+NTRK2	neurotrophic tyrosine kinase, receptor, type 2	receptor	Q16620	8032	Euteleostomi
+NTRK3	neurotrophic tyrosine kinase, receptor, type 3	receptor	Q16288	8033	Euteleostomi
+NTSR1	neurotensin receptor 1 (high affinity)	receptor	P30989	8039	Amniota
+NTSR2	neurotensin receptor 2	receptor	O95665	8040	Eutheria
+OCLN	occludin	receptor	Q16625	8104	Euteleostomi
+OGFR	opioid growth factor receptor	receptor	Q9NZT2	15768	Euteleostomi
+OLR1	oxidized low density lipoprotein (lectin-like) receptor 1	receptor	P78380	8133	Eutheria
+OPRD1	opioid receptor, delta 1	receptor	P41143	8153	Theria
+OPRK1	opioid receptor, kappa 1	receptor	P41145	8154	Chordata
+OPRL1	opiate receptor-like 1	receptor	P41146	8155	Euteleostomi
+OPRM1	opioid receptor, mu 1	receptor	P35372	8156	Euteleostomi
+OR1E1	olfactory receptor, family 1, subfamily E, member 1	receptor	P30953	8189	Eutheria
+OR1G1	olfactory receptor, family 1, subfamily G, member 1	receptor	P47890	8204	Homininae
+ORAI2	ORAI calcium release-activated calcium modulator 2	receptor	Q96SN7	21667	Bilateria
+OSMR	oncostatin M receptor	receptor	Q99650	8507	Amniota
+OXTR	oxytocin receptor	receptor	P30559	8529	Euteleostomi
+P2RX7	purinergic receptor P2X, ligand-gated ion channel, 7	receptor	Q99572	8537	Amniota
+P2RY12	purinergic receptor P2Y, G-protein coupled, 12	receptor	Q9H244	18124	Mammalia
+P2RY14	purinergic receptor P2Y, G-protein coupled, 14	receptor	Q15391	16442	Tetrapoda
+PDGFRA	platelet-derived growth factor receptor, alpha polypeptide	receptor	P16234	8803	Euteleostomi
+PDGFRB	platelet-derived growth factor receptor, beta polypeptide	receptor	P09619	8804	Euteleostomi
+PECAM1	platelet/endothelial cell adhesion molecule 1	receptor	P16284	8823	NA
+PGRMC1	progesterone receptor membrane component 1	receptor	O00264	16090	Eukaryota
+PHEX	phosphate regulating endopeptidase homolog, X-linked	receptor	P78562	8918	Chordata
+PLA2R1	phospholipase A2 receptor 1, 180kDa	receptor	Q13018	9042	Deuterostomia
+PLAUR	plasminogen activator, urokinase receptor	receptor	Q03405	9053	Eutheria
+PLD2	phospholipase D2	receptor	O14939	9068	Opisthokonta
+PLGRKT	plasminogen receptor, C-terminal lysine transmembrane protein	receptor	Q9HBL7	23633	Deuterostomia
+PLSCR4	phospholipid scramblase 4	receptor	Q9NRQ2	16497	Eutheria
+PLXNA1	plexin A1	receptor	Q9UIW2	9099	Bilateria
+PLXNA2	plexin A2	receptor	O75051	9100	Bilateria
+PLXNA3	plexin A3	receptor	P51805	9101	Bilateria
+PLXNA4	plexin A4	receptor	Q9HCM2	9102	NA
+PLXNB1	plexin B1	receptor	O43157	9103	Bilateria
+PLXNB2	plexin B2	receptor	O15031	9104	Bilateria
+PLXNB3	plexin B3	receptor	Q9ULL4	9105	Bilateria
+PLXNC1	plexin C1	receptor	O60486	9106	Euteleostomi
+PLXND1	plexin D1	receptor	Q9Y4D7	9107	Bilateria
+PRLHR	prolactin releasing hormone receptor	receptor	P49683	4464	Euteleostomi
+PRLR	prolactin receptor	receptor	P16471	9446	Euteleostomi
+PROCR	protein C receptor, endothelial	receptor	Q9UNN8	9452	Amniota
+PROKR1	prokineticin receptor 1	receptor	Q8TCW9	4524	Euteleostomi
+PROKR2	prokineticin receptor 2	receptor	Q8NFJ6	15836	Euteleostomi
+PTCH1	patched 1	receptor	Q13635	9585	Bilateria
+PTCH2	patched 2	receptor	Q9Y6C5	9586	Bilateria
+PTGDR	prostaglandin D2 receptor (DP)	receptor	Q13258	9591	Eutheria
+PTGDR2	prostaglandin D2 receptor 2	receptor	Q9Y5Y4	4502	Mammalia
+PTGIR	prostaglandin I2 (prostacyclin) receptor (IP)	receptor	P43119	9602	Theria
+PTH1R	parathyroid hormone 1 receptor	receptor	Q03431	9608	Chordata
+PTH2R	parathyroid hormone 2 receptor	receptor	P49190	9609	Mammalia
+PTPRA	protein tyrosine phosphatase, receptor type, A	receptor	P18433	9664	Bilateria
+PTPRB	protein tyrosine phosphatase, receptor type, B	receptor	P23467	9665	Bilateria
+PTPRD	protein tyrosine phosphatase, receptor type, D	receptor	P23468	9668	Bilateria
+PTPRF	protein tyrosine phosphatase, receptor type, F	receptor	P10586	9670	Bilateria
+PTPRG	protein tyrosine phosphatase, receptor type, G	receptor	P23470	9671	Deuterostomia
+PTPRM	protein tyrosine phosphatase, receptor type, M	receptor	P28827	9675	Deuterostomia
+PTPRS	protein tyrosine phosphatase, receptor type, S	receptor	Q13332	9681	Bilateria
+PTPRU	protein tyrosine phosphatase, receptor type, U	receptor	Q92729	9683	Deuterostomia
+PTPRZ1	protein tyrosine phosphatase, receptor-type, Z polypeptide 1	receptor	P23471	9685	Deuterostomia
+PVR	poliovirus receptor	receptor	P15151	9705	Catarrhini
+PVRL1	poliovirus receptor-related 1 (herpesvirus entry mediator C)	receptor	Q15223	9706	Euteleostomi
+PVRL2	poliovirus receptor-related 2 (herpesvirus entry mediator B)	receptor	Q92692	9707	Euteleostomi
+PVRL3	poliovirus receptor-related 3	receptor	Q9NQS3	17664	Euteleostomi
+PVRL4	poliovirus receptor-related 4	receptor	Q96NY8	19688	Mammalia
+QRFPR	pyroglutamylated RFamide peptide receptor	receptor	Q96P65	15565	Euteleostomi
+RAMP1	receptor (G protein-coupled) activity modifying protein 1	receptor	O60894	9843	Euteleostomi
+RAMP2	receptor (G protein-coupled) activity modifying protein 2	receptor	O60895	9844	Theria
+RAMP3	receptor (G protein-coupled) activity modifying protein 3	receptor	O60896	9845	Tetrapoda
+RET	ret proto-oncogene	receptor	P07949	9967	Euteleostomi
+RHAG	Rh-associated glycoprotein	receptor	Q02094	10006	Bilateria
+RHBDL2	rhomboid, veinlet-like 2 (Drosophila)	receptor	Q9NX52	16083	Chordata
+ROBO1	roundabout, axon guidance receptor, homolog 1 (Drosophila)	receptor	Q9Y6N7	10249	Bilateria
+ROBO2	roundabout, axon guidance receptor, homolog 2 (Drosophila)	receptor	Q9HCK4	10250	Bilateria
+ROBO3	roundabout, axon guidance receptor, homolog 3 (Drosophila)	receptor	Q96MS0	13433	Bilateria
+ROBO4	roundabout, axon guidance receptor, homolog 4 (Drosophila)	receptor	Q8WZ75	17985	Euteleostomi
+ROR1	receptor tyrosine kinase-like orphan receptor 1	receptor	Q01973	10256	Bilateria
+ROR2	receptor tyrosine kinase-like orphan receptor 2	receptor	Q01974	10257	Bilateria
+RPSA	ribosomal protein SA	receptor	P08865	6502	Cell.Organisms
+RTN4R	reticulon 4 receptor	receptor	Q9BZR6	18601	Euarchontoglires
+RTN4RL1	reticulon 4 receptor-like 1	receptor	Q86UN2	21329	Euteleostomi
+RXFP1	relaxin/insulin-like family peptide receptor 1	receptor	Q9HBX9	19718	Euteleostomi
+RXFP2	relaxin/insulin-like family peptide receptor 2	receptor	Q8WXD0	17318	Euteleostomi
+RXFP3	relaxin/insulin-like family peptide receptor 3	receptor	Q9NSD7	24883	Chordata
+RXFP4	relaxin/insulin-like family peptide receptor 4	receptor	Q8TDU9	14666	Catarrhini
+RYK	receptor-like tyrosine kinase	receptor	P34925	10481	Bilateria
+S1PR1	sphingosine-1-phosphate receptor 1	receptor	P21453	3165	Euteleostomi
+S1PR3	sphingosine-1-phosphate receptor 3	receptor	Q99500	3167	Theria
+S1PR4	sphingosine-1-phosphate receptor 4	receptor	O95977	3170	Tetrapoda
+S1PR5	sphingosine-1-phosphate receptor 5	receptor	Q9H228	14299	Human
+SCARB1	scavenger receptor class B, member 1	receptor	Q8WTV0	1664	Euteleostomi
+SCARF1	scavenger receptor class F, member 1	receptor	Q14162	16820	Amniota
+SCN5A	sodium channel, voltage-gated, type V, alpha subunit	receptor	Q14524	10593	Deuterostomia
+SCN8A	sodium channel, voltage gated, type VIII, alpha subunit	receptor	Q9UQD0	10596	Deuterostomia
+SCTR	secretin receptor	receptor	P47872	10608	Theria
+SDC1	syndecan 1	receptor	P18827	10658	Amniota
+SDC2	syndecan 2	receptor	P34741	10659	Amniota
+SDC3	syndecan 3	receptor	O75056	10660	Tetrapoda
+SDC4	syndecan 4	receptor	P31431	10661	Euteleostomi
+SELE	selectin E	receptor	P16581	10718	Amniota
+SELL	selectin L	receptor	P14151	10720	Eutheria
+SELP	selectin P (granule membrane protein 140kDa, antigen CD62)	receptor	P16109	10721	Chordata
+SIRPA	signal-regulatory protein alpha	receptor	P78324	9662	Amniota
+SIRPB1	signal-regulatory protein beta 1	receptor	O00241	15928	Amniota
+SIRPG	signal-regulatory protein gamma	receptor	Q9P1W8	15757	Human
+SLC16A2	solute carrier family 16, member 2 (thyroid hormone transporter)	receptor	P36021	10923	Theria
+SLC16A4	solute carrier family 16, member 4	receptor	O15374	10925	Deuterostomia
+SLC17A7	solute carrier family 17 (vesicular glutamate transporter), member 7	receptor	Q9P2U7	16704	Bilateria
+SLC18A2	solute carrier family 18 (vesicular monoamine transporter), member 2	receptor	Q05940	10935	Bilateria
+SLC18A3	solute carrier family 18 (vesicular acetylcholine transporter), member 3	receptor	Q16572	10936	Bilateria
+SLC37A1	solute carrier family 37 (glucose-6-phosphate transporter), member 1	receptor	P57057	11024	Euteleostomi
+SLC40A1	solute carrier family 40 (iron-regulated transporter), member 1	receptor	Q9NP59	10909	Deuterostomia
+SLC44A5	solute carrier family 44, member 5	receptor	Q8NCS7	28524	Bilateria
+SLC45A3	solute carrier family 45, member 3	receptor	Q96JT2	8642	Euteleostomi
+SLC5A11	solute carrier family 5 (sodium/inositol cotransporter), member 11	receptor	Q8WWX8	23091	Deuterostomia
+SLC9C2	solute carrier family 9, member C2 (putative)	receptor	Q5TAH2	28664	Theria
+SMO	smoothened, frizzled class receptor	receptor	Q99835	11119	Deuterostomia
+SORCS3	sortilin-related VPS10 domain containing receptor 3	receptor	Q9UPU3	16699	Tetrapoda
+SORL1	sortilin-related receptor, L(DLR class) A repeats containing	receptor	Q92673	11185	Deuterostomia
+SORT1	sortilin 1	receptor	Q99523	11186	Euteleostomi
+SSTR1	somatostatin receptor 1	receptor	P30872	11330	Theria
+SSTR2	somatostatin receptor 2	receptor	P30874	11331	Bilateria
+SSTR3	somatostatin receptor 3	receptor	P32745	11332	Euarchontoglires
+SSTR4	somatostatin receptor 4	receptor	P31391	11333	Euarchontoglires
+SSTR5	somatostatin receptor 5	receptor	P35346	11334	Euteleostomi
+ST14	suppression of tumorigenicity 14 (colon carcinoma)	receptor	Q9Y5Y6	11344	Euteleostomi
+STRA6	stimulated by retinoic acid 6	receptor	Q9BX79	30650	Euteleostomi
+TACR1	tachykinin receptor 1	receptor	P25103	11526	Euteleostomi
+TACR2	tachykinin receptor 2	receptor	P21452	11527	Amniota
+TACR3	tachykinin receptor 3	receptor	P29371	11528	Euteleostomi
+TBXA2R	thromboxane A2 receptor	receptor	P21731	11608	Euteleostomi
+TEK	TEK tyrosine kinase, endothelial	receptor	Q02763	11724	Deuterostomia
+TFR2	transferrin receptor 2	receptor	Q9UP52	11762	Theria
+TFRC	transferrin receptor	receptor	P02786	11763	Euteleostomi
+TGFBR1	transforming growth factor, beta receptor 1	receptor	P36897	11772	Bilateria
+TGFBR2	transforming growth factor, beta receptor II (70/80kDa)	receptor	P37173	11773	Human
+TGFBR3	transforming growth factor, beta receptor III	receptor	Q03167	11774	Euteleostomi
+THBD	thrombomodulin	receptor	P07204	11784	Amniota
+TIE1	tyrosine kinase with immunoglobulin-like and EGF-like domains 1	receptor	P35590	11809	Deuterostomia
+TLR1	toll-like receptor 1	receptor	Q15399	11847	Euteleostomi
+TLR2	toll-like receptor 2	receptor	O60603	11848	Chordata
+TLR4	toll-like receptor 4	receptor	O00206	11850	Amniota
+TLR5	toll-like receptor 5	receptor	O60602	11851	Euteleostomi
+TLR6	toll-like receptor 6	receptor	Q9Y2C9	16711	Euteleostomi
+TLR9	toll-like receptor 9	receptor	Q9NR96	15633	NA
+TMEM222	transmembrane protein 222	receptor	Q9H0R3	25363	Eukaryota
+TMEM67	transmembrane protein 67	receptor	Q5HYA8	28396	Bilateria
+TMEM8A	transmembrane protein 8A	receptor	Q9HCN3	17205	Euteleostomi
+TMPRSS6	transmembrane protease, serine 6	receptor	Q8IU80	16517	Tetrapoda
+TNFRSF10A	tumor necrosis factor receptor superfamily, member 10a	receptor	O00220	11904	Euarchontoglires
+TNFRSF10B	tumor necrosis factor receptor superfamily, member 10b	receptor	O14763	11905	Homininae
+TNFRSF10C	tumor necrosis factor receptor superfamily, member 10c, decoy without an intracellular domain	receptor	O14798	11906	Homininae
+TNFRSF10D	tumor necrosis factor receptor superfamily, member 10d, decoy with truncated death domain	receptor	Q9UBN6	11907	Catarrhini
+TNFRSF11A	tumor necrosis factor receptor superfamily, member 11a, NFKB activator	receptor	Q9Y6Q6	11908	Amniota
+TNFRSF11B	tumor necrosis factor receptor superfamily, member 11b	receptor	O00300	11909	Euteleostomi
+TNFRSF12A	tumor necrosis factor receptor superfamily, member 12A	receptor	Q9NP84	18152	Mammalia
+TNFRSF13B	tumor necrosis factor receptor superfamily, member 13B	receptor	O14836	18153	NA
+TNFRSF13C	tumor necrosis factor receptor superfamily, member 13C	receptor	Q96RJ3	17755	Eutheria
+TNFRSF14	tumor necrosis factor receptor superfamily, member 14	receptor	Q92956	11912	Euarchontoglires
+TNFRSF17	tumor necrosis factor receptor superfamily, member 17	receptor	Q02223	11913	Mammalia
+TNFRSF18	tumor necrosis factor receptor superfamily, member 18	receptor	Q9Y5U5	11914	Amniota
+TNFRSF19	tumor necrosis factor receptor superfamily, member 19	receptor	Q9NS68	11915	Euteleostomi
+TNFRSF1A	tumor necrosis factor receptor superfamily, member 1A	receptor	P19438	11916	Amniota
+TNFRSF1B	tumor necrosis factor receptor superfamily, member 1B	receptor	P20333	11917	Amniota
+TNFRSF21	tumor necrosis factor receptor superfamily, member 21	receptor	O75509	13469	Euteleostomi
+TNFRSF25	tumor necrosis factor receptor superfamily, member 25	receptor	Q93038	11910	Amniota
+TNFRSF4	tumor necrosis factor receptor superfamily, member 4	receptor	P43489	11918	Theria
+TNFRSF6B	tumor necrosis factor receptor superfamily, member 6b, decoy	receptor	O95407	11921	NA
+TNFRSF8	tumor necrosis factor receptor superfamily, member 8	receptor	P28908	11923	Eutheria
+TNFRSF9	tumor necrosis factor receptor superfamily, member 9	receptor	Q07011	11924	Amniota
+TRAF2	TNF receptor-associated factor 2	receptor	Q12933	12032	Euteleostomi
+TRAF3	TNF receptor-associated factor 3	receptor	Q13114	12033	Deuterostomia
+TREM2	triggering receptor expressed on myeloid cells 2	receptor	Q9NZC2	17761	Amniota
+TRHR	thyrotropin-releasing hormone receptor	receptor	P34981	12299	Bilateria
+TSHR	thyroid stimulating hormone receptor	receptor	P16473	12373	Bilateria
+TSPAN1	tetraspanin 1	receptor	O60635	20657	Euteleostomi
+TYRO3	TYRO3 protein tyrosine kinase	receptor	Q06418	12446	Chordata
+TYROBP	TYRO protein tyrosine kinase binding protein	receptor	O43914	12449	Mammalia
+UNC5A	unc-5 homolog A (C. elegans)	receptor	Q6ZN44	12567	Chordata
+UNC5B	unc-5 homolog B (C. elegans)	receptor	Q8IZJ1	12568	Chordata
+UNC5C	unc-5 homolog C (C. elegans)	receptor	O95185	12569	Chordata
+UNC5D	unc-5 homolog D (C. elegans)	receptor	Q6UXZ4	18634	Chordata
+UTS2R	urotensin 2 receptor	receptor	Q9UKP6	4468	Euteleostomi
+VANGL1	VANGL planar cell polarity protein 1	receptor	Q8TAA9	15512	Chordata
+VIPR1	vasoactive intestinal peptide receptor 1	receptor	P32241	12694	Euteleostomi
+VIPR2	vasoactive intestinal peptide receptor 2	receptor	P41587	12695	Amniota
+VLDLR	very low density lipoprotein receptor	receptor	P98155	12698	Euteleostomi
+VTCN1	V-set domain containing T cell activation inhibitor 1	receptor	Q7Z7D3	28873	Tetrapoda
+XCR1	chemokine (C motif) receptor 1	receptor	P46094	1625	Amniota
+ZNRF3	zinc and ring finger 3	receptor	Q9ULT6	18126	Euteleostomi
