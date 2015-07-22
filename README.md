@@ -59,7 +59,7 @@ Running `grunt serve` will run a test server on the local host and open your def
 
 # Contact
 
-For more information please contact [J. Harshbarger](jayson.harshbarger@riken.jp)
+For more information please contact J. Harshbarger
 
 ## Acknowledgments
 
