@@ -67,7 +67,11 @@ This work was supported by a research grant from the Japanese Ministry of Educat
 
 ## Reference
 
-TBR
+> **A draft network of ligand–receptor-mediated multicellular signalling in human**
+
+> Jordan A. Ramilowski,	Tatyana Goldberg,	Jayson Harshbarger,	Edda Kloppman,	Marina Lizio,	Venkata P. Satagopam,	Masayoshi Itoh,	Hideya Kawaji,	Piero Carninci,	Burkhard Rost & Alistair R. R. Forrest
+
+> Nature Communications 6, Article number: 7866 [doi:10.1038/ncomms8866](dx.doi.org/10.1038/ncomms8866)
 
 ## License
 
