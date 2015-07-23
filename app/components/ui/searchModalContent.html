@@ -83,10 +83,6 @@
               chosen
               ng-model="pathFilter.source.id"
               ng-options="cell.id as cell.name for cell in data.cells">
-              <!-- option bindonce
-                ng-repeat="cell in data.cells track by cell.id"
-                bo-value="cell.id"
-                bo-text="cell.name"></option -->
             </select>
 
           </div>
@@ -97,7 +93,7 @@
           <div class="col-sm-9">
 
             <select multiple data-placeholder="Pick a ligand receptor pair"
-              chosen
+              chosen="{ search_contains: true }"
               ng-model="pathFilter.pair.id"
               ng-options="pair.id as pair.name for pair in data.pairs">
             </select>
