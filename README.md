@@ -4,7 +4,7 @@ Web tool for exploring cell-cell ligand-receptor mediated communication networks
 
 ## Introduction
 
-In Ramilowski et al. ‘A draft network of ligand-receptor mediated multicellular signaling in human’ 2015 [reference pending publication] we present the first large-scale map of cell-to-cell communication between 144 human primary cell types using 2,422 putative and literature supported ligand-receptor pairs. With up to hundreds of potential interactions between any two of these 144 primary cell types, there are millions of possible cell-cell communication paths across the entire network. Static visualization of such complex networks not only can be obscure and impractical but also difficult. With that, and to benefit the research community, we provide an online resource that visualizes, on demand, our cell-cell communication network for any given subset of the ligand-receptor pairs and profiled primary cells. An online version of the resource is located at: [Ramilowski_et_al_2015](http://fantom.gsc.riken.jp/5/suppl/Ramilowski_et_al_2015/vis/) and mirrored at [forrest-lab.github.io/connectome](http://forrest-lab.github.io/connectome).
+In Ramilowski et al. ‘A draft network of ligand-receptor mediated multicellular signaling in human’ 2015 [doi:10.1038/ncomms8866](dx.doi.org/10.1038/ncomms8866) we present the first large-scale map of cell-to-cell communication between 144 human primary cell types using 2,422 putative and literature supported ligand-receptor pairs. With up to hundreds of potential interactions between any two of these 144 primary cell types, there are millions of possible cell-cell communication paths across the entire network. Static visualization of such complex networks not only can be obscure and impractical but also difficult. With that, and to benefit the research community, we provide an online resource that visualizes, on demand, our cell-cell communication network for any given subset of the ligand-receptor pairs and profiled primary cells. An online version of the resource is located at: [Ramilowski_et_al_2015](http://fantom.gsc.riken.jp/5/suppl/Ramilowski_et_al_2015/vis/) and mirrored at [forrest-lab.github.io/connectome](http://forrest-lab.github.io/connectome).
 
 We developed the online connectome visualization application using various open source and custom tools.  The vector graphic visualization is generated using the [D3.js visualization library][d3].  The application interface was developed using the [AngularJS web application framework][angular] and the [twitter bootstrap front-end framework][twbs].
 
@@ -59,7 +59,7 @@ Running `grunt serve` will run a test server on the local host and open your def
 
 # Contact
 
-For more information please contact [J. Harshbarger](jayson.harshbarger@riken.jp)
+For more information please contact J. Harshbarger
 
 ## Acknowledgments
 
@@ -67,7 +67,11 @@ This work was supported by a research grant from the Japanese Ministry of Educat
 
 ## Reference
 
-TBR
+> **A draft network of ligand–receptor-mediated multicellular signalling in human**
+
+> Jordan A. Ramilowski,	Tatyana Goldberg,	Jayson Harshbarger,	Edda Kloppman,	Marina Lizio,	Venkata P. Satagopam,	Masayoshi Itoh,	Hideya Kawaji,	Piero Carninci,	Burkhard Rost & Alistair R. R. Forrest
+
+> Nature Communications 6, Article number: 7866 [doi:10.1038/ncomms8866](dx.doi.org/10.1038/ncomms8866)
 
 ## License
 
